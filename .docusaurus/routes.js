@@ -3,140 +3,140 @@ import ComponentCreator from '@docusaurus/ComponentCreator';
 
 export default [
   {
-    path: '/josemalyson.github.io/blog',
-    component: ComponentCreator('/josemalyson.github.io/blog', '809'),
+    path: '/blog',
+    component: ComponentCreator('/blog', '0ae'),
     exact: true
   },
   {
-    path: '/josemalyson.github.io/blog/archive',
-    component: ComponentCreator('/josemalyson.github.io/blog/archive', '8cc'),
+    path: '/blog/archive',
+    component: ComponentCreator('/blog/archive', '45e'),
     exact: true
   },
   {
-    path: '/josemalyson.github.io/blog/first-blog-post',
-    component: ComponentCreator('/josemalyson.github.io/blog/first-blog-post', '051'),
+    path: '/blog/first-blog-post',
+    component: ComponentCreator('/blog/first-blog-post', '2c6'),
     exact: true
   },
   {
-    path: '/josemalyson.github.io/blog/long-blog-post',
-    component: ComponentCreator('/josemalyson.github.io/blog/long-blog-post', '994'),
+    path: '/blog/long-blog-post',
+    component: ComponentCreator('/blog/long-blog-post', '904'),
     exact: true
   },
   {
-    path: '/josemalyson.github.io/blog/mdx-blog-post',
-    component: ComponentCreator('/josemalyson.github.io/blog/mdx-blog-post', '025'),
+    path: '/blog/mdx-blog-post',
+    component: ComponentCreator('/blog/mdx-blog-post', '7de'),
     exact: true
   },
   {
-    path: '/josemalyson.github.io/blog/tags',
-    component: ComponentCreator('/josemalyson.github.io/blog/tags', '763'),
+    path: '/blog/tags',
+    component: ComponentCreator('/blog/tags', '448'),
     exact: true
   },
   {
-    path: '/josemalyson.github.io/blog/tags/docusaurus',
-    component: ComponentCreator('/josemalyson.github.io/blog/tags/docusaurus', 'd0f'),
+    path: '/blog/tags/docusaurus',
+    component: ComponentCreator('/blog/tags/docusaurus', 'b46'),
     exact: true
   },
   {
-    path: '/josemalyson.github.io/blog/tags/facebook',
-    component: ComponentCreator('/josemalyson.github.io/blog/tags/facebook', 'bff'),
+    path: '/blog/tags/facebook',
+    component: ComponentCreator('/blog/tags/facebook', 'ec2'),
     exact: true
   },
   {
-    path: '/josemalyson.github.io/blog/tags/hello',
-    component: ComponentCreator('/josemalyson.github.io/blog/tags/hello', '6f6'),
+    path: '/blog/tags/hello',
+    component: ComponentCreator('/blog/tags/hello', 'd08'),
     exact: true
   },
   {
-    path: '/josemalyson.github.io/blog/tags/hola',
-    component: ComponentCreator('/josemalyson.github.io/blog/tags/hola', 'faa'),
+    path: '/blog/tags/hola',
+    component: ComponentCreator('/blog/tags/hola', '949'),
     exact: true
   },
   {
-    path: '/josemalyson.github.io/blog/welcome',
-    component: ComponentCreator('/josemalyson.github.io/blog/welcome', '5b9'),
+    path: '/blog/welcome',
+    component: ComponentCreator('/blog/welcome', 'd61'),
     exact: true
   },
   {
-    path: '/josemalyson.github.io/markdown-page',
-    component: ComponentCreator('/josemalyson.github.io/markdown-page', '830'),
+    path: '/markdown-page',
+    component: ComponentCreator('/markdown-page', 'b69'),
     exact: true
   },
   {
-    path: '/josemalyson.github.io/docs',
-    component: ComponentCreator('/josemalyson.github.io/docs', '2b6'),
+    path: '/docs',
+    component: ComponentCreator('/docs', '874'),
     routes: [
       {
-        path: '/josemalyson.github.io/docs',
-        component: ComponentCreator('/josemalyson.github.io/docs', 'ef3'),
+        path: '/docs',
+        component: ComponentCreator('/docs', '40b'),
         routes: [
           {
-            path: '/josemalyson.github.io/docs',
-            component: ComponentCreator('/josemalyson.github.io/docs', 'aef'),
+            path: '/docs',
+            component: ComponentCreator('/docs', '292'),
             routes: [
               {
-                path: '/josemalyson.github.io/docs/category/tutorial---basics',
-                component: ComponentCreator('/josemalyson.github.io/docs/category/tutorial---basics', 'aa9'),
+                path: '/docs/category/tutorial---basics',
+                component: ComponentCreator('/docs/category/tutorial---basics', 'd44'),
                 exact: true,
                 sidebar: "tutorialSidebar"
               },
               {
-                path: '/josemalyson.github.io/docs/category/tutorial---extras',
-                component: ComponentCreator('/josemalyson.github.io/docs/category/tutorial---extras', '83f'),
+                path: '/docs/category/tutorial---extras',
+                component: ComponentCreator('/docs/category/tutorial---extras', 'f09'),
                 exact: true,
                 sidebar: "tutorialSidebar"
               },
               {
-                path: '/josemalyson.github.io/docs/intro',
-                component: ComponentCreator('/josemalyson.github.io/docs/intro', '3b4'),
+                path: '/docs/intro',
+                component: ComponentCreator('/docs/intro', 'aed'),
                 exact: true,
                 sidebar: "tutorialSidebar"
               },
               {
-                path: '/josemalyson.github.io/docs/tutorial-basics/congratulations',
-                component: ComponentCreator('/josemalyson.github.io/docs/tutorial-basics/congratulations', 'df2'),
+                path: '/docs/tutorial-basics/congratulations',
+                component: ComponentCreator('/docs/tutorial-basics/congratulations', '793'),
                 exact: true,
                 sidebar: "tutorialSidebar"
               },
               {
-                path: '/josemalyson.github.io/docs/tutorial-basics/create-a-blog-post',
-                component: ComponentCreator('/josemalyson.github.io/docs/tutorial-basics/create-a-blog-post', '33c'),
+                path: '/docs/tutorial-basics/create-a-blog-post',
+                component: ComponentCreator('/docs/tutorial-basics/create-a-blog-post', '68e'),
                 exact: true,
                 sidebar: "tutorialSidebar"
               },
               {
-                path: '/josemalyson.github.io/docs/tutorial-basics/create-a-document',
-                component: ComponentCreator('/josemalyson.github.io/docs/tutorial-basics/create-a-document', 'da0'),
+                path: '/docs/tutorial-basics/create-a-document',
+                component: ComponentCreator('/docs/tutorial-basics/create-a-document', 'c2d'),
                 exact: true,
                 sidebar: "tutorialSidebar"
               },
               {
-                path: '/josemalyson.github.io/docs/tutorial-basics/create-a-page',
-                component: ComponentCreator('/josemalyson.github.io/docs/tutorial-basics/create-a-page', '32d'),
+                path: '/docs/tutorial-basics/create-a-page',
+                component: ComponentCreator('/docs/tutorial-basics/create-a-page', 'f44'),
                 exact: true,
                 sidebar: "tutorialSidebar"
               },
               {
-                path: '/josemalyson.github.io/docs/tutorial-basics/deploy-your-site',
-                component: ComponentCreator('/josemalyson.github.io/docs/tutorial-basics/deploy-your-site', '6e8'),
+                path: '/docs/tutorial-basics/deploy-your-site',
+                component: ComponentCreator('/docs/tutorial-basics/deploy-your-site', 'e46'),
                 exact: true,
                 sidebar: "tutorialSidebar"
               },
               {
-                path: '/josemalyson.github.io/docs/tutorial-basics/markdown-features',
-                component: ComponentCreator('/josemalyson.github.io/docs/tutorial-basics/markdown-features', '6da'),
+                path: '/docs/tutorial-basics/markdown-features',
+                component: ComponentCreator('/docs/tutorial-basics/markdown-features', '4b7'),
                 exact: true,
                 sidebar: "tutorialSidebar"
               },
               {
-                path: '/josemalyson.github.io/docs/tutorial-extras/manage-docs-versions',
-                component: ComponentCreator('/josemalyson.github.io/docs/tutorial-extras/manage-docs-versions', '0a9'),
+                path: '/docs/tutorial-extras/manage-docs-versions',
+                component: ComponentCreator('/docs/tutorial-extras/manage-docs-versions', 'fdd'),
                 exact: true,
                 sidebar: "tutorialSidebar"
               },
               {
-                path: '/josemalyson.github.io/docs/tutorial-extras/translate-your-site',
-                component: ComponentCreator('/josemalyson.github.io/docs/tutorial-extras/translate-your-site', '2f1'),
+                path: '/docs/tutorial-extras/translate-your-site',
+                component: ComponentCreator('/docs/tutorial-extras/translate-your-site', '2d7'),
                 exact: true,
                 sidebar: "tutorialSidebar"
               }
@@ -147,8 +147,8 @@ export default [
     ]
   },
   {
-    path: '/josemalyson.github.io/',
-    component: ComponentCreator('/josemalyson.github.io/', 'ef1'),
+    path: '/',
+    component: ComponentCreator('/', '029'),
     exact: true
   },
   {

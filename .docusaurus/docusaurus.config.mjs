@@ -8,9 +8,11 @@ export default {
   "tagline": "Dinosaurs are cool",
   "favicon": "img/favicon.ico",
   "url": "https://josemalyson.github.io",
-  "baseUrl": "/josemalyson.github.io/",
+  "baseUrl": "/",
   "organizationName": "Josemalyson",
   "projectName": "josemalyson.github.io",
+  "deploymentBranch": "main",
+  "trailingSlash": false,
   "onBrokenLinks": "throw",
   "onBrokenMarkdownLinks": "warn",
   "i18n": {
