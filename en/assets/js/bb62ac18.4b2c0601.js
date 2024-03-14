@@ -1,0 +1,1 @@
+"use strict";(self.webpackChunkjosemalyson_github_io=self.webpackChunkjosemalyson_github_io||[]).push([[8912],{779:o=>{o.exports=JSON.parse('{"permalink":"/en/blog/tags/hola","page":1,"postsPerPage":10,"totalPages":1,"totalCount":1,"blogDescription":"Blog","blogTitle":"Blog"}')}}]);
