@@ -4,11 +4,11 @@
  * Modify the docusaurus.config.js file at your site's root instead.
  */
 export default {
-  "title": "My Site",
-  "tagline": "Dinosaurs are cool",
+  "title": "Josemalyson Oliveira",
+  "tagline": "About me",
   "favicon": "img/favicon.ico",
   "url": "https://josemalyson.github.io",
-  "baseUrl": "/",
+  "baseUrl": "/en/",
   "organizationName": "Josemalyson",
   "projectName": "josemalyson.github.io",
   "deploymentBranch": "main",
@@ -16,8 +16,9 @@ export default {
   "onBrokenLinks": "throw",
   "onBrokenMarkdownLinks": "warn",
   "i18n": {
-    "defaultLocale": "en",
+    "defaultLocale": "pt-BR",
     "locales": [
+      "pt-BR",
       "en"
     ],
     "path": "i18n",
@@ -319,7 +320,7 @@ export default {
       ]
     },
     "colorMode": {
-      "defaultMode": "light",
+      "defaultMode": "dark",
       "disableSwitch": false,
       "respectPrefersColorScheme": false
     },

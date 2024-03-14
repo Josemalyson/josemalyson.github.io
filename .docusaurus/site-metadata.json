@@ -1,6 +1,6 @@
 {
   "docusaurusVersion": "3.1.1",
-  "siteVersion": "0.0.0",
+  "siteVersion": "0.0.1",
   "pluginVersions": {
     "docusaurus-plugin-content-docs": {
       "type": "package",
