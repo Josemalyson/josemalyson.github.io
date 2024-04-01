@@ -1,0 +1,16 @@
+{
+  "title": "Generative AI",
+  "description": "Um pouco do que estou entendo sobre GenAI",
+  "slug": "/category/generative-ai-1",
+  "permalink": "/docs/category/generative-ai-1",
+  "navigation": {
+    "previous": {
+      "title": "Generative AI",
+      "permalink": "/docs/category/generative-ai"
+    },
+    "next": {
+      "title": "Create a Blog Post",
+      "permalink": "/docs/generative-ai/LLM/create-a-blog-post"
+    }
+  }
+}

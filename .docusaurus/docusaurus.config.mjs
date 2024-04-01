@@ -8,7 +8,7 @@ export default {
   "tagline": "About me",
   "favicon": "img/favicon.ico",
   "url": "https://josemalyson.github.io",
-  "baseUrl": "/en/",
+  "baseUrl": "/",
   "organizationName": "Josemalyson",
   "projectName": "josemalyson.github.io",
   "deploymentBranch": "main",

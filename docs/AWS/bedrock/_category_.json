@@ -1,0 +1,8 @@
+{
+  "label": "BedRock",
+  "position": 1,
+  "link": {
+    "type": "generated-index",
+    "description": "Serviço de GenAI da AWS"
+  }
+}

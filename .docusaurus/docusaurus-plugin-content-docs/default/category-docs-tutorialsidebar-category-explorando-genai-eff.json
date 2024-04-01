@@ -1,0 +1,12 @@
+{
+  "title": "Explorando GenAI",
+  "description": "Um pouco do que estou entendo sobre GenAI",
+  "slug": "/category/explorando-genai",
+  "permalink": "/docs/category/explorando-genai",
+  "navigation": {
+    "next": {
+      "title": "Generative AI",
+      "permalink": "/docs/generative-ai/genai"
+    }
+  }
+}

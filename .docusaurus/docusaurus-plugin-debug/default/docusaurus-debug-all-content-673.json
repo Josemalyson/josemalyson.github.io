@@ -15,10 +15,87 @@
           "editUrlLocalized": "https://github.com/facebook/docusaurus/tree/main/packages/create-docusaurus/templates/shared/i18n/pt-BR/docusaurus-plugin-content-docs/current",
           "isLast": true,
           "routePriority": -1,
-          "sidebarFilePath": "/home/josemalyson/Projects/josemalyson.github.io/sidebars.js",
-          "contentPath": "/home/josemalyson/Projects/josemalyson.github.io/docs",
-          "contentPathLocalized": "/home/josemalyson/Projects/josemalyson.github.io/i18n/pt-BR/docusaurus-plugin-content-docs/current",
+          "sidebarFilePath": "/home/josemalyson/Projects/docs/josemalyson.github.io.git/sidebars.js",
+          "contentPath": "/home/josemalyson/Projects/docs/josemalyson.github.io.git/docs",
+          "contentPathLocalized": "/home/josemalyson/Projects/docs/josemalyson.github.io.git/i18n/pt-BR/docusaurus-plugin-content-docs/current",
           "docs": [
+            {
+              "id": "AWS/bedrock/description",
+              "title": "Amazon Bedrock",
+              "description": "O amazon Bedrorck é um serviço da AWS para construir e escalar de maneira fácil aplicações de IA Generativa (Generative AI) com modelos fundacionais. Disponibilizando os modelos através de uma simples chamada via API, gerando aplicaçãoes de generative AI com segurança, privacidade e responsabilidade AI.",
+              "source": "@site/docs/AWS/bedrock/description.md",
+              "sourceDirName": "AWS/bedrock",
+              "slug": "/AWS/bedrock/description",
+              "permalink": "/docs/AWS/bedrock/description",
+              "draft": false,
+              "unlisted": false,
+              "editUrl": "https://github.com/facebook/docusaurus/tree/main/packages/create-docusaurus/templates/shared/docs/AWS/bedrock/description.md",
+              "tags": [],
+              "version": "current",
+              "sidebarPosition": 1,
+              "frontMatter": {
+                "sidebar_position": 1
+              },
+              "sidebar": "tutorialSidebar",
+              "previous": {
+                "title": "BedRock",
+                "permalink": "/docs/category/bedrock"
+              }
+            },
+            {
+              "id": "generative-ai/genai",
+              "title": "Entendo GenAI",
+              "description": "Com o uso do NLP (Natural Language Processing) podemos ter algumas ações que podem ser realiadas sendo elas: Text summarization, Text generation, Question answering systems, Agents.",
+              "source": "@site/docs/generative-ai/genai.md",
+              "sourceDirName": "generative-ai",
+              "slug": "/generative-ai/genai",
+              "permalink": "/docs/generative-ai/genai",
+              "draft": false,
+              "unlisted": false,
+              "editUrl": "https://github.com/facebook/docusaurus/tree/main/packages/create-docusaurus/templates/shared/docs/generative-ai/genai.md",
+              "tags": [],
+              "version": "current",
+              "sidebarPosition": 1,
+              "frontMatter": {
+                "sidebar_position": 1
+              },
+              "sidebar": "tutorialSidebar",
+              "previous": {
+                "title": "Generative AI",
+                "permalink": "/docs/category/generative-ai"
+              },
+              "next": {
+                "title": "LLMs",
+                "permalink": "/docs/category/llms"
+              }
+            },
+            {
+              "id": "generative-ai/LLM/create-a-blog-post",
+              "title": "Create a Blog Post",
+              "description": "Docusaurus creates a page for each blog post, but also a blog index page, a tag system, an RSS feed...",
+              "source": "@site/docs/generative-ai/LLM/create-a-blog-post.md",
+              "sourceDirName": "generative-ai/LLM",
+              "slug": "/generative-ai/LLM/create-a-blog-post",
+              "permalink": "/docs/generative-ai/LLM/create-a-blog-post",
+              "draft": false,
+              "unlisted": false,
+              "editUrl": "https://github.com/facebook/docusaurus/tree/main/packages/create-docusaurus/templates/shared/docs/generative-ai/LLM/create-a-blog-post.md",
+              "tags": [],
+              "version": "current",
+              "sidebarPosition": 1,
+              "frontMatter": {
+                "sidebar_position": 1
+              },
+              "sidebar": "tutorialSidebar",
+              "previous": {
+                "title": "LLMs",
+                "permalink": "/docs/category/llms"
+              },
+              "next": {
+                "title": "Tutorial Intro",
+                "permalink": "/docs/intro"
+              }
+            },
             {
               "id": "intro",
               "title": "Tutorial Intro",
@@ -37,6 +114,10 @@
                 "sidebar_position": 1
               },
               "sidebar": "tutorialSidebar",
+              "previous": {
+                "title": "Create a Blog Post",
+                "permalink": "/docs/generative-ai/LLM/create-a-blog-post"
+              },
               "next": {
                 "title": "Tutorial - Basics",
                 "permalink": "/docs/category/tutorial---basics"
@@ -252,12 +333,52 @@
               "previous": {
                 "title": "Manage Docs Versions",
                 "permalink": "/docs/tutorial-extras/manage-docs-versions"
+              },
+              "next": {
+                "title": "BedRock",
+                "permalink": "/docs/category/bedrock"
               }
             }
           ],
           "drafts": [],
           "sidebars": {
             "tutorialSidebar": [
+              {
+                "type": "category",
+                "label": "Generative AI",
+                "collapsible": true,
+                "collapsed": true,
+                "items": [
+                  {
+                    "type": "doc",
+                    "id": "generative-ai/genai"
+                  },
+                  {
+                    "type": "category",
+                    "label": "LLMs",
+                    "collapsible": true,
+                    "collapsed": true,
+                    "items": [
+                      {
+                        "type": "doc",
+                        "id": "generative-ai/LLM/create-a-blog-post"
+                      }
+                    ],
+                    "link": {
+                      "type": "generated-index",
+                      "description": "Um pouco do que estou entendo sobre GenAI",
+                      "slug": "/category/llms",
+                      "permalink": "/docs/category/llms"
+                    }
+                  }
+                ],
+                "link": {
+                  "type": "generated-index",
+                  "description": "Um pouco do que estou entendo sobre GenAI",
+                  "slug": "/category/generative-ai",
+                  "permalink": "/docs/category/generative-ai"
+                }
+              },
               {
                 "type": "doc",
                 "id": "intro"
@@ -320,6 +441,32 @@
                   "slug": "/category/tutorial---extras",
                   "permalink": "/docs/category/tutorial---extras"
                 }
+              },
+              {
+                "type": "category",
+                "label": "AWS",
+                "collapsible": true,
+                "collapsed": true,
+                "items": [
+                  {
+                    "type": "category",
+                    "label": "BedRock",
+                    "collapsible": true,
+                    "collapsed": true,
+                    "items": [
+                      {
+                        "type": "doc",
+                        "id": "AWS/bedrock/description"
+                      }
+                    ],
+                    "link": {
+                      "type": "generated-index",
+                      "description": "Serviço de GenAI da AWS",
+                      "slug": "/category/bedrock",
+                      "permalink": "/docs/category/bedrock"
+                    }
+                  }
+                ]
               }
             ]
           }
@@ -340,7 +487,6 @@
             "title": "Welcome",
             "description": "Docusaurus blogging features are powered by the blog plugin.",
             "date": "2021-08-26T00:00:00.000Z",
-            "formattedDate": "26 de agosto de 2021",
             "tags": [
               {
                 "label": "facebook",
@@ -403,7 +549,6 @@
             "title": "MDX Blog Post",
             "description": "Blog posts support Docusaurus Markdown features, such as MDX.",
             "date": "2021-08-01T00:00:00.000Z",
-            "formattedDate": "1 de agosto de 2021",
             "tags": [
               {
                 "label": "docusaurus",
@@ -452,7 +597,6 @@
             "title": "Long Blog Post",
             "description": "This is the summary of a very long blog post,",
             "date": "2019-05-29T00:00:00.000Z",
-            "formattedDate": "29 de maio de 2019",
             "tags": [
               {
                 "label": "hello",
@@ -504,7 +648,6 @@
             "title": "First Blog Post",
             "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque elementum dignissim ultricies. Fusce rhoncus ipsum tempor eros aliquam consequat. Lorem ipsum dolor sit amet",
             "date": "2019-05-28T00:00:00.000Z",
-            "formattedDate": "28 de maio de 2019",
             "tags": [
               {
                 "label": "hola",

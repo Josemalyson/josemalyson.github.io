@@ -1,0 +1,16 @@
+{
+  "title": "LLMs",
+  "description": "Um pouco do que estou entendo sobre GenAI",
+  "slug": "/category/llms",
+  "permalink": "/docs/category/llms",
+  "navigation": {
+    "previous": {
+      "title": "Entendo GenAI",
+      "permalink": "/docs/generative-ai/genai"
+    },
+    "next": {
+      "title": "Create a Blog Post",
+      "permalink": "/docs/generative-ai/LLM/create-a-blog-post"
+    }
+  }
+}

@@ -1,68 +1,98 @@
 {
   "docusaurus-plugin-content-docs": {
     "default": {
-      "path": "/en/docs",
+      "path": "/docs",
       "versions": [
         {
           "name": "current",
           "label": "Next",
           "isLast": true,
-          "path": "/en/docs",
-          "mainDocId": "intro",
+          "path": "/docs",
+          "mainDocId": "generative-ai/genai",
           "docs": [
             {
+              "id": "AWS/bedrock/description",
+              "path": "/docs/AWS/bedrock/description",
+              "sidebar": "tutorialSidebar"
+            },
+            {
+              "id": "generative-ai/genai",
+              "path": "/docs/generative-ai/genai",
+              "sidebar": "tutorialSidebar"
+            },
+            {
+              "id": "generative-ai/LLM/create-a-blog-post",
+              "path": "/docs/generative-ai/LLM/create-a-blog-post",
+              "sidebar": "tutorialSidebar"
+            },
+            {
               "id": "intro",
-              "path": "/en/docs/intro",
+              "path": "/docs/intro",
               "sidebar": "tutorialSidebar"
             },
             {
               "id": "tutorial-basics/congratulations",
-              "path": "/en/docs/tutorial-basics/congratulations",
+              "path": "/docs/tutorial-basics/congratulations",
               "sidebar": "tutorialSidebar"
             },
             {
               "id": "tutorial-basics/create-a-blog-post",
-              "path": "/en/docs/tutorial-basics/create-a-blog-post",
+              "path": "/docs/tutorial-basics/create-a-blog-post",
               "sidebar": "tutorialSidebar"
             },
             {
               "id": "tutorial-basics/create-a-document",
-              "path": "/en/docs/tutorial-basics/create-a-document",
+              "path": "/docs/tutorial-basics/create-a-document",
               "sidebar": "tutorialSidebar"
             },
             {
               "id": "tutorial-basics/create-a-page",
-              "path": "/en/docs/tutorial-basics/create-a-page",
+              "path": "/docs/tutorial-basics/create-a-page",
               "sidebar": "tutorialSidebar"
             },
             {
               "id": "tutorial-basics/deploy-your-site",
-              "path": "/en/docs/tutorial-basics/deploy-your-site",
+              "path": "/docs/tutorial-basics/deploy-your-site",
               "sidebar": "tutorialSidebar"
             },
             {
               "id": "tutorial-basics/markdown-features",
-              "path": "/en/docs/tutorial-basics/markdown-features",
+              "path": "/docs/tutorial-basics/markdown-features",
               "sidebar": "tutorialSidebar"
             },
             {
               "id": "tutorial-extras/manage-docs-versions",
-              "path": "/en/docs/tutorial-extras/manage-docs-versions",
+              "path": "/docs/tutorial-extras/manage-docs-versions",
               "sidebar": "tutorialSidebar"
             },
             {
               "id": "tutorial-extras/translate-your-site",
-              "path": "/en/docs/tutorial-extras/translate-your-site",
+              "path": "/docs/tutorial-extras/translate-your-site",
+              "sidebar": "tutorialSidebar"
+            },
+            {
+              "id": "/category/generative-ai",
+              "path": "/docs/category/generative-ai",
+              "sidebar": "tutorialSidebar"
+            },
+            {
+              "id": "/category/llms",
+              "path": "/docs/category/llms",
               "sidebar": "tutorialSidebar"
             },
             {
               "id": "/category/tutorial---basics",
-              "path": "/en/docs/category/tutorial---basics",
+              "path": "/docs/category/tutorial---basics",
               "sidebar": "tutorialSidebar"
             },
             {
               "id": "/category/tutorial---extras",
-              "path": "/en/docs/category/tutorial---extras",
+              "path": "/docs/category/tutorial---extras",
+              "sidebar": "tutorialSidebar"
+            },
+            {
+              "id": "/category/bedrock",
+              "path": "/docs/category/bedrock",
               "sidebar": "tutorialSidebar"
             }
           ],
@@ -70,8 +100,8 @@
           "sidebars": {
             "tutorialSidebar": {
               "link": {
-                "path": "/en/docs/intro",
-                "label": "intro"
+                "path": "/docs/category/generative-ai",
+                "label": "Generative AI"
               }
             }
           }

@@ -1,0 +1,16 @@
+{
+  "title": "AWS",
+  "description": "Documentações e resumo de assuntos ligados a AWS",
+  "slug": "/category/aws",
+  "permalink": "/docs/category/aws",
+  "navigation": {
+    "previous": {
+      "title": "Translate your site",
+      "permalink": "/docs/tutorial-extras/translate-your-site"
+    },
+    "next": {
+      "title": "Congratulations!",
+      "permalink": "/docs/AWS/tutorial-basics/amazon-bedrock"
+    }
+  }
+}
