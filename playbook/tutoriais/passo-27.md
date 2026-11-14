@@ -55,6 +55,9 @@ DoD da página 02 cumprida.
 
 [GitHub Actions: build e teste em Go](https://docs.github.com/en/actions/tutorials/build-and-test-code/go)
 
+
+Guia de bolso: [passo 27 no guia BMAD](/guias/bmad/passo-27/).
+
 [← 26 · Abrir o PR no GitHub (web)](/playbook/ai-first/tutoriais/passo-26)
 
 [28 · Retrospectiva do épico →](/playbook/ai-first/tutoriais/passo-28)

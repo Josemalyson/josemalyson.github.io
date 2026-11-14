@@ -49,6 +49,9 @@ Negócio e Tech Lead aprovam. Mudança no PRD só via bmad-prd update; nunca edi
 
 [Plan Inside an Organization](https://github.com/bmad-code-org/BMAD-METHOD/blob/V6.12/docs/plan/plan-inside-an-organization.md)
 
+
+Guia de bolso: [passo 13 no guia BMAD](/guias/bmad/passo-13/).
+
 [← 12 · Spec: PRD (create)](/playbook/ai-first/tutoriais/passo-12)
 
 [14 · Spec: architecture (spine) →](/playbook/ai-first/tutoriais/passo-14)

@@ -59,6 +59,9 @@ git status → On branch main, nothing to commit. O branch main aparece no GitHu
 
 [Go: criar um módulo](https://go.dev/doc/tutorial/create-module)
 
+
+Guia de bolso: [passo 01 no guia BMAD](/guias/bmad/passo-01/).
+
 [← 00 · Prerequisites](/playbook/ai-first/tutoriais/passo-00)
 
 [02 · Install pinned BMAD, no prompts →](/playbook/ai-first/tutoriais/passo-02)

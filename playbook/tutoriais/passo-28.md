@@ -47,6 +47,9 @@ Commit "docs(S-001): retrospectiva do épico 1" com trailer, push e PR pelo mesm
 
 **Evidência para o passo 22 (code review):** no revisor híbrido do LinkedIn, checagens determinísticas vêm primeiro; revisores de IA independentes analisam o PR, achados repetidos são consolidados e achados únicos são verificados por outro modelo. A aceitação é medida por comentário que vira mudança de código ([ByteByteGo](https://blog.bytebytego.com/p/how-linkedin-uses-ai-to-review-40000)).
 
+
+Guia de bolso: [passo 28 no guia BMAD](/guias/bmad/passo-28/).
+
 [← 27 · CI, review humano e merge](/playbook/ai-first/tutoriais/passo-27)
 
 [Outros fluxos →](/playbook/ai-first/tutoriais/outros-fluxos)

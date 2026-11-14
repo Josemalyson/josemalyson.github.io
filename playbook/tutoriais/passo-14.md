@@ -43,6 +43,9 @@ Tech Lead aprova as AD-n.
 
 [Design UX and Architecture](https://github.com/bmad-code-org/BMAD-METHOD/blob/V6.12/docs/plan/design-ux-and-architecture.md)
 
+
+Guia de bolso: [passo 14 no guia BMAD](/guias/bmad/passo-14/).
+
 [← 13 · Spec: PRD (validate)](/playbook/ai-first/tutoriais/passo-13)
 
 [15 · Decomposição: épicos e stories →](/playbook/ai-first/tutoriais/passo-15)

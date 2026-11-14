@@ -1,0 +1,22 @@
+{
+  "version.label": {
+    "message": "Next",
+    "description": "The label for version current"
+  },
+  "sidebar.mattSidebar.category.Guia de bolso": {
+    "message": "Pocket guide",
+    "description": "The label for category 'Guia de bolso' in sidebar"
+  },
+  "sidebar.mattSidebar.category.Workflows": {
+    "message": "Workflows",
+    "description": "The label for category 'Workflows' in sidebar"
+  },
+  "sidebar.mattSidebar.category.Skills": {
+    "message": "Skills",
+    "description": "The label for category 'Skills' in sidebar"
+  },
+  "sidebar.mattSidebar.category.Referências": {
+    "message": "References",
+    "description": "The label for category 'Referências' in sidebar"
+  }
+}

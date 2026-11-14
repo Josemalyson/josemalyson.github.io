@@ -58,6 +58,9 @@ Os dois caminhos acima são onde as fases 1 a 6 gravam.
 
 [Skills and Agents](https://github.com/bmad-code-org/BMAD-METHOD/blob/V6.12/docs/reference/skills-and-agents.md)
 
+
+Guia de bolso: [passo 03 no guia BMAD](/guias/bmad/passo-03/).
+
 [← 02 · Install pinned BMAD, no prompts](/playbook/ai-first/tutoriais/passo-02)
 
 [04 · Commit the installation →](/playbook/ai-first/tutoriais/passo-04)

@@ -106,7 +106,7 @@ review_due: 2027-02-14
 <table>
 <tr><th>Camada</th><th>Referência</th><th>Alternativas a avaliar</th><th>Nota</th></tr>
 <tr><td>Contrato/SDD</td><td>BMAD 6.12 (6.12.4 fixada)</td><td>Spec Kit, OpenSpec</td><td>Instalar com `npx bmad-method@6.12.4`; documentação da v6.12 no branch V6.12 (o site oficial já mostra a v7 preview)</td></tr>
-<tr><td>Execução</td><td>Devin (contratado)</td><td>Claude Code, Codex CLI, OpenCode</td><td>Contratado não é homologado: validar na versão contratada controles enterprise, residência, audit, APIs, ACP, worktree, hooks e VPC</td></tr>
+<tr><td>Execução</td><td>Devin</td><td>Claude Code, Codex CLI, OpenCode</td><td>Validar na versão em uso os controles enterprise, residência, audit, APIs, ACP, worktree, hooks e VPC</td></tr>
 <tr><td>LLM gateway</td><td>LiteLLM</td><td>Bifrost, agentgateway</td><td>Prova de conceito de auth, spend, fail-closed e MCP; fixar versão e digest (ver incidente 1.107.0 acima)</td></tr>
 <tr><td>MCP gateway</td><td>agentgateway</td><td>Docker MCP Gateway, ContextForge</td><td>Validar policy por tool e identidade end-to-end</td></tr>
 <tr><td>Observabilidade</td><td>OTel + Langfuse</td><td>Opik, OpenLIT, MLflow</td><td>Langfuse core MIT; recursos enterprise têm licença separada</td></tr>
@@ -120,7 +120,7 @@ review_due: 2027-02-14
 
 ### Stack não é homologação
 
-A tabela registra candidatos de referência para o piloto. Nenhuma ferramenta está automaticamente aprovada para dado bancário ou produção. Aprovação exige arquitetura, segurança, privacidade, compras, jurídico, risco de terceiros e teste técnico. O Devin já está contratado; a contratação não substitui a homologação técnica e de risco da versão em uso.
+A tabela registra candidatos de referência para o piloto. Nenhuma ferramenta está automaticamente aprovada para dado bancário ou produção. Aprovação exige arquitetura, segurança, privacidade, compras, jurídico, risco de terceiros e teste técnico. O fato de uma ferramenta estar em uso no estudo não substitui a homologação técnica e de risco da versão em uso.
 
 Documentação oficial
 

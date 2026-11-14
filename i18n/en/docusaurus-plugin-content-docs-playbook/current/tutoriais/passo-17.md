@@ -49,6 +49,9 @@ Story 1-1 em backlog ou ready-for-dev.
 
 [Break Work into Stories and Track It](https://github.com/bmad-code-org/BMAD-METHOD/blob/V6.12/docs/plan/break-work-into-stories-and-track-it.md)
 
+
+Guia de bolso: [passo 17 no guia BMAD](/guias/bmad/passo-17/).
+
 [← 16 · Readiness gate](/playbook/ai-first/tutoriais/passo-16)
 
 [18 · Commit the plan →](/playbook/ai-first/tutoriais/passo-18)

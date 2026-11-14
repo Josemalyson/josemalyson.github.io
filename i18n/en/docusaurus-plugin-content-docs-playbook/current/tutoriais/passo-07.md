@@ -49,6 +49,9 @@ git diff AGENTS.md revisado por humano.
 
 [Set and Maintain Project Context](https://github.com/bmad-code-org/BMAD-METHOD/blob/V6.12/docs/existing-codebases/set-and-maintain-project-context.md)
 
+
+Guia de bolso: [passo 07 no guia BMAD](/guias/bmad/passo-07/).
+
 [← 06 · Ask BMAD for guidance](/playbook/ai-first/tutoriais/passo-06)
 
 [08 · Quality gate: install the skill and generate the hooks →](/playbook/ai-first/tutoriais/passo-08)

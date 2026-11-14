@@ -114,6 +114,9 @@ No máximo 3 tentativas e nenhum --no-verify na sessão. Se a 3ª falhar, o agen
 
 [govulncheck](https://pkg.go.dev/golang.org/x/vuln/cmd/govulncheck)
 
+
+Guia de bolso: [passo 20 no guia BMAD](/guias/bmad/passo-20/).
+
 [← 19 · Implementação: bmad-build da story 1-1](/playbook/ai-first/tutoriais/passo-19)
 
 [21 · Verificação local →](/playbook/ai-first/tutoriais/passo-21)

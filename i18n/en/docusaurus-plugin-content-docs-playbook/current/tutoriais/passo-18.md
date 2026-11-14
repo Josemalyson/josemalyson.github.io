@@ -60,6 +60,9 @@ git status limpo.
 
 [Conventional Commits](https://www.conventionalcommits.org/en/v1.0.0/)
 
+
+Guia de bolso: [passo 18 no guia BMAD](/guias/bmad/passo-18/).
+
 [← 17 · Sprint planning](/playbook/ai-first/tutoriais/passo-17)
 
 [19 · Implementation: bmad-build of story 1-1 →](/playbook/ai-first/tutoriais/passo-19)

@@ -43,6 +43,9 @@ Nenhum achado high aberto.
 
 [Review a Change](https://github.com/bmad-code-org/BMAD-METHOD/blob/V6.12/docs/build/review-a-change.md)
 
+
+Guia de bolso: [passo 22 no guia BMAD](/guias/bmad/passo-22/).
+
 [← 21 · Verificação local](/playbook/ai-first/tutoriais/passo-21)
 
 [23 · Walkthrough para o review humano →](/playbook/ai-first/tutoriais/passo-23)

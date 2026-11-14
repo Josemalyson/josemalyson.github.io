@@ -24,6 +24,8 @@ O texto abaixo é a versão 0.4 (14 nov 2026) do playbook: 29 passos, do 00 ao 2
 
 [Repositório e PDF](https://github.com/Josemalyson/ai-first-playbook)
 
+Os guias de bolso recortam os comandos deste playbook: [Matt Pocock](/guias/matt-pocock/) e [BMAD](/guias/bmad/).
+
 
 
 *01 · Fundamentos*
@@ -31,7 +33,7 @@ O texto abaixo é a versão 0.4 (14 nov 2026) do playbook: 29 passos, do 00 ao 2
 
 Um sistema operacional de engenharia em que pessoas definem intenção e risco, especificações tornam o trabalho verificável e agentes executam dentro de limites explícitos.
 
-Versão 0.4 · Atualizado em 14 nov 2026 · Squad piloto: 4 pessoas · Stack de referência candidata · Agente de execução: Devin (contratado)
+Versão 0.4 · Atualizado em 14 nov 2026 · Squad piloto: 4 pessoas · Stack de referência candidata · Agente de execução: Devin
 
 **01 · Contrato de mudança**
 

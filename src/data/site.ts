@@ -100,6 +100,46 @@ export const tutorials: {
     },
   },
   {
+    id: 'guia-matt-pocock',
+    version: '5863806',
+    date: '2026-11-12',
+    href: '/guias/matt-pocock/',
+    repo: 'https://github.com/mattpocock/skills',
+    repoLabel: {
+      'pt-BR': 'Repositório original',
+      en: 'Original repository',
+    },
+    title: {
+      'pt-BR': 'Guia de bolso — Matt Pocock',
+      en: 'Pocket guide — Matt Pocock',
+    },
+    summary: {
+      'pt-BR':
+        'Workflows verificados das 27 skills de Matt Pocock, com os comandos correspondentes do playbook AI-First. Revisado até 12 nov 2026 (commit 5863806).',
+      en: 'Verified workflows for Matt Pocock\'s 27 skills, plus the matching commands from the AI-First playbook. Reviewed through 12 Nov 2026 (commit 5863806). The full text is in Portuguese.',
+    },
+  },
+  {
+    id: 'guia-bmad',
+    version: 'v6.12.4',
+    date: '2026-11-14',
+    href: '/guias/bmad/',
+    repo: 'https://github.com/bmad-code-org/BMAD-METHOD',
+    repoLabel: {
+      'pt-BR': 'Repositório original',
+      en: 'Original repository',
+    },
+    title: {
+      'pt-BR': 'Guia de bolso — BMAD',
+      en: 'Pocket guide — BMAD',
+    },
+    summary: {
+      'pt-BR':
+        'Passo a passo do BMAD Method 6.12.4, do zero ao pull request, com os comandos recortados do playbook AI-First v0.4 e o quality gate de pre-commit.',
+      en: 'A BMAD Method 6.12.4 walkthrough, from zero to a pull request, with the commands taken from the AI-First playbook v0.4 and the pre-commit quality gate. The full text is in Portuguese.',
+    },
+  },
+  {
     id: 'bedrock',
     version: null,
     date: '2024-03-20',

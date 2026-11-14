@@ -43,6 +43,9 @@ O agente reconheceu e executou o skill (teste de integração da documentação)
 
 [Install BMad (v6.12)](https://github.com/bmad-code-org/BMAD-METHOD/blob/V6.12/docs/start/install-bmad.md)
 
+
+Guia de bolso: [passo 06 no guia BMAD](/guias/bmad/passo-06/).
+
 [← 05 · Branch da story](/playbook/ai-first/tutoriais/passo-05)
 
 [07 · Contexto do repositório (AGENTS.md) →](/playbook/ai-first/tutoriais/passo-07)

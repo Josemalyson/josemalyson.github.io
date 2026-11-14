@@ -46,5 +46,13 @@
   "copyright": {
     "message": "Josemalyson Oliveira",
     "description": "The footer copyright"
+  },
+  "link.item.label.Guia Matt Pocock": {
+    "message": "Matt Pocock guide",
+    "description": "The label of footer link with label=Guia Matt Pocock linking to /guias/matt-pocock/"
+  },
+  "link.item.label.Guia BMAD": {
+    "message": "BMAD guide",
+    "description": "The label of footer link with label=Guia BMAD linking to /guias/bmad/"
   }
 }
