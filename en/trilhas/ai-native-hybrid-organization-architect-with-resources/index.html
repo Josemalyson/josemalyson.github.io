@@ -1,0 +1,262 @@
+<!doctype html>
+<html lang="pt-BR" data-theme="dark">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="description" content="Trilha Principal para projetar e operar organizações de engenharia AI-Native com humanos e agentes.">
+<title>AI-Native Hybrid Organization Architect · Learning Trail</title>
+<style>
+:root{--bg:#0b0d10;--surface:#11151a;--surface2:#171c22;--text:#e8edf3;--muted:#9aa6b2;--border:#27303a;--accent:#9ee6c0;--accent2:#86b7ff;--max:1180px}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--bg);color:var(--text);font:15px/1.65 Inter,system-ui,sans-serif}a{color:inherit;text-decoration:none}
+.sidebar{position:fixed;left:0;top:0;bottom:0;width:300px;border-right:1px solid var(--border);background:#0d1014;padding:22px;overflow:auto}.brand{font-weight:800;font-size:17px;margin-bottom:20px}.brand small{display:block;color:var(--muted);font-weight:500;margin-top:5px}
+.nav-link{display:block;padding:7px 9px;border-radius:7px;color:var(--muted);font-size:12px}.nav-link:hover{background:var(--surface2);color:var(--text)}.nav-link span{display:inline-block;width:28px;color:var(--accent);font-family:monospace}
+main{margin-left:300px;max-width:calc(var(--max) + 80px);padding:50px 50px 100px}.hero{border:1px solid var(--border);background:linear-gradient(145deg,#111922,#0e1217);border-radius:18px;padding:42px;margin-bottom:35px}.eyebrow{font:600 11px/1.2 ui-monospace,monospace;letter-spacing:.12em;color:var(--accent)}h1{font-size:clamp(34px,5vw,58px);line-height:1.05;margin:12px 0 18px;letter-spacing:-.04em}h2{font-size:28px;line-height:1.2;margin:6px 0 10px}h3{font-size:16px;margin-top:0}p{color:var(--muted)}.hero-grid,.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}.stat,.card,.gate{border:1px solid var(--border);background:var(--surface);border-radius:13px;padding:20px}.stat strong{display:block;font-size:25px;color:var(--text)}.stat span{color:var(--muted);font-size:12px}.station{padding:35px 0;border-top:1px solid var(--border);scroll-margin-top:25px}ul{padding-left:20px}li{margin:5px 0}.tasks{display:grid;gap:9px}.task{display:flex;gap:9px;align-items:flex-start;color:var(--muted)}input{margin-top:6px;accent-color:#9ee6c0}.gate{margin-top:16px;border-left:3px solid var(--accent)}.gate p{margin-bottom:0}.map{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:20px}.map div{border:1px solid var(--border);padding:10px;border-radius:8px;font-size:11px;color:var(--muted)}.search{width:100%;padding:10px;border:1px solid var(--border);background:var(--surface);color:var(--text);border-radius:8px;margin-bottom:15px}.footer{border-top:1px solid var(--border);padding-top:30px;color:var(--muted);font-size:12px}
+@media(max-width:900px){.sidebar{position:static;width:auto;height:auto;border-right:0;border-bottom:1px solid var(--border)}main{margin-left:0;padding:25px 18px 70px}.hero-grid,.grid{grid-template-columns:1fr}.map{grid-template-columns:repeat(2,1fr)}}
+</style>
+<style>.resource-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.resource{display:block;border:1px solid var(--border);background:var(--surface);border-radius:10px;padding:13px}.resource:hover{border-color:var(--accent)}.resource strong{display:block;color:var(--text);font-size:13px;margin-bottom:4px}.resource span{display:block;color:var(--muted);font-size:12px;line-height:1.45}.resource small{display:block;color:#6f7b87;font:10px ui-monospace,monospace;margin-top:8px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}@media(max-width:900px){.resource-grid{grid-template-columns:1fr}}</style></head>
+<body>
+<aside class="sidebar">
+<div class="brand">AI-Native Hybrid<br>Organization Architect<small>Principal / Staff+ · 26 estações</small></div>
+<input id="search" class="search" placeholder="Buscar estação...">
+<nav><a class="nav-link" href="#station-0"><span>0</span>Fundamentos de Organizações AI-Native</a><a class="nav-link" href="#station-1"><span>1</span>Human × Agent Collaboration</a><a class="nav-link" href="#station-2"><span>2</span>Organizational Design</a><a class="nav-link" href="#station-3"><span>3</span>AI-Native Team Topologies</a><a class="nav-link" href="#station-4"><span>4</span>Agent Engineering</a><a class="nav-link" href="#station-5"><span>5</span>Multi-Agent Systems</a><a class="nav-link" href="#station-6"><span>6</span>Harness Engineering</a><a class="nav-link" href="#station-7"><span>7</span>Agent Platform</a><a class="nav-link" href="#station-8"><span>8</span>Security, Trust & Sandboxing</a><a class="nav-link" href="#station-9"><span>9</span>Evaluation Engineering</a><a class="nav-link" href="#station-10"><span>10</span>Engineering Operating System</a><a class="nav-link" href="#station-11"><span>11</span>Hybrid Engineering Management</a><a class="nav-link" href="#station-12"><span>12</span>Economics of AI Labor</a><a class="nav-link" href="#station-13"><span>13</span>AI Capacity & Queueing</a><a class="nav-link" href="#station-14"><span>14</span>Observability & Agent SRE</a><a class="nav-link" href="#station-15"><span>15</span>Multi-Squad Organization</a><a class="nav-link" href="#station-16"><span>16</span>AI Software Factory</a><a class="nav-link" href="#station-17"><span>17</span>Migration Factory</a><a class="nav-link" href="#station-18"><span>18</span>Governance & Agent Constitution</a><a class="nav-link" href="#station-19"><span>19</span>100-Person Hybrid Organization</a><a class="nav-link" href="#station-20"><span>20</span>Research & Frontier</a><a class="nav-link" href="#station-21"><span>21</span>Executive Architecture</a><a class="nav-link" href="#station-22"><span>22</span>CAPSTONE 1 — Hybrid Squad</a><a class="nav-link" href="#station-23"><span>23</span>CAPSTONE 2 — Agent Platform</a><a class="nav-link" href="#station-24"><span>24</span>CAPSTONE 3 — Multi-Squad Factory</a><a class="nav-link" href="#station-25"><span>25</span>CAPSTONE 4 — 100-Person AI-Native Organization</a></nav>
+</aside>
+<main>
+<header class="hero">
+<span class="eyebrow">LEARNING TRAIL · PRINCIPAL / STAFF+</span>
+<h1>AI-Native Hybrid Organization Architect</h1>
+<p>Formação para projetar, construir, governar e operar organizações de engenharia compostas por humanos + agentes de IA, evoluindo de uma squad para uma operação de aproximadamente 100 pessoas.</p>
+<div class="hero-grid">
+<div class="stat"><strong>26</strong><span>estações</span></div>
+<div class="stat"><strong>5</strong><span>capstones evolutivos</span></div>
+<div class="stat"><strong>6</strong><span>trilhas paralelas: agents, org, platform, security, economics, research</span></div>
+<div class="stat"><strong>∞</strong><span>prazo — conclusão por competência</span></div>
+</div>
+<div class="map">
+<div>Foundation</div><div>Human × Agent</div><div>Org Design</div><div>Agent Engineering</div>
+<div>Platform</div><div>Security</div><div>Evaluation</div><div>Management</div>
+<div>Economics</div><div>AI SRE</div><div>Multi-Squad</div><div>Factory</div>
+<div>Governance</div><div>100 People</div><div>Research</div><div>Strategy</div>
+</div>
+</header>
+<section class="station"><div class="station-head"><span class="eyebrow">NERVOS · FONTES VALIDADAS</span><h2>Biblioteca principal de estudo</h2><p>Estas fontes foram verificadas nesta passagem de curadoria e são os pontos de partida para os labs. O conteúdo do documento anterior não deve ser interpretado como uma bibliografia genérica: cada fonte abaixo foi associada aos domínios em que seu conteúdo é diretamente aplicável.</p></div><div class="resource-grid"><a class="resource" href="https://platform.claude.com/docs/en/agents-and-tools/tool-use/overview" target="_blank" rel="noopener"><strong>Anthropic — Tool use</strong><span>Agent loop, contratos de ferramentas e execução.</span><small>https://platform.claude.com/docs/en/agents-and-tools/tool-use/overview</small></a><a class="resource" href="https://platform.claude.com/docs/en/agents-and-tools/tool-use/build-a-tool-using-agent" target="_blank" rel="noopener"><strong>Anthropic — Build a tool-using agent</strong><span>Laboratório progressivo de tool-using agent.</span><small>https://platform.claude.com/docs/en/agents-and-tools/tool-use/build-a-tool-using-agent</small></a><a class="resource" href="https://openai.github.io/openai-agents-python/tracing/" target="_blank" rel="noopener"><strong>OpenAI Agents SDK — Tracing</strong><span>Tracing de LLM generations, tool calls, handoffs e guardrails.</span><small>https://openai.github.io/openai-agents-python/tracing/</small></a><a class="resource" href="https://google.github.io/adk-docs/" target="_blank" rel="noopener"><strong>Google ADK</strong><span>Agentes, workflows, tools, avaliação e deployment.</span><small>https://google.github.io/adk-docs/</small></a><a class="resource" href="https://google.github.io/agents-cli/guide/development/" target="_blank" rel="noopener"><strong>Google Agents CLI — Development</strong><span>Scaffolding, recipes, sandbox, memória, approvals e eventos.</span><small>https://google.github.io/agents-cli/guide/development/</small></a><a class="resource" href="https://github.com/deepseek-ai/deepseek-harness" target="_blank" rel="noopener"><strong>DeepSeek Harness</strong><span>Harness open source: Everything is a Plugin.</span><small>https://github.com/deepseek-ai/deepseek-harness</small></a><a class="resource" href="https://www.oreilly.com/library/view/team-topologies/9781098157234/" target="_blank" rel="noopener"><strong>Team Topologies</strong><span>Conway, team boundaries, cognitive load e interaction modes.</span><small>https://www.oreilly.com/library/view/team-topologies/9781098157234/</small></a><a class="resource" href="https://www.nist.gov/publications/artificial-intelligence-risk-management-framework-ai-rmf-10" target="_blank" rel="noopener"><strong>NIST AI RMF</strong><span>Gestão de riscos e confiança em IA.</span><small>https://www.nist.gov/publications/artificial-intelligence-risk-management-framework-ai-rmf-10</small></a><a class="resource" href="https://genai.owasp.org/resource/owasp-top-10-for-agentic-applications-for-2026/" target="_blank" rel="noopener"><strong>OWASP Top 10 Agentic Applications 2026</strong><span>Riscos de segurança de sistemas agentic.</span><small>https://genai.owasp.org/resource/owasp-top-10-for-agentic-applications-for-2026/</small></a><a class="resource" href="https://metr.org/time-horizons/" target="_blank" rel="noopener"><strong>METR — Time Horizons</strong><span>Avaliação de capacidade de agentes por duração de tarefa.</span><small>https://metr.org/time-horizons/</small></a></div></section><section class="station">
+<div class="station-head"><span class="eyebrow">COMO USAR</span><h2>Regra da formação</h2><p>Não avance por consumo de conteúdo. Cada estação exige compreensão, implementação, medição e defesa dos trade-offs. Os recursos externos devem ser validados atomicamente antes de entrarem como nervos da trilha.</p></div>
+<div class="grid"><article class="card"><h3>Modelo</h3><ul><li>Conceito → Research → Industry → Architecture → Lab → Simulation → Metrics → Failure modes → Gate.</li><li>Reutilize conhecimentos já dominados de harnesses, coding agents, sandboxes, Migration Factory, SDD, platform engineering e SRE.</li></ul></article><article class="card"><h3>Princípio</h3><ul><li>Não presumir que mais agentes produzem mais throughput.</li><li>Autonomia é variável operacional condicionada a risco, evidência e supervisão.</li><li>O objetivo é otimizar o sistema sociotécnico, não o número de agentes.</li></ul></article></div>
+</section>
+
+<section id="station-0" class="station" data-search="Fundamentos de Organizações AI-Native Do modelo tradicional ao sistema sociotécnico humano + agente. AI-native vs AI-assisted/augmented trabalho como sistema: outcome → value stream → process → task → action automação, augmentation e digital labor autonomia como continuum L0–L5 risk tiers e boundaries">
+ <div class="station-head"><span class="eyebrow">ESTAÇÃO 0</span><h2>Fundamentos de Organizações AI-Native</h2><p>Do modelo tradicional ao sistema sociotécnico humano + agente.</p></div>
+ <div class="grid">
+  <article class="card"><h3>Escopo</h3><ul><li>AI-native vs AI-assisted/augmented</li><li>trabalho como sistema: outcome → value stream → process → task → action</li><li>automação, augmentation e digital labor</li><li>autonomia como continuum L0–L5</li><li>risk tiers e boundaries</li></ul></article>
+  <article class="card"><h3>Laboratórios & entregáveis</h3><div class="tasks"><label class="task"><input type="checkbox" data-task="0-1"><span>Mapear uma iniciativa de software e classificar cada atividade como humano, agente, híbrida ou automação determinística.</span></label><label class="task"><input type="checkbox" data-task="0-2"><span>Produzir um mapa de trabalho com critérios explícitos de autonomia e risco.</span></label><label class="task"><input type="checkbox" data-task="0-3"><span>Definir onde a intervenção humana é obrigatória e por quê.</span></label></div></article>
+ </div>
+ <div class="gate"><strong>Gate de competência</strong><p>Você consegue explicar o domínio, projetar uma solução, implementá-la, medir o resultado e defender os trade-offs sem depender de abstrações do framework?</p></div>
+</section>
+<section id="station-1" class="station" data-search="Human × Agent Collaboration Projetar delegação, supervisão, handoffs e responsabilidade. delegation engineering task specification e acceptance criteria human-in-the-loop / on-the-loop / out-of-the-loop automation bias, calibrated trust e verification RACI humano-agente e escalation paths">
+ <div class="station-head"><span class="eyebrow">ESTAÇÃO 1</span><h2>Human × Agent Collaboration</h2><p>Projetar delegação, supervisão, handoffs e responsabilidade.</p></div>
+ <div class="grid">
+  <article class="card"><h3>Escopo</h3><ul><li>delegation engineering</li><li>task specification e acceptance criteria</li><li>human-in-the-loop / on-the-loop / out-of-the-loop</li><li>automation bias, calibrated trust e verification</li><li>RACI humano-agente e escalation paths</li></ul></article>
+  <article class="card"><h3>Laboratórios & entregáveis</h3><div class="tasks"><label class="task"><input type="checkbox" data-task="1-1"><span>Criar uma matriz Human/Agent RACI para uma squad.</span></label><label class="task"><input type="checkbox" data-task="1-2"><span>Especificar contratos de tarefa, critérios de aceite e escalonamento.</span></label><label class="task"><input type="checkbox" data-task="1-3"><span>Simular falhas de delegação e redesenhar os boundaries.</span></label></div></article>
+ </div>
+ <div class="gate"><strong>Gate de competência</strong><p>Você consegue explicar o domínio, projetar uma solução, implementá-la, medir o resultado e defender os trade-offs sem depender de abstrações do framework?</p></div>
+</section>
+<section id="station-2" class="station" data-search="Organizational Design Aprender a desenhar equipes pelo fluxo de valor e pela carga cognitiva. Team Topologies: stream-aligned, platform, enabling e complicated-subsystem Conway's Law e Reverse Conway Maneuver value-stream mapping cognitive load coordination cost e handoffs">
+ <div class="station-head"><span class="eyebrow">ESTAÇÃO 2</span><h2>Organizational Design</h2><p>Aprender a desenhar equipes pelo fluxo de valor e pela carga cognitiva.</p></div>
+ <div class="grid">
+  <article class="card"><h3>Escopo</h3><ul><li>Team Topologies: stream-aligned, platform, enabling e complicated-subsystem</li><li>Conway's Law e Reverse Conway Maneuver</li><li>value-stream mapping</li><li>cognitive load</li><li>coordination cost e handoffs</li></ul></article>
+  <article class="card"><h3>Laboratórios & entregáveis</h3><div class="tasks"><label class="task"><input type="checkbox" data-task="2-1"><span>Desenhar três topologias para a mesma organização.</span></label><label class="task"><input type="checkbox" data-task="2-2"><span>Mapear gargalos, dependências e carga cognitiva.</span></label><label class="task"><input type="checkbox" data-task="2-3"><span>Defender a topologia escolhida com trade-offs mensuráveis.</span></label></div></article>
+ </div>
+ <div class="gate"><strong>Gate de competência</strong><p>Você consegue explicar o domínio, projetar uma solução, implementá-la, medir o resultado e defender os trade-offs sem depender de abstrações do framework?</p></div>
+</section>
+<section id="station-3" class="station" data-search="AI-Native Team Topologies Transformar papéis de agentes em capacidades organizacionais. agente por pessoa vs squad vs plataforma agentes compartilhados e efêmeros agent specialists vs generalists team boundaries e capability ownership human leadership + agent workforce">
+ <div class="station-head"><span class="eyebrow">ESTAÇÃO 3</span><h2>AI-Native Team Topologies</h2><p>Transformar papéis de agentes em capacidades organizacionais.</p></div>
+ <div class="grid">
+  <article class="card"><h3>Escopo</h3><ul><li>agente por pessoa vs squad vs plataforma</li><li>agentes compartilhados e efêmeros</li><li>agent specialists vs generalists</li><li>team boundaries e capability ownership</li><li>human leadership + agent workforce</li></ul></article>
+  <article class="card"><h3>Laboratórios & entregáveis</h3><div class="tasks"><label class="task"><input type="checkbox" data-task="3-1"><span>Projetar uma squad de 5 humanos + 10 agentes.</span></label><label class="task"><input type="checkbox" data-task="3-2"><span>Comparar agente dedicado, compartilhado e sob demanda.</span></label><label class="task"><input type="checkbox" data-task="3-3"><span>Definir ownership, lifecycle e escalation de cada capability.</span></label></div></article>
+ </div>
+ <div class="gate"><strong>Gate de competência</strong><p>Você consegue explicar o domínio, projetar uma solução, implementá-la, medir o resultado e defender os trade-offs sem depender de abstrações do framework?</p></div>
+</section>
+<section id="station-4" class="station" data-search="Agent Engineering Dominar o runtime que executa trabalho cognitivo. agent loop: observe → reason → plan → act → verify sessions e state tool calling e MCP memory e context engineering subagents, handoffs e persistence">
+ <div class="station-head"><span class="eyebrow">ESTAÇÃO 4</span><h2>Agent Engineering</h2><p>Dominar o runtime que executa trabalho cognitivo.</p></div>
+ <div class="grid">
+  <article class="card"><h3>Escopo</h3><ul><li>agent loop: observe → reason → plan → act → verify</li><li>sessions e state</li><li>tool calling e MCP</li><li>memory e context engineering</li><li>subagents, handoffs e persistence</li></ul></article>
+  <article class="card"><h3>Laboratórios & entregáveis</h3><div class="tasks"><label class="task"><input type="checkbox" data-task="4-1"><span>Implementar um agent runtime mínimo.</span></label><label class="task"><input type="checkbox" data-task="4-2"><span>Adicionar tools, sessões, memória e subagentes.</span></label><label class="task"><input type="checkbox" data-task="4-3"><span>Instrumentar trajetória, custo, latência e falhas.</span></label></div></article>
+ </div>
+ <div class="gate"><strong>Gate de competência</strong><p>Você consegue explicar o domínio, projetar uma solução, implementá-la, medir o resultado e defender os trade-offs sem depender de abstrações do framework?</p></div>
+</section>
+<section id="station-5" class="station" data-search="Multi-Agent Systems Aprender quando decompor trabalho entre agentes e quando não fazê-lo. single-agent vs workflow vs multi-agent sequential, parallel e supervisor planner/executor evaluator/optimizer shared state, event-driven e asynchronous agents">
+ <div class="station-head"><span class="eyebrow">ESTAÇÃO 5</span><h2>Multi-Agent Systems</h2><p>Aprender quando decompor trabalho entre agentes e quando não fazê-lo.</p></div>
+ <div class="grid">
+  <article class="card"><h3>Escopo</h3><ul><li>single-agent vs workflow vs multi-agent</li><li>sequential, parallel e supervisor</li><li>planner/executor</li><li>evaluator/optimizer</li><li>shared state, event-driven e asynchronous agents</li></ul></article>
+  <article class="card"><h3>Laboratórios & entregáveis</h3><div class="tasks"><label class="task"><input type="checkbox" data-task="5-1"><span>Construir um orquestrador com execução sequencial, paralela e supervisor.</span></label><label class="task"><input type="checkbox" data-task="5-2"><span>Medir coordination overhead.</span></label><label class="task"><input type="checkbox" data-task="5-3"><span>Comparar arquitetura multi-agent contra single-agent em um benchmark próprio.</span></label></div></article>
+ </div>
+ <div class="gate"><strong>Gate de competência</strong><p>Você consegue explicar o domínio, projetar uma solução, implementá-la, medir o resultado e defender os trade-offs sem depender de abstrações do framework?</p></div>
+</section>
+<section id="station-6" class="station" data-search="Harness Engineering Construir o substrato modular que permite evolução sem acoplamento. plugin architecture provider/model abstraction skill registry tool registry event bus, session store e persistence">
+ <div class="station-head"><span class="eyebrow">ESTAÇÃO 6</span><h2>Harness Engineering</h2><p>Construir o substrato modular que permite evolução sem acoplamento.</p></div>
+ <div class="grid">
+  <article class="card"><h3>Escopo</h3><ul><li>plugin architecture</li><li>provider/model abstraction</li><li>skill registry</li><li>tool registry</li><li>event bus, session store e persistence</li></ul></article>
+  <article class="card"><h3>Laboratórios & entregáveis</h3><div class="tasks"><label class="task"><input type="checkbox" data-task="6-1"><span>Criar um harness com plugins para modelo, tools, skills e memória.</span></label><label class="task"><input type="checkbox" data-task="6-2"><span>Adicionar uma capability sem alterar o agent loop.</span></label><label class="task"><input type="checkbox" data-task="6-3"><span>Criar contratos e testes de compatibilidade.</span></label></div></article>
+ </div>
+ <div class="gate"><strong>Gate de competência</strong><p>Você consegue explicar o domínio, projetar uma solução, implementá-la, medir o resultado e defender os trade-offs sem depender de abstrações do framework?</p></div>
+</section>
+<section id="station-7" class="station" data-search="Agent Platform Transformar o harness em plataforma interna de engenharia. agent registry runtime orchestration developer portal model gateway policy engine, approvals e evidence store">
+ <div class="station-head"><span class="eyebrow">ESTAÇÃO 7</span><h2>Agent Platform</h2><p>Transformar o harness em plataforma interna de engenharia.</p></div>
+ <div class="grid">
+  <article class="card"><h3>Escopo</h3><ul><li>agent registry</li><li>runtime orchestration</li><li>developer portal</li><li>model gateway</li><li>policy engine, approvals e evidence store</li></ul></article>
+  <article class="card"><h3>Laboratórios & entregáveis</h3><div class="tasks"><label class="task"><input type="checkbox" data-task="7-1"><span>Construir um Agent Platform mínimo.</span></label><label class="task"><input type="checkbox" data-task="7-2"><span>Implementar registry, policies, approvals e evidence.</span></label><label class="task"><input type="checkbox" data-task="7-3"><span>Criar fluxo self-service para publicar e operar um agente.</span></label></div></article>
+ </div>
+ <div class="gate"><strong>Gate de competência</strong><p>Você consegue explicar o domínio, projetar uma solução, implementá-la, medir o resultado e defender os trade-offs sem depender de abstrações do framework?</p></div>
+</section>
+<section id="station-8" class="station" data-search="Security, Trust & Sandboxing Fazer autonomia ser controlada por identidade, políticas e isolamento. prompt injection e indirect injection tool poisoning e excessive agency identity, least privilege e secret brokering sandbox, network e filesystem boundaries audit, kill switch e incident containment">
+ <div class="station-head"><span class="eyebrow">ESTAÇÃO 8</span><h2>Security, Trust & Sandboxing</h2><p>Fazer autonomia ser controlada por identidade, políticas e isolamento.</p></div>
+ <div class="grid">
+  <article class="card"><h3>Escopo</h3><ul><li>prompt injection e indirect injection</li><li>tool poisoning e excessive agency</li><li>identity, least privilege e secret brokering</li><li>sandbox, network e filesystem boundaries</li><li>audit, kill switch e incident containment</li></ul></article>
+  <article class="card"><h3>Laboratórios & entregáveis</h3><div class="tasks"><label class="task"><input type="checkbox" data-task="8-1"><span>Threat model de uma cadeia Agent → Tool → Credential → External System.</span></label><label class="task"><input type="checkbox" data-task="8-2"><span>Construir sandbox com policy enforcement.</span></label><label class="task"><input type="checkbox" data-task="8-3"><span>Executar um game day de comprometimento e contenção.</span></label></div></article>
+ </div>
+ <div class="gate"><strong>Gate de competência</strong><p>Você consegue explicar o domínio, projetar uma solução, implementá-la, medir o resultado e defender os trade-offs sem depender de abstrações do framework?</p></div>
+</section>
+<section id="station-9" class="station" data-search="Evaluation Engineering Medir se agentes e workflows realmente funcionam. task success e correctness trajectory quality tool accuracy human intervention e rework cost, latency, reliability e task horizon">
+ <div class="station-head"><span class="eyebrow">ESTAÇÃO 9</span><h2>Evaluation Engineering</h2><p>Medir se agentes e workflows realmente funcionam.</p></div>
+ <div class="grid">
+  <article class="card"><h3>Escopo</h3><ul><li>task success e correctness</li><li>trajectory quality</li><li>tool accuracy</li><li>human intervention e rework</li><li>cost, latency, reliability e task horizon</li></ul></article>
+  <article class="card"><h3>Laboratórios & entregáveis</h3><div class="tasks"><label class="task"><input type="checkbox" data-task="9-1"><span>Criar um evaluation harness.</span></label><label class="task"><input type="checkbox" data-task="9-2"><span>Definir dataset, rubricas, graders e regressões.</span></label><label class="task"><input type="checkbox" data-task="9-3"><span>Estabelecer métricas de autonomia e intervenção humana.</span></label></div></article>
+ </div>
+ <div class="gate"><strong>Gate de competência</strong><p>Você consegue explicar o domínio, projetar uma solução, implementá-la, medir o resultado e defender os trade-offs sem depender de abstrações do framework?</p></div>
+</section>
+<section id="station-10" class="station" data-search="Engineering Operating System Integrar agentes ao ciclo de desenvolvimento. discovery → SPEC → ADR → PLAN → implementation → test → review → evidence → deploy Spec Driven Development TDD e verification loops CI/CD e progressive delivery evidence-driven engineering">
+ <div class="station-head"><span class="eyebrow">ESTAÇÃO 10</span><h2>Engineering Operating System</h2><p>Integrar agentes ao ciclo de desenvolvimento.</p></div>
+ <div class="grid">
+  <article class="card"><h3>Escopo</h3><ul><li>discovery → SPEC → ADR → PLAN → implementation → test → review → evidence → deploy</li><li>Spec Driven Development</li><li>TDD e verification loops</li><li>CI/CD e progressive delivery</li><li>evidence-driven engineering</li></ul></article>
+  <article class="card"><h3>Laboratórios & entregáveis</h3><div class="tasks"><label class="task"><input type="checkbox" data-task="10-1"><span>Construir um fluxo SDD assistido por agentes.</span></label><label class="task"><input type="checkbox" data-task="10-2"><span>Gerar e validar SPEC/ADR/PLAN/EVIDENCE.</span></label><label class="task"><input type="checkbox" data-task="10-3"><span>Implementar gates de qualidade antes de merge/deploy.</span></label></div></article>
+ </div>
+ <div class="gate"><strong>Gate de competência</strong><p>Você consegue explicar o domínio, projetar uma solução, implementá-la, medir o resultado e defender os trade-offs sem depender de abstrações do framework?</p></div>
+</section>
+<section id="station-11" class="station" data-search="Hybrid Engineering Management Gerenciar capacidade, delegação, desempenho e decisões em uma força de trabalho híbrida. portfolio, roadmap e capacity planning delegation matrix outcome vs activity metrics management span e coordination load decision quality, influence e executive communication">
+ <div class="station-head"><span class="eyebrow">ESTAÇÃO 11</span><h2>Hybrid Engineering Management</h2><p>Gerenciar capacidade, delegação, desempenho e decisões em uma força de trabalho híbrida.</p></div>
+ <div class="grid">
+  <article class="card"><h3>Escopo</h3><ul><li>portfolio, roadmap e capacity planning</li><li>delegation matrix</li><li>outcome vs activity metrics</li><li>management span e coordination load</li><li>decision quality, influence e executive communication</li></ul></article>
+  <article class="card"><h3>Laboratórios & entregáveis</h3><div class="tasks"><label class="task"><input type="checkbox" data-task="11-1"><span>Projetar o operating model de uma squad híbrida.</span></label><label class="task"><input type="checkbox" data-task="11-2"><span>Criar um capacity model humano + agente.</span></label><label class="task"><input type="checkbox" data-task="11-3"><span>Simular decisões de staffing e priorização.</span></label></div></article>
+ </div>
+ <div class="gate"><strong>Gate de competência</strong><p>Você consegue explicar o domínio, projetar uma solução, implementá-la, medir o resultado e defender os trade-offs sem depender de abstrações do framework?</p></div>
+</section>
+<section id="station-12" class="station" data-search="Economics of AI Labor Modelar custo real e retorno da automação. token, compute, tool, storage e network cost human review e rework human vs agent vs hybrid cost quality-adjusted economics unit economics e ROI">
+ <div class="station-head"><span class="eyebrow">ESTAÇÃO 12</span><h2>Economics of AI Labor</h2><p>Modelar custo real e retorno da automação.</p></div>
+ <div class="grid">
+  <article class="card"><h3>Escopo</h3><ul><li>token, compute, tool, storage e network cost</li><li>human review e rework</li><li>human vs agent vs hybrid cost</li><li>quality-adjusted economics</li><li>unit economics e ROI</li></ul></article>
+  <article class="card"><h3>Laboratórios & entregáveis</h3><div class="tasks"><label class="task"><input type="checkbox" data-task="12-1"><span>Criar modelo de custo por task.</span></label><label class="task"><input type="checkbox" data-task="12-2"><span>Comparar três estratégias de automação.</span></label><label class="task"><input type="checkbox" data-task="12-3"><span>Produzir business case com custo, risco, qualidade e oportunidade.</span></label></div></article>
+ </div>
+ <div class="gate"><strong>Gate de competência</strong><p>Você consegue explicar o domínio, projetar uma solução, implementá-la, medir o resultado e defender os trade-offs sem depender de abstrações do framework?</p></div>
+</section>
+<section id="station-13" class="station" data-search="AI Capacity & Queueing Entender throughput como sistema de filas e gargalos. Little's Law WIP, utilization e bottlenecks queueing theory scheduling e concurrency human review capacity">
+ <div class="station-head"><span class="eyebrow">ESTAÇÃO 13</span><h2>AI Capacity & Queueing</h2><p>Entender throughput como sistema de filas e gargalos.</p></div>
+ <div class="grid">
+  <article class="card"><h3>Escopo</h3><ul><li>Little's Law</li><li>WIP, utilization e bottlenecks</li><li>queueing theory</li><li>scheduling e concurrency</li><li>human review capacity</li></ul></article>
+  <article class="card"><h3>Laboratórios & entregáveis</h3><div class="tasks"><label class="task"><input type="checkbox" data-task="13-1"><span>Modelar uma fila de 1.000 tarefas.</span></label><label class="task"><input type="checkbox" data-task="13-2"><span>Simular aumento de agentes e identificar gargalos humanos.</span></label><label class="task"><input type="checkbox" data-task="13-3"><span>Otimizar throughput sem ultrapassar limites de qualidade.</span></label></div></article>
+ </div>
+ <div class="gate"><strong>Gate de competência</strong><p>Você consegue explicar o domínio, projetar uma solução, implementá-la, medir o resultado e defender os trade-offs sem depender de abstrações do framework?</p></div>
+</section>
+<section id="station-14" class="station" data-search="Observability & Agent SRE Operar agentes como sistemas produtivos. system, agent e organization observability traces, trajectories e tool calls SLI/SLO/error budget timeouts, retries, idempotency e circuit breakers agent incident management">
+ <div class="station-head"><span class="eyebrow">ESTAÇÃO 14</span><h2>Observability & Agent SRE</h2><p>Operar agentes como sistemas produtivos.</p></div>
+ <div class="grid">
+  <article class="card"><h3>Escopo</h3><ul><li>system, agent e organization observability</li><li>traces, trajectories e tool calls</li><li>SLI/SLO/error budget</li><li>timeouts, retries, idempotency e circuit breakers</li><li>agent incident management</li></ul></article>
+  <article class="card"><h3>Laboratórios & entregáveis</h3><div class="tasks"><label class="task"><input type="checkbox" data-task="14-1"><span>Criar tracing ponta a ponta.</span></label><label class="task"><input type="checkbox" data-task="14-2"><span>Definir SLOs para agentes.</span></label><label class="task"><input type="checkbox" data-task="14-3"><span>Executar incidente com contenção, rollback e postmortem.</span></label></div></article>
+ </div>
+ <div class="gate"><strong>Gate de competência</strong><p>Você consegue explicar o domínio, projetar uma solução, implementá-la, medir o resultado e defender os trade-offs sem depender de abstrações do framework?</p></div>
+</section>
+<section id="station-15" class="station" data-search="Multi-Squad Organization Escalar de uma squad para uma organização coordenada. platform teams enabling teams shared agents e shared services dependency management standards e federated governance">
+ <div class="station-head"><span class="eyebrow">ESTAÇÃO 15</span><h2>Multi-Squad Organization</h2><p>Escalar de uma squad para uma organização coordenada.</p></div>
+ <div class="grid">
+  <article class="card"><h3>Escopo</h3><ul><li>platform teams</li><li>enabling teams</li><li>shared agents e shared services</li><li>dependency management</li><li>standards e federated governance</li></ul></article>
+  <article class="card"><h3>Laboratórios & entregáveis</h3><div class="tasks"><label class="task"><input type="checkbox" data-task="15-1"><span>Projetar 3–5 squads híbridas.</span></label><label class="task"><input type="checkbox" data-task="15-2"><span>Definir platform team e interfaces.</span></label><label class="task"><input type="checkbox" data-task="15-3"><span>Medir dependências e coordination tax.</span></label></div></article>
+ </div>
+ <div class="gate"><strong>Gate de competência</strong><p>Você consegue explicar o domínio, projetar uma solução, implementá-la, medir o resultado e defender os trade-offs sem depender de abstrações do framework?</p></div>
+</section>
+<section id="station-16" class="station" data-search="AI Software Factory Industrializar discovery, implementação, validação e entrega. demand classification task decomposition context packages agent allocation validators, PRs, evidence e rollout">
+ <div class="station-head"><span class="eyebrow">ESTAÇÃO 16</span><h2>AI Software Factory</h2><p>Industrializar discovery, implementação, validação e entrega.</p></div>
+ <div class="grid">
+  <article class="card"><h3>Escopo</h3><ul><li>demand classification</li><li>task decomposition</li><li>context packages</li><li>agent allocation</li><li>validators, PRs, evidence e rollout</li></ul></article>
+  <article class="card"><h3>Laboratórios & entregáveis</h3><div class="tasks"><label class="task"><input type="checkbox" data-task="16-1"><span>Construir uma factory de software.</span></label><label class="task"><input type="checkbox" data-task="16-2"><span>Processar uma iniciativa real do requisito ao PR.</span></label><label class="task"><input type="checkbox" data-task="16-3"><span>Criar mecanismos de retry, quarantine e human review.</span></label></div></article>
+ </div>
+ <div class="gate"><strong>Gate de competência</strong><p>Você consegue explicar o domínio, projetar uma solução, implementá-la, medir o resultado e defender os trade-offs sem depender de abstrações do framework?</p></div>
+</section>
+<section id="station-17" class="station" data-search="Migration Factory Aplicar agentes a modernização e migração em escala. inventory e dependency mapping AST e semantic transformations batch orchestration validation e compatibility progressive rollout e rollback">
+ <div class="station-head"><span class="eyebrow">ESTAÇÃO 17</span><h2>Migration Factory</h2><p>Aplicar agentes a modernização e migração em escala.</p></div>
+ <div class="grid">
+  <article class="card"><h3>Escopo</h3><ul><li>inventory e dependency mapping</li><li>AST e semantic transformations</li><li>batch orchestration</li><li>validation e compatibility</li><li>progressive rollout e rollback</li></ul></article>
+  <article class="card"><h3>Laboratórios & entregáveis</h3><div class="tasks"><label class="task"><input type="checkbox" data-task="17-1"><span>Construir pipeline de migração de um conjunto de serviços.</span></label><label class="task"><input type="checkbox" data-task="17-2"><span>Gerar PRs auditáveis.</span></label><label class="task"><input type="checkbox" data-task="17-3"><span>Medir taxa de sucesso, retrabalho e regressões.</span></label></div></article>
+ </div>
+ <div class="gate"><strong>Gate de competência</strong><p>Você consegue explicar o domínio, projetar uma solução, implementá-la, medir o resultado e defender os trade-offs sem depender de abstrações do framework?</p></div>
+</section>
+<section id="station-18" class="station" data-search="Governance & Agent Constitution Criar o sistema operacional de governança. agent identity e ownership risk tiers approval gates separation of duties audit log, retention, revalidation e retirement">
+ <div class="station-head"><span class="eyebrow">ESTAÇÃO 18</span><h2>Governance & Agent Constitution</h2><p>Criar o sistema operacional de governança.</p></div>
+ <div class="grid">
+  <article class="card"><h3>Escopo</h3><ul><li>agent identity e ownership</li><li>risk tiers</li><li>approval gates</li><li>separation of duties</li><li>audit log, retention, revalidation e retirement</li></ul></article>
+  <article class="card"><h3>Laboratórios & entregáveis</h3><div class="tasks"><label class="task"><input type="checkbox" data-task="18-1"><span>Escrever AGENT_CONSTITUTION.md.</span></label><label class="task"><input type="checkbox" data-task="18-2"><span>Criar lifecycle de aprovação a aposentadoria.</span></label><label class="task"><input type="checkbox" data-task="18-3"><span>Definir controles técnicos que não dependem de confiança no modelo.</span></label></div></article>
+ </div>
+ <div class="gate"><strong>Gate de competência</strong><p>Você consegue explicar o domínio, projetar uma solução, implementá-la, medir o resultado e defender os trade-offs sem depender de abstrações do framework?</p></div>
+</section>
+<section id="station-19" class="station" data-search="100-Person Hybrid Organization Projetar a organização-alvo da oportunidade. org structure team topology human/agent responsibility matrix shared platform governance boundaries leadership operating mechanisms">
+ <div class="station-head"><span class="eyebrow">ESTAÇÃO 19</span><h2>100-Person Hybrid Organization</h2><p>Projetar a organização-alvo da oportunidade.</p></div>
+ <div class="grid">
+  <article class="card"><h3>Escopo</h3><ul><li>org structure</li><li>team topology</li><li>human/agent responsibility matrix</li><li>shared platform</li><li>governance boundaries</li><li>leadership operating mechanisms</li></ul></article>
+  <article class="card"><h3>Laboratórios & entregáveis</h3><div class="tasks"><label class="task"><input type="checkbox" data-task="19-1"><span>Projetar organização de ~100 pessoas + agentes.</span></label><label class="task"><input type="checkbox" data-task="19-2"><span>Comparar 50, 100 e 500 agentes em diferentes topologias.</span></label><label class="task"><input type="checkbox" data-task="19-3"><span>Produzir Target Operating Model e roadmap de adoção.</span></label></div></article>
+ </div>
+ <div class="gate"><strong>Gate de competência</strong><p>Você consegue explicar o domínio, projetar uma solução, implementá-la, medir o resultado e defender os trade-offs sem depender de abstrações do framework?</p></div>
+</section>
+<section id="station-20" class="station" data-search="Research & Frontier Aprender a transformar pesquisa em decisão de arquitetura. agentic systems multi-agent research human-AI collaboration AI economics evaluation and autonomy socio-technical systems">
+ <div class="station-head"><span class="eyebrow">ESTAÇÃO 20</span><h2>Research & Frontier</h2><p>Aprender a transformar pesquisa em decisão de arquitetura.</p></div>
+ <div class="grid">
+  <article class="card"><h3>Escopo</h3><ul><li>agentic systems</li><li>multi-agent research</li><li>human-AI collaboration</li><li>AI economics</li><li>evaluation and autonomy</li><li>socio-technical systems</li></ul></article>
+  <article class="card"><h3>Laboratórios & entregáveis</h3><div class="tasks"><label class="task"><input type="checkbox" data-task="20-1"><span>Para cada paper: hipótese → implementação → experimento → resultado → decisão.</span></label><label class="task"><input type="checkbox" data-task="20-2"><span>Manter research log.</span></label><label class="task"><input type="checkbox" data-task="20-3"><span>Reproduzir pelo menos um resultado experimental relevante.</span></label></div></article>
+ </div>
+ <div class="gate"><strong>Gate de competência</strong><p>Você consegue explicar o domínio, projetar uma solução, implementá-la, medir o resultado e defender os trade-offs sem depender de abstrações do framework?</p></div>
+</section>
+<section id="station-21" class="station" data-search="Executive Architecture Converter arquitetura híbrida em estratégia executável. business case investment thesis risk communication roadmaps operating mechanisms executive writing">
+ <div class="station-head"><span class="eyebrow">ESTAÇÃO 21</span><h2>Executive Architecture</h2><p>Converter arquitetura híbrida em estratégia executável.</p></div>
+ <div class="grid">
+  <article class="card"><h3>Escopo</h3><ul><li>business case</li><li>investment thesis</li><li>risk communication</li><li>roadmaps</li><li>operating mechanisms</li><li>executive writing</li></ul></article>
+  <article class="card"><h3>Laboratórios & entregáveis</h3><div class="tasks"><label class="task"><input type="checkbox" data-task="21-1"><span>Produzir um executive architecture memo.</span></label><label class="task"><input type="checkbox" data-task="21-2"><span>Defender investimento, riscos e métricas.</span></label><label class="task"><input type="checkbox" data-task="21-3"><span>Conduzir architecture review com stakeholders fictícios.</span></label></div></article>
+ </div>
+ <div class="gate"><strong>Gate de competência</strong><p>Você consegue explicar o domínio, projetar uma solução, implementá-la, medir o resultado e defender os trade-offs sem depender de abstrações do framework?</p></div>
+</section>
+<section id="station-22" class="station" data-search="CAPSTONE 1 — Hybrid Squad Primeiro sistema integrado. 5 humanos + agentes delegation runtime evaluation governance">
+ <div class="station-head"><span class="eyebrow">ESTAÇÃO 22</span><h2>CAPSTONE 1 — Hybrid Squad</h2><p>Primeiro sistema integrado.</p></div>
+ <div class="grid">
+  <article class="card"><h3>Escopo</h3><ul><li>5 humanos + agentes</li><li>delegation</li><li>runtime</li><li>evaluation</li><li>governance</li></ul></article>
+  <article class="card"><h3>Laboratórios & entregáveis</h3><div class="tasks"><label class="task"><input type="checkbox" data-task="22-1"><span>Operar uma squad híbrida em um projeto real ou simulado.</span></label><label class="task"><input type="checkbox" data-task="22-2"><span>Medir throughput, quality, cost e intervention.</span></label><label class="task"><input type="checkbox" data-task="22-3"><span>Apresentar postmortem e evolução da arquitetura.</span></label></div></article>
+ </div>
+ <div class="gate"><strong>Gate de competência</strong><p>Você consegue explicar o domínio, projetar uma solução, implementá-la, medir o resultado e defender os trade-offs sem depender de abstrações do framework?</p></div>
+</section>
+<section id="station-23" class="station" data-search="CAPSTONE 2 — Agent Platform Construir a plataforma que sustenta múltiplas squads. harness runtime registry tools sandbox policy observability evaluation">
+ <div class="station-head"><span class="eyebrow">ESTAÇÃO 23</span><h2>CAPSTONE 2 — Agent Platform</h2><p>Construir a plataforma que sustenta múltiplas squads.</p></div>
+ <div class="grid">
+  <article class="card"><h3>Escopo</h3><ul><li>harness</li><li>runtime</li><li>registry</li><li>tools</li><li>sandbox</li><li>policy</li><li>observability</li><li>evaluation</li></ul></article>
+  <article class="card"><h3>Laboratórios & entregáveis</h3><div class="tasks"><label class="task"><input type="checkbox" data-task="23-1"><span>Publicar e operar múltiplos agentes.</span></label><label class="task"><input type="checkbox" data-task="23-2"><span>Aplicar políticas e evidências.</span></label><label class="task"><input type="checkbox" data-task="23-3"><span>Demonstrar isolamento e recuperação após falha.</span></label></div></article>
+ </div>
+ <div class="gate"><strong>Gate de competência</strong><p>Você consegue explicar o domínio, projetar uma solução, implementá-la, medir o resultado e defender os trade-offs sem depender de abstrações do framework?</p></div>
+</section>
+<section id="station-24" class="station" data-search="CAPSTONE 3 — Multi-Squad Factory Industrializar entrega. 3–5 squads software factory shared platform capacity planning quality gates">
+ <div class="station-head"><span class="eyebrow">ESTAÇÃO 24</span><h2>CAPSTONE 3 — Multi-Squad Factory</h2><p>Industrializar entrega.</p></div>
+ <div class="grid">
+  <article class="card"><h3>Escopo</h3><ul><li>3–5 squads</li><li>software factory</li><li>shared platform</li><li>capacity planning</li><li>quality gates</li></ul></article>
+  <article class="card"><h3>Laboratórios & entregáveis</h3><div class="tasks"><label class="task"><input type="checkbox" data-task="24-1"><span>Processar um portfolio de tarefas em paralelo.</span></label><label class="task"><input type="checkbox" data-task="24-2"><span>Medir coordination tax.</span></label><label class="task"><input type="checkbox" data-task="24-3"><span>Demonstrar throughput sustentável.</span></label></div></article>
+ </div>
+ <div class="gate"><strong>Gate de competência</strong><p>Você consegue explicar o domínio, projetar uma solução, implementá-la, medir o resultado e defender os trade-offs sem depender de abstrações do framework?</p></div>
+</section>
+<section id="station-25" class="station" data-search="CAPSTONE 4 — 100-Person AI-Native Organization Projeto final de nível Principal. ~100 pessoas agentes compartilhados e dedicados organization OS economics security governance SRE strategy">
+ <div class="station-head"><span class="eyebrow">ESTAÇÃO 25</span><h2>CAPSTONE 4 — 100-Person AI-Native Organization</h2><p>Projeto final de nível Principal.</p></div>
+ <div class="grid">
+  <article class="card"><h3>Escopo</h3><ul><li>~100 pessoas</li><li>agentes compartilhados e dedicados</li><li>organization OS</li><li>economics</li><li>security</li><li>governance</li><li>SRE</li><li>strategy</li></ul></article>
+  <article class="card"><h3>Laboratórios & entregáveis</h3><div class="tasks"><label class="task"><input type="checkbox" data-task="25-1"><span>Entregar TARGET_OPERATING_MODEL.md.</span></label><label class="task"><input type="checkbox" data-task="25-2"><span>Entregar ORG_DESIGN.md, TEAM_TOPOLOGY.md, HUMAN_AGENT_RACI.md e GOVERNANCE.md.</span></label><label class="task"><input type="checkbox" data-task="25-3"><span>Entregar arquitetura da plataforma, métricas, economics e roadmap.</span></label><label class="task"><input type="checkbox" data-task="25-4"><span>Defender o sistema perante um painel executivo/técnico.</span></label></div></article>
+ </div>
+ <div class="gate"><strong>Gate de competência</strong><p>Você consegue explicar o domínio, projetar uma solução, implementá-la, medir o resultado e defender os trade-offs sem depender de abstrações do framework?</p></div>
+</section>
+<footer class="footer"><strong>Boss final:</strong> defender uma organização AI-Native de ~100 pessoas + agentes, incluindo Target Operating Model, topologia, plataforma, governança, segurança, avaliação, SRE, economics, capacidade e roadmap executivo.</footer>
+</main>
+<script>
+const boxes=[...document.querySelectorAll('input[type=checkbox]')];
+const key='ai-native-hybrid-org-progress-v1';
+try{const s=JSON.parse(localStorage.getItem(key)||'{}');boxes.forEach(b=>b.checked=!!s[b.dataset.task]);}catch(e){}
+boxes.forEach(b=>b.addEventListener('change',()=>{const s={};boxes.forEach(x=>s[x.dataset.task]=x.checked);try{localStorage.setItem(key,JSON.stringify(s))}catch(e){}}));
+document.getElementById('search').addEventListener('input',e=>{const q=e.target.value.toLowerCase();document.querySelectorAll('.station[id]').forEach(s=>s.style.display=(!q||s.dataset.search.toLowerCase().includes(q))?'':'none')});
+</script>
+</body></html>

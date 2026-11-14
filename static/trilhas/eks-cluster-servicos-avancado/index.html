@@ -1,0 +1,461 @@
+<!DOCTYPE html>
+<html
+  lang="pt-BR"
+  class="scroll-smooth"
+  x-data="{
+    dark: window.matchMedia('(prefers-color-scheme: dark)').matches,
+    toggleDark() {
+      this.dark = !this.dark;
+      document.documentElement.classList.toggle('dark', this.dark);
+      document.documentElement.style.colorScheme = this.dark ? 'dark' : 'light';
+    }
+  }"
+  x-init="
+    document.documentElement.classList.toggle('dark', dark);
+    document.documentElement.style.colorScheme = dark ? 'dark' : 'light';
+  "
+>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#0f172a" media="(prefers-color-scheme: dark)">
+  <meta name="theme-color" content="#f8fafc" media="(prefers-color-scheme: light)">
+  <title>Learning Trail — Construir Servicos de Producao em um Cluster EKS</title>
+  <link rel="preconnect" href="https://cdn.tailwindcss.com">
+  <link rel="preconnect" href="https://unpkg.com">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/@phosphor-icons/web"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            primary: { DEFAULT: '#2563eb', hover: '#1d4ed8' },
+          },
+          fontFamily: {
+            sans: ['Inter', 'system-ui', 'sans-serif'],
+          },
+        }
+      }
+    }
+  </script>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+    .custom-scrollbar::-webkit-scrollbar { width: 4px; }
+    .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
+    .custom-scrollbar::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
+    .dark .custom-scrollbar::-webkit-scrollbar-thumb { background: #334155; }
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        transition-duration: 0.01ms !important;
+        animation-duration: 0.01ms !important;
+      }
+    }
+    .skip-link {
+      position: absolute;
+      top: -100%;
+      left: 1rem;
+      z-index: 100;
+      padding: 0.5rem 1rem;
+      background: #2563eb;
+      color: white;
+      border-radius: 0 0 0.5rem 0.5rem;
+      font-weight: 600;
+      transition: top 0.2s;
+    }
+    .skip-link:focus { top: 0; }
+    .text-pretty { text-wrap: pretty; }
+  </style>
+</head>
+<body
+  class="bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100 font-sans antialiased"
+  style="color-scheme: light;"
+  :style="dark ? 'color-scheme: dark' : 'color-scheme: light'"
+>
+  <a href="#main-content" class="skip-link focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white">
+    Ir para o conteudo principal
+  </a>
+
+  <div class="flex h-screen overflow-hidden">
+    <aside
+      id="sidebar"
+      class="hidden md:flex flex-col w-72 shrink-0 bg-white dark:bg-slate-900 border-r border-slate-200 dark:border-slate-800 overflow-y-auto custom-scrollbar z-10 overscroll-y-contain"
+      aria-label="Mapa da trilha"
+    >
+      <div class="p-5 flex flex-col h-full">
+        <div class="flex items-center gap-3 mb-8 min-w-0">
+          <div class="flex items-center justify-center w-9 h-9 rounded-xl bg-blue-600 shrink-0 shadow-sm">
+            <i class="ph-fill ph-compass text-white text-lg" aria-hidden="true"></i>
+          </div>
+          <div class="min-w-0">
+            <h1 class="text-sm font-bold truncate text-slate-900 dark:text-slate-100">
+              <span translate="no">EKS avancado</span>
+            </h1>
+            <p class="text-xs text-slate-500 dark:text-slate-400 font-medium uppercase tracking-widest">Learning Trail</p>
+          </div>
+        </div>
+
+        <div class="flex flex-wrap gap-1.5 mb-6">
+          <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 text-xs font-semibold">
+            <i class="ph ph-graduation-cap text-xs" aria-hidden="true"></i> avancado
+          </span>
+          <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-blue-50 dark:bg-blue-950 text-blue-700 dark:text-blue-300 text-xs font-semibold">
+            <i class="ph ph-map-pin text-xs" aria-hidden="true"></i> 8 estacoes
+          </span>
+          <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-emerald-50 dark:bg-emerald-950 text-emerald-700 dark:text-emerald-300 text-xs font-semibold">
+            <i class="ph ph-check-circle text-xs" aria-hidden="true"></i> 32 validados
+          </span>
+        </div>
+
+        <nav aria-label="Estacoes da trilha">
+          <p class="text-xs font-bold text-slate-400 dark:text-slate-500 uppercase tracking-widest mb-3 px-1">Estacoes</p>
+          <ul class="space-y-0.5" role="list">
+            <li><a href="#estacao-1" class="flex items-start gap-3 p-2.5 rounded-lg border border-transparent text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors duration-150"><span class="flex items-center justify-center w-5 h-5 rounded-full bg-slate-200 dark:bg-slate-700 text-slate-600 dark:text-slate-300 text-xs font-bold shrink-0 mt-0.5">1</span><span><span class="block text-sm font-medium leading-snug">Inventario do cluster</span><span class="text-xs text-slate-400 dark:text-slate-500">~8 min</span></span></a></li>
+            <li><a href="#estacao-2" class="flex items-start gap-3 p-2.5 rounded-lg border border-transparent text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors duration-150"><span class="flex items-center justify-center w-5 h-5 rounded-full bg-slate-200 dark:bg-slate-700 text-slate-600 dark:text-slate-300 text-xs font-bold shrink-0 mt-0.5">2</span><span><span class="block text-sm font-medium leading-snug">Base EKS com IaC</span><span class="text-xs text-slate-400 dark:text-slate-500">~9 min</span></span></a></li>
+            <li><a href="#estacao-3" class="flex items-start gap-3 p-2.5 rounded-lg border border-transparent text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors duration-150"><span class="flex items-center justify-center w-5 h-5 rounded-full bg-slate-200 dark:bg-slate-700 text-slate-600 dark:text-slate-300 text-xs font-bold shrink-0 mt-0.5">3</span><span><span class="block text-sm font-medium leading-snug">Rede interna e CNI</span><span class="text-xs text-slate-400 dark:text-slate-500">~10 min</span></span></a></li>
+            <li><a href="#estacao-4" class="flex items-start gap-3 p-2.5 rounded-lg border border-transparent text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors duration-150"><span class="flex items-center justify-center w-5 h-5 rounded-full bg-slate-200 dark:bg-slate-700 text-slate-600 dark:text-slate-300 text-xs font-bold shrink-0 mt-0.5">4</span><span><span class="block text-sm font-medium leading-snug">Identidade e segredos</span><span class="text-xs text-slate-400 dark:text-slate-500">~10 min</span></span></a></li>
+            <li><a href="#estacao-5" class="flex items-start gap-3 p-2.5 rounded-lg border border-transparent text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors duration-150"><span class="flex items-center justify-center w-5 h-5 rounded-full bg-slate-200 dark:bg-slate-700 text-slate-600 dark:text-slate-300 text-xs font-bold shrink-0 mt-0.5">5</span><span><span class="block text-sm font-medium leading-snug">ALB, NLB e webhooks</span><span class="text-xs text-slate-400 dark:text-slate-500">~10 min</span></span></a></li>
+            <li><a href="#estacao-6" class="flex items-start gap-3 p-2.5 rounded-lg border border-transparent text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors duration-150"><span class="flex items-center justify-center w-5 h-5 rounded-full bg-slate-200 dark:bg-slate-700 text-slate-600 dark:text-slate-300 text-xs font-bold shrink-0 mt-0.5">6</span><span><span class="block text-sm font-medium leading-snug">Observabilidade</span><span class="text-xs text-slate-400 dark:text-slate-500">~10 min</span></span></a></li>
+            <li><a href="#estacao-7" class="flex items-start gap-3 p-2.5 rounded-lg border border-transparent text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors duration-150"><span class="flex items-center justify-center w-5 h-5 rounded-full bg-slate-200 dark:bg-slate-700 text-slate-600 dark:text-slate-300 text-xs font-bold shrink-0 mt-0.5">7</span><span><span class="block text-sm font-medium leading-snug">Autoscaling</span><span class="text-xs text-slate-400 dark:text-slate-500">~10 min</span></span></a></li>
+            <li><a href="#estacao-8" class="flex items-start gap-3 p-2.5 rounded-lg border border-transparent text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors duration-150"><span class="flex items-center justify-center w-5 h-5 rounded-full bg-slate-200 dark:bg-slate-700 text-slate-600 dark:text-slate-300 text-xs font-bold shrink-0 mt-0.5">8</span><span><span class="block text-sm font-medium leading-snug">Seguranca e rollouts</span><span class="text-xs text-slate-400 dark:text-slate-500">~10 min</span></span></a></li>
+            <li class="pt-3 mt-2 border-t border-slate-100 dark:border-slate-800">
+              <a href="#boss-final" class="flex items-center gap-3 p-2.5 rounded-lg border border-transparent text-amber-700 dark:text-amber-400 hover:bg-amber-50 dark:hover:bg-amber-950/40 transition-colors duration-150">
+                <i class="ph-fill ph-sword text-lg shrink-0" aria-hidden="true"></i>
+                <span class="text-sm font-bold">Boss Final</span>
+              </a>
+            </li>
+          </ul>
+        </nav>
+
+        <div class="mt-auto pt-4 border-t border-slate-100 dark:border-slate-800">
+          <p class="text-xs text-slate-400 dark:text-slate-500 flex items-center gap-1.5">
+            <i class="ph ph-shield-check text-emerald-500" aria-hidden="true"></i>
+            <span translate="no">Trust&nbsp;by&nbsp;Inspection</span>
+          </p>
+        </div>
+      </div>
+    </aside>
+
+    <div class="flex flex-col flex-1 min-w-0 overflow-hidden">
+      <header class="sticky top-0 z-20 bg-white/80 dark:bg-slate-900/80 backdrop-blur-md border-b border-slate-200 dark:border-slate-800">
+        <div class="flex items-center justify-between px-4 h-14 gap-3">
+          <div class="flex md:hidden items-center gap-2 min-w-0">
+            <i class="ph-fill ph-compass text-blue-600 dark:text-blue-400 text-xl shrink-0" aria-hidden="true"></i>
+            <span class="text-sm font-bold truncate" translate="no">EKS avancado</span>
+          </div>
+          <p class="hidden md:block text-sm text-slate-500 dark:text-slate-400">
+            <span translate="no">Learning Trail</span>
+          </p>
+          <button
+            @click="toggleDark()"
+            :aria-pressed="dark"
+            aria-label="Alternar modo escuro"
+            class="p-2 rounded-full text-slate-500 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors duration-150 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
+            style="touch-action: manipulation"
+          >
+            <i class="ph text-lg" :class="dark ? 'ph-sun' : 'ph-moon'" aria-hidden="true"></i>
+          </button>
+        </div>
+      </header>
+
+      <main id="main-content" class="flex-1 overflow-y-auto custom-scrollbar">
+        <div class="max-w-3xl mx-auto px-5 py-10 md:py-16">
+          <header class="mb-14">
+            <div class="flex flex-wrap gap-2 mb-5" role="list" aria-label="Metadados da trilha">
+              <span role="listitem" class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 text-xs font-semibold border border-slate-200 dark:border-slate-700">
+                Nivel: avancado
+              </span>
+              <span role="listitem" class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 text-xs font-semibold border border-slate-200 dark:border-slate-700">
+                8 estacoes
+              </span>
+              <span role="listitem" class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-blue-50 dark:bg-blue-950 text-blue-700 dark:text-blue-300 text-xs font-semibold border border-blue-200 dark:border-blue-900">
+                <i class="ph ph-check" aria-hidden="true"></i> 32 nervos validados
+              </span>
+              <span role="listitem" class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-emerald-50 dark:bg-emerald-950 text-emerald-700 dark:text-emerald-300 text-xs font-semibold border border-emerald-200 dark:border-emerald-900">
+                Fontes verificadas em 2026-07-07
+              </span>
+            </div>
+
+            <h2 class="text-3xl md:text-4xl font-extrabold tracking-tight mb-5 text-pretty">
+              Construir todos os servicos de um cluster EKS com add-ons e workloads de producao
+            </h2>
+
+            <div class="rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-5">
+              <h3 class="text-xs font-bold uppercase tracking-widest text-slate-400 dark:text-slate-500 mb-2 flex items-center gap-1.5">
+                <i class="ph ph-target" aria-hidden="true"></i> Objetivo
+              </h3>
+              <p class="text-slate-700 dark:text-slate-300 leading-relaxed text-pretty">
+                Ao final, voce conseguira reconstruir um cluster EKS semelhante ao inventario da imagem: add-ons de plataforma como AWS Load Balancer Controller, Datadog, External Secrets, Fluent Bit, Metrics Server, KEDA, Falcon KAC e Argo Rollouts; e workloads internos como <code>timeline-mobile-bff</code>, <code>timeline-adapter-gateway</code>, <code>hub-account-*</code>, <code>quickconfig</code> e <code>org-yy4-*</code>. O foco e pratico: IaC, Helm, CRDs, IAM, rede, observabilidade, autoscaling, seguranca e rollout progressivo.
+              </p>
+            </div>
+          </header>
+
+          <section class="mb-14" aria-labelledby="mapa-titulo">
+            <h2 id="mapa-titulo" class="text-xl font-bold mb-4">Mapa da trilha</h2>
+            <div class="overflow-x-auto rounded-xl border border-slate-200 dark:border-slate-800">
+              <table class="min-w-full text-sm bg-white dark:bg-slate-900">
+                <thead class="bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300">
+                  <tr>
+                    <th class="text-left p-3">#</th>
+                    <th class="text-left p-3">Estacao</th>
+                    <th class="text-left p-3">Entrega pratica</th>
+                    <th class="text-left p-3">Nervos</th>
+                  </tr>
+                </thead>
+                <tbody class="divide-y divide-slate-200 dark:divide-slate-800 text-slate-700 dark:text-slate-300">
+                  <tr><td class="p-3">1</td><td class="p-3">Inventario do cluster</td><td class="p-3">Catalogo de servicos, portas, namespaces e donos</td><td class="p-3">4</td></tr>
+                  <tr><td class="p-3">2</td><td class="p-3">Base EKS com IaC</td><td class="p-3">Cluster Terraform com add-ons base e convencoes</td><td class="p-3">4</td></tr>
+                  <tr><td class="p-3">3</td><td class="p-3">Rede interna e VPC CNI</td><td class="p-3">Servicos mockados e testes DNS/porta/IPAM</td><td class="p-3">4</td></tr>
+                  <tr><td class="p-3">4</td><td class="p-3">Identidade e segredos</td><td class="p-3">Pod Identity/IRSA + External Secrets</td><td class="p-3">4</td></tr>
+                  <tr><td class="p-3">5</td><td class="p-3">ALB, NLB e webhooks</td><td class="p-3">Ingress e LoadBalancer reproduzindo a topologia</td><td class="p-3">4</td></tr>
+                  <tr><td class="p-3">6</td><td class="p-3">Observabilidade</td><td class="p-3">Datadog, Fluent Bit e sinais por namespace</td><td class="p-3">4</td></tr>
+                  <tr><td class="p-3">7</td><td class="p-3">Autoscaling</td><td class="p-3">HPA, KEDA, SQS e capacidade com Karpenter</td><td class="p-3">4</td></tr>
+                  <tr><td class="p-3">8</td><td class="p-3">Seguranca e rollouts</td><td class="p-3">Falcon KAC + canary com Argo Rollouts</td><td class="p-3">4</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </section>
+
+          <section class="mb-14" aria-labelledby="mix-titulo">
+            <h2 id="mix-titulo" class="text-xl font-bold mb-4">Mix multimodal validado</h2>
+            <div class="grid sm:grid-cols-2 gap-3">
+              <div class="rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-4"><strong>Leituras profundas:</strong> 18 docs oficiais e guias tecnicos.</div>
+              <div class="rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-4"><strong>Videos:</strong> 5 demos/aulas com descricao verificavel.</div>
+              <div class="rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-4"><strong>Audio/podcasts:</strong> 4 episodios com show notes/transcricao.</div>
+              <div class="rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-4"><strong>Tutoriais/labs:</strong> 7 labs ou guias executaveis.</div>
+              <div class="rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-4"><strong>Comunidade recente:</strong> 5 sinais de GitHub, HN, Reddit e releases.</div>
+              <div class="rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-4"><strong>Livros:</strong> 4 referencias opcionais validadas por sumario.</div>
+            </div>
+          </section>
+
+          <hr class="border-slate-200 dark:border-slate-800 mb-14" aria-hidden="true">
+
+          <section id="estacao-1" class="mb-16 scroll-mt-20" aria-labelledby="estacao-1-titulo">
+            <div class="flex items-center gap-3 mb-5">
+              <span class="flex items-center justify-center w-8 h-8 rounded-full bg-blue-600 text-white font-bold text-sm shrink-0 shadow" aria-hidden="true">1</span>
+              <h2 id="estacao-1-titulo" class="text-xl font-bold text-pretty">Do print ao contrato de plataforma: inventariar o cluster</h2>
+            </div>
+            <p class="text-xs text-slate-400 dark:text-slate-500 mb-5 flex items-center gap-3 font-medium">
+              <span class="flex items-center gap-1"><i class="ph ph-clock" aria-hidden="true"></i> ~8 min leitura</span>
+              <span class="flex items-center gap-1"><i class="ph ph-plug" aria-hidden="true"></i> 4 nervos</span>
+            </p>
+            <div class="text-slate-700 dark:text-slate-300 leading-relaxed mb-8 space-y-3 text-[1.0625rem]">
+              <p>A imagem mostra uma mistura tipica de plataforma e produto: namespaces de add-ons, webhooks, APIs internas e BFFs expostos como <code>ClusterIP</code>. No nivel avancado, o primeiro passo nao e instalar coisas; e transformar <code>kubectl get svc -A</code> em um contrato operacional: o que e add-on, o que e workload, qual porta e usada, quem depende de quem e qual falha derruba o fluxo do usuario.</p>
+            </div>
+            <div class="rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900/60 overflow-hidden mb-6">
+              <div class="flex items-center gap-2 px-4 py-3 border-b border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900">
+                <i class="ph ph-plug text-blue-500 dark:text-blue-400" aria-hidden="true"></i>
+                <h3 class="text-xs font-bold uppercase tracking-widest text-slate-600 dark:text-slate-300">Nervos validados</h3>
+              </div>
+              <ul class="divide-y divide-slate-200 dark:divide-slate-800" role="list">
+                <li class="p-4">
+                  <div class="flex items-start gap-3"><div class="flex items-center justify-center w-9 h-9 rounded-lg bg-blue-50 dark:bg-blue-950 text-blue-600 dark:text-blue-400 shrink-0 mt-0.5"><i class="ph-fill ph-article text-lg"></i></div><div class="min-w-0 flex-1">
+                    <a href="https://kubernetes.io/docs/concepts/services-networking/service/" target="_blank" rel="noopener noreferrer" class="text-sm font-bold text-slate-900 dark:text-white hover:text-blue-600 dark:hover:text-blue-400 inline-flex items-center gap-1"><span translate="no">Service | Kubernetes</span><i class="ph ph-arrow-up-right text-xs opacity-50"></i></a>
+                    <p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">Kubernetes Docs · leitura profunda</p>
+                    <div class="mt-2.5 rounded-lg bg-white dark:bg-slate-800 border border-slate-100 dark:border-slate-700 p-3 space-y-2"><p class="text-xs text-slate-700 dark:text-slate-300"><strong>Quando seguir:</strong> antes de replicar os <code>ClusterIP</code> da imagem.</p><p class="text-xs italic text-slate-500 dark:text-slate-400 border-l-2 border-blue-300 dark:border-blue-700 pl-2"><strong class="not-italic text-emerald-600 dark:text-emerald-400">Validado:</strong> cobre <span translate="no">ClusterIP, NodePort, LoadBalancer e ExternalName</span>.</p></div>
+                  </div></div>
+                </li>
+                <li class="p-4">
+                  <div class="flex items-start gap-3"><div class="flex items-center justify-center w-9 h-9 rounded-lg bg-blue-50 dark:bg-blue-950 text-blue-600 dark:text-blue-400 shrink-0 mt-0.5"><i class="ph-fill ph-article text-lg"></i></div><div class="min-w-0 flex-1">
+                    <a href="https://kubernetes.io/docs/concepts/services-networking/dns-pod-service/" target="_blank" rel="noopener noreferrer" class="text-sm font-bold text-slate-900 dark:text-white hover:text-blue-600 dark:hover:text-blue-400 inline-flex items-center gap-1"><span translate="no">DNS for Services and Pods</span><i class="ph ph-arrow-up-right text-xs opacity-50"></i></a>
+                    <p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">Kubernetes Docs · leitura profunda</p>
+                    <div class="mt-2.5 rounded-lg bg-white dark:bg-slate-800 border border-slate-100 dark:border-slate-700 p-3 space-y-2"><p class="text-xs text-slate-700 dark:text-slate-300"><strong>Quando seguir:</strong> para entender como <code>timeline-mobile-bff-service.timeline-mobile-bff.svc</code> deve resolver internamente.</p><p class="text-xs italic text-slate-500 dark:text-slate-400 border-l-2 border-blue-300 dark:border-blue-700 pl-2"><strong class="not-italic text-emerald-600 dark:text-emerald-400">Validado:</strong> explica DNS estavel para Services e Pods.</p></div>
+                  </div></div>
+                </li>
+                <li class="p-4">
+                  <div class="flex items-start gap-3"><div class="flex items-center justify-center w-9 h-9 rounded-lg bg-blue-50 dark:bg-blue-950 text-blue-600 dark:text-blue-400 shrink-0 mt-0.5"><i class="ph-fill ph-video text-lg"></i></div><div class="min-w-0 flex-1">
+                    <a href="https://www.youtube.com/watch?v=BYZgA2BBt4s" target="_blank" rel="noopener noreferrer" class="text-sm font-bold text-slate-900 dark:text-white hover:text-blue-600 dark:hover:text-blue-400 inline-flex items-center gap-1"><span translate="no">Kubernetes Services Explained</span><i class="ph ph-arrow-up-right text-xs opacity-50"></i></a>
+                    <p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">Video · ClusterIP, NodePort, LoadBalancer</p>
+                    <div class="mt-2.5 rounded-lg bg-white dark:bg-slate-800 border border-slate-100 dark:border-slate-700 p-3 space-y-2"><p class="text-xs text-slate-700 dark:text-slate-300"><strong>Quando seguir:</strong> se quiser consolidar visualmente a diferenca entre os tipos de Service.</p><p class="text-xs italic text-slate-500 dark:text-slate-400 border-l-2 border-blue-300 dark:border-blue-700 pl-2"><strong class="not-italic text-emerald-600 dark:text-emerald-400">Validado:</strong> a descricao cobre os tres tipos principais de Service.</p></div>
+                  </div></div>
+                </li>
+                <li class="p-4">
+                  <div class="flex items-start gap-3"><div class="flex items-center justify-center w-9 h-9 rounded-lg bg-blue-50 dark:bg-blue-950 text-blue-600 dark:text-blue-400 shrink-0 mt-0.5"><i class="ph-fill ph-headphones text-lg"></i></div><div class="min-w-0 flex-1">
+                    <a href="https://kubernetespodcast.com/episode/266-k8s-at-uber/" target="_blank" rel="noopener noreferrer" class="text-sm font-bold text-slate-900 dark:text-white hover:text-blue-600 dark:hover:text-blue-400 inline-flex items-center gap-1"><span translate="no">Kubernetes at Uber, with Lucy Sweet</span><i class="ph ph-arrow-up-right text-xs opacity-50"></i></a>
+                    <p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">Kubernetes Podcast · publicado em junho de 2026</p>
+                    <div class="mt-2.5 rounded-lg bg-white dark:bg-slate-800 border border-slate-100 dark:border-slate-700 p-3 space-y-2"><p class="text-xs text-slate-700 dark:text-slate-300"><strong>Quando seguir:</strong> para captar o peso operacional de DNS e inventario em escala real.</p><p class="text-xs italic text-slate-500 dark:text-slate-400 border-l-2 border-blue-300 dark:border-blue-700 pl-2"><strong class="not-italic text-emerald-600 dark:text-emerald-400">Validado:</strong> show notes citam migracao para Kubernetes, escala e DNS.</p></div>
+                  </div></div>
+                </li>
+              </ul>
+            </div>
+            <div class="rounded-xl border border-amber-200 dark:border-amber-900/60 bg-amber-50 dark:bg-amber-950/30 p-4" role="note">
+              <p class="text-xs font-bold uppercase tracking-widest text-amber-700 dark:text-amber-500 mb-1.5 flex items-center gap-1.5"><i class="ph ph-compass-rose" aria-hidden="true"></i> Entrega pratica</p>
+              <p class="text-sm font-medium text-amber-900 dark:text-amber-200 text-pretty">Gere um CSV a partir de <code>kubectl get svc -A -o json</code> com namespace, servico, tipo, portas, owner provavel, criticidade e dependencia. Classifique cada linha da imagem como plataforma, observabilidade, seguranca, autoscaling, rollout ou produto.</p>
+            </div>
+          </section>
+
+          <section id="estacao-2" class="mb-16 scroll-mt-20" aria-labelledby="estacao-2-titulo">
+            <div class="flex items-center gap-3 mb-5"><span class="flex items-center justify-center w-8 h-8 rounded-full bg-blue-600 text-white font-bold text-sm shrink-0 shadow">2</span><h2 id="estacao-2-titulo" class="text-xl font-bold text-pretty">Construir a base EKS com Terraform, add-ons e padroes de operacao</h2></div>
+            <p class="text-xs text-slate-400 dark:text-slate-500 mb-5 flex items-center gap-3 font-medium"><span class="flex items-center gap-1"><i class="ph ph-clock"></i> ~9 min leitura</span><span class="flex items-center gap-1"><i class="ph ph-plug"></i> 4 nervos</span></p>
+            <div class="text-slate-700 dark:text-slate-300 leading-relaxed mb-8 space-y-3 text-[1.0625rem]"><p>Um cluster que roda Datadog, External Secrets, KEDA, Falcon e Argo Rollouts precisa nascer com decisoes explicitas: versao, VPC, subnets, endpoints, node groups, add-ons gerenciados, quem instala CRDs, quem possui Helm releases e qual fluxo promove mudancas. Aqui voce sai do console e monta uma fundacao reprodutivel.</p></div>
+            <div class="rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900/60 overflow-hidden mb-6"><div class="flex items-center gap-2 px-4 py-3 border-b border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900"><i class="ph ph-plug text-blue-500 dark:text-blue-400"></i><h3 class="text-xs font-bold uppercase tracking-widest text-slate-600 dark:text-slate-300">Nervos validados</h3></div><ul class="divide-y divide-slate-200 dark:divide-slate-800">
+              <li class="p-4"><div class="flex items-start gap-3"><div class="flex items-center justify-center w-9 h-9 rounded-lg bg-blue-50 dark:bg-blue-950 text-blue-600 dark:text-blue-400 shrink-0 mt-0.5"><i class="ph-fill ph-book-open text-lg"></i></div><div class="min-w-0 flex-1"><a href="https://docs.aws.amazon.com/eks/latest/best-practices/introduction.html" target="_blank" rel="noopener noreferrer" class="text-sm font-bold text-slate-900 dark:text-white hover:text-blue-600 dark:hover:text-blue-400 inline-flex items-center gap-1"><span translate="no">Amazon EKS Best Practices Guide</span><i class="ph ph-arrow-up-right text-xs opacity-50"></i></a><p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">AWS Docs · day-2 operations</p><div class="mt-2.5 rounded-lg bg-white dark:bg-slate-800 border border-slate-100 dark:border-slate-700 p-3 space-y-2"><p class="text-xs text-slate-700 dark:text-slate-300"><strong>Quando seguir:</strong> para transformar instalacao em padroes de operacao.</p><p class="text-xs italic text-slate-500 dark:text-slate-400 border-l-2 border-blue-300 dark:border-blue-700 pl-2"><strong class="not-italic text-emerald-600 dark:text-emerald-400">Validado:</strong> guia oficial de praticas para day-2 em EKS.</p></div></div></div></li>
+              <li class="p-4"><div class="flex items-start gap-3"><div class="flex items-center justify-center w-9 h-9 rounded-lg bg-blue-50 dark:bg-blue-950 text-blue-600 dark:text-blue-400 shrink-0 mt-0.5"><i class="ph-fill ph-wrench text-lg"></i></div><div class="min-w-0 flex-1"><a href="https://github.com/terraform-aws-modules/terraform-aws-eks" target="_blank" rel="noopener noreferrer" class="text-sm font-bold text-slate-900 dark:text-white hover:text-blue-600 dark:hover:text-blue-400 inline-flex items-center gap-1"><span translate="no">terraform-aws-eks</span><i class="ph ph-arrow-up-right text-xs opacity-50"></i></a><p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">Terraform module · IaC</p><div class="mt-2.5 rounded-lg bg-white dark:bg-slate-800 border border-slate-100 dark:border-slate-700 p-3 space-y-2"><p class="text-xs text-slate-700 dark:text-slate-300"><strong>Quando seguir:</strong> para criar cluster, node groups e configuracoes EKS sem clicar no console.</p><p class="text-xs italic text-slate-500 dark:text-slate-400 border-l-2 border-blue-300 dark:border-blue-700 pl-2"><strong class="not-italic text-emerald-600 dark:text-emerald-400">Validado:</strong> README referencia managed node groups, self-managed node groups e Fargate.</p></div></div></div></li>
+              <li class="p-4"><div class="flex items-start gap-3"><div class="flex items-center justify-center w-9 h-9 rounded-lg bg-blue-50 dark:bg-blue-950 text-blue-600 dark:text-blue-400 shrink-0 mt-0.5"><i class="ph-fill ph-wrench text-lg"></i></div><div class="min-w-0 flex-1"><a href="https://github.com/aws-ia/terraform-aws-eks-blueprints-addons" target="_blank" rel="noopener noreferrer" class="text-sm font-bold text-slate-900 dark:text-white hover:text-blue-600 dark:hover:text-blue-400 inline-flex items-center gap-1"><span translate="no">EKS Blueprints Addons</span><i class="ph ph-arrow-up-right text-xs opacity-50"></i></a><p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">AWS IA · Terraform + Helm</p><div class="mt-2.5 rounded-lg bg-white dark:bg-slate-800 border border-slate-100 dark:border-slate-700 p-3 space-y-2"><p class="text-xs text-slate-700 dark:text-slate-300"><strong>Quando seguir:</strong> para padronizar add-ons como LBC, External Secrets, KEDA e Argo.</p><p class="text-xs italic text-slate-500 dark:text-slate-400 border-l-2 border-blue-300 dark:border-blue-700 pl-2"><strong class="not-italic text-emerald-600 dark:text-emerald-400">Validado:</strong> modulo declara deploy de Kubernetes add-ons em EKS.</p></div></div></div></li>
+              <li class="p-4"><div class="flex items-start gap-3"><div class="flex items-center justify-center w-9 h-9 rounded-lg bg-blue-50 dark:bg-blue-950 text-blue-600 dark:text-blue-400 shrink-0 mt-0.5"><i class="ph-fill ph-article text-lg"></i></div><div class="min-w-0 flex-1"><a href="https://docs.aws.amazon.com/eks/latest/userguide/eks-add-ons.html" target="_blank" rel="noopener noreferrer" class="text-sm font-bold text-slate-900 dark:text-white hover:text-blue-600 dark:hover:text-blue-400 inline-flex items-center gap-1"><span translate="no">Amazon EKS add-ons</span><i class="ph ph-arrow-up-right text-xs opacity-50"></i></a><p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">AWS Docs · add-ons gerenciados</p><div class="mt-2.5 rounded-lg bg-white dark:bg-slate-800 border border-slate-100 dark:border-slate-700 p-3 space-y-2"><p class="text-xs text-slate-700 dark:text-slate-300"><strong>Quando seguir:</strong> para decidir entre EKS managed add-on e Helm chart externo.</p><p class="text-xs italic text-slate-500 dark:text-slate-400 border-l-2 border-blue-300 dark:border-blue-700 pl-2"><strong class="not-italic text-emerald-600 dark:text-emerald-400">Validado:</strong> cobre add-ons de observabilidade, rede, storage e seguranca.</p></div></div></div></li>
+            </ul></div>
+            <div class="rounded-xl border border-amber-200 dark:border-amber-900/60 bg-amber-50 dark:bg-amber-950/30 p-4"><p class="text-xs font-bold uppercase tracking-widest text-amber-700 dark:text-amber-500 mb-1.5 flex items-center gap-1.5"><i class="ph ph-compass-rose"></i> Entrega pratica</p><p class="text-sm font-medium text-amber-900 dark:text-amber-200 text-pretty">Monte um esqueleto Terraform com VPC, EKS, node group, add-ons gerenciados essenciais e um modulo de add-ons Helm. Registre no README quais componentes serao gerenciados pela AWS e quais serao gerenciados por Helm/GitOps.</p></div>
+          </section>
+
+          <section id="estacao-3" class="mb-16 scroll-mt-20" aria-labelledby="estacao-3-titulo">
+            <div class="flex items-center gap-3 mb-5"><span class="flex items-center justify-center w-8 h-8 rounded-full bg-blue-600 text-white font-bold text-sm shrink-0 shadow">3</span><h2 id="estacao-3-titulo" class="text-xl font-bold text-pretty">Rede interna: VPC CNI, Services, DNS, portas e capacidade de IP</h2></div>
+            <p class="text-xs text-slate-400 dark:text-slate-500 mb-5 flex items-center gap-3 font-medium"><span class="flex items-center gap-1"><i class="ph ph-clock"></i> ~10 min leitura</span><span class="flex items-center gap-1"><i class="ph ph-plug"></i> 4 nervos</span></p>
+            <div class="text-slate-700 dark:text-slate-300 leading-relaxed mb-8 space-y-3 text-[1.0625rem]"><p>Os <code>ClusterIP</code> da imagem parecem simples, mas em EKS eles descansam em cima do VPC CNI, ENIs, subnets, CoreDNS, kube-proxy e regras de seguranca. Esta estacao te ensina a criar a rede para suportar densidade de pods, resolver nomes internos e evitar que uma decisao de subnet vire falha de deploy.</p></div>
+            <div class="rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900/60 overflow-hidden mb-6"><div class="flex items-center gap-2 px-4 py-3 border-b border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900"><i class="ph ph-plug text-blue-500 dark:text-blue-400"></i><h3 class="text-xs font-bold uppercase tracking-widest text-slate-600 dark:text-slate-300">Nervos validados</h3></div><ul class="divide-y divide-slate-200 dark:divide-slate-800">
+              <li class="p-4"><div class="flex items-start gap-3"><div class="flex items-center justify-center w-9 h-9 rounded-lg bg-blue-50 dark:bg-blue-950 text-blue-600 dark:text-blue-400 shrink-0 mt-0.5"><i class="ph-fill ph-article text-lg"></i></div><div class="min-w-0 flex-1"><a href="https://docs.aws.amazon.com/eks/latest/best-practices/vpc-cni.html" target="_blank" rel="noopener noreferrer" class="text-sm font-bold text-slate-900 dark:text-white hover:text-blue-600 dark:hover:text-blue-400 inline-flex items-center gap-1"><span translate="no">Amazon VPC CNI best practices</span><i class="ph ph-arrow-up-right text-xs opacity-50"></i></a><p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">AWS Docs · networking</p><div class="mt-2.5 rounded-lg bg-white dark:bg-slate-800 border border-slate-100 dark:border-slate-700 p-3 space-y-2"><p class="text-xs text-slate-700 dark:text-slate-300"><strong>Quando seguir:</strong> antes de escolher instancias, prefix delegation ou subnets para pods.</p><p class="text-xs italic text-slate-500 dark:text-slate-400 border-l-2 border-blue-300 dark:border-blue-700 pl-2"><strong class="not-italic text-emerald-600 dark:text-emerald-400">Validado:</strong> explica ENIs, warm pool e slots de IP.</p></div></div></div></li>
+              <li class="p-4"><div class="flex items-start gap-3"><div class="flex items-center justify-center w-9 h-9 rounded-lg bg-blue-50 dark:bg-blue-950 text-blue-600 dark:text-blue-400 shrink-0 mt-0.5"><i class="ph-fill ph-wrench text-lg"></i></div><div class="min-w-0 flex-1"><a href="https://www.eksworkshop.com/docs/networking/vpc-cni/prefix/" target="_blank" rel="noopener noreferrer" class="text-sm font-bold text-slate-900 dark:text-white hover:text-blue-600 dark:hover:text-blue-400 inline-flex items-center gap-1"><span translate="no">EKS Workshop: Prefix Delegation</span><i class="ph ph-arrow-up-right text-xs opacity-50"></i></a><p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">AWS Workshop · lab pratico</p><div class="mt-2.5 rounded-lg bg-white dark:bg-slate-800 border border-slate-100 dark:border-slate-700 p-3 space-y-2"><p class="text-xs text-slate-700 dark:text-slate-300"><strong>Quando seguir:</strong> para testar aumento de densidade de pods em nodes Nitro.</p><p class="text-xs italic text-slate-500 dark:text-slate-400 border-l-2 border-blue-300 dark:border-blue-700 pl-2"><strong class="not-italic text-emerald-600 dark:text-emerald-400">Validado:</strong> lab orienta prefixos no Amazon VPC CNI.</p></div></div></div></li>
+              <li class="p-4"><div class="flex items-start gap-3"><div class="flex items-center justify-center w-9 h-9 rounded-lg bg-blue-50 dark:bg-blue-950 text-blue-600 dark:text-blue-400 shrink-0 mt-0.5"><i class="ph-fill ph-article text-lg"></i></div><div class="min-w-0 flex-1"><a href="https://kubernetes.io/docs/concepts/services-networking/ingress/" target="_blank" rel="noopener noreferrer" class="text-sm font-bold text-slate-900 dark:text-white hover:text-blue-600 dark:hover:text-blue-400 inline-flex items-center gap-1"><span translate="no">Ingress | Kubernetes</span><i class="ph ph-arrow-up-right text-xs opacity-50"></i></a><p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">Kubernetes Docs · L7 routing</p><div class="mt-2.5 rounded-lg bg-white dark:bg-slate-800 border border-slate-100 dark:border-slate-700 p-3 space-y-2"><p class="text-xs text-slate-700 dark:text-slate-300"><strong>Quando seguir:</strong> para separar service discovery interno de entrada HTTP externa.</p><p class="text-xs italic text-slate-500 dark:text-slate-400 border-l-2 border-blue-300 dark:border-blue-700 pl-2"><strong class="not-italic text-emerald-600 dark:text-emerald-400">Validado:</strong> define regras por URI, host e path.</p></div></div></div></li>
+              <li class="p-4"><div class="flex items-start gap-3"><div class="flex items-center justify-center w-9 h-9 rounded-lg bg-blue-50 dark:bg-blue-950 text-blue-600 dark:text-blue-400 shrink-0 mt-0.5"><i class="ph-fill ph-chats-circle text-lg"></i></div><div class="min-w-0 flex-1"><a href="https://news.ycombinator.com/item?id=47043345" target="_blank" rel="noopener noreferrer" class="text-sm font-bold text-slate-900 dark:text-white hover:text-blue-600 dark:hover:text-blue-400 inline-flex items-center gap-1"><span translate="no">HN: EKS, Bottlerocket, managed add-ons e Karpenter</span><i class="ph ph-arrow-up-right text-xs opacity-50"></i></a><p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">Hacker News · sinal de comunidade · marco de 2026</p><div class="mt-2.5 rounded-lg bg-white dark:bg-slate-800 border border-slate-100 dark:border-slate-700 p-3 space-y-2"><p class="text-xs text-slate-700 dark:text-slate-300"><strong>Quando seguir:</strong> como termometro de escolhas reais em EKS, nao como fonte normativa.</p><p class="text-xs italic text-slate-500 dark:text-slate-400 border-l-2 border-blue-300 dark:border-blue-700 pl-2"><strong class="not-italic text-emerald-600 dark:text-emerald-400">Validado:</strong> comentario cita EKS com Bottlerocket, add-ons gerenciados e Karpenter.</p></div></div></div></li>
+            </ul></div>
+            <div class="rounded-xl border border-amber-200 dark:border-amber-900/60 bg-amber-50 dark:bg-amber-950/30 p-4"><p class="text-xs font-bold uppercase tracking-widest text-amber-700 dark:text-amber-500 mb-1.5 flex items-center gap-1.5"><i class="ph ph-compass-rose"></i> Entrega pratica</p><p class="text-sm font-medium text-amber-900 dark:text-amber-200 text-pretty">Crie namespaces e servicos mock para <code>timeline-mobile-bff</code>, <code>timeline-adapter-gateway</code>, <code>hub-account-*</code> e <code>quickconfig</code>. Rode testes de <code>nslookup</code>, <code>curl</code>, NetworkPolicy basica e consumo de IP antes/depois de prefix delegation.</p></div>
+          </section>
+
+          <section id="estacao-4" class="mb-16 scroll-mt-20" aria-labelledby="estacao-4-titulo">
+            <div class="flex items-center gap-3 mb-5"><span class="flex items-center justify-center w-8 h-8 rounded-full bg-blue-600 text-white font-bold text-sm shrink-0 shadow">4</span><h2 id="estacao-4-titulo" class="text-xl font-bold text-pretty">Identidade e segredos: Pod Identity, IRSA e External Secrets</h2></div>
+            <p class="text-xs text-slate-400 dark:text-slate-500 mb-5 flex items-center gap-3 font-medium"><span class="flex items-center gap-1"><i class="ph ph-clock"></i> ~10 min leitura</span><span class="flex items-center gap-1"><i class="ph ph-plug"></i> 4 nervos</span></p>
+            <div class="text-slate-700 dark:text-slate-300 leading-relaxed mb-8 space-y-3 text-[1.0625rem]"><p><code>external-secrets-webhook</code> aparece na imagem porque segredos sao parte do plano de controle do seu produto. A meta aqui e eliminar secrets hardcoded, criar permissoes IAM por service account, entender quando usar Pod Identity ou IRSA e publicar segredos no cluster sem vazar valor sensivel no Git.</p></div>
+            <div class="rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900/60 overflow-hidden mb-6"><div class="flex items-center gap-2 px-4 py-3 border-b border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900"><i class="ph ph-plug text-blue-500 dark:text-blue-400"></i><h3 class="text-xs font-bold uppercase tracking-widest text-slate-600 dark:text-slate-300">Nervos validados</h3></div><ul class="divide-y divide-slate-200 dark:divide-slate-800">
+              <li class="p-4"><div class="flex items-start gap-3"><div class="flex items-center justify-center w-9 h-9 rounded-lg bg-blue-50 dark:bg-blue-950 text-blue-600 dark:text-blue-400 shrink-0 mt-0.5"><i class="ph-fill ph-article text-lg"></i></div><div class="min-w-0 flex-1"><a href="https://docs.aws.amazon.com/eks/latest/userguide/pod-identities.html" target="_blank" rel="noopener noreferrer" class="text-sm font-bold text-slate-900 dark:text-white hover:text-blue-600 dark:hover:text-blue-400 inline-flex items-center gap-1"><span translate="no">EKS Pod Identities</span><i class="ph ph-arrow-up-right text-xs opacity-50"></i></a><p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">AWS Docs · IAM para workloads</p><div class="mt-2.5 rounded-lg bg-white dark:bg-slate-800 border border-slate-100 dark:border-slate-700 p-3 space-y-2"><p class="text-xs text-slate-700 dark:text-slate-300"><strong>Quando seguir:</strong> para workloads novos que acessam AWS APIs.</p><p class="text-xs italic text-slate-500 dark:text-slate-400 border-l-2 border-blue-300 dark:border-blue-700 pl-2"><strong class="not-italic text-emerald-600 dark:text-emerald-400">Validado:</strong> cobre least privilege, isolamento de credenciais e associacao por service account.</p></div></div></div></li>
+              <li class="p-4"><div class="flex items-start gap-3"><div class="flex items-center justify-center w-9 h-9 rounded-lg bg-blue-50 dark:bg-blue-950 text-blue-600 dark:text-blue-400 shrink-0 mt-0.5"><i class="ph-fill ph-article text-lg"></i></div><div class="min-w-0 flex-1"><a href="https://docs.aws.amazon.com/eks/latest/userguide/iam-roles-for-service-accounts.html" target="_blank" rel="noopener noreferrer" class="text-sm font-bold text-slate-900 dark:text-white hover:text-blue-600 dark:hover:text-blue-400 inline-flex items-center gap-1"><span translate="no">IAM roles for service accounts</span><i class="ph ph-arrow-up-right text-xs opacity-50"></i></a><p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">AWS Docs · IRSA</p><div class="mt-2.5 rounded-lg bg-white dark:bg-slate-800 border border-slate-100 dark:border-slate-700 p-3 space-y-2"><p class="text-xs text-slate-700 dark:text-slate-300"><strong>Quando seguir:</strong> quando seu padrao atual ainda usa OIDC e anotacao no ServiceAccount.</p><p class="text-xs italic text-slate-500 dark:text-slate-400 border-l-2 border-blue-300 dark:border-blue-700 pl-2"><strong class="not-italic text-emerald-600 dark:text-emerald-400">Validado:</strong> documenta roles IAM associadas a service accounts Kubernetes.</p></div></div></div></li>
+              <li class="p-4"><div class="flex items-start gap-3"><div class="flex items-center justify-center w-9 h-9 rounded-lg bg-blue-50 dark:bg-blue-950 text-blue-600 dark:text-blue-400 shrink-0 mt-0.5"><i class="ph-fill ph-wrench text-lg"></i></div><div class="min-w-0 flex-1"><a href="https://www.eksworkshop.com/docs/security/secrets-management/secrets-manager/external-secrets" target="_blank" rel="noopener noreferrer" class="text-sm font-bold text-slate-900 dark:text-white hover:text-blue-600 dark:hover:text-blue-400 inline-flex items-center gap-1"><span translate="no">EKS Workshop: External Secrets</span><i class="ph ph-arrow-up-right text-xs opacity-50"></i></a><p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">AWS Workshop · lab pratico</p><div class="mt-2.5 rounded-lg bg-white dark:bg-slate-800 border border-slate-100 dark:border-slate-700 p-3 space-y-2"><p class="text-xs text-slate-700 dark:text-slate-300"><strong>Quando seguir:</strong> para ligar AWS Secrets Manager ao cluster.</p><p class="text-xs italic text-slate-500 dark:text-slate-400 border-l-2 border-blue-300 dark:border-blue-700 pl-2"><strong class="not-italic text-emerald-600 dark:text-emerald-400">Validado:</strong> lab cria <span translate="no">ClusterSecretStore</span> referenciavel por namespaces.</p></div></div></div></li>
+              <li class="p-4"><div class="flex items-start gap-3"><div class="flex items-center justify-center w-9 h-9 rounded-lg bg-blue-50 dark:bg-blue-950 text-blue-600 dark:text-blue-400 shrink-0 mt-0.5"><i class="ph-fill ph-article text-lg"></i></div><div class="min-w-0 flex-1"><a href="https://external-secrets.io/latest/guides/security-best-practices/" target="_blank" rel="noopener noreferrer" class="text-sm font-bold text-slate-900 dark:text-white hover:text-blue-600 dark:hover:text-blue-400 inline-flex items-center gap-1"><span translate="no">ESO Security Best Practices</span><i class="ph ph-arrow-up-right text-xs opacity-50"></i></a><p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">External Secrets Operator · seguranca</p><div class="mt-2.5 rounded-lg bg-white dark:bg-slate-800 border border-slate-100 dark:border-slate-700 p-3 space-y-2"><p class="text-xs text-slate-700 dark:text-slate-300"><strong>Quando seguir:</strong> antes de liberar ClusterSecretStore amplo em producao.</p><p class="text-xs italic text-slate-500 dark:text-slate-400 border-l-2 border-blue-300 dark:border-blue-700 pl-2"><strong class="not-italic text-emerald-600 dark:text-emerald-400">Validado:</strong> aborda NetworkPolicies e risco de exfiltracao.</p></div></div></div></li>
+            </ul></div>
+            <div class="rounded-xl border border-amber-200 dark:border-amber-900/60 bg-amber-50 dark:bg-amber-950/30 p-4"><p class="text-xs font-bold uppercase tracking-widest text-amber-700 dark:text-amber-500 mb-1.5 flex items-center gap-1.5"><i class="ph ph-compass-rose"></i> Entrega pratica</p><p class="text-sm font-medium text-amber-900 dark:text-amber-200 text-pretty">Crie um segredo em AWS Secrets Manager para <code>timeline-mobile-bff</code>, associe permissao por Pod Identity ou IRSA ao External Secrets Operator, publique um <code>ExternalSecret</code> no namespace da app e prove que o valor nao aparece no Git.</p></div>
+          </section>
+
+          <section id="estacao-5" class="mb-16 scroll-mt-20" aria-labelledby="estacao-5-titulo">
+            <div class="flex items-center gap-3 mb-5"><span class="flex items-center justify-center w-8 h-8 rounded-full bg-blue-600 text-white font-bold text-sm shrink-0 shadow">5</span><h2 id="estacao-5-titulo" class="text-xl font-bold text-pretty">Entrada de trafego: AWS Load Balancer Controller, ALB, NLB e webhooks</h2></div>
+            <p class="text-xs text-slate-400 dark:text-slate-500 mb-5 flex items-center gap-3 font-medium"><span class="flex items-center gap-1"><i class="ph ph-clock"></i> ~10 min leitura</span><span class="flex items-center gap-1"><i class="ph ph-plug"></i> 4 nervos</span></p>
+            <div class="text-slate-700 dark:text-slate-300 leading-relaxed mb-8 space-y-3 text-[1.0625rem]"><p>A imagem mostra <code>aws-load-balancer-controller</code> e seu webhook. Este componente traduz Ingress e Service em ALBs/NLBs, mas tambem adiciona webhooks, IAM, CRDs e risco operacional. Voce precisa entender annotations, target types, cert-manager, health checks e falhas de webhook antes de expor qualquer BFF.</p></div>
+            <div class="rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900/60 overflow-hidden mb-6"><div class="flex items-center gap-2 px-4 py-3 border-b border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900"><i class="ph ph-plug text-blue-500 dark:text-blue-400"></i><h3 class="text-xs font-bold uppercase tracking-widest text-slate-600 dark:text-slate-300">Nervos validados</h3></div><ul class="divide-y divide-slate-200 dark:divide-slate-800">
+              <li class="p-4"><div class="flex items-start gap-3"><div class="flex items-center justify-center w-9 h-9 rounded-lg bg-blue-50 dark:bg-blue-950 text-blue-600 dark:text-blue-400 shrink-0 mt-0.5"><i class="ph-fill ph-wrench text-lg"></i></div><div class="min-w-0 flex-1"><a href="https://docs.aws.amazon.com/eks/latest/userguide/lbc-helm.html" target="_blank" rel="noopener noreferrer" class="text-sm font-bold text-slate-900 dark:text-white hover:text-blue-600 dark:hover:text-blue-400 inline-flex items-center gap-1"><span translate="no">Install AWS Load Balancer Controller with Helm</span><i class="ph ph-arrow-up-right text-xs opacity-50"></i></a><p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">AWS Docs · tutorial/lab</p><div class="mt-2.5 rounded-lg bg-white dark:bg-slate-800 border border-slate-100 dark:border-slate-700 p-3 space-y-2"><p class="text-xs text-slate-700 dark:text-slate-300"><strong>Quando seguir:</strong> para instalar o controller do jeito suportado em EKS.</p><p class="text-xs italic text-slate-500 dark:text-slate-400 border-l-2 border-blue-300 dark:border-blue-700 pl-2"><strong class="not-italic text-emerald-600 dark:text-emerald-400">Validado:</strong> guia inclui IAM role, instalacao Helm e verificacao do Deployment.</p></div></div></div></li>
+              <li class="p-4"><div class="flex items-start gap-3"><div class="flex items-center justify-center w-9 h-9 rounded-lg bg-blue-50 dark:bg-blue-950 text-blue-600 dark:text-blue-400 shrink-0 mt-0.5"><i class="ph-fill ph-article text-lg"></i></div><div class="min-w-0 flex-1"><a href="https://docs.aws.amazon.com/eks/latest/userguide/alb-ingress.html" target="_blank" rel="noopener noreferrer" class="text-sm font-bold text-slate-900 dark:text-white hover:text-blue-600 dark:hover:text-blue-400 inline-flex items-center gap-1"><span translate="no">Route HTTP traffic with Application Load Balancers</span><i class="ph ph-arrow-up-right text-xs opacity-50"></i></a><p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">AWS Docs · ALB ingress</p><div class="mt-2.5 rounded-lg bg-white dark:bg-slate-800 border border-slate-100 dark:border-slate-700 p-3 space-y-2"><p class="text-xs text-slate-700 dark:text-slate-300"><strong>Quando seguir:</strong> para expor BFFs por host/path.</p><p class="text-xs italic text-slate-500 dark:text-slate-400 border-l-2 border-blue-300 dark:border-blue-700 pl-2"><strong class="not-italic text-emerald-600 dark:text-emerald-400">Validado:</strong> explica target-type <span translate="no">ip</span> e registro de Pods no ALB.</p></div></div></div></li>
+              <li class="p-4"><div class="flex items-start gap-3"><div class="flex items-center justify-center w-9 h-9 rounded-lg bg-blue-50 dark:bg-blue-950 text-blue-600 dark:text-blue-400 shrink-0 mt-0.5"><i class="ph-fill ph-article text-lg"></i></div><div class="min-w-0 flex-1"><a href="https://kubernetes-sigs.github.io/aws-load-balancer-controller/latest/guide/ingress/annotations/" target="_blank" rel="noopener noreferrer" class="text-sm font-bold text-slate-900 dark:text-white hover:text-blue-600 dark:hover:text-blue-400 inline-flex items-center gap-1"><span translate="no">AWS LBC Ingress annotations</span><i class="ph ph-arrow-up-right text-xs opacity-50"></i></a><p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">Controller docs · annotations</p><div class="mt-2.5 rounded-lg bg-white dark:bg-slate-800 border border-slate-100 dark:border-slate-700 p-3 space-y-2"><p class="text-xs text-slate-700 dark:text-slate-300"><strong>Quando seguir:</strong> para modelar TLS, health check, target group e scheme.</p><p class="text-xs italic text-slate-500 dark:text-slate-400 border-l-2 border-blue-300 dark:border-blue-700 pl-2"><strong class="not-italic text-emerald-600 dark:text-emerald-400">Validado:</strong> lista annotations aplicaveis a Ingress e Service.</p></div></div></div></li>
+              <li class="p-4"><div class="flex items-start gap-3"><div class="flex items-center justify-center w-9 h-9 rounded-lg bg-blue-50 dark:bg-blue-950 text-blue-600 dark:text-blue-400 shrink-0 mt-0.5"><i class="ph-fill ph-chats-circle text-lg"></i></div><div class="min-w-0 flex-1"><a href="https://github.com/kubernetes-sigs/aws-load-balancer-controller/releases" target="_blank" rel="noopener noreferrer" class="text-sm font-bold text-slate-900 dark:text-white hover:text-blue-600 dark:hover:text-blue-400 inline-flex items-center gap-1"><span translate="no">AWS LBC releases: Gateway API e webhook TLS</span><i class="ph ph-arrow-up-right text-xs opacity-50"></i></a><p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">GitHub releases · sinal recente · 2026</p><div class="mt-2.5 rounded-lg bg-white dark:bg-slate-800 border border-slate-100 dark:border-slate-700 p-3 space-y-2"><p class="text-xs text-slate-700 dark:text-slate-300"><strong>Quando seguir:</strong> para aprender a ler release notes antes de atualizar add-ons.</p><p class="text-xs italic text-slate-500 dark:text-slate-400 border-l-2 border-blue-300 dark:border-blue-700 pl-2"><strong class="not-italic text-emerald-600 dark:text-emerald-400">Validado:</strong> release v3.0.0 cita Gateway API GA e acao em CRDs/webhook.</p></div></div></div></li>
+            </ul></div>
+            <div class="rounded-xl border border-amber-200 dark:border-amber-900/60 bg-amber-50 dark:bg-amber-950/30 p-4"><p class="text-xs font-bold uppercase tracking-widest text-amber-700 dark:text-amber-500 mb-1.5 flex items-center gap-1.5"><i class="ph ph-compass-rose"></i> Entrega pratica</p><p class="text-sm font-medium text-amber-900 dark:text-amber-200 text-pretty">Instale o AWS Load Balancer Controller com IAM dedicado. Publique um Ingress para dois BFFs mockados, um Service <code>LoadBalancer</code> NLB para trafego TCP e um checklist de troubleshooting para falha em <code>aws-load-balancer-webhook-service</code>.</p></div>
+          </section>
+
+          <section id="estacao-6" class="mb-16 scroll-mt-20" aria-labelledby="estacao-6-titulo">
+            <div class="flex items-center gap-3 mb-5"><span class="flex items-center justify-center w-8 h-8 rounded-full bg-blue-600 text-white font-bold text-sm shrink-0 shadow">6</span><h2 id="estacao-6-titulo" class="text-xl font-bold text-pretty">Observabilidade: Datadog, Metrics Server e Fluent Bit</h2></div>
+            <p class="text-xs text-slate-400 dark:text-slate-500 mb-5 flex items-center gap-3 font-medium"><span class="flex items-center gap-1"><i class="ph ph-clock"></i> ~10 min leitura</span><span class="flex items-center gap-1"><i class="ph ph-plug"></i> 4 nervos</span></p>
+            <div class="text-slate-700 dark:text-slate-300 leading-relaxed mb-8 space-y-3 text-[1.0625rem]"><p>Na imagem, Datadog aparece varias vezes: Agent, Cluster Agent, metrics API e admission controller. Observabilidade avancada nao e so instalar agente; e decidir onde coletar metricas, logs, traces, eventos, labels e como detectar regressao em rollouts e autoscaling.</p></div>
+            <div class="rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900/60 overflow-hidden mb-6"><div class="flex items-center gap-2 px-4 py-3 border-b border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900"><i class="ph ph-plug text-blue-500 dark:text-blue-400"></i><h3 class="text-xs font-bold uppercase tracking-widest text-slate-600 dark:text-slate-300">Nervos validados</h3></div><ul class="divide-y divide-slate-200 dark:divide-slate-800">
+              <li class="p-4"><div class="flex items-start gap-3"><div class="flex items-center justify-center w-9 h-9 rounded-lg bg-blue-50 dark:bg-blue-950 text-blue-600 dark:text-blue-400 shrink-0 mt-0.5"><i class="ph-fill ph-wrench text-lg"></i></div><div class="min-w-0 flex-1"><a href="https://docs.datadoghq.com/containers/kubernetes/installation/" target="_blank" rel="noopener noreferrer" class="text-sm font-bold text-slate-900 dark:text-white hover:text-blue-600 dark:hover:text-blue-400 inline-flex items-center gap-1"><span translate="no">Install the Datadog Agent on Kubernetes</span><i class="ph ph-arrow-up-right text-xs opacity-50"></i></a><p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">Datadog Docs · instalacao</p><div class="mt-2.5 rounded-lg bg-white dark:bg-slate-800 border border-slate-100 dark:border-slate-700 p-3 space-y-2"><p class="text-xs text-slate-700 dark:text-slate-300"><strong>Quando seguir:</strong> para instalar Agent/Cluster Agent via Helm ou Operator.</p><p class="text-xs italic text-slate-500 dark:text-slate-400 border-l-2 border-blue-300 dark:border-blue-700 pl-2"><strong class="not-italic text-emerald-600 dark:text-emerald-400">Validado:</strong> pagina e dedicada a instalacao em Kubernetes e EKS.</p></div></div></div></li>
+              <li class="p-4"><div class="flex items-start gap-3"><div class="flex items-center justify-center w-9 h-9 rounded-lg bg-blue-50 dark:bg-blue-950 text-blue-600 dark:text-blue-400 shrink-0 mt-0.5"><i class="ph-fill ph-article text-lg"></i></div><div class="min-w-0 flex-1"><a href="https://docs.datadoghq.com/containers/cluster_agent/admission_controller/" target="_blank" rel="noopener noreferrer" class="text-sm font-bold text-slate-900 dark:text-white hover:text-blue-600 dark:hover:text-blue-400 inline-flex items-center gap-1"><span translate="no">Datadog Admission Controller</span><i class="ph ph-arrow-up-right text-xs opacity-50"></i></a><p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">Datadog Docs · webhook/injecao</p><div class="mt-2.5 rounded-lg bg-white dark:bg-slate-800 border border-slate-100 dark:border-slate-700 p-3 space-y-2"><p class="text-xs text-slate-700 dark:text-slate-300"><strong>Quando seguir:</strong> para entender injecao automatica e impactos em pods existentes.</p><p class="text-xs italic text-slate-500 dark:text-slate-400 border-l-2 border-blue-300 dark:border-blue-700 pl-2"><strong class="not-italic text-emerald-600 dark:text-emerald-400">Validado:</strong> descreve o Admission Controller como componente do Cluster Agent.</p></div></div></div></li>
+              <li class="p-4"><div class="flex items-start gap-3"><div class="flex items-center justify-center w-9 h-9 rounded-lg bg-blue-50 dark:bg-blue-950 text-blue-600 dark:text-blue-400 shrink-0 mt-0.5"><i class="ph-fill ph-wrench text-lg"></i></div><div class="min-w-0 flex-1"><a href="https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/Container-Insights-setup-logs-FluentBit.html" target="_blank" rel="noopener noreferrer" class="text-sm font-bold text-slate-900 dark:text-white hover:text-blue-600 dark:hover:text-blue-400 inline-flex items-center gap-1"><span translate="no">Set up Fluent Bit as a DaemonSet</span><i class="ph ph-arrow-up-right text-xs opacity-50"></i></a><p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">AWS CloudWatch Docs · logs</p><div class="mt-2.5 rounded-lg bg-white dark:bg-slate-800 border border-slate-100 dark:border-slate-700 p-3 space-y-2"><p class="text-xs text-slate-700 dark:text-slate-300"><strong>Quando seguir:</strong> para encaminhar logs dos containers para CloudWatch.</p><p class="text-xs italic text-slate-500 dark:text-slate-400 border-l-2 border-blue-300 dark:border-blue-700 pl-2"><strong class="not-italic text-emerald-600 dark:text-emerald-400">Validado:</strong> guia instala Fluent Bit como DaemonSet para logs de containers.</p></div></div></div></li>
+              <li class="p-4"><div class="flex items-start gap-3"><div class="flex items-center justify-center w-9 h-9 rounded-lg bg-blue-50 dark:bg-blue-950 text-blue-600 dark:text-blue-400 shrink-0 mt-0.5"><i class="ph-fill ph-headphones text-lg"></i></div><div class="min-w-0 flex-1"><a href="https://komodor.com/resources/013-kubernetes-for-humans-podcast-with-ian-nowland-datadog/" target="_blank" rel="noopener noreferrer" class="text-sm font-bold text-slate-900 dark:text-white hover:text-blue-600 dark:hover:text-blue-400 inline-flex items-center gap-1"><span translate="no">Kubernetes for Humans: Ian Nowland, Datadog</span><i class="ph ph-arrow-up-right text-xs opacity-50"></i></a><p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">Podcast · transcricao · 35 min</p><div class="mt-2.5 rounded-lg bg-white dark:bg-slate-800 border border-slate-100 dark:border-slate-700 p-3 space-y-2"><p class="text-xs text-slate-700 dark:text-slate-300"><strong>Quando seguir:</strong> para contexto de metricas e observabilidade em escala.</p><p class="text-xs italic text-slate-500 dark:text-slate-400 border-l-2 border-blue-300 dark:border-blue-700 pl-2"><strong class="not-italic text-emerald-600 dark:text-emerald-400">Validado:</strong> pagina declara episodio sobre Kubernetes monitoring e metricas em escala.</p></div></div></div></li>
+            </ul></div>
+            <div class="rounded-xl border border-amber-200 dark:border-amber-900/60 bg-amber-50 dark:bg-amber-950/30 p-4"><p class="text-xs font-bold uppercase tracking-widest text-amber-700 dark:text-amber-500 mb-1.5 flex items-center gap-1.5"><i class="ph ph-compass-rose"></i> Entrega pratica</p><p class="text-sm font-medium text-amber-900 dark:text-amber-200 text-pretty">Instale Datadog com Cluster Agent, habilite Admission Controller em um namespace controlado, instale Fluent Bit para logs e defina tags por namespace/app. Crie um dashboard minimo para latencia, erros, restarts, HPA e eventos de rollout.</p></div>
+          </section>
+
+          <section id="estacao-7" class="mb-16 scroll-mt-20" aria-labelledby="estacao-7-titulo">
+            <div class="flex items-center gap-3 mb-5"><span class="flex items-center justify-center w-8 h-8 rounded-full bg-blue-600 text-white font-bold text-sm shrink-0 shadow">7</span><h2 id="estacao-7-titulo" class="text-xl font-bold text-pretty">Autoscaling: Metrics Server, HPA, KEDA e capacidade com Karpenter</h2></div>
+            <p class="text-xs text-slate-400 dark:text-slate-500 mb-5 flex items-center gap-3 font-medium"><span class="flex items-center gap-1"><i class="ph ph-clock"></i> ~10 min leitura</span><span class="flex items-center gap-1"><i class="ph ph-plug"></i> 4 nervos</span></p>
+            <div class="text-slate-700 dark:text-slate-300 leading-relaxed mb-8 space-y-3 text-[1.0625rem]"><p>A imagem tem <code>metrics-server</code>, <code>keda-operator</code>, <code>keda-admission-webhooks</code> e <code>keda-operator-metrics-apiserver</code>. Isso indica duas camadas: escalonar replicas com metricas e eventos, e garantir que o cluster tenha nodes certos para acomodar os pods.</p></div>
+            <div class="rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900/60 overflow-hidden mb-6"><div class="flex items-center gap-2 px-4 py-3 border-b border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900"><i class="ph ph-plug text-blue-500 dark:text-blue-400"></i><h3 class="text-xs font-bold uppercase tracking-widest text-slate-600 dark:text-slate-300">Nervos validados</h3></div><ul class="divide-y divide-slate-200 dark:divide-slate-800">
+              <li class="p-4"><div class="flex items-start gap-3"><div class="flex items-center justify-center w-9 h-9 rounded-lg bg-blue-50 dark:bg-blue-950 text-blue-600 dark:text-blue-400 shrink-0 mt-0.5"><i class="ph-fill ph-article text-lg"></i></div><div class="min-w-0 flex-1"><a href="https://github.com/kubernetes-sigs/metrics-server" target="_blank" rel="noopener noreferrer" class="text-sm font-bold text-slate-900 dark:text-white hover:text-blue-600 dark:hover:text-blue-400 inline-flex items-center gap-1"><span translate="no">Kubernetes Metrics Server</span><i class="ph ph-arrow-up-right text-xs opacity-50"></i></a><p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">Kubernetes SIGs · metrics API</p><div class="mt-2.5 rounded-lg bg-white dark:bg-slate-800 border border-slate-100 dark:border-slate-700 p-3 space-y-2"><p class="text-xs text-slate-700 dark:text-slate-300"><strong>Quando seguir:</strong> antes de configurar HPA por CPU/memoria.</p><p class="text-xs italic text-slate-500 dark:text-slate-400 border-l-2 border-blue-300 dark:border-blue-700 pl-2"><strong class="not-italic text-emerald-600 dark:text-emerald-400">Validado:</strong> expõe resource metrics para HPA, VPA e <code>kubectl top</code>.</p></div></div></div></li>
+              <li class="p-4"><div class="flex items-start gap-3"><div class="flex items-center justify-center w-9 h-9 rounded-lg bg-blue-50 dark:bg-blue-950 text-blue-600 dark:text-blue-400 shrink-0 mt-0.5"><i class="ph-fill ph-wrench text-lg"></i></div><div class="min-w-0 flex-1"><a href="https://docs.aws.amazon.com/prescriptive-guidance/latest/patterns/event-driven-auto-scaling-with-eks-pod-identity-and-keda.html" target="_blank" rel="noopener noreferrer" class="text-sm font-bold text-slate-900 dark:text-white hover:text-blue-600 dark:hover:text-blue-400 inline-flex items-center gap-1"><span translate="no">Event-driven autoscaling with EKS Pod Identity and KEDA</span><i class="ph ph-arrow-up-right text-xs opacity-50"></i></a><p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">AWS Prescriptive Guidance · lab</p><div class="mt-2.5 rounded-lg bg-white dark:bg-slate-800 border border-slate-100 dark:border-slate-700 p-3 space-y-2"><p class="text-xs text-slate-700 dark:text-slate-300"><strong>Quando seguir:</strong> para escalar workers por SQS sem credenciais estaticas.</p><p class="text-xs italic text-slate-500 dark:text-slate-400 border-l-2 border-blue-300 dark:border-blue-700 pl-2"><strong class="not-italic text-emerald-600 dark:text-emerald-400">Validado:</strong> usa TriggerAuthentication, ScaledObject, SQS e escala para zero.</p></div></div></div></li>
+              <li class="p-4"><div class="flex items-start gap-3"><div class="flex items-center justify-center w-9 h-9 rounded-lg bg-blue-50 dark:bg-blue-950 text-blue-600 dark:text-blue-400 shrink-0 mt-0.5"><i class="ph-fill ph-article text-lg"></i></div><div class="min-w-0 flex-1"><a href="https://docs.aws.amazon.com/eks/latest/best-practices/karpenter.html" target="_blank" rel="noopener noreferrer" class="text-sm font-bold text-slate-900 dark:text-white hover:text-blue-600 dark:hover:text-blue-400 inline-flex items-center gap-1"><span translate="no">Karpenter best practices for EKS</span><i class="ph ph-arrow-up-right text-xs opacity-50"></i></a><p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">AWS Docs · cluster autoscaling</p><div class="mt-2.5 rounded-lg bg-white dark:bg-slate-800 border border-slate-100 dark:border-slate-700 p-3 space-y-2"><p class="text-xs text-slate-700 dark:text-slate-300"><strong>Quando seguir:</strong> para escolher NodePools, constraints e consolidacao.</p><p class="text-xs italic text-slate-500 dark:text-slate-400 border-l-2 border-blue-300 dark:border-blue-700 pl-2"><strong class="not-italic text-emerald-600 dark:text-emerald-400">Validado:</strong> descreve NodePools, taints, labels, requirements e limites.</p></div></div></div></li>
+              <li class="p-4"><div class="flex items-start gap-3"><div class="flex items-center justify-center w-9 h-9 rounded-lg bg-blue-50 dark:bg-blue-950 text-blue-600 dark:text-blue-400 shrink-0 mt-0.5"><i class="ph-fill ph-headphones text-lg"></i></div><div class="min-w-0 flex-1"><a href="https://kubernetespodcast.com/episode/160-keda/" target="_blank" rel="noopener noreferrer" class="text-sm font-bold text-slate-900 dark:text-white hover:text-blue-600 dark:hover:text-blue-400 inline-flex items-center gap-1"><span translate="no">KEDA, with Tom Kerkhove</span><i class="ph ph-arrow-up-right text-xs opacity-50"></i></a><p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">Kubernetes Podcast · audio com show notes</p><div class="mt-2.5 rounded-lg bg-white dark:bg-slate-800 border border-slate-100 dark:border-slate-700 p-3 space-y-2"><p class="text-xs text-slate-700 dark:text-slate-300"><strong>Quando seguir:</strong> para entender por que KEDA complementa HPA.</p><p class="text-xs italic text-slate-500 dark:text-slate-400 border-l-2 border-blue-300 dark:border-blue-700 pl-2"><strong class="not-italic text-emerald-600 dark:text-emerald-400">Validado:</strong> show notes citam superpowers para HPA e scale zero-to-one.</p></div></div></div></li>
+            </ul></div>
+            <div class="rounded-xl border border-amber-200 dark:border-amber-900/60 bg-amber-50 dark:bg-amber-950/30 p-4"><p class="text-xs font-bold uppercase tracking-widest text-amber-700 dark:text-amber-500 mb-1.5 flex items-center gap-1.5"><i class="ph ph-compass-rose"></i> Entrega pratica</p><p class="text-sm font-medium text-amber-900 dark:text-amber-200 text-pretty">Instale Metrics Server e KEDA. Configure HPA em um BFF HTTP e <code>ScaledObject</code> SQS em um worker. Em seguida, crie um NodePool Karpenter com limites e demonstre escala de pods e escala de nodes sob carga.</p></div>
+          </section>
+
+          <section id="estacao-8" class="mb-16 scroll-mt-20" aria-labelledby="estacao-8-titulo">
+            <div class="flex items-center gap-3 mb-5"><span class="flex items-center justify-center w-8 h-8 rounded-full bg-blue-600 text-white font-bold text-sm shrink-0 shadow">8</span><h2 id="estacao-8-titulo" class="text-xl font-bold text-pretty">Seguranca e entrega progressiva: Falcon KAC e Argo Rollouts</h2></div>
+            <p class="text-xs text-slate-400 dark:text-slate-500 mb-5 flex items-center gap-3 font-medium"><span class="flex items-center gap-1"><i class="ph ph-clock"></i> ~10 min leitura</span><span class="flex items-center gap-1"><i class="ph ph-plug"></i> 4 nervos</span></p>
+            <div class="text-slate-700 dark:text-slate-300 leading-relaxed mb-8 space-y-3 text-[1.0625rem]"><p>O print mostra <code>falcon-kac</code> e <code>argo-rollouts</code>. Isso fecha o ciclo: bloquear ou observar objetos inseguros antes de entrarem no cluster, e trocar versoes de produto com canary/blue-green em vez de rollout cego. O nivel avancado esta nos modos de falha: webhook indisponivel, metricas ruins, health checks lentos e rollback mal definido.</p></div>
+            <div class="rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900/60 overflow-hidden mb-6"><div class="flex items-center gap-2 px-4 py-3 border-b border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900"><i class="ph ph-plug text-blue-500 dark:text-blue-400"></i><h3 class="text-xs font-bold uppercase tracking-widest text-slate-600 dark:text-slate-300">Nervos validados</h3></div><ul class="divide-y divide-slate-200 dark:divide-slate-800">
+              <li class="p-4"><div class="flex items-start gap-3"><div class="flex items-center justify-center w-9 h-9 rounded-lg bg-blue-50 dark:bg-blue-950 text-blue-600 dark:text-blue-400 shrink-0 mt-0.5"><i class="ph-fill ph-shield-check text-lg"></i></div><div class="min-w-0 flex-1"><a href="https://github.com/CrowdStrike/falcon-helm/blob/main/helm-charts/falcon-kac/README.md" target="_blank" rel="noopener noreferrer" class="text-sm font-bold text-slate-900 dark:text-white hover:text-blue-600 dark:hover:text-blue-400 inline-flex items-center gap-1"><span translate="no">Falcon Kubernetes Admission Controller Helm Chart</span><i class="ph ph-arrow-up-right text-xs opacity-50"></i></a><p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">CrowdStrike GitHub · Helm</p><div class="mt-2.5 rounded-lg bg-white dark:bg-slate-800 border border-slate-100 dark:border-slate-700 p-3 space-y-2"><p class="text-xs text-slate-700 dark:text-slate-300"><strong>Quando seguir:</strong> para instalar o <code>falcon-kac</code> visto na imagem.</p><p class="text-xs italic text-slate-500 dark:text-slate-400 border-l-2 border-blue-300 dark:border-blue-700 pl-2"><strong class="not-italic text-emerald-600 dark:text-emerald-400">Validado:</strong> README define KAC como plugin para revisar objetos criados.</p></div></div></div></li>
+              <li class="p-4"><div class="flex items-start gap-3"><div class="flex items-center justify-center w-9 h-9 rounded-lg bg-blue-50 dark:bg-blue-950 text-blue-600 dark:text-blue-400 shrink-0 mt-0.5"><i class="ph-fill ph-article text-lg"></i></div><div class="min-w-0 flex-1"><a href="https://argo-rollouts.readthedocs.io/en/stable/" target="_blank" rel="noopener noreferrer" class="text-sm font-bold text-slate-900 dark:text-white hover:text-blue-600 dark:hover:text-blue-400 inline-flex items-center gap-1"><span translate="no">Argo Rollouts docs</span><i class="ph ph-arrow-up-right text-xs opacity-50"></i></a><p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">Argo Project · progressive delivery</p><div class="mt-2.5 rounded-lg bg-white dark:bg-slate-800 border border-slate-100 dark:border-slate-700 p-3 space-y-2"><p class="text-xs text-slate-700 dark:text-slate-300"><strong>Quando seguir:</strong> para trocar Deployment por Rollout em apps criticas.</p><p class="text-xs italic text-slate-500 dark:text-slate-400 border-l-2 border-blue-300 dark:border-blue-700 pl-2"><strong class="not-italic text-emerald-600 dark:text-emerald-400">Validado:</strong> cobre blue-green, canary, analysis e experiments.</p></div></div></div></li>
+              <li class="p-4"><div class="flex items-start gap-3"><div class="flex items-center justify-center w-9 h-9 rounded-lg bg-blue-50 dark:bg-blue-950 text-blue-600 dark:text-blue-400 shrink-0 mt-0.5"><i class="ph-fill ph-wrench text-lg"></i></div><div class="min-w-0 flex-1"><a href="https://argo-rollouts.readthedocs.io/en/stable/getting-started/alb/" target="_blank" rel="noopener noreferrer" class="text-sm font-bold text-slate-900 dark:text-white hover:text-blue-600 dark:hover:text-blue-400 inline-flex items-center gap-1"><span translate="no">Argo Rollouts with AWS Load Balancer Controller</span><i class="ph ph-arrow-up-right text-xs opacity-50"></i></a><p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">Argo docs · lab com ALB</p><div class="mt-2.5 rounded-lg bg-white dark:bg-slate-800 border border-slate-100 dark:border-slate-700 p-3 space-y-2"><p class="text-xs text-slate-700 dark:text-slate-300"><strong>Quando seguir:</strong> para canary real em EKS usando ALB.</p><p class="text-xs italic text-slate-500 dark:text-slate-400 border-l-2 border-blue-300 dark:border-blue-700 pl-2"><strong class="not-italic text-emerald-600 dark:text-emerald-400">Validado:</strong> guia declara integracao com AWS LBC para traffic shaping.</p></div></div></div></li>
+              <li class="p-4"><div class="flex items-start gap-3"><div class="flex items-center justify-center w-9 h-9 rounded-lg bg-blue-50 dark:bg-blue-950 text-blue-600 dark:text-blue-400 shrink-0 mt-0.5"><i class="ph-fill ph-video text-lg"></i></div><div class="min-w-0 flex-1"><a href="https://www.youtube.com/watch?v=b2yYR9ARNaE" target="_blank" rel="noopener noreferrer" class="text-sm font-bold text-slate-900 dark:text-white hover:text-blue-600 dark:hover:text-blue-400 inline-flex items-center gap-1"><span translate="no">Supercharge Your Canary Deployments With Argo Rollouts Step Plugins</span><i class="ph ph-arrow-up-right text-xs opacity-50"></i></a><p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">Video · publicado ha cerca de 7 meses</p><div class="mt-2.5 rounded-lg bg-white dark:bg-slate-800 border border-slate-100 dark:border-slate-700 p-3 space-y-2"><p class="text-xs text-slate-700 dark:text-slate-300"><strong>Quando seguir:</strong> para ver progressive delivery alem do exemplo minimo.</p><p class="text-xs italic text-slate-500 dark:text-slate-400 border-l-2 border-blue-300 dark:border-blue-700 pl-2"><strong class="not-italic text-emerald-600 dark:text-emerald-400">Validado:</strong> descricao cita canary deployments com Argo Rollouts step plugins.</p></div></div></div></li>
+            </ul></div>
+            <div class="rounded-xl border border-amber-200 dark:border-amber-900/60 bg-amber-50 dark:bg-amber-950/30 p-4"><p class="text-xs font-bold uppercase tracking-widest text-amber-700 dark:text-amber-500 mb-1.5 flex items-center gap-1.5"><i class="ph ph-compass-rose"></i> Entrega pratica</p><p class="text-sm font-medium text-amber-900 dark:text-amber-200 text-pretty">Instale Falcon KAC em modo observacao ou politica segura. Converta <code>timeline-mobile-bff</code> mock para Argo Rollout com ALB, metricas de sucesso e rollback automatico. Simule uma versao ruim e documente a linha do tempo de deteccao, pausa e rollback.</p></div>
+          </section>
+
+          <section id="boss-final" class="mb-16 scroll-mt-20" aria-labelledby="boss-titulo">
+            <div class="rounded-2xl bg-slate-900 dark:bg-slate-950 border border-slate-800 p-8 md:p-10 relative overflow-hidden">
+              <div class="relative z-10">
+                <div class="flex items-center gap-3 mb-5">
+                  <div class="flex items-center justify-center w-11 h-11 rounded-xl bg-white/10 border border-white/20">
+                    <i class="ph-fill ph-sword text-2xl text-amber-400" aria-hidden="true"></i>
+                  </div>
+                  <h2 id="boss-titulo" class="text-2xl font-extrabold text-white text-pretty">Boss Final</h2>
+                </div>
+                <p class="text-slate-400 mb-8 text-pretty">Sem gabarito. Responda por escrito antes de considerar a trilha concluida.</p>
+                <ol class="space-y-4" aria-label="Perguntas socraticas">
+                  <li class="rounded-xl border border-white/10 bg-white/5 p-4"><span class="block text-blue-300 text-xs font-bold uppercase tracking-widest mb-1.5">1. Conceitual</span><p class="text-white font-medium text-pretty">Se voce recebesse apenas o print de <code>kubectl get svc -A</code>, quais inferencias faria sobre add-ons, workloads, entrada de trafego, observabilidade e risco operacional?</p></li>
+                  <li class="rounded-xl border border-white/10 bg-white/5 p-4"><span class="block text-blue-300 text-xs font-bold uppercase tracking-widest mb-1.5">2. Arquitetural</span><p class="text-white font-medium text-pretty">Quais componentes voce instalaria como EKS managed add-ons, quais via Helm e quais via GitOps? Que ownership cada escolha cria?</p></li>
+                  <li class="rounded-xl border border-white/10 bg-white/5 p-4"><span class="block text-blue-300 text-xs font-bold uppercase tracking-widest mb-1.5">3. Aplicada</span><p class="text-white font-medium text-pretty">Como voce exporia <code>timeline-mobile-bff</code> publicamente sem expor <code>timeline-adapter-gateway</code>, mantendo DNS interno, TLS, health checks e rollback?</p></li>
+                  <li class="rounded-xl border border-white/10 bg-white/5 p-4"><span class="block text-blue-300 text-xs font-bold uppercase tracking-widest mb-1.5">4. Operacional</span><p class="text-white font-medium text-pretty">Se o AWS Load Balancer Controller webhook falhar durante um deploy, quais sintomas voce veria e qual seria sua ordem de investigacao?</p></li>
+                  <li class="rounded-xl border border-white/10 bg-white/5 p-4"><span class="block text-blue-300 text-xs font-bold uppercase tracking-widest mb-1.5">5. Critica</span><p class="text-white font-medium text-pretty">Quando KEDA, Argo Rollouts ou Falcon KAC seriam escolhas erradas para um servico? Que sinais indicariam uma solucao mais simples?</p></li>
+                </ol>
+              </div>
+            </div>
+          </section>
+
+          <section class="mb-16" aria-labelledby="livros-titulo">
+            <div class="rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-5">
+              <h3 id="livros-titulo" class="text-xs font-bold uppercase tracking-widest text-slate-400 dark:text-slate-500 mb-3 flex items-center gap-1.5"><i class="ph ph-books" aria-hidden="true"></i> Livros opcionais</h3>
+              <ul class="space-y-3" role="list">
+                <li class="text-sm text-slate-700 dark:text-slate-300"><a href="https://www.oreilly.com/library/view/production-kubernetes/9781492092292/" target="_blank" rel="noopener noreferrer" class="font-semibold hover:text-blue-600 dark:hover:text-blue-400">Production Kubernetes</a> — validado pelo sumario com pod networking, service routing, secret management, admission control, platform services e autoscaling.</li>
+                <li class="text-sm text-slate-700 dark:text-slate-300"><a href="https://www.oreilly.com/library/view/cloud-native-devops/9781098116811/" target="_blank" rel="noopener noreferrer" class="font-semibold hover:text-blue-600 dark:hover:text-blue-400">Cloud Native DevOps with Kubernetes, 2nd Edition</a> — validado por capitulos sobre EKS, objetos Kubernetes, Helm, recursos e operacao.</li>
+                <li class="text-sm text-slate-700 dark:text-slate-300"><a href="https://www.simonandschuster.co.uk/books/Kubernetes-in-Action-Second-Edition/Marko-Luksa/In-Action/9781638350828" target="_blank" rel="noopener noreferrer" class="font-semibold hover:text-blue-600 dark:hover:text-blue-400">Kubernetes in Action, Second Edition</a> — validado por sumario sobre API model, pods, lifecycle, namespaces, labels, ConfigMaps e Secrets.</li>
+                <li class="text-sm text-slate-700 dark:text-slate-300"><a href="https://www.terraformupandrunning.com/" target="_blank" rel="noopener noreferrer" class="font-semibold hover:text-blue-600 dark:hover:text-blue-400">Terraform: Up & Running, 3rd Edition</a> — validado por foco em state, modules, secrets e multiplas contas/regioes/clouds.</li>
+              </ul>
+            </div>
+          </section>
+
+          <section class="mb-16" aria-labelledby="recursos-adicionais-titulo">
+            <div class="rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-5">
+              <h3 id="recursos-adicionais-titulo" class="text-xs font-bold uppercase tracking-widest text-slate-400 dark:text-slate-500 mb-3 flex items-center gap-1.5"><i class="ph ph-package" aria-hidden="true"></i> Recursos adicionais multimodais</h3>
+              <ul class="space-y-2" role="list">
+                <li class="text-sm text-slate-700 dark:text-slate-300 flex items-start gap-2"><i class="ph ph-headphones text-blue-500 mt-0.5 shrink-0"></i><span><a href="https://kubernetespodcast.com/episode/257-sreprodcast/" target="_blank" rel="noopener noreferrer" class="font-medium hover:text-blue-600 dark:hover:text-blue-400">Platform Engineering, with Ben Good</a> — validado: pagina tem transcricao e discute Kubernetes como base de plataforma.</span></li>
+                <li class="text-sm text-slate-700 dark:text-slate-300 flex items-start gap-2"><i class="ph ph-headphones text-blue-500 mt-0.5 shrink-0"></i><span><a href="https://kubernetespodcast.com/episode/268-lovable/" target="_blank" rel="noopener noreferrer" class="font-medium hover:text-blue-600 dark:hover:text-blue-400">Agent Sandbox and Lovable</a> — validado: episodio de 12 de junho de 2026 sobre churn de pods e escala de plataforma.</span></li>
+                <li class="text-sm text-slate-700 dark:text-slate-300 flex items-start gap-2"><i class="ph ph-video text-blue-500 mt-0.5 shrink-0"></i><span><a href="https://www.youtube.com/watch?v=8DjS3t4l4no" target="_blank" rel="noopener noreferrer" class="font-medium hover:text-blue-600 dark:hover:text-blue-400">AWS EKS Auto Mode Tutorial</a> — validado: descricao cobre ALB em EKS Auto Mode passo a passo.</span></li>
+                <li class="text-sm text-slate-700 dark:text-slate-300 flex items-start gap-2"><i class="ph ph-wrench text-blue-500 mt-0.5 shrink-0"></i><span><a href="https://keda.sh/docs/2.20/deploy/" target="_blank" rel="noopener noreferrer" class="font-medium hover:text-blue-600 dark:hover:text-blue-400">Deploying KEDA</a> — validado: instrucoes oficiais de instalacao via Helm.</span></li>
+                <li class="text-sm text-slate-700 dark:text-slate-300 flex items-start gap-2"><i class="ph ph-wrench text-blue-500 mt-0.5 shrink-0"></i><span><a href="https://keda.sh/docs/2.20/scalers/aws-sqs/" target="_blank" rel="noopener noreferrer" class="font-medium hover:text-blue-600 dark:hover:text-blue-400">KEDA AWS SQS scaler</a> — validado: documenta parametros e autenticacao para SQS.</span></li>
+                <li class="text-sm text-slate-700 dark:text-slate-300 flex items-start gap-2"><i class="ph ph-chats-circle text-blue-500 mt-0.5 shrink-0"></i><span><a href="https://www.reddit.com/r/kubernetes/comments/1rqc5p3/managing_external_secrets_in_production_kubernetes/" target="_blank" rel="noopener noreferrer" class="font-medium hover:text-blue-600 dark:hover:text-blue-400">Reddit: external secrets em producao</a> — validado: discussao recente sobre ESO, Secrets Manager e Vault.</span></li>
+                <li class="text-sm text-slate-700 dark:text-slate-300 flex items-start gap-2"><i class="ph ph-chats-circle text-blue-500 mt-0.5 shrink-0"></i><span><a href="https://github.com/external-secrets/external-secrets/releases" target="_blank" rel="noopener noreferrer" class="font-medium hover:text-blue-600 dark:hover:text-blue-400">External Secrets releases</a> — validado: releases de junho de 2026 incluem v2.7.0 e helm-chart-2.7.0.</span></li>
+                <li class="text-sm text-slate-700 dark:text-slate-300 flex items-start gap-2"><i class="ph ph-chats-circle text-blue-500 mt-0.5 shrink-0"></i><span><a href="https://github.com/argoproj/argo-rollouts/issues/4433" target="_blank" rel="noopener noreferrer" class="font-medium hover:text-blue-600 dark:hover:text-blue-400">Argo Rollouts + AWS ALB issue 4433</a> — validado: issue relata 503s em canary com ALB, bom para troubleshooting.</span></li>
+              </ul>
+            </div>
+          </section>
+
+          <section class="mb-16" aria-labelledby="proximos-passos-titulo">
+            <div class="rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-5">
+              <h3 id="proximos-passos-titulo" class="text-xs font-bold uppercase tracking-widest text-slate-400 dark:text-slate-500 mb-3 flex items-center gap-1.5"><i class="ph ph-arrow-fat-lines-right" aria-hidden="true"></i> Proximos passos sugeridos</h3>
+              <ul class="space-y-2" role="list">
+                <li class="text-sm text-slate-700 dark:text-slate-300"><strong>Repositorio de plataforma EKS</strong> — transformar as entregas em modulos Terraform, Helm values e manifests versionados.</li>
+                <li class="text-sm text-slate-700 dark:text-slate-300"><strong>GitOps com Argo CD</strong> — separar bootstrap de cluster, add-ons e workloads de produto.</li>
+                <li class="text-sm text-slate-700 dark:text-slate-300"><strong>Runbooks SRE</strong> — criar runbooks para webhook down, HPA sem metricas, ExternalSecret sem sync, ALB sem targets e Rollout pausado.</li>
+              </ul>
+            </div>
+          </section>
+
+          <footer class="pt-8 border-t border-slate-200 dark:border-slate-800 text-sm" aria-label="Auditoria da trilha">
+            <p class="font-semibold text-slate-900 dark:text-slate-100 flex items-center gap-1.5 mb-3">
+              <i class="ph ph-shield-check text-emerald-500" aria-hidden="true"></i>
+              Auditoria <span translate="no">Trust by Inspection</span>
+            </p>
+            <ul class="space-y-1 text-slate-500 dark:text-slate-400 list-disc list-inside">
+              <li>Candidatos inspecionados: 50</li>
+              <li>Nervos principais aprovados: 32</li>
+              <li>Recursos adicionais aprovados: 8</li>
+              <li>Livros opcionais aprovados por sumario: 4</li>
+              <li>Mix: 5 videos, 4 audios/podcasts, 7 tutoriais/labs, 18 leituras profundas, 5 sinais recentes de comunidade, 4 livros</li>
+              <li>Lacunas declaradas: Falcon KAC depende de documentacao e credenciais CrowdStrike; Datadog depende de conta/API key; alguns videos foram validados por titulo/descricao quando transcricao publica nao estava disponivel.</li>
+              <li>Estimativa: 77 min de leitura, 130 min de video/audio e 10 a 16 horas de pratica.</li>
+              <li>Gerado por <code class="px-1 py-0.5 rounded bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 text-xs" translate="no">learning-trail-skill</code> em 2026-07-07.</li>
+            </ul>
+          </footer>
+        </div>
+      </main>
+    </div>
+  </div>
+</body>
+</html>

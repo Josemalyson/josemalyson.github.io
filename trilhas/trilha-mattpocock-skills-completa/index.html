@@ -1,0 +1,2048 @@
+<!doctype html>
+<html lang="pt-BR" data-theme="dark">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Trilha completa para aprender o projeto mattpocock/skills via engenharia reversa, uso operacional e criação de skills próprias.">
+  <title>Trilha de Aprendizado — mattpocock/skills</title>
+  <style>
+    :root {
+      color-scheme: dark;
+      --bg:#070b16; --bg-soft:#0b1020; --panel:#111827; --panel-2:#0f172a; --card:#0b1224;
+      --text:#e5e7eb; --muted:#94a3b8; --line:#273449; --accent:#8b5cf6; --accent-2:#22c55e;
+      --warn:#f59e0b; --bad:#ef4444; --good:#22c55e; --blue:#38bdf8;
+      --shadow: 0 20px 80px rgba(0,0,0,.36);
+    }
+    [data-theme="light"] {
+      color-scheme: light;
+      --bg:#f8fafc; --bg-soft:#eef2ff; --panel:#ffffff; --panel-2:#f1f5f9; --card:#ffffff;
+      --text:#0f172a; --muted:#475569; --line:#dbe4ef; --accent:#6d28d9; --accent-2:#15803d;
+      --warn:#b45309; --bad:#b91c1c; --good:#15803d; --blue:#0369a1;
+      --shadow: 0 20px 60px rgba(15,23,42,.13);
+    }
+    * { box-sizing:border-box; }
+    html { scroll-behavior:smooth; }
+    body { margin:0; font-family:Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; background:radial-gradient(circle at top left, rgba(139,92,246,.22), transparent 36rem), var(--bg); color:var(--text); }
+    a { color:inherit; }
+    .layout { display:grid; grid-template-columns:330px minmax(0,1fr); min-height:100vh; }
+    .sidebar { position:sticky; top:0; height:100vh; overflow:auto; padding:24px; border-right:1px solid var(--line); background:rgba(15,23,42,.78); backdrop-filter:blur(16px); }
+    [data-theme="light"] .sidebar { background:rgba(255,255,255,.86); }
+    .brand { display:flex; gap:12px; align-items:center; margin-bottom:22px; }
+    .logo { width:44px; height:44px; border-radius:16px; display:grid; place-items:center; background:linear-gradient(135deg,var(--accent),#06b6d4); color:white; font-weight:950; box-shadow:var(--shadow); }
+    .brand h1 { font-size:16px; line-height:1.1; margin:0; }
+    .brand p { margin:4px 0 0; color:var(--muted); font-size:12px; letter-spacing:.12em; text-transform:uppercase; }
+    .pillbar { display:flex; flex-wrap:wrap; gap:8px; margin-bottom:20px; }
+    .pill,.tag { display:inline-flex; align-items:center; gap:6px; border:1px solid var(--line); border-radius:999px; padding:6px 9px; color:var(--muted); background:var(--panel-2); font-size:12px; font-weight:700; }
+    .tag.approved { color:var(--good); border-color:rgba(34,197,94,.38); background:rgba(34,197,94,.1); }
+    .tag.weak_signal { color:var(--warn); border-color:rgba(245,158,11,.38); background:rgba(245,158,11,.1); }
+    .searchbox { width:100%; border:1px solid var(--line); border-radius:14px; padding:11px 12px; background:var(--panel); color:var(--text); outline:none; margin:4px 0 14px; }
+    .searchbox:focus { border-color:var(--accent); box-shadow:0 0 0 3px rgba(139,92,246,.18); }
+    .progress-wrap { margin:16px 0 24px; }
+    .progress-line { height:10px; border:1px solid var(--line); background:var(--panel-2); border-radius:999px; overflow:hidden; }
+    .progress-fill { width:0%; height:100%; background:linear-gradient(90deg,var(--accent),var(--accent-2)); transition:width .2s ease; }
+    .progress-text { color:var(--muted); font-size:12px; margin-top:8px; }
+    .nav-title { font-size:11px; letter-spacing:.14em; text-transform:uppercase; color:var(--muted); margin:20px 0 8px; font-weight:900; }
+    .nav { display:flex; flex-direction:column; gap:8px; }
+    .nav-item { display:grid; grid-template-columns:30px 1fr; gap:8px; align-items:start; text-decoration:none; padding:10px; border:1px solid transparent; border-radius:14px; }
+    .nav-item:hover, .nav-item.active { background:var(--panel-2); border-color:var(--line); }
+    .nav-item span { width:26px; height:26px; border-radius:999px; display:grid; place-items:center; background:var(--panel); border:1px solid var(--line); color:var(--muted); font-size:12px; font-weight:900; }
+    .nav-item strong { font-size:13px; line-height:1.25; }
+    .nav-item small { grid-column:2; color:var(--muted); font-size:12px; }
+    .controls { display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-top:18px; }
+    button,.download { border:1px solid var(--line); background:var(--panel); color:var(--text); padding:10px 12px; border-radius:12px; cursor:pointer; text-decoration:none; font-size:13px; text-align:center; }
+    button:hover,.download:hover { border-color:var(--accent); }
+    .main { max-width:1120px; margin:0 auto; padding:48px 32px 90px; }
+    .hero { margin-bottom:34px; }
+    .hero h1 { font-size:clamp(36px,6vw,68px); line-height:.95; letter-spacing:-.06em; margin:16px 0; max-width:960px; }
+    .hero p { color:var(--muted); font-size:18px; line-height:1.65; max-width:920px; }
+    .hero-actions { display:flex; flex-wrap:wrap; gap:10px; margin-top:20px; }
+    .primary { background:linear-gradient(135deg,var(--accent),#2563eb); color:white; border-color:transparent; font-weight:900; }
+    .statgrid { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:12px; margin:24px 0 18px; }
+    .stat { background:var(--panel); border:1px solid var(--line); border-radius:20px; padding:16px; box-shadow:var(--shadow); }
+    .stat b { display:block; font-size:28px; letter-spacing:-.04em; }
+    .stat span { display:block; color:var(--muted); font-size:12px; letter-spacing:.1em; text-transform:uppercase; margin-top:3px; }
+    .notice { border:1px solid rgba(245,158,11,.42); background:rgba(245,158,11,.1); border-radius:18px; padding:16px; color:var(--text); line-height:1.55; }
+    .panel { background:var(--panel); border:1px solid var(--line); border-radius:24px; padding:24px; box-shadow:var(--shadow); margin:26px 0; }
+    .panel h2,.station h2,.boss h2 { letter-spacing:-.04em; }
+    .section-title { font-size:13px; letter-spacing:.12em; text-transform:uppercase; color:var(--muted); margin:24px 0 12px; }
+    .flow { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:12px; }
+    .flow-card { background:var(--card); border:1px solid var(--line); border-radius:18px; padding:15px; }
+    .flow-card span { color:var(--muted); text-transform:uppercase; letter-spacing:.1em; font-size:11px; font-weight:900; }
+    .flow-card strong { display:block; margin:6px 0; font-size:15px; }
+    .flow-card p { color:var(--muted); margin:0; font-size:13px; line-height:1.45; }
+    .station { background:linear-gradient(180deg,rgba(255,255,255,.045),transparent 18rem), var(--panel); border:1px solid var(--line); border-radius:28px; padding:28px; box-shadow:var(--shadow); margin:28px 0; scroll-margin-top:18px; }
+    .station.hidden { display:none; }
+    .station-header { display:grid; grid-template-columns:48px 1fr auto; gap:16px; align-items:start; }
+    .station-number { width:46px; height:46px; border-radius:17px; display:grid; place-items:center; background:linear-gradient(135deg,var(--accent),#2563eb); color:white; font-size:18px; font-weight:950; }
+    .eyebrow { margin:0 0 6px; color:var(--muted); font-size:12px; letter-spacing:.1em; text-transform:uppercase; font-weight:900; }
+    .station h2 { margin:0; font-size:28px; }
+    .objective { margin:10px 0 0; color:var(--muted); line-height:1.55; }
+    .complete-toggle { display:flex; gap:8px; align-items:center; color:var(--muted); font-size:13px; white-space:nowrap; user-select:none; }
+    .narrative { margin:22px 0; line-height:1.7; }
+    .narrative p { margin:0 0 12px; }
+    .action-grid { display:grid; grid-template-columns:1fr 1fr; gap:14px; }
+    .lab,.check { border:1px solid var(--line); border-radius:18px; background:var(--panel-2); padding:15px; line-height:1.55; }
+    .check { border-color:rgba(245,158,11,.42); }
+    .resources { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:14px; }
+    .resource { border:1px solid var(--line); border-radius:18px; background:var(--card); padding:15px; }
+    .resource.weak_signal { border-color:rgba(245,158,11,.5); }
+    .resource-head { display:flex; gap:12px; align-items:flex-start; }
+    .resource-icon { min-width:34px; height:34px; border-radius:13px; display:grid; place-items:center; background:rgba(139,92,246,.14); color:var(--accent); font-weight:900; }
+    .resource-meta { display:flex; gap:7px; align-items:center; flex-wrap:wrap; color:var(--muted); font-size:11px; text-transform:uppercase; letter-spacing:.08em; font-weight:900; }
+    .dot { width:4px; height:4px; border-radius:99px; background:var(--muted); display:inline-block; opacity:.6; }
+    .resource a { display:inline-block; font-weight:900; text-decoration:none; margin-top:4px; }
+    .resource a:hover { text-decoration:underline; }
+    .resource .author,.resource-body p { color:var(--muted); margin:5px 0; font-size:13px; line-height:1.45; }
+    blockquote { border-left:3px solid var(--accent-2); margin:10px 0 0; padding-left:10px; font-size:13px; line-height:1.5; color:var(--text); }
+    .cmd-grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:12px; }
+    .cmd { border:1px solid var(--line); background:var(--card); border-radius:16px; padding:14px; display:flex; gap:10px; justify-content:space-between; align-items:center; }
+    code { display:block; background:var(--panel-2); border:1px solid var(--line); padding:7px 8px; border-radius:10px; margin-top:7px; color:var(--blue); overflow:auto; }
+    .roadmap { list-style:none; padding:0; margin:0; display:grid; gap:10px; }
+    .roadmap li { display:grid; grid-template-columns:90px 1fr; gap:14px; border:1px solid var(--line); background:var(--card); border-radius:16px; padding:14px; }
+    .roadmap b { color:var(--accent-2); }
+    .roadmap span { color:var(--muted); line-height:1.45; }
+    .boss { margin:34px 0; background:#030712; border:1px solid #1f2937; border-radius:30px; padding:30px; color:white; box-shadow:var(--shadow); }
+    .boss p.intro { color:#9ca3af; }
+    .boss ol { list-style:none; padding:0; display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:14px; }
+    .boss li { border:1px solid rgba(255,255,255,.13); background:rgba(255,255,255,.045); border-radius:18px; padding:16px; }
+    .boss li span { display:block; color:#a5b4fc; font-size:12px; text-transform:uppercase; letter-spacing:.1em; font-weight:950; }
+    .boss li p { margin:8px 0 0; line-height:1.5; }
+    .audit-grid { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:12px; }
+    table { width:100%; border-collapse:collapse; overflow:hidden; border-radius:18px; font-size:13px; }
+    th,td { padding:12px; border-bottom:1px solid var(--line); text-align:left; vertical-align:top; }
+    th { color:var(--muted); font-size:11px; letter-spacing:.1em; text-transform:uppercase; }
+    tbody tr:hover { background:var(--panel-2); }
+    .footer-links { display:flex; flex-wrap:wrap; gap:10px; margin-top:24px; }
+    .schema { display:none; }
+    @media (max-width: 980px) {
+      .layout { display:block; } .sidebar { position:relative; width:auto; height:auto; border-right:0; border-bottom:1px solid var(--line); }
+      .main { padding:30px 18px 70px; } .statgrid,.flow,.audit-grid { grid-template-columns:repeat(2,minmax(0,1fr)); }
+      .resources,.action-grid,.cmd-grid,.boss ol { grid-template-columns:1fr; } .station-header { grid-template-columns:44px 1fr; } .complete-toggle { grid-column:2; }
+    }
+    @media (max-width: 560px) { .statgrid,.flow,.audit-grid { grid-template-columns:1fr; } .hero h1 { font-size:38px; } .roadmap li { grid-template-columns:1fr; } }
+    @media print { .sidebar,.controls,.hero-actions,.complete-toggle,.cmd button { display:none!important; } body { background:white; color:black; } .layout { display:block; } .panel,.station,.boss { box-shadow:none; break-inside:avoid; } a { text-decoration:none; } }
+  </style>
+</head>
+<body>
+  <div class="layout">
+    <aside class="sidebar">
+      <div class="brand">
+        <div class="logo">LT</div>
+        <div><h1>Trilha de Aprendizado — mattpocock/skills</h1><p>Learning Trail</p></div>
+      </div>
+      <div class="pillbar">
+        <span class="pill">Avançado / prático</span>
+        <span class="pill">8 estações</span>
+        <span class="pill">29 nervos</span>
+      </div>
+      <input class="searchbox" id="searchInput" type="search" placeholder="Filtrar estações..." aria-label="Filtrar estações">
+      <div class="progress-wrap"><div class="progress-line"><div class="progress-fill" id="progressFill"></div></div><div class="progress-text" id="progressText">0/8 estações concluídas</div></div>
+      <div class="nav-title">Mapa</div>
+      <nav class="nav" id="stationNav">
+      <a class="nav-item" href="#estacao-1" data-title="Entender o problema: skills como disciplina de engenharia, não prompts soltos">
+        <span>1</span>
+        <strong>Entender o problema: skills como disciplina de engenharia, não prompts soltos</strong>
+        <small>18 min • 3 nervos</small>
+      </a>
+      <a class="nav-item" href="#estacao-2" data-title="Instalação, anatomia do repo e contrato de execução">
+        <span>2</span>
+        <strong>Instalação, anatomia do repo e contrato de execução</strong>
+        <small>22 min • 4 nervos</small>
+      </a>
+      <a class="nav-item" href="#estacao-3" data-title="O mapa de navegação: router, fluxos e higiene de contexto">
+        <span>3</span>
+        <strong>O mapa de navegação: router, fluxos e higiene de contexto</strong>
+        <small>25 min • 4 nervos</small>
+      </a>
+      <a class="nav-item" href="#estacao-4" data-title="Alinhamento antes de código: grilling, domínio e ADRs">
+        <span>4</span>
+        <strong>Alinhamento antes de código: grilling, domínio e ADRs</strong>
+        <small>28 min • 4 nervos</small>
+      </a>
+      <a class="nav-item" href="#estacao-5" data-title="Da conversa para spec e da spec para tickets verticais">
+        <span>5</span>
+        <strong>Da conversa para spec e da spec para tickets verticais</strong>
+        <small>30 min • 4 nervos</small>
+      </a>
+      <a class="nav-item" href="#estacao-6" data-title="Execução: implement, TDD, diagnóstico e loop de feedback">
+        <span>6</span>
+        <strong>Execução: implement, TDD, diagnóstico e loop de feedback</strong>
+        <small>32 min • 5 nervos</small>
+      </a>
+      <a class="nav-item" href="#estacao-7" data-title="Review e saúde arquitetural: standards, spec e deep modules">
+        <span>7</span>
+        <strong>Review e saúde arquitetural: standards, spec e deep modules</strong>
+        <small>34 min • 4 nervos</small>
+      </a>
+      <a class="nav-item" href="#estacao-8" data-title="Adaptar para seu ecossistema: escrever skills previsíveis e operar em múltiplas sessões">
+        <span>8</span>
+        <strong>Adaptar para seu ecossistema: escrever skills previsíveis e operar em múltiplas sessões</strong>
+        <small>36 min • 5 nervos</small>
+      </a></nav>
+      <div class="nav-title">Ações</div>
+      <div class="controls"><button id="themeBtn" type="button">Tema</button><button type="button" onclick="window.print()">Imprimir</button></div>
+    </aside>
+    <main class="main">
+      <section class="hero" id="topo">
+        <div class="pillbar"><span class="pill">Trust by Inspection</span><span class="pill">GitHub + AI Hero</span><span class="pill">Foco: Engenharia reversa, uso operacional e criação de skill pack próprio</span></div>
+        <h1>Trilha de Aprendizado — mattpocock/skills</h1>
+        <p>Ao final, você será capaz de instalar, mapear, operar e adaptar mattpocock/skills; entender o fluxo idea → ship; aplicar setup, grilling, specs, tickets, TDD, review e arquitetura; e derivar uma versão própria para seu ecossistema de agentes.</p>
+        <div class="hero-actions"><a class="download primary" href="#estacao-1">Começar trilha</a><a class="download" href="https://github.com/mattpocock/skills" target="_blank" rel="noopener noreferrer">Abrir repositório</a><a class="download" href="trilha-mattpocock-skills.json" download>Baixar JSON</a></div>
+        <div class="statgrid">
+          <div class="stat"><b>8</b><span>Estações</span></div>
+          <div class="stat"><b>29</b><span>Nervos validados</span></div>
+          <div class="stat"><b>225</b><span>Minutos</span></div>
+          <div class="stat"><b>4</b><span>Weak signals</span></div>
+        </div>
+        <div class="notice"><b>Premissa:</b> esta trilha foi construída para engenharia reversa operacional do projeto. Ela privilegia fontes primárias: README, CLAUDE.md, CONTEXT.md, plugin.json, SKILL.md individuais e documentação pública do AI Hero.</div>
+      </section>
+      <section class="panel" id="arquitetura">
+        <p class="eyebrow">Mapa operacional</p>
+        <h2>Como o projeto se organiza mentalmente</h2>
+        <p class="objective">O projeto funciona como um skill pack de processo: primeiro configura o ambiente, depois roteia a intenção, alinha o problema, formaliza trabalho, executa por feedback loops e revisa contra qualidade e especificação.</p>
+        <div class="flow">
+          <div class="flow-card">
+            <span>Setup</span>
+            <strong>/setup-matt-pocock-skills</strong>
+            <p>Configura issue tracker, labels e docs de agente antes dos demais fluxos.</p>
+          </div>
+          <div class="flow-card">
+            <span>Router</span>
+            <strong>/ask-matt</strong>
+            <p>Escolhe o caminho operacional correto: ideia, bug, triagem, arquitetura ou esforço grande.</p>
+          </div>
+          <div class="flow-card">
+            <span>Alinhamento</span>
+            <strong>/grill-with-docs</strong>
+            <p>Entrevista o usuário, cria vocabulário e deixa rastro em CONTEXT.md/ADRs.</p>
+          </div>
+          <div class="flow-card">
+            <span>Especificação</span>
+            <strong>/to-spec</strong>
+            <p>Transforma a conversa em especificação rastreável.</p>
+          </div>
+          <div class="flow-card">
+            <span>Decomposição</span>
+            <strong>/to-tickets</strong>
+            <p>Quebra a spec em fatias verticais com bloqueios explícitos.</p>
+          </div>
+          <div class="flow-card">
+            <span>Execução</span>
+            <strong>/implement + /tdd</strong>
+            <p>Implementa por fatias, guiado por red-green-refactor e revisão.</p>
+          </div>
+          <div class="flow-card">
+            <span>Review</span>
+            <strong>/code-review</strong>
+            <p>Valida Standards e Spec em eixos separados.</p>
+          </div>
+          <div class="flow-card">
+            <span>Saúde</span>
+            <strong>/improve-codebase-architecture</strong>
+            <p>Busca oportunidades de deep modules e redução de bola de lama.</p>
+          </div></div>
+      </section>
+      <section class="panel" id="comandos">
+        <p class="eyebrow">Runbook mínimo</p>
+        <h2>Comandos e pontos de entrada</h2>
+        <div class="cmd-grid">
+        <div class="cmd"><div><b>Instalar skill pack</b><code>npx skills@latest add mattpocock/skills</code></div><button type="button" data-copy="npx skills@latest add mattpocock/skills">Copiar</button></div>
+        <div class="cmd"><div><b>Setup inicial no agente</b><code>/setup-matt-pocock-skills</code></div><button type="button" data-copy="/setup-matt-pocock-skills">Copiar</button></div>
+        <div class="cmd"><div><b>Perguntar qual fluxo usar</b><code>/ask-matt</code></div><button type="button" data-copy="/ask-matt">Copiar</button></div>
+        <div class="cmd"><div><b>Alinhar uma mudança com docs</b><code>/grill-with-docs</code></div><button type="button" data-copy="/grill-with-docs">Copiar</button></div>
+        <div class="cmd"><div><b>Converter conversa em spec</b><code>/to-spec</code></div><button type="button" data-copy="/to-spec">Copiar</button></div>
+        <div class="cmd"><div><b>Quebrar spec em tickets</b><code>/to-tickets</code></div><button type="button" data-copy="/to-tickets">Copiar</button></div>
+        <div class="cmd"><div><b>Implementar ticket/spec</b><code>/implement</code></div><button type="button" data-copy="/implement">Copiar</button></div>
+        <div class="cmd"><div><b>Executar TDD isolado</b><code>/tdd</code></div><button type="button" data-copy="/tdd">Copiar</button></div>
+        <div class="cmd"><div><b>Diagnosticar bug difícil</b><code>/diagnosing-bugs</code></div><button type="button" data-copy="/diagnosing-bugs">Copiar</button></div>
+        <div class="cmd"><div><b>Revisar branch/diff</b><code>/code-review</code></div><button type="button" data-copy="/code-review">Copiar</button></div></div>
+      </section>
+      
+    <section class="station" id="estacao-1" data-station="1" data-search="entender o problema: skills como disciplina de engenharia, não prompts soltos separar o projeto de uma biblioteca tradicional: ele é uma coleção de workflows versionáveis para agentes de código. o primeiro erro seria estudar esse repositório como se fosse um framework. ele não fornece runtime, api ou componentes reutilizáveis em produção; ele fornece processos operacionais para orientar claude code, codex e outros agentes. a tese central é que agentes falham menos quando trabalham dentro de loops de engenharia: alinhamento, vocabulário, testes, revisão e decomposição em fatias pequenas. antes de decorar cada skill, você precisa entender o problema que elas tentam reduzir: desalinhamento, verbosidade, falta de feedback e deterioração arquitetural. ao final desta estação, você deve conseguir explicar por que uma skill boa se parece mais com um runbook executável do que com um prompt longo.">
+      <div class="station-header">
+        <div class="station-number">1</div>
+        <div>
+          <p class="eyebrow">Estação 1 • 18 min</p>
+          <h2>Entender o problema: skills como disciplina de engenharia, não prompts soltos</h2>
+          <p class="objective">Separar o projeto de uma biblioteca tradicional: ele é uma coleção de workflows versionáveis para agentes de código.</p>
+        </div>
+        <label class="complete-toggle"><input type="checkbox" data-progress="estacao-1"> concluída</label>
+      </div>
+      <div class="narrative">
+        <p>O primeiro erro seria estudar esse repositório como se fosse um framework. Ele não fornece runtime, API ou componentes reutilizáveis em produção; ele fornece processos operacionais para orientar Claude Code, Codex e outros agentes.</p><p>A tese central é que agentes falham menos quando trabalham dentro de loops de engenharia: alinhamento, vocabulário, testes, revisão e decomposição em fatias pequenas. Antes de decorar cada skill, você precisa entender o problema que elas tentam reduzir: desalinhamento, verbosidade, falta de feedback e deterioração arquitetural.</p><p>Ao final desta estação, você deve conseguir explicar por que uma skill boa se parece mais com um runbook executável do que com um prompt longo.</p>
+      </div>
+      <div class="action-grid">
+        <div class="lab"><b>Laboratório:</b><br>Escreva um mapa de uma página com quatro falhas que o repositório tenta corrigir: desalinhamento, verbosidade, código que não roda e bola de lama arquitetural.</div>
+        <div class="check"><b>Check de avanço:</b><br>Você consegue explicar a diferença entre prompt, skill, workflow e disciplina operacional sem citar uma ferramenta específica?</div>
+      </div>
+      <h3 class="section-title">Nervos validados</h3>
+      <div class="resources">
+        
+          <article class="resource approved" data-resource-title="README — Skills For Real Engineers" data-status="approved">
+            <div class="resource-head">
+              <div class="resource-icon" aria-hidden="true">◈</div>
+              <div>
+                <div class="resource-meta"><span>Leitura primária</span><span class="dot"></span><span>approved</span></div>
+                <a href="https://raw.githubusercontent.com/mattpocock/skills/main/README.md" target="_blank" rel="noopener noreferrer">README — Skills For Real Engineers</a>
+                <p class="author">Matt Pocock / GitHub</p>
+              </div>
+            </div>
+            <div class="resource-body">
+              <p><b>Quando seguir:</b> Use para entender a tese do projeto e os quatro failure modes que justificam a coleção.</p>
+              <blockquote><b>Validação:</b> O README apresenta as skills como pequenas, adaptáveis e compostas para engenharia real, não vibe coding.</blockquote>
+            </div>
+          </article>
+          <article class="resource approved" data-resource-title="Página do repositório GitHub" data-status="approved">
+            <div class="resource-head">
+              <div class="resource-icon" aria-hidden="true">◈</div>
+              <div>
+                <div class="resource-meta"><span>Leitura primária</span><span class="dot"></span><span>approved</span></div>
+                <a href="https://github.com/mattpocock/skills" target="_blank" rel="noopener noreferrer">Página do repositório GitHub</a>
+                <p class="author">mattpocock/skills</p>
+              </div>
+            </div>
+            <div class="resource-body">
+              <p><b>Quando seguir:</b> Use para observar popularidade, estrutura de pastas, licença e atividade do projeto.</p>
+              <blockquote><b>Validação:</b> A página mostra o repositório público, com pastas .agents, .claude-plugin, docs, scripts e skills.</blockquote>
+            </div>
+          </article>
+          <article class="resource approved" data-resource-title="AI Hero — posts e documentação de skills" data-status="approved">
+            <div class="resource-head">
+              <div class="resource-icon" aria-hidden="true">◈</div>
+              <div>
+                <div class="resource-meta"><span>Leitura oficial</span><span class="dot"></span><span>approved</span></div>
+                <a href="https://www.aihero.dev/posts" target="_blank" rel="noopener noreferrer">AI Hero — posts e documentação de skills</a>
+                <p class="author">Matt Pocock / AI Hero</p>
+              </div>
+            </div>
+            <div class="resource-body">
+              <p><b>Quando seguir:</b> Use como índice cronológico para entender evolução, changelogs e documentação pública das skills.</p>
+              <blockquote><b>Validação:</b> A página lista docs individuais para setup, ask-matt, implement, tdd, wayfinder e demais skills.</blockquote>
+            </div>
+          </article>
+      </div>
+    </section>
+    <section class="station" id="estacao-2" data-station="2" data-search="instalação, anatomia do repo e contrato de execução entender como as skills são instaladas, onde vivem e quais arquivos sustentam o comportamento do agente. depois de entender a intenção, você precisa estudar a mecânica. o projeto organiza skills em buckets, promove apenas algumas famílias e usa plugin metadata para expor o conjunto instalável. o ponto crítico é que a instalação não termina no npx. o setup precisa capturar como o seu repositório trabalha: issue tracker, labels de triagem e localização dos documentos de domínio. sem isso, as skills downstream começam a adivinhar. a estação termina quando você souber o que precisa existir em um repo para que as skills rodem de forma previsível.">
+      <div class="station-header">
+        <div class="station-number">2</div>
+        <div>
+          <p class="eyebrow">Estação 2 • 22 min</p>
+          <h2>Instalação, anatomia do repo e contrato de execução</h2>
+          <p class="objective">Entender como as skills são instaladas, onde vivem e quais arquivos sustentam o comportamento do agente.</p>
+        </div>
+        <label class="complete-toggle"><input type="checkbox" data-progress="estacao-2"> concluída</label>
+      </div>
+      <div class="narrative">
+        <p>Depois de entender a intenção, você precisa estudar a mecânica. O projeto organiza skills em buckets, promove apenas algumas famílias e usa plugin metadata para expor o conjunto instalável.</p><p>O ponto crítico é que a instalação não termina no npx. O setup precisa capturar como o seu repositório trabalha: issue tracker, labels de triagem e localização dos documentos de domínio. Sem isso, as skills downstream começam a adivinhar.</p><p>A estação termina quando você souber o que precisa existir em um repo para que as skills rodem de forma previsível.</p>
+      </div>
+      <div class="action-grid">
+        <div class="lab"><b>Laboratório:</b><br>Em um repositório sandbox, rode mentalmente o fluxo: instalar skills, selecionar /setup-matt-pocock-skills, definir issue tracker, labels e docs de domínio. Gere uma checklist de arquivos esperados.</div>
+        <div class="check"><b>Check de avanço:</b><br>Você sabe quais decisões são capturadas pelo setup antes do primeiro uso real das skills?</div>
+      </div>
+      <h3 class="section-title">Nervos validados</h3>
+      <div class="resources">
+        
+          <article class="resource approved" data-resource-title="README — Quickstart" data-status="approved">
+            <div class="resource-head">
+              <div class="resource-icon" aria-hidden="true">◈</div>
+              <div>
+                <div class="resource-meta"><span>Leitura primária</span><span class="dot"></span><span>approved</span></div>
+                <a href="https://raw.githubusercontent.com/mattpocock/skills/main/README.md" target="_blank" rel="noopener noreferrer">README — Quickstart</a>
+                <p class="author">Matt Pocock / GitHub</p>
+              </div>
+            </div>
+            <div class="resource-body">
+              <p><b>Quando seguir:</b> Use para executar o caminho de instalação oficial com npx skills.</p>
+              <blockquote><b>Validação:</b> O quickstart orienta instalar via npx skills e depois executar /setup-matt-pocock-skills.</blockquote>
+            </div>
+          </article>
+          <article class="resource approved" data-resource-title="CLAUDE.md — organização e regras de manutenção" data-status="approved">
+            <div class="resource-head">
+              <div class="resource-icon" aria-hidden="true">◈</div>
+              <div>
+                <div class="resource-meta"><span>Leitura primária</span><span class="dot"></span><span>approved</span></div>
+                <a href="https://raw.githubusercontent.com/mattpocock/skills/main/CLAUDE.md" target="_blank" rel="noopener noreferrer">CLAUDE.md — organização e regras de manutenção</a>
+                <p class="author">Matt Pocock / GitHub</p>
+              </div>
+            </div>
+            <div class="resource-body">
+              <p><b>Quando seguir:</b> Use para entender buckets promovidos, buckets não promovidos e sincronização de docs.</p>
+              <blockquote><b>Validação:</b> O arquivo define buckets engineering, productivity, misc, personal, in-progress e deprecated.</blockquote>
+            </div>
+          </article>
+          <article class="resource approved" data-resource-title=".claude-plugin/plugin.json" data-status="approved">
+            <div class="resource-head">
+              <div class="resource-icon" aria-hidden="true">⚙</div>
+              <div>
+                <div class="resource-meta"><span>Config primária</span><span class="dot"></span><span>approved</span></div>
+                <a href="https://raw.githubusercontent.com/mattpocock/skills/main/.claude-plugin/plugin.json" target="_blank" rel="noopener noreferrer">.claude-plugin/plugin.json</a>
+                <p class="author">Matt Pocock / GitHub</p>
+              </div>
+            </div>
+            <div class="resource-body">
+              <p><b>Quando seguir:</b> Use para auditar quais skills entram no plugin instalável.</p>
+              <blockquote><b>Validação:</b> O plugin lista skills de engineering e productivity como componentes do pacote.</blockquote>
+            </div>
+          </article>
+          <article class="resource approved" data-resource-title="The /setup-matt-pocock-skills Skill" data-status="approved">
+            <div class="resource-head">
+              <div class="resource-icon" aria-hidden="true">▣</div>
+              <div>
+                <div class="resource-meta"><span>Documentação oficial</span><span class="dot"></span><span>approved</span></div>
+                <a href="https://www.aihero.dev/skills-setup-matt-pocock-skills" target="_blank" rel="noopener noreferrer">The /setup-matt-pocock-skills Skill</a>
+                <p class="author">Matt Pocock / AI Hero</p>
+              </div>
+            </div>
+            <div class="resource-body">
+              <p><b>Quando seguir:</b> Use para entender o bootstrap por repo e os arquivos docs/agents esperados.</p>
+              <blockquote><b>Validação:</b> O setup registra issue tracker, triage labels e domínio como configuração lida pelas outras skills.</blockquote>
+            </div>
+          </article>
+      </div>
+    </section>
+    <section class="station" id="estacao-3" data-station="3" data-search="o mapa de navegação: router, fluxos e higiene de contexto aprender quando usar cada skill e como o repositório evita perder coerência entre sessões. a coleção cresce o suficiente para virar um problema de descoberta: você não quer memorizar vinte comandos. o projeto resolve isso com um router: /ask-matt. a ideia de fluxo é mais importante que a lista de skills. trabalho novo segue idea → ship; bugs entram por diagnóstico ou triagem; esforços grandes passam por wayfinder; sessões longas exigem handoff em vez de compactação cega. aqui você aprende a ler o projeto como um grafo de processos, não como comandos isolados.">
+      <div class="station-header">
+        <div class="station-number">3</div>
+        <div>
+          <p class="eyebrow">Estação 3 • 25 min</p>
+          <h2>O mapa de navegação: router, fluxos e higiene de contexto</h2>
+          <p class="objective">Aprender quando usar cada skill e como o repositório evita perder coerência entre sessões.</p>
+        </div>
+        <label class="complete-toggle"><input type="checkbox" data-progress="estacao-3"> concluída</label>
+      </div>
+      <div class="narrative">
+        <p>A coleção cresce o suficiente para virar um problema de descoberta: você não quer memorizar vinte comandos. O projeto resolve isso com um router: /ask-matt.</p><p>A ideia de fluxo é mais importante que a lista de skills. Trabalho novo segue idea → ship; bugs entram por diagnóstico ou triagem; esforços grandes passam por wayfinder; sessões longas exigem handoff em vez de compactação cega.</p><p>Aqui você aprende a ler o projeto como um grafo de processos, não como comandos isolados.</p>
+      </div>
+      <div class="action-grid">
+        <div class="lab"><b>Laboratório:</b><br>Crie uma tabela com cinco situações reais do seu trabalho e escolha o fluxo: bug intermitente, feature pequena, feature grande, fila de issues, refactor arquitetural.</div>
+        <div class="check"><b>Check de avanço:</b><br>Você consegue decidir quando usar /ask-matt, /wayfinder, /grill-with-docs, /triage ou /diagnosing-bugs?</div>
+      </div>
+      <h3 class="section-title">Nervos validados</h3>
+      <div class="resources">
+        
+          <article class="resource approved" data-resource-title="ask-matt/SKILL.md" data-status="approved">
+            <div class="resource-head">
+              <div class="resource-icon" aria-hidden="true">◈</div>
+              <div>
+                <div class="resource-meta"><span>Leitura primária</span><span class="dot"></span><span>approved</span></div>
+                <a href="https://raw.githubusercontent.com/mattpocock/skills/main/skills/engineering/ask-matt/SKILL.md" target="_blank" rel="noopener noreferrer">ask-matt/SKILL.md</a>
+                <p class="author">Matt Pocock / GitHub</p>
+              </div>
+            </div>
+            <div class="resource-body">
+              <p><b>Quando seguir:</b> Use para aprender o grafo de fluxos e o papel de cada skill.</p>
+              <blockquote><b>Validação:</b> A skill descreve o fluxo principal idea → ship e suas on-ramps.</blockquote>
+            </div>
+          </article>
+          <article class="resource approved" data-resource-title="The /ask-matt Skill" data-status="approved">
+            <div class="resource-head">
+              <div class="resource-icon" aria-hidden="true">▣</div>
+              <div>
+                <div class="resource-meta"><span>Documentação oficial</span><span class="dot"></span><span>approved</span></div>
+                <a href="https://www.aihero.dev/skills-ask-matt" target="_blank" rel="noopener noreferrer">The /ask-matt Skill</a>
+                <p class="author">Matt Pocock / AI Hero</p>
+              </div>
+            </div>
+            <div class="resource-body">
+              <p><b>Quando seguir:</b> Use para entender o router como memória externa para skills user-invoked.</p>
+              <blockquote><b>Validação:</b> A página explica que ask-matt orienta qual skill ou fluxo usar e em que ordem.</blockquote>
+            </div>
+          </article>
+          <article class="resource approved" data-resource-title="CONTEXT.md — linguagem do próprio repositório" data-status="approved">
+            <div class="resource-head">
+              <div class="resource-icon" aria-hidden="true">◈</div>
+              <div>
+                <div class="resource-meta"><span>Leitura primária</span><span class="dot"></span><span>approved</span></div>
+                <a href="https://raw.githubusercontent.com/mattpocock/skills/main/CONTEXT.md" target="_blank" rel="noopener noreferrer">CONTEXT.md — linguagem do próprio repositório</a>
+                <p class="author">Matt Pocock / GitHub</p>
+              </div>
+            </div>
+            <div class="resource-body">
+              <p><b>Quando seguir:</b> Use para ver como o projeto define issue tracker, issue e triage role.</p>
+              <blockquote><b>Validação:</b> O contexto resolve ambiguidades como backlog, issue tracker e triage role.</blockquote>
+            </div>
+          </article>
+          <article class="resource approved" data-resource-title="The /wayfinder Skill" data-status="approved">
+            <div class="resource-head">
+              <div class="resource-icon" aria-hidden="true">▣</div>
+              <div>
+                <div class="resource-meta"><span>Documentação oficial</span><span class="dot"></span><span>approved</span></div>
+                <a href="https://www.aihero.dev/skills-wayfinder" target="_blank" rel="noopener noreferrer">The /wayfinder Skill</a>
+                <p class="author">Matt Pocock / AI Hero</p>
+              </div>
+            </div>
+            <div class="resource-body">
+              <p><b>Quando seguir:</b> Use quando o esforço é grande demais ou nebuloso para virar spec diretamente.</p>
+              <blockquote><b>Validação:</b> Wayfinder transforma esforço nebuloso em mapa compartilhado de tickets de investigação.</blockquote>
+            </div>
+          </article>
+      </div>
+    </section>
+    <section class="station" id="estacao-4" data-station="4" data-search="alinhamento antes de código: grilling, domínio e adrs dominar a fase de reduzir ambiguidade antes da escrita de spec e antes de qualquer implementação. a skill /grill-with-docs é o ponto em que o agente deixa de ser executor e vira entrevistador. ela força decisões, captura vocabulário e atualiza o modelo de domínio do repositório. o componente mais reutilizável aqui é domain-modeling: termos vagos são desafiados, termos canônicos são criados, contradições com o código são trazidas para a conversa e adrs são usados apenas quando a decisão é difícil de reverter. essa estação deve mudar seu padrão de uso: antes de pedir código, você faz o agente fechar as perguntas certas.">
+      <div class="station-header">
+        <div class="station-number">4</div>
+        <div>
+          <p class="eyebrow">Estação 4 • 28 min</p>
+          <h2>Alinhamento antes de código: grilling, domínio e ADRs</h2>
+          <p class="objective">Dominar a fase de reduzir ambiguidade antes da escrita de spec e antes de qualquer implementação.</p>
+        </div>
+        <label class="complete-toggle"><input type="checkbox" data-progress="estacao-4"> concluída</label>
+      </div>
+      <div class="narrative">
+        <p>A skill /grill-with-docs é o ponto em que o agente deixa de ser executor e vira entrevistador. Ela força decisões, captura vocabulário e atualiza o modelo de domínio do repositório.</p><p>O componente mais reutilizável aqui é domain-modeling: termos vagos são desafiados, termos canônicos são criados, contradições com o código são trazidas para a conversa e ADRs são usados apenas quando a decisão é difícil de reverter.</p><p>Essa estação deve mudar seu padrão de uso: antes de pedir código, você faz o agente fechar as perguntas certas.</p>
+      </div>
+      <div class="action-grid">
+        <div class="lab"><b>Laboratório:</b><br>Pegue uma feature sua e faça um mini /grill-with-docs manual: liste 10 perguntas, 5 termos de domínio, 2 ambiguidades e 1 possível ADR.</div>
+        <div class="check"><b>Check de avanço:</b><br>Você sabe diferenciar fato descoberto no código de decisão que precisa vir do humano?</div>
+      </div>
+      <h3 class="section-title">Nervos validados</h3>
+      <div class="resources">
+        
+          <article class="resource approved" data-resource-title="grill-with-docs/SKILL.md" data-status="approved">
+            <div class="resource-head">
+              <div class="resource-icon" aria-hidden="true">◈</div>
+              <div>
+                <div class="resource-meta"><span>Leitura primária</span><span class="dot"></span><span>approved</span></div>
+                <a href="https://raw.githubusercontent.com/mattpocock/skills/main/skills/engineering/grill-with-docs/SKILL.md" target="_blank" rel="noopener noreferrer">grill-with-docs/SKILL.md</a>
+                <p class="author">Matt Pocock / GitHub</p>
+              </div>
+            </div>
+            <div class="resource-body">
+              <p><b>Quando seguir:</b> Use para entender que grill-with-docs combina entrevista com domínio e documentação.</p>
+              <blockquote><b>Validação:</b> A skill executa uma sessão de grilling usando domain-modeling.</blockquote>
+            </div>
+          </article>
+          <article class="resource approved" data-resource-title="domain-modeling/SKILL.md" data-status="approved">
+            <div class="resource-head">
+              <div class="resource-icon" aria-hidden="true">◈</div>
+              <div>
+                <div class="resource-meta"><span>Leitura primária</span><span class="dot"></span><span>approved</span></div>
+                <a href="https://raw.githubusercontent.com/mattpocock/skills/main/skills/engineering/domain-modeling/SKILL.md" target="_blank" rel="noopener noreferrer">domain-modeling/SKILL.md</a>
+                <p class="author">Matt Pocock / GitHub</p>
+              </div>
+            </div>
+            <div class="resource-body">
+              <p><b>Quando seguir:</b> Use para aprender o formato de CONTEXT.md, ADRs e resolução de linguagem ambígua.</p>
+              <blockquote><b>Validação:</b> Domain-modeling desafia termos, propõe linguagem canônica e atualiza CONTEXT.md inline.</blockquote>
+            </div>
+          </article>
+          <article class="resource approved" data-resource-title="v1.1 — Grilling Skill Improvements" data-status="approved">
+            <div class="resource-head">
+              <div class="resource-icon" aria-hidden="true">↺</div>
+              <div>
+                <div class="resource-meta"><span>Changelog oficial</span><span class="dot"></span><span>approved</span></div>
+                <a href="https://www.aihero.dev/skills/skills-changelog-v1-1-wayfinder-to-spec-to-tickets-grilling-improvements" target="_blank" rel="noopener noreferrer">v1.1 — Grilling Skill Improvements</a>
+                <p class="author">Matt Pocock / AI Hero</p>
+              </div>
+            </div>
+            <div class="resource-body">
+              <p><b>Quando seguir:</b> Use para entender por que grilling recebeu gates contra auto-grilling e implementação prematura.</p>
+              <blockquote><b>Validação:</b> O changelog cita confirmação antes de implementar e distinção entre fatos e decisões.</blockquote>
+            </div>
+          </article>
+          <article class="resource weak_signal" data-resource-title="I stopped using /grill-me for coding. Here&#x27;s what I use instead" data-status="weak_signal">
+            <div class="resource-head">
+              <div class="resource-icon" aria-hidden="true">▶</div>
+              <div>
+                <div class="resource-meta"><span>Vídeo candidato</span><span class="dot"></span><span>weak_signal</span></div>
+                <a href="https://www.youtube.com/watch?v=6BB6exR8Zd8" target="_blank" rel="noopener noreferrer">I stopped using /grill-me for coding. Here&#x27;s what I use instead</a>
+                <p class="author">Matt Pocock / YouTube</p>
+              </div>
+            </div>
+            <div class="resource-body">
+              <p><b>Quando seguir:</b> Use como complemento visual; trate como weak signal porque não validei transcript completa.</p>
+              <blockquote><b>Validação:</b> A descrição apresenta /grill-with-docs como evolução de /grill-me com DDD.</blockquote>
+            </div>
+          </article>
+      </div>
+    </section>
+    <section class="station" id="estacao-5" data-station="5" data-search="da conversa para spec e da spec para tickets verticais transformar entendimento em artefatos executáveis: spec, user stories, decisões e tickets com blocking edges. depois de alinhar, o projeto evita pular direto para código. primeiro ele sintetiza o que já foi decidido em uma spec. depois quebra a spec em tickets verticais que atravessam camadas e podem ser verificados individualmente. o conceito chave é tracer bullet: uma fatia estreita que prova o caminho end-to-end. isso se opõe a slicing horizontal, onde schema, api e ui são feitos separadamente e nada fica demonstrável até o fim. ao final, você deve conseguir pegar uma feature complexa e gerar issues que um agente consiga implementar sem reabrir decisões.">
+      <div class="station-header">
+        <div class="station-number">5</div>
+        <div>
+          <p class="eyebrow">Estação 5 • 30 min</p>
+          <h2>Da conversa para spec e da spec para tickets verticais</h2>
+          <p class="objective">Transformar entendimento em artefatos executáveis: spec, user stories, decisões e tickets com blocking edges.</p>
+        </div>
+        <label class="complete-toggle"><input type="checkbox" data-progress="estacao-5"> concluída</label>
+      </div>
+      <div class="narrative">
+        <p>Depois de alinhar, o projeto evita pular direto para código. Primeiro ele sintetiza o que já foi decidido em uma spec. Depois quebra a spec em tickets verticais que atravessam camadas e podem ser verificados individualmente.</p><p>O conceito chave é tracer bullet: uma fatia estreita que prova o caminho end-to-end. Isso se opõe a slicing horizontal, onde schema, API e UI são feitos separadamente e nada fica demonstrável até o fim.</p><p>Ao final, você deve conseguir pegar uma feature complexa e gerar issues que um agente consiga implementar sem reabrir decisões.</p>
+      </div>
+      <div class="action-grid">
+        <div class="lab"><b>Laboratório:</b><br>Escolha uma feature simples e escreva: problema, solução, 8 user stories, decisões de implementação, decisões de teste, fora de escopo e 5 tickets com blockers.</div>
+        <div class="check"><b>Check de avanço:</b><br>Você consegue quebrar uma feature em tickets verticais sem cair em &#x27;fazer todo backend&#x27; e depois &#x27;fazer todo frontend&#x27;?</div>
+      </div>
+      <h3 class="section-title">Nervos validados</h3>
+      <div class="resources">
+        
+          <article class="resource approved" data-resource-title="to-spec/SKILL.md" data-status="approved">
+            <div class="resource-head">
+              <div class="resource-icon" aria-hidden="true">◈</div>
+              <div>
+                <div class="resource-meta"><span>Leitura primária</span><span class="dot"></span><span>approved</span></div>
+                <a href="https://raw.githubusercontent.com/mattpocock/skills/main/skills/engineering/to-spec/SKILL.md" target="_blank" rel="noopener noreferrer">to-spec/SKILL.md</a>
+                <p class="author">Matt Pocock / GitHub</p>
+              </div>
+            </div>
+            <div class="resource-body">
+              <p><b>Quando seguir:</b> Use para aprender o template real de spec e as decisões que devem ser carregadas.</p>
+              <blockquote><b>Validação:</b> A skill transforma a conversa em spec e inclui problema, solução, user stories e decisões de teste.</blockquote>
+            </div>
+          </article>
+          <article class="resource approved" data-resource-title="The /to-spec Skill" data-status="approved">
+            <div class="resource-head">
+              <div class="resource-icon" aria-hidden="true">▣</div>
+              <div>
+                <div class="resource-meta"><span>Documentação oficial</span><span class="dot"></span><span>approved</span></div>
+                <a href="https://www.aihero.dev/skills-to-spec" target="_blank" rel="noopener noreferrer">The /to-spec Skill</a>
+                <p class="author">Matt Pocock / AI Hero</p>
+              </div>
+            </div>
+            <div class="resource-body">
+              <p><b>Quando seguir:</b> Use para entender pré-requisitos, deep modules e posicionamento no fluxo.</p>
+              <blockquote><b>Validação:</b> A página coloca to-spec depois do alinhamento e antes de quebrar o trabalho em tickets.</blockquote>
+            </div>
+          </article>
+          <article class="resource approved" data-resource-title="The /to-tickets Skill" data-status="approved">
+            <div class="resource-head">
+              <div class="resource-icon" aria-hidden="true">▣</div>
+              <div>
+                <div class="resource-meta"><span>Documentação oficial</span><span class="dot"></span><span>approved</span></div>
+                <a href="https://www.aihero.dev/skills-to-tickets" target="_blank" rel="noopener noreferrer">The /to-tickets Skill</a>
+                <p class="author">Matt Pocock / AI Hero</p>
+              </div>
+            </div>
+            <div class="resource-body">
+              <p><b>Quando seguir:</b> Use para dominar tracer bullets, blockers e diferença entre tracker local e real.</p>
+              <blockquote><b>Validação:</b> to-tickets cria tickets verticais com blocking edges e frontier de trabalho.</blockquote>
+            </div>
+          </article>
+          <article class="resource approved" data-resource-title="v1.1 — renames para /to-spec e /to-tickets" data-status="approved">
+            <div class="resource-head">
+              <div class="resource-icon" aria-hidden="true">↺</div>
+              <div>
+                <div class="resource-meta"><span>Changelog oficial</span><span class="dot"></span><span>approved</span></div>
+                <a href="https://www.aihero.dev/skills/skills-changelog-v1-1-wayfinder-to-spec-to-tickets-grilling-improvements" target="_blank" rel="noopener noreferrer">v1.1 — renames para /to-spec e /to-tickets</a>
+                <p class="author">Matt Pocock / AI Hero</p>
+              </div>
+            </div>
+            <div class="resource-body">
+              <p><b>Quando seguir:</b> Use para entender por que PRD virou spec e issues/plan viraram tickets.</p>
+              <blockquote><b>Validação:</b> O changelog explica a unificação de /to-plan e /to-issues em /to-tickets.</blockquote>
+            </div>
+          </article>
+      </div>
+    </section>
+    <section class="station" id="estacao-6" data-station="6" data-search="execução: implement, tdd, diagnóstico e loop de feedback aprender o loop que transforma tickets em código com testes, typecheck e regressão. a implementação é deliberadamente estreita: a decisão sobre o que construir já aconteceu. o agente deve trabalhar a partir de spec ou tickets, usar seams pré-acordados, rodar typecheck e testes continuamente e só fazer o sweep completo no final. o tdd aqui não é uma cerimônia; é um mecanismo de feedback para agentes. o teste deve verificar comportamento em interface pública, não detalhes internos. diagnosing-bugs aplica a mesma lógica: antes de hipótese, criar um loop tight que reproduz o problema. o objetivo é tirar o agente do modo &#x27;eu acho&#x27; e colocá-lo no modo &#x27;um comando prova&#x27;.">
+      <div class="station-header">
+        <div class="station-number">6</div>
+        <div>
+          <p class="eyebrow">Estação 6 • 32 min</p>
+          <h2>Execução: implement, TDD, diagnóstico e loop de feedback</h2>
+          <p class="objective">Aprender o loop que transforma tickets em código com testes, typecheck e regressão.</p>
+        </div>
+        <label class="complete-toggle"><input type="checkbox" data-progress="estacao-6"> concluída</label>
+      </div>
+      <div class="narrative">
+        <p>A implementação é deliberadamente estreita: a decisão sobre o que construir já aconteceu. O agente deve trabalhar a partir de spec ou tickets, usar seams pré-acordados, rodar typecheck e testes continuamente e só fazer o sweep completo no final.</p><p>O TDD aqui não é uma cerimônia; é um mecanismo de feedback para agentes. O teste deve verificar comportamento em interface pública, não detalhes internos. Diagnosing-bugs aplica a mesma lógica: antes de hipótese, criar um loop tight que reproduz o problema.</p><p>O objetivo é tirar o agente do modo &#x27;eu acho&#x27; e colocá-lo no modo &#x27;um comando prova&#x27;.</p>
+      </div>
+      <div class="action-grid">
+        <div class="lab"><b>Laboratório:</b><br>Crie um ticket mínimo e defina um seam público, um teste red, o comando de teste unitário, o comando de typecheck e o comando de suite final.</div>
+        <div class="check"><b>Check de avanço:</b><br>Antes de implementar, você consegue nomear o seam testado e o comando que ficará vermelho se o comportamento estiver quebrado?</div>
+      </div>
+      <h3 class="section-title">Nervos validados</h3>
+      <div class="resources">
+        
+          <article class="resource approved" data-resource-title="implement/SKILL.md" data-status="approved">
+            <div class="resource-head">
+              <div class="resource-icon" aria-hidden="true">◈</div>
+              <div>
+                <div class="resource-meta"><span>Leitura primária</span><span class="dot"></span><span>approved</span></div>
+                <a href="https://raw.githubusercontent.com/mattpocock/skills/main/skills/engineering/implement/SKILL.md" target="_blank" rel="noopener noreferrer">implement/SKILL.md</a>
+                <p class="author">Matt Pocock / GitHub</p>
+              </div>
+            </div>
+            <div class="resource-body">
+              <p><b>Quando seguir:</b> Use para entender o contrato mínimo da execução.</p>
+              <blockquote><b>Validação:</b> Implement usa TDD em seams pré-acordados, typecheck, testes e code-review antes do commit.</blockquote>
+            </div>
+          </article>
+          <article class="resource approved" data-resource-title="The /implement Skill" data-status="approved">
+            <div class="resource-head">
+              <div class="resource-icon" aria-hidden="true">▣</div>
+              <div>
+                <div class="resource-meta"><span>Documentação oficial</span><span class="dot"></span><span>approved</span></div>
+                <a href="https://www.aihero.dev/skills-implement" target="_blank" rel="noopener noreferrer">The /implement Skill</a>
+                <p class="author">Matt Pocock / AI Hero</p>
+              </div>
+            </div>
+            <div class="resource-body">
+              <p><b>Quando seguir:</b> Use para entender implement como mãos da cadeia, não cabeça.</p>
+              <blockquote><b>Validação:</b> A página diz que implement executa uma spec ou tickets já definidos.</blockquote>
+            </div>
+          </article>
+          <article class="resource approved" data-resource-title="tdd/SKILL.md" data-status="approved">
+            <div class="resource-head">
+              <div class="resource-icon" aria-hidden="true">◈</div>
+              <div>
+                <div class="resource-meta"><span>Leitura primária</span><span class="dot"></span><span>approved</span></div>
+                <a href="https://raw.githubusercontent.com/mattpocock/skills/main/skills/engineering/tdd/SKILL.md" target="_blank" rel="noopener noreferrer">tdd/SKILL.md</a>
+                <p class="author">Matt Pocock / GitHub</p>
+              </div>
+            </div>
+            <div class="resource-body">
+              <p><b>Quando seguir:</b> Use para aprender red-green, seams, anti-patterns e vertical slicing.</p>
+              <blockquote><b>Validação:</b> A skill exige testes em seams públicos e um teste por fatia vertical.</blockquote>
+            </div>
+          </article>
+          <article class="resource approved" data-resource-title="diagnosing-bugs/SKILL.md" data-status="approved">
+            <div class="resource-head">
+              <div class="resource-icon" aria-hidden="true">◈</div>
+              <div>
+                <div class="resource-meta"><span>Leitura primária</span><span class="dot"></span><span>approved</span></div>
+                <a href="https://raw.githubusercontent.com/mattpocock/skills/main/skills/engineering/diagnosing-bugs/SKILL.md" target="_blank" rel="noopener noreferrer">diagnosing-bugs/SKILL.md</a>
+                <p class="author">Matt Pocock / GitHub</p>
+              </div>
+            </div>
+            <div class="resource-body">
+              <p><b>Quando seguir:</b> Use para bugs difíceis, flakiness e regressões de performance.</p>
+              <blockquote><b>Validação:</b> A fase 1 exige um loop tight e red-capable antes de teorizar sobre a causa.</blockquote>
+            </div>
+          </article>
+          <article class="resource weak_signal" data-resource-title="Red Green Refactor is OP With Claude Code" data-status="weak_signal">
+            <div class="resource-head">
+              <div class="resource-icon" aria-hidden="true">▶</div>
+              <div>
+                <div class="resource-meta"><span>Vídeo candidato</span><span class="dot"></span><span>weak_signal</span></div>
+                <a href="https://www.youtube.com/watch?v=hYZdIwFIy-c" target="_blank" rel="noopener noreferrer">Red Green Refactor is OP With Claude Code</a>
+                <p class="author">Matt Pocock / YouTube</p>
+              </div>
+            </div>
+            <div class="resource-body">
+              <p><b>Quando seguir:</b> Use como complemento visual; trate como weak signal porque não validei transcript completa.</p>
+              <blockquote><b>Validação:</b> A descrição relaciona agentes de código com TDD e red-green-refactor.</blockquote>
+            </div>
+          </article>
+      </div>
+    </section>
+    <section class="station" id="estacao-7" data-station="7" data-search="review e saúde arquitetural: standards, spec e deep modules usar code-review e codebase-design para impedir que velocidade com ia vire entropia arquitetural. a cadeia não termina quando os testes passam. o projeto separa review em dois eixos: standards e spec. isso impede que código bonito mas errado, ou correto mas fora dos padrões, passe sem explicitar o problema. a camada arquitetural usa vocabulário próprio: module, interface, seam, adapter, depth, leverage e locality. o objetivo é desenhar módulos profundos, com muito comportamento atrás de uma interface pequena e testável. essa estação conecta diretamente com seu loop de pre-commit e taac: o agente precisa fechar a mudança com verificação técnica e revisão sem misturar critérios.">
+      <div class="station-header">
+        <div class="station-number">7</div>
+        <div>
+          <p class="eyebrow">Estação 7 • 34 min</p>
+          <h2>Review e saúde arquitetural: standards, spec e deep modules</h2>
+          <p class="objective">Usar code-review e codebase-design para impedir que velocidade com IA vire entropia arquitetural.</p>
+        </div>
+        <label class="complete-toggle"><input type="checkbox" data-progress="estacao-7"> concluída</label>
+      </div>
+      <div class="narrative">
+        <p>A cadeia não termina quando os testes passam. O projeto separa review em dois eixos: standards e spec. Isso impede que código bonito mas errado, ou correto mas fora dos padrões, passe sem explicitar o problema.</p><p>A camada arquitetural usa vocabulário próprio: module, interface, seam, adapter, depth, leverage e locality. O objetivo é desenhar módulos profundos, com muito comportamento atrás de uma interface pequena e testável.</p><p>Essa estação conecta diretamente com seu loop de pre-commit e TAAC: o agente precisa fechar a mudança com verificação técnica e revisão sem misturar critérios.</p>
+      </div>
+      <div class="action-grid">
+        <div class="lab"><b>Laboratório:</b><br>Pegue um diff real e faça uma review em dois blocos: Standards e Spec. Depois identifique uma oportunidade de deepening usando deletion test.</div>
+        <div class="check"><b>Check de avanço:</b><br>Você consegue separar achados de conformidade de padrões, achados de aderência à spec e achados de desenho arquitetural?</div>
+      </div>
+      <h3 class="section-title">Nervos validados</h3>
+      <div class="resources">
+        
+          <article class="resource approved" data-resource-title="code-review/SKILL.md" data-status="approved">
+            <div class="resource-head">
+              <div class="resource-icon" aria-hidden="true">◈</div>
+              <div>
+                <div class="resource-meta"><span>Leitura primária</span><span class="dot"></span><span>approved</span></div>
+                <a href="https://raw.githubusercontent.com/mattpocock/skills/main/skills/engineering/code-review/SKILL.md" target="_blank" rel="noopener noreferrer">code-review/SKILL.md</a>
+                <p class="author">Matt Pocock / GitHub</p>
+              </div>
+            </div>
+            <div class="resource-body">
+              <p><b>Quando seguir:</b> Use para estruturar revisão de branch/PR desde um ponto fixo.</p>
+              <blockquote><b>Validação:</b> A review compara HEAD com um fixed point em dois eixos: Standards e Spec.</blockquote>
+            </div>
+          </article>
+          <article class="resource approved" data-resource-title="codebase-design/SKILL.md" data-status="approved">
+            <div class="resource-head">
+              <div class="resource-icon" aria-hidden="true">◈</div>
+              <div>
+                <div class="resource-meta"><span>Leitura primária</span><span class="dot"></span><span>approved</span></div>
+                <a href="https://raw.githubusercontent.com/mattpocock/skills/main/skills/engineering/codebase-design/SKILL.md" target="_blank" rel="noopener noreferrer">codebase-design/SKILL.md</a>
+                <p class="author">Matt Pocock / GitHub</p>
+              </div>
+            </div>
+            <div class="resource-body">
+              <p><b>Quando seguir:</b> Use como vocabulário-base para módulos profundos, seams e adapters.</p>
+              <blockquote><b>Validação:</b> A skill define deep modules como comportamento amplo atrás de uma interface pequena.</blockquote>
+            </div>
+          </article>
+          <article class="resource approved" data-resource-title="The /improve-codebase-architecture Skill" data-status="approved">
+            <div class="resource-head">
+              <div class="resource-icon" aria-hidden="true">▣</div>
+              <div>
+                <div class="resource-meta"><span>Documentação oficial</span><span class="dot"></span><span>approved</span></div>
+                <a href="https://www.aihero.dev/skills-improve-codebase-architecture" target="_blank" rel="noopener noreferrer">The /improve-codebase-architecture Skill</a>
+                <p class="author">Matt Pocock / AI Hero</p>
+              </div>
+            </div>
+            <div class="resource-body">
+              <p><b>Quando seguir:</b> Use para health check arquitetural periódico com relatório HTML.</p>
+              <blockquote><b>Validação:</b> A skill busca oportunidades de deepening e apresenta cards em relatório HTML.</blockquote>
+            </div>
+          </article>
+          <article class="resource weak_signal" data-resource-title="How To De-Slop A Codebase Ruined By AI" data-status="weak_signal">
+            <div class="resource-head">
+              <div class="resource-icon" aria-hidden="true">▶</div>
+              <div>
+                <div class="resource-meta"><span>Vídeo candidato</span><span class="dot"></span><span>weak_signal</span></div>
+                <a href="https://www.youtube.com/watch?v=3MP8D-mdheA" target="_blank" rel="noopener noreferrer">How To De-Slop A Codebase Ruined By AI</a>
+                <p class="author">Matt Pocock / YouTube</p>
+              </div>
+            </div>
+            <div class="resource-body">
+              <p><b>Quando seguir:</b> Use como complemento visual de arquitetura; weak signal sem transcript validada.</p>
+              <blockquote><b>Validação:</b> A descrição conecta qualidade de codebase e skills de arquitetura.</blockquote>
+            </div>
+          </article>
+      </div>
+    </section>
+    <section class="station" id="estacao-8" data-station="8" data-search="adaptar para seu ecossistema: escrever skills previsíveis e operar em múltiplas sessões extrair princípios para criar suas próprias skills no padrão hes/sdd sem copiar cegamente o repo. a etapa final é engenharia reversa aplicada. você não quer apenas usar as skills do matt; quer absorver o padrão para criar suas próprias: pequenas, composáveis, com critérios de conclusão e progressiva divulgação de referência. writing-great-skills é a peça mais importante para seu projeto de cultura de ai: ela define previsibilidade, context load, cognitive load, router skill, leading words, no-op, sediment e sprawl. handoff, research e teach mostram como preservar contexto, delegar leitura e aprender ao longo de sessões. o resultado final esperado é você conseguir criar um skill pack próprio para sua empresa, com setup, roteador, fluxos e gates de qualidade.">
+      <div class="station-header">
+        <div class="station-number">8</div>
+        <div>
+          <p class="eyebrow">Estação 8 • 36 min</p>
+          <h2>Adaptar para seu ecossistema: escrever skills previsíveis e operar em múltiplas sessões</h2>
+          <p class="objective">Extrair princípios para criar suas próprias skills no padrão HES/SDD sem copiar cegamente o repo.</p>
+        </div>
+        <label class="complete-toggle"><input type="checkbox" data-progress="estacao-8"> concluída</label>
+      </div>
+      <div class="narrative">
+        <p>A etapa final é engenharia reversa aplicada. Você não quer apenas usar as skills do Matt; quer absorver o padrão para criar suas próprias: pequenas, composáveis, com critérios de conclusão e progressiva divulgação de referência.</p><p>writing-great-skills é a peça mais importante para seu projeto de cultura de AI: ela define previsibilidade, context load, cognitive load, router skill, leading words, no-op, sediment e sprawl. Handoff, research e teach mostram como preservar contexto, delegar leitura e aprender ao longo de sessões.</p><p>O resultado final esperado é você conseguir criar um skill pack próprio para sua empresa, com setup, roteador, fluxos e gates de qualidade.</p>
+      </div>
+      <div class="action-grid">
+        <div class="lab"><b>Laboratório:</b><br>Crie uma versão inicial de um skill pack corporativo: /ask-jose, /setup-org-skills, /to-spec, /to-tickets, /implement-taac, /review-taac, /handoff.</div>
+        <div class="check"><b>Check de avanço:</b><br>Você consegue explicar quais skills devem ser user-invoked, quais podem ser model-invoked e por quê?</div>
+      </div>
+      <h3 class="section-title">Nervos validados</h3>
+      <div class="resources">
+        
+          <article class="resource approved" data-resource-title="writing-great-skills/SKILL.md" data-status="approved">
+            <div class="resource-head">
+              <div class="resource-icon" aria-hidden="true">◈</div>
+              <div>
+                <div class="resource-meta"><span>Leitura primária</span><span class="dot"></span><span>approved</span></div>
+                <a href="https://raw.githubusercontent.com/mattpocock/skills/main/skills/productivity/writing-great-skills/SKILL.md" target="_blank" rel="noopener noreferrer">writing-great-skills/SKILL.md</a>
+                <p class="author">Matt Pocock / GitHub</p>
+              </div>
+            </div>
+            <div class="resource-body">
+              <p><b>Quando seguir:</b> Use como referência para desenhar skills determinísticas, pequenas e previsíveis.</p>
+              <blockquote><b>Validação:</b> A skill afirma que predictability é a virtude central de uma skill.</blockquote>
+            </div>
+          </article>
+          <article class="resource approved" data-resource-title="The /handoff Skill" data-status="approved">
+            <div class="resource-head">
+              <div class="resource-icon" aria-hidden="true">▣</div>
+              <div>
+                <div class="resource-meta"><span>Documentação oficial</span><span class="dot"></span><span>approved</span></div>
+                <a href="https://www.aihero.dev/skills-handoff" target="_blank" rel="noopener noreferrer">The /handoff Skill</a>
+                <p class="author">Matt Pocock / AI Hero</p>
+              </div>
+            </div>
+            <div class="resource-body">
+              <p><b>Quando seguir:</b> Use para preservar o núcleo de uma sessão sem carregar transcrição inteira.</p>
+              <blockquote><b>Validação:</b> Handoff compacta a conversa em documento para outro agente continuar.</blockquote>
+            </div>
+          </article>
+          <article class="resource approved" data-resource-title="The /research Skill" data-status="approved">
+            <div class="resource-head">
+              <div class="resource-icon" aria-hidden="true">▣</div>
+              <div>
+                <div class="resource-meta"><span>Documentação oficial</span><span class="dot"></span><span>approved</span></div>
+                <a href="https://www.aihero.dev/skills-research" target="_blank" rel="noopener noreferrer">The /research Skill</a>
+                <p class="author">Matt Pocock / AI Hero</p>
+              </div>
+            </div>
+            <div class="resource-body">
+              <p><b>Quando seguir:</b> Use para delegar leitura com fontes primárias antes de decisões de design.</p>
+              <blockquote><b>Validação:</b> Research investiga apenas fontes primárias e salva um Markdown citado.</blockquote>
+            </div>
+          </article>
+          <article class="resource approved" data-resource-title="v1.1 — lifecycle, wayfinder, research e prototype" data-status="approved">
+            <div class="resource-head">
+              <div class="resource-icon" aria-hidden="true">↺</div>
+              <div>
+                <div class="resource-meta"><span>Changelog oficial</span><span class="dot"></span><span>approved</span></div>
+                <a href="https://www.aihero.dev/skills/skills-changelog-v1-1-wayfinder-to-spec-to-tickets-grilling-improvements" target="_blank" rel="noopener noreferrer">v1.1 — lifecycle, wayfinder, research e prototype</a>
+                <p class="author">Matt Pocock / AI Hero</p>
+              </div>
+            </div>
+            <div class="resource-body">
+              <p><b>Quando seguir:</b> Use para entender a evolução do sistema e como o ciclo ficou mais completo.</p>
+              <blockquote><b>Validação:</b> O changelog descreve o fluxo grilling → spec → tickets → implement → code-review.</blockquote>
+            </div>
+          </article>
+          <article class="resource weak_signal" data-resource-title="5 Claude Code skills I use every single day" data-status="weak_signal">
+            <div class="resource-head">
+              <div class="resource-icon" aria-hidden="true">▶</div>
+              <div>
+                <div class="resource-meta"><span>Vídeo candidato</span><span class="dot"></span><span>weak_signal</span></div>
+                <a href="https://www.youtube.com/watch?v=EJyuu6zlQCg" target="_blank" rel="noopener noreferrer">5 Claude Code skills I use every single day</a>
+                <p class="author">Matt Pocock / YouTube</p>
+              </div>
+            </div>
+            <div class="resource-body">
+              <p><b>Quando seguir:</b> Use como visão visual do repertório; weak signal sem transcript validada.</p>
+              <blockquote><b>Validação:</b> A descrição menciona skills diárias para orientar Claude Code e melhorar qualidade.</blockquote>
+            </div>
+          </article>
+      </div>
+    </section>
+      <section class="panel" id="plano-7-dias">
+        <p class="eyebrow">Fixação</p>
+        <h2>Plano prático de 7 dias</h2>
+        <ol class="roadmap"><li><b>Dia 1</b><span>Leia README, CLAUDE.md e plugin.json. Faça o mapa mental de buckets e invocação.</span></li><li><b>Dia 2</b><span>Instale em um repo sandbox e execute /setup-matt-pocock-skills.</span></li><li><b>Dia 3</b><span>Simule uma feature pequena usando /ask-matt → /grill-with-docs → /to-spec.</span></li><li><b>Dia 4</b><span>Quebre a spec com /to-tickets e valide se cada ticket é vertical e desbloqueável.</span></li><li><b>Dia 5</b><span>Implemente um ticket com /implement e force o loop /tdd.</span></li><li><b>Dia 6</b><span>Rode /code-review e compare falhas de Standards versus falhas de Spec.</span></li><li><b>Dia 7</b><span>Escreva uma skill própria baseada no fluxo TAAC/pre-commit loop e valide contra writing-great-skills.</span></li></ol>
+      </section>
+      <section class="boss" id="boss-final">
+        <h2>Boss Final</h2>
+        <p class="intro">Sem gabarito. Responda por escrito para provar retenção, síntese e capacidade de adaptação.</p>
+        <ol>
+        <li>
+          <span>1. Conceitual</span>
+          <p>Por que mattpocock/skills é melhor entendido como sistema de workflow e não como biblioteca de código?</p>
+        </li>
+        <li>
+          <span>2. Arquitetura</span>
+          <p>Qual é a diferença operacional entre /grill-with-docs, /to-spec e /to-tickets?</p>
+        </li>
+        <li>
+          <span>3. Fluxo</span>
+          <p>Quando você escolheria /wayfinder em vez de /grill-with-docs?</p>
+        </li>
+        <li>
+          <span>4. Qualidade</span>
+          <p>Por que /implement não deve decidir o que construir durante a implementação?</p>
+        </li>
+        <li>
+          <span>5. TDD</span>
+          <p>O que torna um teste bom nesse projeto: testar internals ou testar comportamento em seam público?</p>
+        </li>
+        <li>
+          <span>6. Review</span>
+          <p>Por que a review é separada em Standards e Spec? Dê um exemplo de falha em cada eixo.</p>
+        </li>
+        <li>
+          <span>7. Domínio</span>
+          <p>Quando uma decisão merece ADR e quando deve ser apenas vocabulário em CONTEXT.md?</p>
+        </li>
+        <li>
+          <span>8. Customização</span>
+          <p>Como você adaptaria esse sistema para um fluxo corporativo com TAAC, pre-commit loop e múltiplos agentes?</p>
+        </li></ol>
+      </section>
+      <section class="panel" id="auditoria">
+        <p class="eyebrow">Auditoria</p>
+        <h2>Trust by Inspection</h2>
+        <div class="audit-grid">
+          <div class="stat"><b>34</b><span>Candidatos inspecionados</span></div>
+          <div class="stat"><b>29</b><span>Aprovados</span></div>
+          <div class="stat"><b>4</b><span>Weak signals</span></div>
+          <div class="stat"><b>3</b><span>Rejeitados</span></div>
+        </div>
+        <p class="objective"><b>Método:</b> Trust by Inspection: GitHub raw, README, CLAUDE.md, CONTEXT.md, plugin.json, SKILL.md individuais e documentação AI Hero foram inspecionados antes da curadoria.</p>
+        <ul><li>Vídeos do YouTube foram encontrados, mas não promovi como nervos principais quando não havia transcript/trecho verificável suficiente via ferramenta de leitura.</li><li>Não clonei o repositório localmente porque o ambiente de container não resolveu github.com; usei GitHub raw, página do repo e documentação oficial AI Hero via web.</li><li>Não incluí papers acadêmicos porque o objeto estudado é um skill pack operacional com fontes primárias melhores no próprio repo e docs oficiais.</li></ul>
+      </section>
+      <section class="panel" id="inventario">
+        <p class="eyebrow">Inventário</p>
+        <h2>Todos os recursos da trilha</h2>
+        <div style="overflow:auto"><table><thead><tr><th>Estação</th><th>Status</th><th>Tipo</th><th>Recurso</th><th>Autor</th></tr></thead><tbody>
+          <tr data-status="approved">
+            <td>1</td>
+            <td><span class="tag approved">approved</span></td>
+            <td>Leitura primária</td>
+            <td><a href="https://raw.githubusercontent.com/mattpocock/skills/main/README.md" target="_blank" rel="noopener noreferrer">README — Skills For Real Engineers</a></td>
+            <td>Matt Pocock / GitHub</td>
+          </tr>
+          <tr data-status="approved">
+            <td>1</td>
+            <td><span class="tag approved">approved</span></td>
+            <td>Leitura primária</td>
+            <td><a href="https://github.com/mattpocock/skills" target="_blank" rel="noopener noreferrer">Página do repositório GitHub</a></td>
+            <td>mattpocock/skills</td>
+          </tr>
+          <tr data-status="approved">
+            <td>1</td>
+            <td><span class="tag approved">approved</span></td>
+            <td>Leitura oficial</td>
+            <td><a href="https://www.aihero.dev/posts" target="_blank" rel="noopener noreferrer">AI Hero — posts e documentação de skills</a></td>
+            <td>Matt Pocock / AI Hero</td>
+          </tr>
+          <tr data-status="approved">
+            <td>2</td>
+            <td><span class="tag approved">approved</span></td>
+            <td>Leitura primária</td>
+            <td><a href="https://raw.githubusercontent.com/mattpocock/skills/main/README.md" target="_blank" rel="noopener noreferrer">README — Quickstart</a></td>
+            <td>Matt Pocock / GitHub</td>
+          </tr>
+          <tr data-status="approved">
+            <td>2</td>
+            <td><span class="tag approved">approved</span></td>
+            <td>Leitura primária</td>
+            <td><a href="https://raw.githubusercontent.com/mattpocock/skills/main/CLAUDE.md" target="_blank" rel="noopener noreferrer">CLAUDE.md — organização e regras de manutenção</a></td>
+            <td>Matt Pocock / GitHub</td>
+          </tr>
+          <tr data-status="approved">
+            <td>2</td>
+            <td><span class="tag approved">approved</span></td>
+            <td>Config primária</td>
+            <td><a href="https://raw.githubusercontent.com/mattpocock/skills/main/.claude-plugin/plugin.json" target="_blank" rel="noopener noreferrer">.claude-plugin/plugin.json</a></td>
+            <td>Matt Pocock / GitHub</td>
+          </tr>
+          <tr data-status="approved">
+            <td>2</td>
+            <td><span class="tag approved">approved</span></td>
+            <td>Documentação oficial</td>
+            <td><a href="https://www.aihero.dev/skills-setup-matt-pocock-skills" target="_blank" rel="noopener noreferrer">The /setup-matt-pocock-skills Skill</a></td>
+            <td>Matt Pocock / AI Hero</td>
+          </tr>
+          <tr data-status="approved">
+            <td>3</td>
+            <td><span class="tag approved">approved</span></td>
+            <td>Leitura primária</td>
+            <td><a href="https://raw.githubusercontent.com/mattpocock/skills/main/skills/engineering/ask-matt/SKILL.md" target="_blank" rel="noopener noreferrer">ask-matt/SKILL.md</a></td>
+            <td>Matt Pocock / GitHub</td>
+          </tr>
+          <tr data-status="approved">
+            <td>3</td>
+            <td><span class="tag approved">approved</span></td>
+            <td>Documentação oficial</td>
+            <td><a href="https://www.aihero.dev/skills-ask-matt" target="_blank" rel="noopener noreferrer">The /ask-matt Skill</a></td>
+            <td>Matt Pocock / AI Hero</td>
+          </tr>
+          <tr data-status="approved">
+            <td>3</td>
+            <td><span class="tag approved">approved</span></td>
+            <td>Leitura primária</td>
+            <td><a href="https://raw.githubusercontent.com/mattpocock/skills/main/CONTEXT.md" target="_blank" rel="noopener noreferrer">CONTEXT.md — linguagem do próprio repositório</a></td>
+            <td>Matt Pocock / GitHub</td>
+          </tr>
+          <tr data-status="approved">
+            <td>3</td>
+            <td><span class="tag approved">approved</span></td>
+            <td>Documentação oficial</td>
+            <td><a href="https://www.aihero.dev/skills-wayfinder" target="_blank" rel="noopener noreferrer">The /wayfinder Skill</a></td>
+            <td>Matt Pocock / AI Hero</td>
+          </tr>
+          <tr data-status="approved">
+            <td>4</td>
+            <td><span class="tag approved">approved</span></td>
+            <td>Leitura primária</td>
+            <td><a href="https://raw.githubusercontent.com/mattpocock/skills/main/skills/engineering/grill-with-docs/SKILL.md" target="_blank" rel="noopener noreferrer">grill-with-docs/SKILL.md</a></td>
+            <td>Matt Pocock / GitHub</td>
+          </tr>
+          <tr data-status="approved">
+            <td>4</td>
+            <td><span class="tag approved">approved</span></td>
+            <td>Leitura primária</td>
+            <td><a href="https://raw.githubusercontent.com/mattpocock/skills/main/skills/engineering/domain-modeling/SKILL.md" target="_blank" rel="noopener noreferrer">domain-modeling/SKILL.md</a></td>
+            <td>Matt Pocock / GitHub</td>
+          </tr>
+          <tr data-status="approved">
+            <td>4</td>
+            <td><span class="tag approved">approved</span></td>
+            <td>Changelog oficial</td>
+            <td><a href="https://www.aihero.dev/skills/skills-changelog-v1-1-wayfinder-to-spec-to-tickets-grilling-improvements" target="_blank" rel="noopener noreferrer">v1.1 — Grilling Skill Improvements</a></td>
+            <td>Matt Pocock / AI Hero</td>
+          </tr>
+          <tr data-status="weak_signal">
+            <td>4</td>
+            <td><span class="tag weak_signal">weak_signal</span></td>
+            <td>Vídeo candidato</td>
+            <td><a href="https://www.youtube.com/watch?v=6BB6exR8Zd8" target="_blank" rel="noopener noreferrer">I stopped using /grill-me for coding. Here&#x27;s what I use instead</a></td>
+            <td>Matt Pocock / YouTube</td>
+          </tr>
+          <tr data-status="approved">
+            <td>5</td>
+            <td><span class="tag approved">approved</span></td>
+            <td>Leitura primária</td>
+            <td><a href="https://raw.githubusercontent.com/mattpocock/skills/main/skills/engineering/to-spec/SKILL.md" target="_blank" rel="noopener noreferrer">to-spec/SKILL.md</a></td>
+            <td>Matt Pocock / GitHub</td>
+          </tr>
+          <tr data-status="approved">
+            <td>5</td>
+            <td><span class="tag approved">approved</span></td>
+            <td>Documentação oficial</td>
+            <td><a href="https://www.aihero.dev/skills-to-spec" target="_blank" rel="noopener noreferrer">The /to-spec Skill</a></td>
+            <td>Matt Pocock / AI Hero</td>
+          </tr>
+          <tr data-status="approved">
+            <td>5</td>
+            <td><span class="tag approved">approved</span></td>
+            <td>Documentação oficial</td>
+            <td><a href="https://www.aihero.dev/skills-to-tickets" target="_blank" rel="noopener noreferrer">The /to-tickets Skill</a></td>
+            <td>Matt Pocock / AI Hero</td>
+          </tr>
+          <tr data-status="approved">
+            <td>5</td>
+            <td><span class="tag approved">approved</span></td>
+            <td>Changelog oficial</td>
+            <td><a href="https://www.aihero.dev/skills/skills-changelog-v1-1-wayfinder-to-spec-to-tickets-grilling-improvements" target="_blank" rel="noopener noreferrer">v1.1 — renames para /to-spec e /to-tickets</a></td>
+            <td>Matt Pocock / AI Hero</td>
+          </tr>
+          <tr data-status="approved">
+            <td>6</td>
+            <td><span class="tag approved">approved</span></td>
+            <td>Leitura primária</td>
+            <td><a href="https://raw.githubusercontent.com/mattpocock/skills/main/skills/engineering/implement/SKILL.md" target="_blank" rel="noopener noreferrer">implement/SKILL.md</a></td>
+            <td>Matt Pocock / GitHub</td>
+          </tr>
+          <tr data-status="approved">
+            <td>6</td>
+            <td><span class="tag approved">approved</span></td>
+            <td>Documentação oficial</td>
+            <td><a href="https://www.aihero.dev/skills-implement" target="_blank" rel="noopener noreferrer">The /implement Skill</a></td>
+            <td>Matt Pocock / AI Hero</td>
+          </tr>
+          <tr data-status="approved">
+            <td>6</td>
+            <td><span class="tag approved">approved</span></td>
+            <td>Leitura primária</td>
+            <td><a href="https://raw.githubusercontent.com/mattpocock/skills/main/skills/engineering/tdd/SKILL.md" target="_blank" rel="noopener noreferrer">tdd/SKILL.md</a></td>
+            <td>Matt Pocock / GitHub</td>
+          </tr>
+          <tr data-status="approved">
+            <td>6</td>
+            <td><span class="tag approved">approved</span></td>
+            <td>Leitura primária</td>
+            <td><a href="https://raw.githubusercontent.com/mattpocock/skills/main/skills/engineering/diagnosing-bugs/SKILL.md" target="_blank" rel="noopener noreferrer">diagnosing-bugs/SKILL.md</a></td>
+            <td>Matt Pocock / GitHub</td>
+          </tr>
+          <tr data-status="weak_signal">
+            <td>6</td>
+            <td><span class="tag weak_signal">weak_signal</span></td>
+            <td>Vídeo candidato</td>
+            <td><a href="https://www.youtube.com/watch?v=hYZdIwFIy-c" target="_blank" rel="noopener noreferrer">Red Green Refactor is OP With Claude Code</a></td>
+            <td>Matt Pocock / YouTube</td>
+          </tr>
+          <tr data-status="approved">
+            <td>7</td>
+            <td><span class="tag approved">approved</span></td>
+            <td>Leitura primária</td>
+            <td><a href="https://raw.githubusercontent.com/mattpocock/skills/main/skills/engineering/code-review/SKILL.md" target="_blank" rel="noopener noreferrer">code-review/SKILL.md</a></td>
+            <td>Matt Pocock / GitHub</td>
+          </tr>
+          <tr data-status="approved">
+            <td>7</td>
+            <td><span class="tag approved">approved</span></td>
+            <td>Leitura primária</td>
+            <td><a href="https://raw.githubusercontent.com/mattpocock/skills/main/skills/engineering/codebase-design/SKILL.md" target="_blank" rel="noopener noreferrer">codebase-design/SKILL.md</a></td>
+            <td>Matt Pocock / GitHub</td>
+          </tr>
+          <tr data-status="approved">
+            <td>7</td>
+            <td><span class="tag approved">approved</span></td>
+            <td>Documentação oficial</td>
+            <td><a href="https://www.aihero.dev/skills-improve-codebase-architecture" target="_blank" rel="noopener noreferrer">The /improve-codebase-architecture Skill</a></td>
+            <td>Matt Pocock / AI Hero</td>
+          </tr>
+          <tr data-status="weak_signal">
+            <td>7</td>
+            <td><span class="tag weak_signal">weak_signal</span></td>
+            <td>Vídeo candidato</td>
+            <td><a href="https://www.youtube.com/watch?v=3MP8D-mdheA" target="_blank" rel="noopener noreferrer">How To De-Slop A Codebase Ruined By AI</a></td>
+            <td>Matt Pocock / YouTube</td>
+          </tr>
+          <tr data-status="approved">
+            <td>8</td>
+            <td><span class="tag approved">approved</span></td>
+            <td>Leitura primária</td>
+            <td><a href="https://raw.githubusercontent.com/mattpocock/skills/main/skills/productivity/writing-great-skills/SKILL.md" target="_blank" rel="noopener noreferrer">writing-great-skills/SKILL.md</a></td>
+            <td>Matt Pocock / GitHub</td>
+          </tr>
+          <tr data-status="approved">
+            <td>8</td>
+            <td><span class="tag approved">approved</span></td>
+            <td>Documentação oficial</td>
+            <td><a href="https://www.aihero.dev/skills-handoff" target="_blank" rel="noopener noreferrer">The /handoff Skill</a></td>
+            <td>Matt Pocock / AI Hero</td>
+          </tr>
+          <tr data-status="approved">
+            <td>8</td>
+            <td><span class="tag approved">approved</span></td>
+            <td>Documentação oficial</td>
+            <td><a href="https://www.aihero.dev/skills-research" target="_blank" rel="noopener noreferrer">The /research Skill</a></td>
+            <td>Matt Pocock / AI Hero</td>
+          </tr>
+          <tr data-status="approved">
+            <td>8</td>
+            <td><span class="tag approved">approved</span></td>
+            <td>Changelog oficial</td>
+            <td><a href="https://www.aihero.dev/skills/skills-changelog-v1-1-wayfinder-to-spec-to-tickets-grilling-improvements" target="_blank" rel="noopener noreferrer">v1.1 — lifecycle, wayfinder, research e prototype</a></td>
+            <td>Matt Pocock / AI Hero</td>
+          </tr>
+          <tr data-status="weak_signal">
+            <td>8</td>
+            <td><span class="tag weak_signal">weak_signal</span></td>
+            <td>Vídeo candidato</td>
+            <td><a href="https://www.youtube.com/watch?v=EJyuu6zlQCg" target="_blank" rel="noopener noreferrer">5 Claude Code skills I use every single day</a></td>
+            <td>Matt Pocock / YouTube</td>
+          </tr></tbody></table></div>
+      </section>
+      <div class="footer-links"><a class="download primary" href="#topo">Voltar ao topo</a><a class="download" href="https://github.com/mattpocock/skills" target="_blank" rel="noopener noreferrer">Repositório</a><a class="download" href="trilha-mattpocock-skills.json" download>JSON canônico</a></div>
+    </main>
+  </div>
+  <script type="application/json" id="trail-data">{
+  &quot;title&quot;: &quot;Trilha de Aprendizado — mattpocock/skills&quot;,
+  &quot;slug&quot;: &quot;trilha-mattpocock-skills&quot;,
+  &quot;language&quot;: &quot;pt-BR&quot;,
+  &quot;level&quot;: &quot;Avançado / prático&quot;,
+  &quot;focus&quot;: &quot;Engenharia reversa, uso operacional e criação de skill pack próprio&quot;,
+  &quot;goal&quot;: &quot;Ao final, você será capaz de instalar, mapear, operar e adaptar mattpocock/skills; entender o fluxo idea → ship; aplicar setup, grilling, specs, tickets, TDD, review e arquitetura; e derivar uma versão própria para seu ecossistema de agentes.&quot;,
+  &quot;summary&quot;: {
+    &quot;stations&quot;: 8,
+    &quot;validated_nerves&quot;: 29,
+    &quot;weak_signals&quot;: 4,
+    &quot;estimated_minutes&quot;: 225,
+    &quot;modalities&quot;: {
+      &quot;primary_reading&quot;: 29,
+      &quot;video_candidates&quot;: 4,
+      &quot;labs&quot;: 8,
+      &quot;official_docs&quot;: 12
+    }
+  },
+  &quot;stations&quot;: [
+    {
+      &quot;id&quot;: &quot;estacao-1&quot;,
+      &quot;number&quot;: 1,
+      &quot;title&quot;: &quot;Entender o problema: skills como disciplina de engenharia, não prompts soltos&quot;,
+      &quot;time&quot;: 18,
+      &quot;objective&quot;: &quot;Separar o projeto de uma biblioteca tradicional: ele é uma coleção de workflows versionáveis para agentes de código.&quot;,
+      &quot;narrative&quot;: [
+        &quot;O primeiro erro seria estudar esse repositório como se fosse um framework. Ele não fornece runtime, API ou componentes reutilizáveis em produção; ele fornece processos operacionais para orientar Claude Code, Codex e outros agentes.&quot;,
+        &quot;A tese central é que agentes falham menos quando trabalham dentro de loops de engenharia: alinhamento, vocabulário, testes, revisão e decomposição em fatias pequenas. Antes de decorar cada skill, você precisa entender o problema que elas tentam reduzir: desalinhamento, verbosidade, falta de feedback e deterioração arquitetural.&quot;,
+        &quot;Ao final desta estação, você deve conseguir explicar por que uma skill boa se parece mais com um runbook executável do que com um prompt longo.&quot;
+      ],
+      &quot;lab&quot;: &quot;Escreva um mapa de uma página com quatro falhas que o repositório tenta corrigir: desalinhamento, verbosidade, código que não roda e bola de lama arquitetural.&quot;,
+      &quot;check&quot;: &quot;Você consegue explicar a diferença entre prompt, skill, workflow e disciplina operacional sem citar uma ferramenta específica?&quot;,
+      &quot;resources&quot;: [
+        {
+          &quot;type&quot;: &quot;Leitura primária&quot;,
+          &quot;title&quot;: &quot;README — Skills For Real Engineers&quot;,
+          &quot;author&quot;: &quot;Matt Pocock / GitHub&quot;,
+          &quot;url&quot;: &quot;https://raw.githubusercontent.com/mattpocock/skills/main/README.md&quot;,
+          &quot;when&quot;: &quot;Use para entender a tese do projeto e os quatro failure modes que justificam a coleção.&quot;,
+          &quot;evidence&quot;: &quot;O README apresenta as skills como pequenas, adaptáveis e compostas para engenharia real, não vibe coding.&quot;,
+          &quot;status&quot;: &quot;approved&quot;
+        },
+        {
+          &quot;type&quot;: &quot;Leitura primária&quot;,
+          &quot;title&quot;: &quot;Página do repositório GitHub&quot;,
+          &quot;author&quot;: &quot;mattpocock/skills&quot;,
+          &quot;url&quot;: &quot;https://github.com/mattpocock/skills&quot;,
+          &quot;when&quot;: &quot;Use para observar popularidade, estrutura de pastas, licença e atividade do projeto.&quot;,
+          &quot;evidence&quot;: &quot;A página mostra o repositório público, com pastas .agents, .claude-plugin, docs, scripts e skills.&quot;,
+          &quot;status&quot;: &quot;approved&quot;
+        },
+        {
+          &quot;type&quot;: &quot;Leitura oficial&quot;,
+          &quot;title&quot;: &quot;AI Hero — posts e documentação de skills&quot;,
+          &quot;author&quot;: &quot;Matt Pocock / AI Hero&quot;,
+          &quot;url&quot;: &quot;https://www.aihero.dev/posts&quot;,
+          &quot;when&quot;: &quot;Use como índice cronológico para entender evolução, changelogs e documentação pública das skills.&quot;,
+          &quot;evidence&quot;: &quot;A página lista docs individuais para setup, ask-matt, implement, tdd, wayfinder e demais skills.&quot;,
+          &quot;status&quot;: &quot;approved&quot;
+        }
+      ]
+    },
+    {
+      &quot;id&quot;: &quot;estacao-2&quot;,
+      &quot;number&quot;: 2,
+      &quot;title&quot;: &quot;Instalação, anatomia do repo e contrato de execução&quot;,
+      &quot;time&quot;: 22,
+      &quot;objective&quot;: &quot;Entender como as skills são instaladas, onde vivem e quais arquivos sustentam o comportamento do agente.&quot;,
+      &quot;narrative&quot;: [
+        &quot;Depois de entender a intenção, você precisa estudar a mecânica. O projeto organiza skills em buckets, promove apenas algumas famílias e usa plugin metadata para expor o conjunto instalável.&quot;,
+        &quot;O ponto crítico é que a instalação não termina no npx. O setup precisa capturar como o seu repositório trabalha: issue tracker, labels de triagem e localização dos documentos de domínio. Sem isso, as skills downstream começam a adivinhar.&quot;,
+        &quot;A estação termina quando você souber o que precisa existir em um repo para que as skills rodem de forma previsível.&quot;
+      ],
+      &quot;lab&quot;: &quot;Em um repositório sandbox, rode mentalmente o fluxo: instalar skills, selecionar /setup-matt-pocock-skills, definir issue tracker, labels e docs de domínio. Gere uma checklist de arquivos esperados.&quot;,
+      &quot;check&quot;: &quot;Você sabe quais decisões são capturadas pelo setup antes do primeiro uso real das skills?&quot;,
+      &quot;resources&quot;: [
+        {
+          &quot;type&quot;: &quot;Leitura primária&quot;,
+          &quot;title&quot;: &quot;README — Quickstart&quot;,
+          &quot;author&quot;: &quot;Matt Pocock / GitHub&quot;,
+          &quot;url&quot;: &quot;https://raw.githubusercontent.com/mattpocock/skills/main/README.md&quot;,
+          &quot;when&quot;: &quot;Use para executar o caminho de instalação oficial com npx skills.&quot;,
+          &quot;evidence&quot;: &quot;O quickstart orienta instalar via npx skills e depois executar /setup-matt-pocock-skills.&quot;,
+          &quot;status&quot;: &quot;approved&quot;
+        },
+        {
+          &quot;type&quot;: &quot;Leitura primária&quot;,
+          &quot;title&quot;: &quot;CLAUDE.md — organização e regras de manutenção&quot;,
+          &quot;author&quot;: &quot;Matt Pocock / GitHub&quot;,
+          &quot;url&quot;: &quot;https://raw.githubusercontent.com/mattpocock/skills/main/CLAUDE.md&quot;,
+          &quot;when&quot;: &quot;Use para entender buckets promovidos, buckets não promovidos e sincronização de docs.&quot;,
+          &quot;evidence&quot;: &quot;O arquivo define buckets engineering, productivity, misc, personal, in-progress e deprecated.&quot;,
+          &quot;status&quot;: &quot;approved&quot;
+        },
+        {
+          &quot;type&quot;: &quot;Config primária&quot;,
+          &quot;title&quot;: &quot;.claude-plugin/plugin.json&quot;,
+          &quot;author&quot;: &quot;Matt Pocock / GitHub&quot;,
+          &quot;url&quot;: &quot;https://raw.githubusercontent.com/mattpocock/skills/main/.claude-plugin/plugin.json&quot;,
+          &quot;when&quot;: &quot;Use para auditar quais skills entram no plugin instalável.&quot;,
+          &quot;evidence&quot;: &quot;O plugin lista skills de engineering e productivity como componentes do pacote.&quot;,
+          &quot;status&quot;: &quot;approved&quot;
+        },
+        {
+          &quot;type&quot;: &quot;Documentação oficial&quot;,
+          &quot;title&quot;: &quot;The /setup-matt-pocock-skills Skill&quot;,
+          &quot;author&quot;: &quot;Matt Pocock / AI Hero&quot;,
+          &quot;url&quot;: &quot;https://www.aihero.dev/skills-setup-matt-pocock-skills&quot;,
+          &quot;when&quot;: &quot;Use para entender o bootstrap por repo e os arquivos docs/agents esperados.&quot;,
+          &quot;evidence&quot;: &quot;O setup registra issue tracker, triage labels e domínio como configuração lida pelas outras skills.&quot;,
+          &quot;status&quot;: &quot;approved&quot;
+        }
+      ]
+    },
+    {
+      &quot;id&quot;: &quot;estacao-3&quot;,
+      &quot;number&quot;: 3,
+      &quot;title&quot;: &quot;O mapa de navegação: router, fluxos e higiene de contexto&quot;,
+      &quot;time&quot;: 25,
+      &quot;objective&quot;: &quot;Aprender quando usar cada skill e como o repositório evita perder coerência entre sessões.&quot;,
+      &quot;narrative&quot;: [
+        &quot;A coleção cresce o suficiente para virar um problema de descoberta: você não quer memorizar vinte comandos. O projeto resolve isso com um router: /ask-matt.&quot;,
+        &quot;A ideia de fluxo é mais importante que a lista de skills. Trabalho novo segue idea → ship; bugs entram por diagnóstico ou triagem; esforços grandes passam por wayfinder; sessões longas exigem handoff em vez de compactação cega.&quot;,
+        &quot;Aqui você aprende a ler o projeto como um grafo de processos, não como comandos isolados.&quot;
+      ],
+      &quot;lab&quot;: &quot;Crie uma tabela com cinco situações reais do seu trabalho e escolha o fluxo: bug intermitente, feature pequena, feature grande, fila de issues, refactor arquitetural.&quot;,
+      &quot;check&quot;: &quot;Você consegue decidir quando usar /ask-matt, /wayfinder, /grill-with-docs, /triage ou /diagnosing-bugs?&quot;,
+      &quot;resources&quot;: [
+        {
+          &quot;type&quot;: &quot;Leitura primária&quot;,
+          &quot;title&quot;: &quot;ask-matt/SKILL.md&quot;,
+          &quot;author&quot;: &quot;Matt Pocock / GitHub&quot;,
+          &quot;url&quot;: &quot;https://raw.githubusercontent.com/mattpocock/skills/main/skills/engineering/ask-matt/SKILL.md&quot;,
+          &quot;when&quot;: &quot;Use para aprender o grafo de fluxos e o papel de cada skill.&quot;,
+          &quot;evidence&quot;: &quot;A skill descreve o fluxo principal idea → ship e suas on-ramps.&quot;,
+          &quot;status&quot;: &quot;approved&quot;
+        },
+        {
+          &quot;type&quot;: &quot;Documentação oficial&quot;,
+          &quot;title&quot;: &quot;The /ask-matt Skill&quot;,
+          &quot;author&quot;: &quot;Matt Pocock / AI Hero&quot;,
+          &quot;url&quot;: &quot;https://www.aihero.dev/skills-ask-matt&quot;,
+          &quot;when&quot;: &quot;Use para entender o router como memória externa para skills user-invoked.&quot;,
+          &quot;evidence&quot;: &quot;A página explica que ask-matt orienta qual skill ou fluxo usar e em que ordem.&quot;,
+          &quot;status&quot;: &quot;approved&quot;
+        },
+        {
+          &quot;type&quot;: &quot;Leitura primária&quot;,
+          &quot;title&quot;: &quot;CONTEXT.md — linguagem do próprio repositório&quot;,
+          &quot;author&quot;: &quot;Matt Pocock / GitHub&quot;,
+          &quot;url&quot;: &quot;https://raw.githubusercontent.com/mattpocock/skills/main/CONTEXT.md&quot;,
+          &quot;when&quot;: &quot;Use para ver como o projeto define issue tracker, issue e triage role.&quot;,
+          &quot;evidence&quot;: &quot;O contexto resolve ambiguidades como backlog, issue tracker e triage role.&quot;,
+          &quot;status&quot;: &quot;approved&quot;
+        },
+        {
+          &quot;type&quot;: &quot;Documentação oficial&quot;,
+          &quot;title&quot;: &quot;The /wayfinder Skill&quot;,
+          &quot;author&quot;: &quot;Matt Pocock / AI Hero&quot;,
+          &quot;url&quot;: &quot;https://www.aihero.dev/skills-wayfinder&quot;,
+          &quot;when&quot;: &quot;Use quando o esforço é grande demais ou nebuloso para virar spec diretamente.&quot;,
+          &quot;evidence&quot;: &quot;Wayfinder transforma esforço nebuloso em mapa compartilhado de tickets de investigação.&quot;,
+          &quot;status&quot;: &quot;approved&quot;
+        }
+      ]
+    },
+    {
+      &quot;id&quot;: &quot;estacao-4&quot;,
+      &quot;number&quot;: 4,
+      &quot;title&quot;: &quot;Alinhamento antes de código: grilling, domínio e ADRs&quot;,
+      &quot;time&quot;: 28,
+      &quot;objective&quot;: &quot;Dominar a fase de reduzir ambiguidade antes da escrita de spec e antes de qualquer implementação.&quot;,
+      &quot;narrative&quot;: [
+        &quot;A skill /grill-with-docs é o ponto em que o agente deixa de ser executor e vira entrevistador. Ela força decisões, captura vocabulário e atualiza o modelo de domínio do repositório.&quot;,
+        &quot;O componente mais reutilizável aqui é domain-modeling: termos vagos são desafiados, termos canônicos são criados, contradições com o código são trazidas para a conversa e ADRs são usados apenas quando a decisão é difícil de reverter.&quot;,
+        &quot;Essa estação deve mudar seu padrão de uso: antes de pedir código, você faz o agente fechar as perguntas certas.&quot;
+      ],
+      &quot;lab&quot;: &quot;Pegue uma feature sua e faça um mini /grill-with-docs manual: liste 10 perguntas, 5 termos de domínio, 2 ambiguidades e 1 possível ADR.&quot;,
+      &quot;check&quot;: &quot;Você sabe diferenciar fato descoberto no código de decisão que precisa vir do humano?&quot;,
+      &quot;resources&quot;: [
+        {
+          &quot;type&quot;: &quot;Leitura primária&quot;,
+          &quot;title&quot;: &quot;grill-with-docs/SKILL.md&quot;,
+          &quot;author&quot;: &quot;Matt Pocock / GitHub&quot;,
+          &quot;url&quot;: &quot;https://raw.githubusercontent.com/mattpocock/skills/main/skills/engineering/grill-with-docs/SKILL.md&quot;,
+          &quot;when&quot;: &quot;Use para entender que grill-with-docs combina entrevista com domínio e documentação.&quot;,
+          &quot;evidence&quot;: &quot;A skill executa uma sessão de grilling usando domain-modeling.&quot;,
+          &quot;status&quot;: &quot;approved&quot;
+        },
+        {
+          &quot;type&quot;: &quot;Leitura primária&quot;,
+          &quot;title&quot;: &quot;domain-modeling/SKILL.md&quot;,
+          &quot;author&quot;: &quot;Matt Pocock / GitHub&quot;,
+          &quot;url&quot;: &quot;https://raw.githubusercontent.com/mattpocock/skills/main/skills/engineering/domain-modeling/SKILL.md&quot;,
+          &quot;when&quot;: &quot;Use para aprender o formato de CONTEXT.md, ADRs e resolução de linguagem ambígua.&quot;,
+          &quot;evidence&quot;: &quot;Domain-modeling desafia termos, propõe linguagem canônica e atualiza CONTEXT.md inline.&quot;,
+          &quot;status&quot;: &quot;approved&quot;
+        },
+        {
+          &quot;type&quot;: &quot;Changelog oficial&quot;,
+          &quot;title&quot;: &quot;v1.1 — Grilling Skill Improvements&quot;,
+          &quot;author&quot;: &quot;Matt Pocock / AI Hero&quot;,
+          &quot;url&quot;: &quot;https://www.aihero.dev/skills/skills-changelog-v1-1-wayfinder-to-spec-to-tickets-grilling-improvements&quot;,
+          &quot;when&quot;: &quot;Use para entender por que grilling recebeu gates contra auto-grilling e implementação prematura.&quot;,
+          &quot;evidence&quot;: &quot;O changelog cita confirmação antes de implementar e distinção entre fatos e decisões.&quot;,
+          &quot;status&quot;: &quot;approved&quot;
+        },
+        {
+          &quot;type&quot;: &quot;Vídeo candidato&quot;,
+          &quot;title&quot;: &quot;I stopped using /grill-me for coding. Here&#x27;s what I use instead&quot;,
+          &quot;author&quot;: &quot;Matt Pocock / YouTube&quot;,
+          &quot;url&quot;: &quot;https://www.youtube.com/watch?v=6BB6exR8Zd8&quot;,
+          &quot;when&quot;: &quot;Use como complemento visual; trate como weak signal porque não validei transcript completa.&quot;,
+          &quot;evidence&quot;: &quot;A descrição apresenta /grill-with-docs como evolução de /grill-me com DDD.&quot;,
+          &quot;status&quot;: &quot;weak_signal&quot;
+        }
+      ]
+    },
+    {
+      &quot;id&quot;: &quot;estacao-5&quot;,
+      &quot;number&quot;: 5,
+      &quot;title&quot;: &quot;Da conversa para spec e da spec para tickets verticais&quot;,
+      &quot;time&quot;: 30,
+      &quot;objective&quot;: &quot;Transformar entendimento em artefatos executáveis: spec, user stories, decisões e tickets com blocking edges.&quot;,
+      &quot;narrative&quot;: [
+        &quot;Depois de alinhar, o projeto evita pular direto para código. Primeiro ele sintetiza o que já foi decidido em uma spec. Depois quebra a spec em tickets verticais que atravessam camadas e podem ser verificados individualmente.&quot;,
+        &quot;O conceito chave é tracer bullet: uma fatia estreita que prova o caminho end-to-end. Isso se opõe a slicing horizontal, onde schema, API e UI são feitos separadamente e nada fica demonstrável até o fim.&quot;,
+        &quot;Ao final, você deve conseguir pegar uma feature complexa e gerar issues que um agente consiga implementar sem reabrir decisões.&quot;
+      ],
+      &quot;lab&quot;: &quot;Escolha uma feature simples e escreva: problema, solução, 8 user stories, decisões de implementação, decisões de teste, fora de escopo e 5 tickets com blockers.&quot;,
+      &quot;check&quot;: &quot;Você consegue quebrar uma feature em tickets verticais sem cair em &#x27;fazer todo backend&#x27; e depois &#x27;fazer todo frontend&#x27;?&quot;,
+      &quot;resources&quot;: [
+        {
+          &quot;type&quot;: &quot;Leitura primária&quot;,
+          &quot;title&quot;: &quot;to-spec/SKILL.md&quot;,
+          &quot;author&quot;: &quot;Matt Pocock / GitHub&quot;,
+          &quot;url&quot;: &quot;https://raw.githubusercontent.com/mattpocock/skills/main/skills/engineering/to-spec/SKILL.md&quot;,
+          &quot;when&quot;: &quot;Use para aprender o template real de spec e as decisões que devem ser carregadas.&quot;,
+          &quot;evidence&quot;: &quot;A skill transforma a conversa em spec e inclui problema, solução, user stories e decisões de teste.&quot;,
+          &quot;status&quot;: &quot;approved&quot;
+        },
+        {
+          &quot;type&quot;: &quot;Documentação oficial&quot;,
+          &quot;title&quot;: &quot;The /to-spec Skill&quot;,
+          &quot;author&quot;: &quot;Matt Pocock / AI Hero&quot;,
+          &quot;url&quot;: &quot;https://www.aihero.dev/skills-to-spec&quot;,
+          &quot;when&quot;: &quot;Use para entender pré-requisitos, deep modules e posicionamento no fluxo.&quot;,
+          &quot;evidence&quot;: &quot;A página coloca to-spec depois do alinhamento e antes de quebrar o trabalho em tickets.&quot;,
+          &quot;status&quot;: &quot;approved&quot;
+        },
+        {
+          &quot;type&quot;: &quot;Documentação oficial&quot;,
+          &quot;title&quot;: &quot;The /to-tickets Skill&quot;,
+          &quot;author&quot;: &quot;Matt Pocock / AI Hero&quot;,
+          &quot;url&quot;: &quot;https://www.aihero.dev/skills-to-tickets&quot;,
+          &quot;when&quot;: &quot;Use para dominar tracer bullets, blockers e diferença entre tracker local e real.&quot;,
+          &quot;evidence&quot;: &quot;to-tickets cria tickets verticais com blocking edges e frontier de trabalho.&quot;,
+          &quot;status&quot;: &quot;approved&quot;
+        },
+        {
+          &quot;type&quot;: &quot;Changelog oficial&quot;,
+          &quot;title&quot;: &quot;v1.1 — renames para /to-spec e /to-tickets&quot;,
+          &quot;author&quot;: &quot;Matt Pocock / AI Hero&quot;,
+          &quot;url&quot;: &quot;https://www.aihero.dev/skills/skills-changelog-v1-1-wayfinder-to-spec-to-tickets-grilling-improvements&quot;,
+          &quot;when&quot;: &quot;Use para entender por que PRD virou spec e issues/plan viraram tickets.&quot;,
+          &quot;evidence&quot;: &quot;O changelog explica a unificação de /to-plan e /to-issues em /to-tickets.&quot;,
+          &quot;status&quot;: &quot;approved&quot;
+        }
+      ]
+    },
+    {
+      &quot;id&quot;: &quot;estacao-6&quot;,
+      &quot;number&quot;: 6,
+      &quot;title&quot;: &quot;Execução: implement, TDD, diagnóstico e loop de feedback&quot;,
+      &quot;time&quot;: 32,
+      &quot;objective&quot;: &quot;Aprender o loop que transforma tickets em código com testes, typecheck e regressão.&quot;,
+      &quot;narrative&quot;: [
+        &quot;A implementação é deliberadamente estreita: a decisão sobre o que construir já aconteceu. O agente deve trabalhar a partir de spec ou tickets, usar seams pré-acordados, rodar typecheck e testes continuamente e só fazer o sweep completo no final.&quot;,
+        &quot;O TDD aqui não é uma cerimônia; é um mecanismo de feedback para agentes. O teste deve verificar comportamento em interface pública, não detalhes internos. Diagnosing-bugs aplica a mesma lógica: antes de hipótese, criar um loop tight que reproduz o problema.&quot;,
+        &quot;O objetivo é tirar o agente do modo &#x27;eu acho&#x27; e colocá-lo no modo &#x27;um comando prova&#x27;.&quot;
+      ],
+      &quot;lab&quot;: &quot;Crie um ticket mínimo e defina um seam público, um teste red, o comando de teste unitário, o comando de typecheck e o comando de suite final.&quot;,
+      &quot;check&quot;: &quot;Antes de implementar, você consegue nomear o seam testado e o comando que ficará vermelho se o comportamento estiver quebrado?&quot;,
+      &quot;resources&quot;: [
+        {
+          &quot;type&quot;: &quot;Leitura primária&quot;,
+          &quot;title&quot;: &quot;implement/SKILL.md&quot;,
+          &quot;author&quot;: &quot;Matt Pocock / GitHub&quot;,
+          &quot;url&quot;: &quot;https://raw.githubusercontent.com/mattpocock/skills/main/skills/engineering/implement/SKILL.md&quot;,
+          &quot;when&quot;: &quot;Use para entender o contrato mínimo da execução.&quot;,
+          &quot;evidence&quot;: &quot;Implement usa TDD em seams pré-acordados, typecheck, testes e code-review antes do commit.&quot;,
+          &quot;status&quot;: &quot;approved&quot;
+        },
+        {
+          &quot;type&quot;: &quot;Documentação oficial&quot;,
+          &quot;title&quot;: &quot;The /implement Skill&quot;,
+          &quot;author&quot;: &quot;Matt Pocock / AI Hero&quot;,
+          &quot;url&quot;: &quot;https://www.aihero.dev/skills-implement&quot;,
+          &quot;when&quot;: &quot;Use para entender implement como mãos da cadeia, não cabeça.&quot;,
+          &quot;evidence&quot;: &quot;A página diz que implement executa uma spec ou tickets já definidos.&quot;,
+          &quot;status&quot;: &quot;approved&quot;
+        },
+        {
+          &quot;type&quot;: &quot;Leitura primária&quot;,
+          &quot;title&quot;: &quot;tdd/SKILL.md&quot;,
+          &quot;author&quot;: &quot;Matt Pocock / GitHub&quot;,
+          &quot;url&quot;: &quot;https://raw.githubusercontent.com/mattpocock/skills/main/skills/engineering/tdd/SKILL.md&quot;,
+          &quot;when&quot;: &quot;Use para aprender red-green, seams, anti-patterns e vertical slicing.&quot;,
+          &quot;evidence&quot;: &quot;A skill exige testes em seams públicos e um teste por fatia vertical.&quot;,
+          &quot;status&quot;: &quot;approved&quot;
+        },
+        {
+          &quot;type&quot;: &quot;Leitura primária&quot;,
+          &quot;title&quot;: &quot;diagnosing-bugs/SKILL.md&quot;,
+          &quot;author&quot;: &quot;Matt Pocock / GitHub&quot;,
+          &quot;url&quot;: &quot;https://raw.githubusercontent.com/mattpocock/skills/main/skills/engineering/diagnosing-bugs/SKILL.md&quot;,
+          &quot;when&quot;: &quot;Use para bugs difíceis, flakiness e regressões de performance.&quot;,
+          &quot;evidence&quot;: &quot;A fase 1 exige um loop tight e red-capable antes de teorizar sobre a causa.&quot;,
+          &quot;status&quot;: &quot;approved&quot;
+        },
+        {
+          &quot;type&quot;: &quot;Vídeo candidato&quot;,
+          &quot;title&quot;: &quot;Red Green Refactor is OP With Claude Code&quot;,
+          &quot;author&quot;: &quot;Matt Pocock / YouTube&quot;,
+          &quot;url&quot;: &quot;https://www.youtube.com/watch?v=hYZdIwFIy-c&quot;,
+          &quot;when&quot;: &quot;Use como complemento visual; trate como weak signal porque não validei transcript completa.&quot;,
+          &quot;evidence&quot;: &quot;A descrição relaciona agentes de código com TDD e red-green-refactor.&quot;,
+          &quot;status&quot;: &quot;weak_signal&quot;
+        }
+      ]
+    },
+    {
+      &quot;id&quot;: &quot;estacao-7&quot;,
+      &quot;number&quot;: 7,
+      &quot;title&quot;: &quot;Review e saúde arquitetural: standards, spec e deep modules&quot;,
+      &quot;time&quot;: 34,
+      &quot;objective&quot;: &quot;Usar code-review e codebase-design para impedir que velocidade com IA vire entropia arquitetural.&quot;,
+      &quot;narrative&quot;: [
+        &quot;A cadeia não termina quando os testes passam. O projeto separa review em dois eixos: standards e spec. Isso impede que código bonito mas errado, ou correto mas fora dos padrões, passe sem explicitar o problema.&quot;,
+        &quot;A camada arquitetural usa vocabulário próprio: module, interface, seam, adapter, depth, leverage e locality. O objetivo é desenhar módulos profundos, com muito comportamento atrás de uma interface pequena e testável.&quot;,
+        &quot;Essa estação conecta diretamente com seu loop de pre-commit e TAAC: o agente precisa fechar a mudança com verificação técnica e revisão sem misturar critérios.&quot;
+      ],
+      &quot;lab&quot;: &quot;Pegue um diff real e faça uma review em dois blocos: Standards e Spec. Depois identifique uma oportunidade de deepening usando deletion test.&quot;,
+      &quot;check&quot;: &quot;Você consegue separar achados de conformidade de padrões, achados de aderência à spec e achados de desenho arquitetural?&quot;,
+      &quot;resources&quot;: [
+        {
+          &quot;type&quot;: &quot;Leitura primária&quot;,
+          &quot;title&quot;: &quot;code-review/SKILL.md&quot;,
+          &quot;author&quot;: &quot;Matt Pocock / GitHub&quot;,
+          &quot;url&quot;: &quot;https://raw.githubusercontent.com/mattpocock/skills/main/skills/engineering/code-review/SKILL.md&quot;,
+          &quot;when&quot;: &quot;Use para estruturar revisão de branch/PR desde um ponto fixo.&quot;,
+          &quot;evidence&quot;: &quot;A review compara HEAD com um fixed point em dois eixos: Standards e Spec.&quot;,
+          &quot;status&quot;: &quot;approved&quot;
+        },
+        {
+          &quot;type&quot;: &quot;Leitura primária&quot;,
+          &quot;title&quot;: &quot;codebase-design/SKILL.md&quot;,
+          &quot;author&quot;: &quot;Matt Pocock / GitHub&quot;,
+          &quot;url&quot;: &quot;https://raw.githubusercontent.com/mattpocock/skills/main/skills/engineering/codebase-design/SKILL.md&quot;,
+          &quot;when&quot;: &quot;Use como vocabulário-base para módulos profundos, seams e adapters.&quot;,
+          &quot;evidence&quot;: &quot;A skill define deep modules como comportamento amplo atrás de uma interface pequena.&quot;,
+          &quot;status&quot;: &quot;approved&quot;
+        },
+        {
+          &quot;type&quot;: &quot;Documentação oficial&quot;,
+          &quot;title&quot;: &quot;The /improve-codebase-architecture Skill&quot;,
+          &quot;author&quot;: &quot;Matt Pocock / AI Hero&quot;,
+          &quot;url&quot;: &quot;https://www.aihero.dev/skills-improve-codebase-architecture&quot;,
+          &quot;when&quot;: &quot;Use para health check arquitetural periódico com relatório HTML.&quot;,
+          &quot;evidence&quot;: &quot;A skill busca oportunidades de deepening e apresenta cards em relatório HTML.&quot;,
+          &quot;status&quot;: &quot;approved&quot;
+        },
+        {
+          &quot;type&quot;: &quot;Vídeo candidato&quot;,
+          &quot;title&quot;: &quot;How To De-Slop A Codebase Ruined By AI&quot;,
+          &quot;author&quot;: &quot;Matt Pocock / YouTube&quot;,
+          &quot;url&quot;: &quot;https://www.youtube.com/watch?v=3MP8D-mdheA&quot;,
+          &quot;when&quot;: &quot;Use como complemento visual de arquitetura; weak signal sem transcript validada.&quot;,
+          &quot;evidence&quot;: &quot;A descrição conecta qualidade de codebase e skills de arquitetura.&quot;,
+          &quot;status&quot;: &quot;weak_signal&quot;
+        }
+      ]
+    },
+    {
+      &quot;id&quot;: &quot;estacao-8&quot;,
+      &quot;number&quot;: 8,
+      &quot;title&quot;: &quot;Adaptar para seu ecossistema: escrever skills previsíveis e operar em múltiplas sessões&quot;,
+      &quot;time&quot;: 36,
+      &quot;objective&quot;: &quot;Extrair princípios para criar suas próprias skills no padrão HES/SDD sem copiar cegamente o repo.&quot;,
+      &quot;narrative&quot;: [
+        &quot;A etapa final é engenharia reversa aplicada. Você não quer apenas usar as skills do Matt; quer absorver o padrão para criar suas próprias: pequenas, composáveis, com critérios de conclusão e progressiva divulgação de referência.&quot;,
+        &quot;writing-great-skills é a peça mais importante para seu projeto de cultura de AI: ela define previsibilidade, context load, cognitive load, router skill, leading words, no-op, sediment e sprawl. Handoff, research e teach mostram como preservar contexto, delegar leitura e aprender ao longo de sessões.&quot;,
+        &quot;O resultado final esperado é você conseguir criar um skill pack próprio para sua empresa, com setup, roteador, fluxos e gates de qualidade.&quot;
+      ],
+      &quot;lab&quot;: &quot;Crie uma versão inicial de um skill pack corporativo: /ask-jose, /setup-org-skills, /to-spec, /to-tickets, /implement-taac, /review-taac, /handoff.&quot;,
+      &quot;check&quot;: &quot;Você consegue explicar quais skills devem ser user-invoked, quais podem ser model-invoked e por quê?&quot;,
+      &quot;resources&quot;: [
+        {
+          &quot;type&quot;: &quot;Leitura primária&quot;,
+          &quot;title&quot;: &quot;writing-great-skills/SKILL.md&quot;,
+          &quot;author&quot;: &quot;Matt Pocock / GitHub&quot;,
+          &quot;url&quot;: &quot;https://raw.githubusercontent.com/mattpocock/skills/main/skills/productivity/writing-great-skills/SKILL.md&quot;,
+          &quot;when&quot;: &quot;Use como referência para desenhar skills determinísticas, pequenas e previsíveis.&quot;,
+          &quot;evidence&quot;: &quot;A skill afirma que predictability é a virtude central de uma skill.&quot;,
+          &quot;status&quot;: &quot;approved&quot;
+        },
+        {
+          &quot;type&quot;: &quot;Documentação oficial&quot;,
+          &quot;title&quot;: &quot;The /handoff Skill&quot;,
+          &quot;author&quot;: &quot;Matt Pocock / AI Hero&quot;,
+          &quot;url&quot;: &quot;https://www.aihero.dev/skills-handoff&quot;,
+          &quot;when&quot;: &quot;Use para preservar o núcleo de uma sessão sem carregar transcrição inteira.&quot;,
+          &quot;evidence&quot;: &quot;Handoff compacta a conversa em documento para outro agente continuar.&quot;,
+          &quot;status&quot;: &quot;approved&quot;
+        },
+        {
+          &quot;type&quot;: &quot;Documentação oficial&quot;,
+          &quot;title&quot;: &quot;The /research Skill&quot;,
+          &quot;author&quot;: &quot;Matt Pocock / AI Hero&quot;,
+          &quot;url&quot;: &quot;https://www.aihero.dev/skills-research&quot;,
+          &quot;when&quot;: &quot;Use para delegar leitura com fontes primárias antes de decisões de design.&quot;,
+          &quot;evidence&quot;: &quot;Research investiga apenas fontes primárias e salva um Markdown citado.&quot;,
+          &quot;status&quot;: &quot;approved&quot;
+        },
+        {
+          &quot;type&quot;: &quot;Changelog oficial&quot;,
+          &quot;title&quot;: &quot;v1.1 — lifecycle, wayfinder, research e prototype&quot;,
+          &quot;author&quot;: &quot;Matt Pocock / AI Hero&quot;,
+          &quot;url&quot;: &quot;https://www.aihero.dev/skills/skills-changelog-v1-1-wayfinder-to-spec-to-tickets-grilling-improvements&quot;,
+          &quot;when&quot;: &quot;Use para entender a evolução do sistema e como o ciclo ficou mais completo.&quot;,
+          &quot;evidence&quot;: &quot;O changelog descreve o fluxo grilling → spec → tickets → implement → code-review.&quot;,
+          &quot;status&quot;: &quot;approved&quot;
+        },
+        {
+          &quot;type&quot;: &quot;Vídeo candidato&quot;,
+          &quot;title&quot;: &quot;5 Claude Code skills I use every single day&quot;,
+          &quot;author&quot;: &quot;Matt Pocock / YouTube&quot;,
+          &quot;url&quot;: &quot;https://www.youtube.com/watch?v=EJyuu6zlQCg&quot;,
+          &quot;when&quot;: &quot;Use como visão visual do repertório; weak signal sem transcript validada.&quot;,
+          &quot;evidence&quot;: &quot;A descrição menciona skills diárias para orientar Claude Code e melhorar qualidade.&quot;,
+          &quot;status&quot;: &quot;weak_signal&quot;
+        }
+      ]
+    }
+  ],
+  &quot;boss_final&quot;: [
+    {
+      &quot;type&quot;: &quot;Conceitual&quot;,
+      &quot;question&quot;: &quot;Por que mattpocock/skills é melhor entendido como sistema de workflow e não como biblioteca de código?&quot;
+    },
+    {
+      &quot;type&quot;: &quot;Arquitetura&quot;,
+      &quot;question&quot;: &quot;Qual é a diferença operacional entre /grill-with-docs, /to-spec e /to-tickets?&quot;
+    },
+    {
+      &quot;type&quot;: &quot;Fluxo&quot;,
+      &quot;question&quot;: &quot;Quando você escolheria /wayfinder em vez de /grill-with-docs?&quot;
+    },
+    {
+      &quot;type&quot;: &quot;Qualidade&quot;,
+      &quot;question&quot;: &quot;Por que /implement não deve decidir o que construir durante a implementação?&quot;
+    },
+    {
+      &quot;type&quot;: &quot;TDD&quot;,
+      &quot;question&quot;: &quot;O que torna um teste bom nesse projeto: testar internals ou testar comportamento em seam público?&quot;
+    },
+    {
+      &quot;type&quot;: &quot;Review&quot;,
+      &quot;question&quot;: &quot;Por que a review é separada em Standards e Spec? Dê um exemplo de falha em cada eixo.&quot;
+    },
+    {
+      &quot;type&quot;: &quot;Domínio&quot;,
+      &quot;question&quot;: &quot;Quando uma decisão merece ADR e quando deve ser apenas vocabulário em CONTEXT.md?&quot;
+    },
+    {
+      &quot;type&quot;: &quot;Customização&quot;,
+      &quot;question&quot;: &quot;Como você adaptaria esse sistema para um fluxo corporativo com TAAC, pre-commit loop e múltiplos agentes?&quot;
+    }
+  ],
+  &quot;resources&quot;: [
+    {
+      &quot;type&quot;: &quot;Leitura primária&quot;,
+      &quot;title&quot;: &quot;README — Skills For Real Engineers&quot;,
+      &quot;author&quot;: &quot;Matt Pocock / GitHub&quot;,
+      &quot;url&quot;: &quot;https://raw.githubusercontent.com/mattpocock/skills/main/README.md&quot;,
+      &quot;when&quot;: &quot;Use para entender a tese do projeto e os quatro failure modes que justificam a coleção.&quot;,
+      &quot;evidence&quot;: &quot;O README apresenta as skills como pequenas, adaptáveis e compostas para engenharia real, não vibe coding.&quot;,
+      &quot;status&quot;: &quot;approved&quot;,
+      &quot;station&quot;: 1
+    },
+    {
+      &quot;type&quot;: &quot;Leitura primária&quot;,
+      &quot;title&quot;: &quot;Página do repositório GitHub&quot;,
+      &quot;author&quot;: &quot;mattpocock/skills&quot;,
+      &quot;url&quot;: &quot;https://github.com/mattpocock/skills&quot;,
+      &quot;when&quot;: &quot;Use para observar popularidade, estrutura de pastas, licença e atividade do projeto.&quot;,
+      &quot;evidence&quot;: &quot;A página mostra o repositório público, com pastas .agents, .claude-plugin, docs, scripts e skills.&quot;,
+      &quot;status&quot;: &quot;approved&quot;,
+      &quot;station&quot;: 1
+    },
+    {
+      &quot;type&quot;: &quot;Leitura oficial&quot;,
+      &quot;title&quot;: &quot;AI Hero — posts e documentação de skills&quot;,
+      &quot;author&quot;: &quot;Matt Pocock / AI Hero&quot;,
+      &quot;url&quot;: &quot;https://www.aihero.dev/posts&quot;,
+      &quot;when&quot;: &quot;Use como índice cronológico para entender evolução, changelogs e documentação pública das skills.&quot;,
+      &quot;evidence&quot;: &quot;A página lista docs individuais para setup, ask-matt, implement, tdd, wayfinder e demais skills.&quot;,
+      &quot;status&quot;: &quot;approved&quot;,
+      &quot;station&quot;: 1
+    },
+    {
+      &quot;type&quot;: &quot;Leitura primária&quot;,
+      &quot;title&quot;: &quot;README — Quickstart&quot;,
+      &quot;author&quot;: &quot;Matt Pocock / GitHub&quot;,
+      &quot;url&quot;: &quot;https://raw.githubusercontent.com/mattpocock/skills/main/README.md&quot;,
+      &quot;when&quot;: &quot;Use para executar o caminho de instalação oficial com npx skills.&quot;,
+      &quot;evidence&quot;: &quot;O quickstart orienta instalar via npx skills e depois executar /setup-matt-pocock-skills.&quot;,
+      &quot;status&quot;: &quot;approved&quot;,
+      &quot;station&quot;: 2
+    },
+    {
+      &quot;type&quot;: &quot;Leitura primária&quot;,
+      &quot;title&quot;: &quot;CLAUDE.md — organização e regras de manutenção&quot;,
+      &quot;author&quot;: &quot;Matt Pocock / GitHub&quot;,
+      &quot;url&quot;: &quot;https://raw.githubusercontent.com/mattpocock/skills/main/CLAUDE.md&quot;,
+      &quot;when&quot;: &quot;Use para entender buckets promovidos, buckets não promovidos e sincronização de docs.&quot;,
+      &quot;evidence&quot;: &quot;O arquivo define buckets engineering, productivity, misc, personal, in-progress e deprecated.&quot;,
+      &quot;status&quot;: &quot;approved&quot;,
+      &quot;station&quot;: 2
+    },
+    {
+      &quot;type&quot;: &quot;Config primária&quot;,
+      &quot;title&quot;: &quot;.claude-plugin/plugin.json&quot;,
+      &quot;author&quot;: &quot;Matt Pocock / GitHub&quot;,
+      &quot;url&quot;: &quot;https://raw.githubusercontent.com/mattpocock/skills/main/.claude-plugin/plugin.json&quot;,
+      &quot;when&quot;: &quot;Use para auditar quais skills entram no plugin instalável.&quot;,
+      &quot;evidence&quot;: &quot;O plugin lista skills de engineering e productivity como componentes do pacote.&quot;,
+      &quot;status&quot;: &quot;approved&quot;,
+      &quot;station&quot;: 2
+    },
+    {
+      &quot;type&quot;: &quot;Documentação oficial&quot;,
+      &quot;title&quot;: &quot;The /setup-matt-pocock-skills Skill&quot;,
+      &quot;author&quot;: &quot;Matt Pocock / AI Hero&quot;,
+      &quot;url&quot;: &quot;https://www.aihero.dev/skills-setup-matt-pocock-skills&quot;,
+      &quot;when&quot;: &quot;Use para entender o bootstrap por repo e os arquivos docs/agents esperados.&quot;,
+      &quot;evidence&quot;: &quot;O setup registra issue tracker, triage labels e domínio como configuração lida pelas outras skills.&quot;,
+      &quot;status&quot;: &quot;approved&quot;,
+      &quot;station&quot;: 2
+    },
+    {
+      &quot;type&quot;: &quot;Leitura primária&quot;,
+      &quot;title&quot;: &quot;ask-matt/SKILL.md&quot;,
+      &quot;author&quot;: &quot;Matt Pocock / GitHub&quot;,
+      &quot;url&quot;: &quot;https://raw.githubusercontent.com/mattpocock/skills/main/skills/engineering/ask-matt/SKILL.md&quot;,
+      &quot;when&quot;: &quot;Use para aprender o grafo de fluxos e o papel de cada skill.&quot;,
+      &quot;evidence&quot;: &quot;A skill descreve o fluxo principal idea → ship e suas on-ramps.&quot;,
+      &quot;status&quot;: &quot;approved&quot;,
+      &quot;station&quot;: 3
+    },
+    {
+      &quot;type&quot;: &quot;Documentação oficial&quot;,
+      &quot;title&quot;: &quot;The /ask-matt Skill&quot;,
+      &quot;author&quot;: &quot;Matt Pocock / AI Hero&quot;,
+      &quot;url&quot;: &quot;https://www.aihero.dev/skills-ask-matt&quot;,
+      &quot;when&quot;: &quot;Use para entender o router como memória externa para skills user-invoked.&quot;,
+      &quot;evidence&quot;: &quot;A página explica que ask-matt orienta qual skill ou fluxo usar e em que ordem.&quot;,
+      &quot;status&quot;: &quot;approved&quot;,
+      &quot;station&quot;: 3
+    },
+    {
+      &quot;type&quot;: &quot;Leitura primária&quot;,
+      &quot;title&quot;: &quot;CONTEXT.md — linguagem do próprio repositório&quot;,
+      &quot;author&quot;: &quot;Matt Pocock / GitHub&quot;,
+      &quot;url&quot;: &quot;https://raw.githubusercontent.com/mattpocock/skills/main/CONTEXT.md&quot;,
+      &quot;when&quot;: &quot;Use para ver como o projeto define issue tracker, issue e triage role.&quot;,
+      &quot;evidence&quot;: &quot;O contexto resolve ambiguidades como backlog, issue tracker e triage role.&quot;,
+      &quot;status&quot;: &quot;approved&quot;,
+      &quot;station&quot;: 3
+    },
+    {
+      &quot;type&quot;: &quot;Documentação oficial&quot;,
+      &quot;title&quot;: &quot;The /wayfinder Skill&quot;,
+      &quot;author&quot;: &quot;Matt Pocock / AI Hero&quot;,
+      &quot;url&quot;: &quot;https://www.aihero.dev/skills-wayfinder&quot;,
+      &quot;when&quot;: &quot;Use quando o esforço é grande demais ou nebuloso para virar spec diretamente.&quot;,
+      &quot;evidence&quot;: &quot;Wayfinder transforma esforço nebuloso em mapa compartilhado de tickets de investigação.&quot;,
+      &quot;status&quot;: &quot;approved&quot;,
+      &quot;station&quot;: 3
+    },
+    {
+      &quot;type&quot;: &quot;Leitura primária&quot;,
+      &quot;title&quot;: &quot;grill-with-docs/SKILL.md&quot;,
+      &quot;author&quot;: &quot;Matt Pocock / GitHub&quot;,
+      &quot;url&quot;: &quot;https://raw.githubusercontent.com/mattpocock/skills/main/skills/engineering/grill-with-docs/SKILL.md&quot;,
+      &quot;when&quot;: &quot;Use para entender que grill-with-docs combina entrevista com domínio e documentação.&quot;,
+      &quot;evidence&quot;: &quot;A skill executa uma sessão de grilling usando domain-modeling.&quot;,
+      &quot;status&quot;: &quot;approved&quot;,
+      &quot;station&quot;: 4
+    },
+    {
+      &quot;type&quot;: &quot;Leitura primária&quot;,
+      &quot;title&quot;: &quot;domain-modeling/SKILL.md&quot;,
+      &quot;author&quot;: &quot;Matt Pocock / GitHub&quot;,
+      &quot;url&quot;: &quot;https://raw.githubusercontent.com/mattpocock/skills/main/skills/engineering/domain-modeling/SKILL.md&quot;,
+      &quot;when&quot;: &quot;Use para aprender o formato de CONTEXT.md, ADRs e resolução de linguagem ambígua.&quot;,
+      &quot;evidence&quot;: &quot;Domain-modeling desafia termos, propõe linguagem canônica e atualiza CONTEXT.md inline.&quot;,
+      &quot;status&quot;: &quot;approved&quot;,
+      &quot;station&quot;: 4
+    },
+    {
+      &quot;type&quot;: &quot;Changelog oficial&quot;,
+      &quot;title&quot;: &quot;v1.1 — Grilling Skill Improvements&quot;,
+      &quot;author&quot;: &quot;Matt Pocock / AI Hero&quot;,
+      &quot;url&quot;: &quot;https://www.aihero.dev/skills/skills-changelog-v1-1-wayfinder-to-spec-to-tickets-grilling-improvements&quot;,
+      &quot;when&quot;: &quot;Use para entender por que grilling recebeu gates contra auto-grilling e implementação prematura.&quot;,
+      &quot;evidence&quot;: &quot;O changelog cita confirmação antes de implementar e distinção entre fatos e decisões.&quot;,
+      &quot;status&quot;: &quot;approved&quot;,
+      &quot;station&quot;: 4
+    },
+    {
+      &quot;type&quot;: &quot;Vídeo candidato&quot;,
+      &quot;title&quot;: &quot;I stopped using /grill-me for coding. Here&#x27;s what I use instead&quot;,
+      &quot;author&quot;: &quot;Matt Pocock / YouTube&quot;,
+      &quot;url&quot;: &quot;https://www.youtube.com/watch?v=6BB6exR8Zd8&quot;,
+      &quot;when&quot;: &quot;Use como complemento visual; trate como weak signal porque não validei transcript completa.&quot;,
+      &quot;evidence&quot;: &quot;A descrição apresenta /grill-with-docs como evolução de /grill-me com DDD.&quot;,
+      &quot;status&quot;: &quot;weak_signal&quot;,
+      &quot;station&quot;: 4
+    },
+    {
+      &quot;type&quot;: &quot;Leitura primária&quot;,
+      &quot;title&quot;: &quot;to-spec/SKILL.md&quot;,
+      &quot;author&quot;: &quot;Matt Pocock / GitHub&quot;,
+      &quot;url&quot;: &quot;https://raw.githubusercontent.com/mattpocock/skills/main/skills/engineering/to-spec/SKILL.md&quot;,
+      &quot;when&quot;: &quot;Use para aprender o template real de spec e as decisões que devem ser carregadas.&quot;,
+      &quot;evidence&quot;: &quot;A skill transforma a conversa em spec e inclui problema, solução, user stories e decisões de teste.&quot;,
+      &quot;status&quot;: &quot;approved&quot;,
+      &quot;station&quot;: 5
+    },
+    {
+      &quot;type&quot;: &quot;Documentação oficial&quot;,
+      &quot;title&quot;: &quot;The /to-spec Skill&quot;,
+      &quot;author&quot;: &quot;Matt Pocock / AI Hero&quot;,
+      &quot;url&quot;: &quot;https://www.aihero.dev/skills-to-spec&quot;,
+      &quot;when&quot;: &quot;Use para entender pré-requisitos, deep modules e posicionamento no fluxo.&quot;,
+      &quot;evidence&quot;: &quot;A página coloca to-spec depois do alinhamento e antes de quebrar o trabalho em tickets.&quot;,
+      &quot;status&quot;: &quot;approved&quot;,
+      &quot;station&quot;: 5
+    },
+    {
+      &quot;type&quot;: &quot;Documentação oficial&quot;,
+      &quot;title&quot;: &quot;The /to-tickets Skill&quot;,
+      &quot;author&quot;: &quot;Matt Pocock / AI Hero&quot;,
+      &quot;url&quot;: &quot;https://www.aihero.dev/skills-to-tickets&quot;,
+      &quot;when&quot;: &quot;Use para dominar tracer bullets, blockers e diferença entre tracker local e real.&quot;,
+      &quot;evidence&quot;: &quot;to-tickets cria tickets verticais com blocking edges e frontier de trabalho.&quot;,
+      &quot;status&quot;: &quot;approved&quot;,
+      &quot;station&quot;: 5
+    },
+    {
+      &quot;type&quot;: &quot;Changelog oficial&quot;,
+      &quot;title&quot;: &quot;v1.1 — renames para /to-spec e /to-tickets&quot;,
+      &quot;author&quot;: &quot;Matt Pocock / AI Hero&quot;,
+      &quot;url&quot;: &quot;https://www.aihero.dev/skills/skills-changelog-v1-1-wayfinder-to-spec-to-tickets-grilling-improvements&quot;,
+      &quot;when&quot;: &quot;Use para entender por que PRD virou spec e issues/plan viraram tickets.&quot;,
+      &quot;evidence&quot;: &quot;O changelog explica a unificação de /to-plan e /to-issues em /to-tickets.&quot;,
+      &quot;status&quot;: &quot;approved&quot;,
+      &quot;station&quot;: 5
+    },
+    {
+      &quot;type&quot;: &quot;Leitura primária&quot;,
+      &quot;title&quot;: &quot;implement/SKILL.md&quot;,
+      &quot;author&quot;: &quot;Matt Pocock / GitHub&quot;,
+      &quot;url&quot;: &quot;https://raw.githubusercontent.com/mattpocock/skills/main/skills/engineering/implement/SKILL.md&quot;,
+      &quot;when&quot;: &quot;Use para entender o contrato mínimo da execução.&quot;,
+      &quot;evidence&quot;: &quot;Implement usa TDD em seams pré-acordados, typecheck, testes e code-review antes do commit.&quot;,
+      &quot;status&quot;: &quot;approved&quot;,
+      &quot;station&quot;: 6
+    },
+    {
+      &quot;type&quot;: &quot;Documentação oficial&quot;,
+      &quot;title&quot;: &quot;The /implement Skill&quot;,
+      &quot;author&quot;: &quot;Matt Pocock / AI Hero&quot;,
+      &quot;url&quot;: &quot;https://www.aihero.dev/skills-implement&quot;,
+      &quot;when&quot;: &quot;Use para entender implement como mãos da cadeia, não cabeça.&quot;,
+      &quot;evidence&quot;: &quot;A página diz que implement executa uma spec ou tickets já definidos.&quot;,
+      &quot;status&quot;: &quot;approved&quot;,
+      &quot;station&quot;: 6
+    },
+    {
+      &quot;type&quot;: &quot;Leitura primária&quot;,
+      &quot;title&quot;: &quot;tdd/SKILL.md&quot;,
+      &quot;author&quot;: &quot;Matt Pocock / GitHub&quot;,
+      &quot;url&quot;: &quot;https://raw.githubusercontent.com/mattpocock/skills/main/skills/engineering/tdd/SKILL.md&quot;,
+      &quot;when&quot;: &quot;Use para aprender red-green, seams, anti-patterns e vertical slicing.&quot;,
+      &quot;evidence&quot;: &quot;A skill exige testes em seams públicos e um teste por fatia vertical.&quot;,
+      &quot;status&quot;: &quot;approved&quot;,
+      &quot;station&quot;: 6
+    },
+    {
+      &quot;type&quot;: &quot;Leitura primária&quot;,
+      &quot;title&quot;: &quot;diagnosing-bugs/SKILL.md&quot;,
+      &quot;author&quot;: &quot;Matt Pocock / GitHub&quot;,
+      &quot;url&quot;: &quot;https://raw.githubusercontent.com/mattpocock/skills/main/skills/engineering/diagnosing-bugs/SKILL.md&quot;,
+      &quot;when&quot;: &quot;Use para bugs difíceis, flakiness e regressões de performance.&quot;,
+      &quot;evidence&quot;: &quot;A fase 1 exige um loop tight e red-capable antes de teorizar sobre a causa.&quot;,
+      &quot;status&quot;: &quot;approved&quot;,
+      &quot;station&quot;: 6
+    },
+    {
+      &quot;type&quot;: &quot;Vídeo candidato&quot;,
+      &quot;title&quot;: &quot;Red Green Refactor is OP With Claude Code&quot;,
+      &quot;author&quot;: &quot;Matt Pocock / YouTube&quot;,
+      &quot;url&quot;: &quot;https://www.youtube.com/watch?v=hYZdIwFIy-c&quot;,
+      &quot;when&quot;: &quot;Use como complemento visual; trate como weak signal porque não validei transcript completa.&quot;,
+      &quot;evidence&quot;: &quot;A descrição relaciona agentes de código com TDD e red-green-refactor.&quot;,
+      &quot;status&quot;: &quot;weak_signal&quot;,
+      &quot;station&quot;: 6
+    },
+    {
+      &quot;type&quot;: &quot;Leitura primária&quot;,
+      &quot;title&quot;: &quot;code-review/SKILL.md&quot;,
+      &quot;author&quot;: &quot;Matt Pocock / GitHub&quot;,
+      &quot;url&quot;: &quot;https://raw.githubusercontent.com/mattpocock/skills/main/skills/engineering/code-review/SKILL.md&quot;,
+      &quot;when&quot;: &quot;Use para estruturar revisão de branch/PR desde um ponto fixo.&quot;,
+      &quot;evidence&quot;: &quot;A review compara HEAD com um fixed point em dois eixos: Standards e Spec.&quot;,
+      &quot;status&quot;: &quot;approved&quot;,
+      &quot;station&quot;: 7
+    },
+    {
+      &quot;type&quot;: &quot;Leitura primária&quot;,
+      &quot;title&quot;: &quot;codebase-design/SKILL.md&quot;,
+      &quot;author&quot;: &quot;Matt Pocock / GitHub&quot;,
+      &quot;url&quot;: &quot;https://raw.githubusercontent.com/mattpocock/skills/main/skills/engineering/codebase-design/SKILL.md&quot;,
+      &quot;when&quot;: &quot;Use como vocabulário-base para módulos profundos, seams e adapters.&quot;,
+      &quot;evidence&quot;: &quot;A skill define deep modules como comportamento amplo atrás de uma interface pequena.&quot;,
+      &quot;status&quot;: &quot;approved&quot;,
+      &quot;station&quot;: 7
+    },
+    {
+      &quot;type&quot;: &quot;Documentação oficial&quot;,
+      &quot;title&quot;: &quot;The /improve-codebase-architecture Skill&quot;,
+      &quot;author&quot;: &quot;Matt Pocock / AI Hero&quot;,
+      &quot;url&quot;: &quot;https://www.aihero.dev/skills-improve-codebase-architecture&quot;,
+      &quot;when&quot;: &quot;Use para health check arquitetural periódico com relatório HTML.&quot;,
+      &quot;evidence&quot;: &quot;A skill busca oportunidades de deepening e apresenta cards em relatório HTML.&quot;,
+      &quot;status&quot;: &quot;approved&quot;,
+      &quot;station&quot;: 7
+    },
+    {
+      &quot;type&quot;: &quot;Vídeo candidato&quot;,
+      &quot;title&quot;: &quot;How To De-Slop A Codebase Ruined By AI&quot;,
+      &quot;author&quot;: &quot;Matt Pocock / YouTube&quot;,
+      &quot;url&quot;: &quot;https://www.youtube.com/watch?v=3MP8D-mdheA&quot;,
+      &quot;when&quot;: &quot;Use como complemento visual de arquitetura; weak signal sem transcript validada.&quot;,
+      &quot;evidence&quot;: &quot;A descrição conecta qualidade de codebase e skills de arquitetura.&quot;,
+      &quot;status&quot;: &quot;weak_signal&quot;,
+      &quot;station&quot;: 7
+    },
+    {
+      &quot;type&quot;: &quot;Leitura primária&quot;,
+      &quot;title&quot;: &quot;writing-great-skills/SKILL.md&quot;,
+      &quot;author&quot;: &quot;Matt Pocock / GitHub&quot;,
+      &quot;url&quot;: &quot;https://raw.githubusercontent.com/mattpocock/skills/main/skills/productivity/writing-great-skills/SKILL.md&quot;,
+      &quot;when&quot;: &quot;Use como referência para desenhar skills determinísticas, pequenas e previsíveis.&quot;,
+      &quot;evidence&quot;: &quot;A skill afirma que predictability é a virtude central de uma skill.&quot;,
+      &quot;status&quot;: &quot;approved&quot;,
+      &quot;station&quot;: 8
+    },
+    {
+      &quot;type&quot;: &quot;Documentação oficial&quot;,
+      &quot;title&quot;: &quot;The /handoff Skill&quot;,
+      &quot;author&quot;: &quot;Matt Pocock / AI Hero&quot;,
+      &quot;url&quot;: &quot;https://www.aihero.dev/skills-handoff&quot;,
+      &quot;when&quot;: &quot;Use para preservar o núcleo de uma sessão sem carregar transcrição inteira.&quot;,
+      &quot;evidence&quot;: &quot;Handoff compacta a conversa em documento para outro agente continuar.&quot;,
+      &quot;status&quot;: &quot;approved&quot;,
+      &quot;station&quot;: 8
+    },
+    {
+      &quot;type&quot;: &quot;Documentação oficial&quot;,
+      &quot;title&quot;: &quot;The /research Skill&quot;,
+      &quot;author&quot;: &quot;Matt Pocock / AI Hero&quot;,
+      &quot;url&quot;: &quot;https://www.aihero.dev/skills-research&quot;,
+      &quot;when&quot;: &quot;Use para delegar leitura com fontes primárias antes de decisões de design.&quot;,
+      &quot;evidence&quot;: &quot;Research investiga apenas fontes primárias e salva um Markdown citado.&quot;,
+      &quot;status&quot;: &quot;approved&quot;,
+      &quot;station&quot;: 8
+    },
+    {
+      &quot;type&quot;: &quot;Changelog oficial&quot;,
+      &quot;title&quot;: &quot;v1.1 — lifecycle, wayfinder, research e prototype&quot;,
+      &quot;author&quot;: &quot;Matt Pocock / AI Hero&quot;,
+      &quot;url&quot;: &quot;https://www.aihero.dev/skills/skills-changelog-v1-1-wayfinder-to-spec-to-tickets-grilling-improvements&quot;,
+      &quot;when&quot;: &quot;Use para entender a evolução do sistema e como o ciclo ficou mais completo.&quot;,
+      &quot;evidence&quot;: &quot;O changelog descreve o fluxo grilling → spec → tickets → implement → code-review.&quot;,
+      &quot;status&quot;: &quot;approved&quot;,
+      &quot;station&quot;: 8
+    },
+    {
+      &quot;type&quot;: &quot;Vídeo candidato&quot;,
+      &quot;title&quot;: &quot;5 Claude Code skills I use every single day&quot;,
+      &quot;author&quot;: &quot;Matt Pocock / YouTube&quot;,
+      &quot;url&quot;: &quot;https://www.youtube.com/watch?v=EJyuu6zlQCg&quot;,
+      &quot;when&quot;: &quot;Use como visão visual do repertório; weak signal sem transcript validada.&quot;,
+      &quot;evidence&quot;: &quot;A descrição menciona skills diárias para orientar Claude Code e melhorar qualidade.&quot;,
+      &quot;status&quot;: &quot;weak_signal&quot;,
+      &quot;station&quot;: 8
+    }
+  ],
+  &quot;audit&quot;: {
+    &quot;generated_at&quot;: &quot;2026-07-08&quot;,
+    &quot;candidate_resources_inspected&quot;: 34,
+    &quot;approved_resources&quot;: 29,
+    &quot;weak_signal_resources&quot;: 4,
+    &quot;rejected_resources&quot;: 3,
+    &quot;declared_gaps&quot;: [
+      &quot;Vídeos do YouTube foram encontrados, mas não promovi como nervos principais quando não havia transcript/trecho verificável suficiente via ferramenta de leitura.&quot;,
+      &quot;Não clonei o repositório localmente porque o ambiente de container não resolveu github.com; usei GitHub raw, página do repo e documentação oficial AI Hero via web.&quot;,
+      &quot;Não incluí papers acadêmicos porque o objeto estudado é um skill pack operacional com fontes primárias melhores no próprio repo e docs oficiais.&quot;
+    ],
+    &quot;method&quot;: &quot;Trust by Inspection: GitHub raw, README, CLAUDE.md, CONTEXT.md, plugin.json, SKILL.md individuais e documentação AI Hero foram inspecionados antes da curadoria.&quot;
+  }
+}</script>
+  <script>
+    const progressKey = "trilha-mattpocock-skills-completa:progress";
+    const themeKey = "trilha-mattpocock-skills-completa:theme";
+    const boxes = [...document.querySelectorAll('[data-progress]')];
+    const saved = JSON.parse(localStorage.getItem(progressKey) || '{}');
+    function updateProgress() {
+      const done = boxes.filter(b => b.checked).length;
+      const total = boxes.length || 1;
+      document.getElementById('progressFill').style.width = Math.round(done/total*100) + '%';
+      document.getElementById('progressText').textContent = `${done}/${total} estações concluídas`;
+    }
+    boxes.forEach(box => { box.checked = !!saved[box.dataset.progress]; box.addEventListener('change', () => { saved[box.dataset.progress] = box.checked; localStorage.setItem(progressKey, JSON.stringify(saved)); updateProgress(); }); });
+    updateProgress();
+    const storedTheme = localStorage.getItem(themeKey); if (storedTheme) document.documentElement.dataset.theme = storedTheme;
+    document.getElementById('themeBtn').addEventListener('click', () => { const next = document.documentElement.dataset.theme === 'dark' ? 'light' : 'dark'; document.documentElement.dataset.theme = next; localStorage.setItem(themeKey, next); });
+    document.querySelectorAll('[data-copy]').forEach(btn => btn.addEventListener('click', async () => { await navigator.clipboard.writeText(btn.dataset.copy); const old = btn.textContent; btn.textContent = 'Copiado'; setTimeout(() => btn.textContent = old, 1100); }));
+    const input = document.getElementById('searchInput');
+    input.addEventListener('input', () => {
+      const q = input.value.trim().toLowerCase();
+      document.querySelectorAll('.station').forEach(st => {
+        const found = !q || st.dataset.search.includes(q) || st.textContent.toLowerCase().includes(q);
+        st.classList.toggle('hidden', !found);
+      });
+    });
+    const observer = new IntersectionObserver(entries => {
+      entries.forEach(entry => { if (entry.isIntersecting) { document.querySelectorAll('.nav-item').forEach(a => a.classList.remove('active')); const link = document.querySelector(`.nav-item[href="#${entry.target.id}"]`); if (link) link.classList.add('active'); } });
+    }, { rootMargin: '-20% 0px -70% 0px', threshold: 0.01 });
+    document.querySelectorAll('.station').forEach(s => observer.observe(s));
+  </script>
+</body>
+</html>

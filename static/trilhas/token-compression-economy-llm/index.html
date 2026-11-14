@@ -1,0 +1,1149 @@
+<!DOCTYPE html>
+<html
+  lang="pt-BR"
+  class="scroll-smooth"
+  x-data="{
+    dark: window.matchMedia('(prefers-color-scheme: dark)').matches,
+    mobileNav: false,
+    toggleDark() {
+      this.dark = !this.dark;
+      document.documentElement.classList.toggle('dark', this.dark);
+      document.documentElement.style.colorScheme = this.dark ? 'dark' : 'light';
+    }
+  }"
+  x-init="
+    document.documentElement.classList.toggle('dark', dark);
+    document.documentElement.style.colorScheme = dark ? 'dark' : 'light';
+  "
+>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#0f172a" media="(prefers-color-scheme: dark)">
+  <meta name="theme-color" content="#f8fafc" media="(prefers-color-scheme: light)">
+  <title>Learning Trail — Compressão e Economia de Tokens para LLMs</title>
+  <link rel="preconnect" href="https://cdn.tailwindcss.com">
+  <link rel="preconnect" href="https://unpkg.com">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/@phosphor-icons/web"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            primary: { DEFAULT: '#6366f1', hover: '#4f46e5' },
+          },
+          fontFamily: {
+            sans: ['Inter', 'system-ui', 'sans-serif'],
+          },
+        }
+      }
+    }
+  </script>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+    .custom-scrollbar::-webkit-scrollbar { width: 4px; }
+    .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
+    .custom-scrollbar::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
+    .dark .custom-scrollbar::-webkit-scrollbar-thumb { background: #334155; }
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        transition-duration: 0.01ms !important;
+        animation-duration: 0.01ms !important;
+      }
+    }
+    .nav-link[aria-current="true"] {
+      background-color: rgb(238 242 255);
+      color: #4f46e5;
+      border-color: #c7d2fe;
+    }
+    .dark .nav-link[aria-current="true"] {
+      background-color: rgb(30 27 75 / 0.5);
+      color: #a5b4fc;
+      border-color: #3730a3;
+    }
+    .overscroll-y-contain { overscroll-behavior-y: contain; }
+    .skip-link {
+      position: absolute;
+      top: -100%;
+      left: 1rem;
+      z-index: 100;
+      padding: 0.5rem 1rem;
+      background: #6366f1;
+      color: white;
+      border-radius: 0 0 0.5rem 0.5rem;
+      font-weight: 600;
+      transition: top 0.2s;
+    }
+    .skip-link:focus { top: 0; }
+  </style>
+</head>
+<body
+  class="bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100 font-sans antialiased"
+  style="color-scheme: light;"
+  :style="dark ? 'color-scheme: dark' : 'color-scheme: light'"
+>
+
+  <a href="#main-content" class="skip-link focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white">
+    Ir para o conteúdo principal
+  </a>
+
+  <div class="flex h-screen overflow-hidden">
+
+    <!-- SIDEBAR -->
+    <aside
+      id="sidebar"
+      class="hidden md:flex flex-col w-72 shrink-0 bg-white dark:bg-slate-900 border-r border-slate-200 dark:border-slate-800 overflow-y-auto custom-scrollbar z-10 overscroll-y-contain"
+      aria-label="Mapa da trilha"
+    >
+      <div class="p-5 flex flex-col h-full">
+        <div class="flex items-center gap-3 mb-8 min-w-0">
+          <div class="flex items-center justify-center w-9 h-9 rounded-xl bg-indigo-600 shrink-0 shadow-sm">
+            <i class="ph-fill ph-compass text-white text-lg" aria-hidden="true"></i>
+          </div>
+          <div class="min-w-0">
+            <h1 class="text-sm font-bold truncate text-slate-900 dark:text-slate-100">Compressão e Economia de Tokens</h1>
+            <p class="text-xs text-slate-500 dark:text-slate-400 font-medium uppercase tracking-widest">Learning Trail</p>
+          </div>
+        </div>
+
+        <div class="flex flex-wrap gap-1.5 mb-6">
+          <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 text-xs font-semibold">
+            <i class="ph ph-graduation-cap text-xs" aria-hidden="true"></i> Avançado
+          </span>
+          <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-indigo-50 dark:bg-indigo-950 text-indigo-700 dark:text-indigo-300 text-xs font-semibold">
+            <i class="ph ph-map-pin text-xs" aria-hidden="true"></i> 9 estações
+          </span>
+          <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-emerald-50 dark:bg-emerald-950 text-emerald-700 dark:text-emerald-300 text-xs font-semibold">
+            <i class="ph ph-check-circle text-xs" aria-hidden="true"></i> 27 validados
+          </span>
+        </div>
+
+        <nav aria-label="Estações da trilha">
+          <p class="text-xs font-bold text-slate-400 dark:text-slate-500 uppercase tracking-widest mb-3 px-1">Estações</p>
+          <ul class="space-y-0.5" role="list">
+            <li>
+              <a href="#estacao-1" class="nav-link flex items-start gap-3 p-2.5 rounded-lg border border-transparent text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors duration-150" style="touch-action: manipulation">
+                <span class="flex items-center justify-center w-5 h-5 rounded-full bg-slate-200 dark:bg-slate-700 text-slate-600 dark:text-slate-300 text-xs font-bold shrink-0 mt-0.5">1</span>
+                <span class="min-w-0">
+                  <span class="block text-sm font-medium leading-snug">A Economia dos Tokens</span>
+                  <span class="flex items-center gap-1 text-xs text-slate-400 dark:text-slate-500 mt-0.5"><i class="ph ph-clock" aria-hidden="true"></i><span>~8 min</span></span>
+                </span>
+              </a>
+            </li>
+            <li>
+              <a href="#estacao-2" class="nav-link flex items-start gap-3 p-2.5 rounded-lg border border-transparent text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors duration-150" style="touch-action: manipulation">
+                <span class="flex items-center justify-center w-5 h-5 rounded-full bg-slate-200 dark:bg-slate-700 text-slate-600 dark:text-slate-300 text-xs font-bold shrink-0 mt-0.5">2</span>
+                <span class="min-w-0">
+                  <span class="block text-sm font-medium leading-snug">RTK — O Matador de Tokens</span>
+                  <span class="flex items-center gap-1 text-xs text-slate-400 dark:text-slate-500 mt-0.5"><i class="ph ph-clock" aria-hidden="true"></i><span>~10 min</span></span>
+                </span>
+              </a>
+            </li>
+            <li>
+              <a href="#estacao-3" class="nav-link flex items-start gap-3 p-2.5 rounded-lg border border-transparent text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors duration-150" style="touch-action: manipulation">
+                <span class="flex items-center justify-center w-5 h-5 rounded-full bg-slate-200 dark:bg-slate-700 text-slate-600 dark:text-slate-300 text-xs font-bold shrink-0 mt-0.5">3</span>
+                <span class="min-w-0">
+                  <span class="block text-sm font-medium leading-snug">Headroom — Context Compression</span>
+                  <span class="flex items-center gap-1 text-xs text-slate-400 dark:text-slate-500 mt-0.5"><i class="ph ph-clock" aria-hidden="true"></i><span>~10 min</span></span>
+                </span>
+              </a>
+            </li>
+            <li>
+              <a href="#estacao-4" class="nav-link flex items-start gap-3 p-2.5 rounded-lg border border-transparent text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors duration-150" style="touch-action: manipulation">
+                <span class="flex items-center justify-center w-5 h-5 rounded-full bg-slate-200 dark:bg-slate-700 text-slate-600 dark:text-slate-300 text-xs font-bold shrink-0 mt-0.5">4</span>
+                <span class="min-w-0">
+                  <span class="block text-sm font-medium leading-snug">Caveman — Output Efficiency</span>
+                  <span class="flex items-center gap-1 text-xs text-slate-400 dark:text-slate-500 mt-0.5"><i class="ph ph-clock" aria-hidden="true"></i><span>~8 min</span></span>
+                </span>
+              </a>
+            </li>
+            <li>
+              <a href="#estacao-5" class="nav-link flex items-start gap-3 p-2.5 rounded-lg border border-transparent text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors duration-150" style="touch-action: manipulation">
+                <span class="flex items-center justify-center w-5 h-5 rounded-full bg-slate-200 dark:bg-slate-700 text-slate-600 dark:text-slate-300 text-xs font-bold shrink-0 mt-0.5">5</span>
+                <span class="min-w-0">
+                  <span class="block text-sm font-medium leading-snug">LLMLingua — Prompt Compression</span>
+                  <span class="flex items-center gap-1 text-xs text-slate-400 dark:text-slate-500 mt-0.5"><i class="ph ph-clock" aria-hidden="true"></i><span>~10 min</span></span>
+                </span>
+              </a>
+            </li>
+            <li>
+              <a href="#estacao-6" class="nav-link flex items-start gap-3 p-2.5 rounded-lg border border-transparent text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors duration-150" style="touch-action: manipulation">
+                <span class="flex items-center justify-center w-5 h-5 rounded-full bg-slate-200 dark:bg-slate-700 text-slate-600 dark:text-slate-300 text-xs font-bold shrink-0 mt-0.5">6</span>
+                <span class="min-w-0">
+                  <span class="block text-sm font-medium leading-snug">KV Cache &amp; Prompt Caching</span>
+                  <span class="flex items-center gap-1 text-xs text-slate-400 dark:text-slate-500 mt-0.5"><i class="ph ph-clock" aria-hidden="true"></i><span>~10 min</span></span>
+                </span>
+              </a>
+            </li>
+            <li>
+              <a href="#estacao-7" class="nav-link flex items-start gap-3 p-2.5 rounded-lg border border-transparent text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors duration-150" style="touch-action: manipulation">
+                <span class="flex items-center justify-center w-5 h-5 rounded-full bg-slate-200 dark:bg-slate-700 text-slate-600 dark:text-slate-300 text-xs font-bold shrink-0 mt-0.5">7</span>
+                <span class="min-w-0">
+                  <span class="block text-sm font-medium leading-snug">Inference Engines: vLLM, SGLang, TRT-LLM</span>
+                  <span class="flex items-center gap-1 text-xs text-slate-400 dark:text-slate-500 mt-0.5"><i class="ph ph-clock" aria-hidden="true"></i><span>~10 min</span></span>
+                </span>
+              </a>
+            </li>
+            <li>
+              <a href="#estacao-8" class="nav-link flex items-start gap-3 p-2.5 rounded-lg border border-transparent text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors duration-150" style="touch-action: manipulation">
+                <span class="flex items-center justify-center w-5 h-5 rounded-full bg-slate-200 dark:bg-slate-700 text-slate-600 dark:text-slate-300 text-xs font-bold shrink-0 mt-0.5">8</span>
+                <span class="min-w-0">
+                  <span class="block text-sm font-medium leading-snug">Quantização &amp; Model Compression</span>
+                  <span class="flex items-center gap-1 text-xs text-slate-400 dark:text-slate-500 mt-0.5"><i class="ph ph-clock" aria-hidden="true"></i><span>~8 min</span></span>
+                </span>
+              </a>
+            </li>
+            <li>
+              <a href="#estacao-9" class="nav-link flex items-start gap-3 p-2.5 rounded-lg border border-transparent text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors duration-150" style="touch-action: manipulation">
+                <span class="flex items-center justify-center w-5 h-5 rounded-full bg-slate-200 dark:bg-slate-700 text-slate-600 dark:text-slate-300 text-xs font-bold shrink-0 mt-0.5">9</span>
+                <span class="min-w-0">
+                  <span class="block text-sm font-medium leading-snug">Context Engineering — O Meta-Skill</span>
+                  <span class="flex items-center gap-1 text-xs text-slate-400 dark:text-slate-500 mt-0.5"><i class="ph ph-clock" aria-hidden="true"></i><span>~10 min</span></span>
+                </span>
+              </a>
+            </li>
+            <li class="pt-3 mt-2 border-t border-slate-100 dark:border-slate-800">
+              <a href="#boss-final" class="nav-link flex items-center gap-3 p-2.5 rounded-lg border border-transparent text-amber-700 dark:text-amber-400 hover:bg-amber-50 dark:hover:bg-amber-950/40 transition-colors duration-150" style="touch-action: manipulation">
+                <i class="ph-fill ph-sword text-lg shrink-0" aria-hidden="true"></i>
+                <span class="text-sm font-bold">Boss Final</span>
+              </a>
+            </li>
+          </ul>
+        </nav>
+
+        <div class="mt-auto pt-4 border-t border-slate-100 dark:border-slate-800">
+          <p class="text-xs text-slate-400 dark:text-slate-500 flex items-center gap-1.5">
+            <i class="ph ph-shield-check text-emerald-500" aria-hidden="true"></i>
+            <span>Trust by Inspection</span>
+          </p>
+        </div>
+      </div>
+    </aside>
+
+    <!-- MAIN -->
+    <div class="flex flex-col flex-1 min-w-0 overflow-hidden">
+      <header class="sticky top-0 z-20 bg-white/80 dark:bg-slate-900/80 backdrop-blur-md border-b border-slate-200 dark:border-slate-800">
+        <div class="flex items-center justify-between px-4 h-14 gap-3">
+          <div class="flex md:hidden items-center gap-2 min-w-0">
+            <i class="ph-fill ph-compass text-indigo-600 dark:text-indigo-400 text-xl shrink-0" aria-hidden="true"></i>
+            <span class="text-sm font-bold truncate">Compressão de Tokens</span>
+          </div>
+          <p class="hidden md:block text-sm text-slate-500 dark:text-slate-400">Learning Trail</p>
+          <div class="flex items-center gap-2 ml-auto">
+            <button @click="toggleDark()" :aria-pressed="dark" aria-label="Alternar modo escuro" class="p-2 rounded-full text-slate-500 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors duration-150" style="touch-action: manipulation">
+              <i class="ph text-lg" :class="dark ? 'ph-sun' : 'ph-moon'" aria-hidden="true"></i>
+            </button>
+          </div>
+        </div>
+      </header>
+
+      <main id="main-content" class="flex-1 overflow-y-auto custom-scrollbar">
+        <div class="max-w-2xl mx-auto px-5 py-10 md:py-16">
+
+          <!-- HERO -->
+          <header class="mb-14">
+            <div class="flex flex-wrap gap-2 mb-5" role="list" aria-label="Metadados da trilha">
+              <span role="listitem" class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 text-xs font-semibold border border-slate-200 dark:border-slate-700">Nível:&nbsp;Avançado</span>
+              <span role="listitem" class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 text-xs font-semibold border border-slate-200 dark:border-slate-700">9&nbsp;Estações</span>
+              <span role="listitem" class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-indigo-50 dark:bg-indigo-950 text-indigo-700 dark:text-indigo-300 text-xs font-semibold border border-indigo-200 dark:border-indigo-900">
+                <i class="ph ph-check" aria-hidden="true"></i> 27&nbsp;Nervos Validados
+              </span>
+            </div>
+            <h2 class="text-3xl md:text-4xl font-extrabold tracking-tight mb-5 text-pretty">
+              Compressão e Economia de Tokens para LLMs
+            </h2>
+            <div class="rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-5">
+              <h3 class="text-xs font-bold uppercase tracking-widest text-slate-400 dark:text-slate-500 mb-2 flex items-center gap-1.5">
+                <i class="ph ph-target" aria-hidden="true"></i> Objetivo
+              </h3>
+              <p class="text-slate-700 dark:text-slate-300 leading-relaxed text-pretty">
+                Dominar o ecossistema de compressão e economia de tokens para LLMs em 2026. Ao final, você será capaz de: escolher e combinar ferramentas de compressão (RTK, Headroom, Caveman, LLMLingua), implementar prompt caching e KV cache optimization, selecionar o engine de inferência ideal (vLLM, SGLang, TensorRT-LLM), aplicar quantização em modelos, e projetar pipelines de context engineering que reduzem custos em 80-99%.
+              </p>
+            </div>
+          </header>
+
+          <hr class="border-slate-200 dark:border-slate-800 mb-14" aria-hidden="true">
+
+          <!-- ESTAÇÃO 1 -->
+          <section id="estacao-1" class="mb-16 scroll-mt-20" aria-labelledby="estacao-1-titulo">
+            <div class="flex items-center gap-3 mb-5">
+              <span class="flex items-center justify-center w-8 h-8 rounded-full bg-indigo-600 text-white font-bold text-sm shrink-0 shadow" aria-hidden="true">1</span>
+              <h2 id="estacao-1-titulo" class="text-xl font-bold text-pretty">A Economia dos Tokens — Por Que Isso Importa</h2>
+            </div>
+            <p class="text-xs text-slate-400 dark:text-slate-500 mb-5 flex items-center gap-3 font-medium">
+              <span class="flex items-center gap-1"><i class="ph ph-clock" aria-hidden="true"></i> ~8 min leitura</span>
+              <span class="flex items-center gap-1"><i class="ph ph-plug" aria-hidden="true"></i> 3 nervo(s)</span>
+            </p>
+            <div class="text-slate-700 dark:text-slate-300 leading-relaxed mb-8 space-y-3 text-[1.0625rem]">
+              <p>Todo token enviado a um LLM custa dinheiro — tanto no input quanto no output. Enquanto os preços de API caíram ~80% de 2025 para 2026, o volume de inferência cresce mais rápido. Agentes de codificação que fazem 50-200 chamadas LLM por tarefa transformam um preço barato por token em um custo caro por tarefa. O problema se complica em três frentes: <strong>context bloat</strong> (sessões multi-turn acumulam tokens obsoletos), <strong>computação redundante</strong> (sem caching, o modelo recompute atenção sobre o mesmo prefixo a cada chamada), e <strong>hardware subutilizado</strong> (configurações default deixam GPUs ociosas).</p>
+              <p>A tese central: <strong>otimização de tokens é um problema de context engineering, não de encurtamento de prompts</strong>. A maioria das equipes perde tempo encurtando prompts quando os verdadeiros drivers de custo são context bloat, tool schemas ociosos e histórico de conversação obsoleto.</p>
+            </div>
+            <div class="rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900/60 overflow-hidden mb-6">
+              <div class="flex items-center gap-2 px-4 py-3 border-b border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900">
+                <i class="ph ph-plug text-indigo-500 dark:text-indigo-400" aria-hidden="true"></i>
+                <h3 class="text-xs font-bold uppercase tracking-widest text-slate-600 dark:text-slate-300">Nervos Validados</h3>
+              </div>
+              <ul class="divide-y divide-slate-200 dark:divide-slate-800" role="list">
+                <li class="p-4">
+                  <div class="flex items-start gap-3">
+                    <div class="flex items-center justify-center w-9 h-9 rounded-lg bg-indigo-50 dark:bg-indigo-950 text-indigo-600 dark:text-indigo-400 shrink-0 mt-0.5" aria-hidden="true"><i class="ph-fill ph-article text-lg"></i></div>
+                    <div class="min-w-0 flex-1">
+                      <a href="https://www.glukhov.org/llm-performance/cost-effective-llm-applications" target="_blank" rel="noopener noreferrer" class="text-sm font-bold text-slate-900 dark:text-white hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors duration-150 inline-flex items-center gap-1">
+                        <span class="truncate">Reduce LLM Costs: Token Optimization Strategies</span>
+                        <i class="ph ph-arrow-up-right text-xs shrink-0 opacity-50" aria-hidden="true"></i>
+                      </a>
+                      <p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">Rost Glukhov &middot; Artigo técnico &middot; 2026</p>
+                      <div class="mt-2.5 rounded-lg bg-white dark:bg-slate-800 border border-slate-100 dark:border-slate-700 p-3 space-y-2">
+                        <p class="text-xs text-slate-700 dark:text-slate-300"><strong>Quando seguir:</strong> Para visão completa do pipeline de otimização com benchmarks reais de custo.</p>
+                        <p class="text-xs italic text-slate-500 dark:text-slate-400 border-l-2 border-indigo-300 dark:border-indigo-700 pl-2">
+                          <strong class="not-italic text-emerald-600 dark:text-emerald-400"><i class="ph ph-check-circle" aria-hidden="true"></i> Validado:</strong>
+                          "Token optimization transforms LLM economics from prohibitively expensive to sustainably scalable. By implementing prompt compression, context caching, smart model selection, and response caching, most applications achieve 60-80% cost reduction."
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </li>
+                <li class="p-4">
+                  <div class="flex items-start gap-3">
+                    <div class="flex items-center justify-center w-9 h-9 rounded-lg bg-indigo-50 dark:bg-indigo-950 text-indigo-600 dark:text-indigo-400 shrink-0 mt-0.5" aria-hidden="true"><i class="ph-fill ph-article text-lg"></i></div>
+                    <div class="min-w-0 flex-1">
+                      <a href="https://www.morphllm.com/llm-inference-optimization" target="_blank" rel="noopener noreferrer" class="text-sm font-bold text-slate-900 dark:text-white hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors duration-150 inline-flex items-center gap-1">
+                        <span class="truncate">LLM Inference Optimization: Cut Cost &amp; Latency at Every Layer (2026)</span>
+                        <i class="ph ph-arrow-up-right text-xs shrink-0 opacity-50" aria-hidden="true"></i>
+                      </a>
+                      <p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">Morph &middot; Guia técnico &middot; Mar 2026</p>
+                      <div class="mt-2.5 rounded-lg bg-white dark:bg-slate-800 border border-slate-100 dark:border-slate-700 p-3 space-y-2">
+                        <p class="text-xs text-slate-700 dark:text-slate-300"><strong>Quando seguir:</strong> Para entender as camadas de otimização: model-level, system-level e application-level.</p>
+                        <p class="text-xs italic text-slate-500 dark:text-slate-400 border-l-2 border-indigo-300 dark:border-indigo-700 pl-2">
+                          <strong class="not-italic text-emerald-600 dark:text-emerald-400"><i class="ph ph-check-circle" aria-hidden="true"></i> Validado:</strong>
+                          "The average LLM API call wastes 40-60% of input tokens on context the model doesn't need. 80% cost reduction with stacked optimizations."
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </li>
+                <li class="p-4">
+                  <div class="flex items-start gap-3">
+                    <div class="flex items-center justify-center w-9 h-9 rounded-lg bg-indigo-50 dark:bg-indigo-950 text-indigo-600 dark:text-indigo-400 shrink-0 mt-0.5" aria-hidden="true"><i class="ph-fill ph-article text-lg"></i></div>
+                    <div class="min-w-0 flex-1">
+                      <a href="https://www.edenai.co/post/token-compression-for-llms-reduce-api-costs" target="_blank" rel="noopener noreferrer" class="text-sm font-bold text-slate-900 dark:text-white hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors duration-150 inline-flex items-center gap-1">
+                        <span class="truncate">Token Compression for LLMs: Reduce API Costs by 60-95%</span>
+                        <i class="ph ph-arrow-up-right text-xs shrink-0 opacity-50" aria-hidden="true"></i>
+                      </a>
+                      <p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">Eden AI &middot; Visão geral &middot; Jul 2026</p>
+                      <div class="mt-2.5 rounded-lg bg-white dark:bg-slate-800 border border-slate-100 dark:border-slate-700 p-3 space-y-2">
+                        <p class="text-xs text-slate-700 dark:text-slate-300"><strong>Quando seguir:</strong> Para um mapa rápido das 5 estratégias core de compressão de tokens.</p>
+                        <p class="text-xs italic text-slate-500 dark:text-slate-400 border-l-2 border-indigo-300 dark:border-indigo-700 pl-2">
+                          <strong class="not-italic text-emerald-600 dark:text-emerald-400"><i class="ph ph-check-circle" aria-hidden="true"></i> Validado:</strong>
+                          "Token compression reduces the number of tokens sent to LLM APIs by 60% to 95%, cutting costs without changing the model or sacrificing answer quality."
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </li>
+              </ul>
+            </div>
+            <div class="rounded-xl border border-amber-200 dark:border-amber-900/60 bg-amber-50 dark:bg-amber-950/30 p-4" role="note" aria-label="Check de avanço">
+              <p class="text-xs font-bold uppercase tracking-widest text-amber-700 dark:text-amber-500 mb-1.5 flex items-center gap-1.5"><i class="ph ph-compass-rose" aria-hidden="true"></i> Check de avanço</p>
+              <p class="text-sm font-medium text-amber-900 dark:text-amber-200 text-pretty">Você consegue explicar por que "context engineering" é mais importante que "prompt engineering" para redução de custos? Se não, revise os nervos acima.</p>
+            </div>
+          </section>
+
+          <hr class="border-slate-200 dark:border-slate-800 mb-16" aria-hidden="true">
+
+          <!-- ESTAÇÃO 2 -->
+          <section id="estacao-2" class="mb-16 scroll-mt-20" aria-labelledby="estacao-2-titulo">
+            <div class="flex items-center gap-3 mb-5">
+              <span class="flex items-center justify-center w-8 h-8 rounded-full bg-indigo-600 text-white font-bold text-sm shrink-0 shadow" aria-hidden="true">2</span>
+              <h2 id="estacao-2-titulo" class="text-xl font-bold text-pretty">RTK — O Rust Token Killer (69K+ ⭐)</h2>
+            </div>
+            <p class="text-xs text-slate-400 dark:text-slate-500 mb-5 flex items-center gap-3 font-medium">
+              <span class="flex items-center gap-1"><i class="ph ph-clock" aria-hidden="true"></i> ~10 min leitura</span>
+              <span class="flex items-center gap-1"><i class="ph ph-plug" aria-hidden="true"></i> 3 nervo(s)</span>
+            </p>
+            <div class="text-slate-700 dark:text-slate-300 leading-relaxed mb-8 space-y-3 text-[1.0625rem]">
+              <p>RTK é um proxy CLI escrito em Rust que intercepta comandos shell emitidos por agentes de codificação e retorna output comprimido — mesma informação, muito menos tokens. Com 69K+ estrelas no GitHub, é uma das ferramentas mais populares do ecossistema. O hook do RTK roda como um binário nativo (sem shell bash), reescrevendo transparentemente comandos como <code>git status</code> para <code>rtk git status</code> antes que o agente veja a reescrita.</p>
+              <p>Quatro estratégias de compressão são aplicadas por tipo de comando: <strong>Smart Filtering</strong> (remove noise como comentários, whitespace, boilerplate), <strong>Grouping</strong> (agrupa itens similares), <strong>Truncation</strong> (mantém apenas contexto relevante), e <strong>Deduplication</strong> (colapsa linhas de log repetidas). Em um projeto médio TypeScript/Rust, uma sessão de 30 minutos de Claude Code consome ~118K tokens em comandos shell — com RTK, cai para ~23.9K tokens (redução de 80%).</p>
+            </div>
+            <div class="rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900/60 overflow-hidden mb-6">
+              <div class="flex items-center gap-2 px-4 py-3 border-b border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900">
+                <i class="ph ph-plug text-indigo-500 dark:text-indigo-400" aria-hidden="true"></i>
+                <h3 class="text-xs font-bold uppercase tracking-widest text-slate-600 dark:text-slate-300">Nervos Validados</h3>
+              </div>
+              <ul class="divide-y divide-slate-200 dark:divide-slate-800" role="list">
+                <li class="p-4">
+                  <div class="flex items-start gap-3">
+                    <div class="flex items-center justify-center w-9 h-9 rounded-lg bg-indigo-50 dark:bg-indigo-950 text-indigo-600 dark:text-indigo-400 shrink-0 mt-0.5" aria-hidden="true"><i class="ph-fill ph-github-logo text-lg"></i></div>
+                    <div class="min-w-0 flex-1">
+                      <a href="https://github.com/rtk-ai/rtk" target="_blank" rel="noopener noreferrer" class="text-sm font-bold text-slate-900 dark:text-white hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors duration-150 inline-flex items-center gap-1">
+                        <span class="truncate">rtk-ai/rtk — CLI proxy that reduces LLM token consumption</span>
+                        <i class="ph ph-arrow-up-right text-xs shrink-0 opacity-50" aria-hidden="true"></i>
+                      </a>
+                      <p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">GitHub &middot; Rust &middot; Apache 2.0 &middot; 69K+ ⭐</p>
+                      <div class="mt-2.5 rounded-lg bg-white dark:bg-slate-800 border border-slate-100 dark:border-slate-700 p-3 space-y-2">
+                        <p class="text-xs text-slate-700 dark:text-slate-300"><strong>Quando seguir:</strong> Para qualquer sessão com Claude Code, Cursor, Copilot ou agente CLI. Instale com <code>curl -fsSL https://raw.githubusercontent.com/rtk-ai/rtk/refs/heads/master/install.sh | sh && rtk init -g</code></p>
+                        <p class="text-xs italic text-slate-500 dark:text-slate-400 border-l-2 border-indigo-300 dark:border-indigo-700 pl-2">
+                          <strong class="not-italic text-emerald-600 dark:text-emerald-400"><i class="ph ph-check-circle" aria-hidden="true"></i> Validado:</strong>
+                          "Based on measurements across 2,900+ real-world commands, RTK removes an average of 89% of CLI output noise."
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </li>
+                <li class="p-4">
+                  <div class="flex items-start gap-3">
+                    <div class="flex items-center justify-center w-9 h-9 rounded-lg bg-indigo-50 dark:bg-indigo-950 text-indigo-600 dark:text-indigo-400 shrink-0 mt-0.5" aria-hidden="true"><i class="ph-fill ph-article text-lg"></i></div>
+                    <div class="min-w-0 flex-1">
+                      <a href="https://www.codeline.co/thoughts/repo-review/2026/rtk-cli-proxy-token-reduction-for-ai-coding-agents" target="_blank" rel="noopener noreferrer" class="text-sm font-bold text-slate-900 dark:text-white hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors duration-150 inline-flex items-center gap-1">
+                        <span class="truncate">RTK: A Rust Proxy That Cuts LLM Token Usage by 80%</span>
+                        <i class="ph ph-arrow-up-right text-xs shrink-0 opacity-50" aria-hidden="true"></i>
+                      </a>
+                      <p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">Florian Narr &middot; Repo Review &middot; Abr 2026</p>
+                      <div class="mt-2.5 rounded-lg bg-white dark:bg-slate-800 border border-slate-100 dark:border-slate-700 p-3 space-y-2">
+                        <p class="text-xs text-slate-700 dark:text-slate-300"><strong>Quando seguir:</strong> Para entender a arquitetura interna do RTK: hooks, rewrite logic, filtering pipeline.</p>
+                        <p class="text-xs italic text-slate-500 dark:text-slate-400 border-l-2 border-indigo-300 dark:border-indigo-700 pl-2">
+                          <strong class="not-italic text-emerald-600 dark:text-emerald-400"><i class="ph ph-check-circle" aria-hidden="true"></i> Validado:</strong>
+                          "It intercepts at the tool execution layer — the Bash hook — and rewrites the command string before Claude even runs it. The agent receives a cleaner, shorter output and never sees the rewrite happen."
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </li>
+                <li class="p-4">
+                  <div class="flex items-start gap-3">
+                    <div class="flex items-center justify-center w-9 h-9 rounded-lg bg-indigo-50 dark:bg-indigo-950 text-indigo-600 dark:text-indigo-400 shrink-0 mt-0.5" aria-hidden="true"><i class="ph-fill ph-article text-lg"></i></div>
+                    <div class="min-w-0 flex-1">
+                      <a href="https://antaoalmada.dev/posts/Reducing-Token-Usage-in-Code-Agents" target="_blank" rel="noopener noreferrer" class="text-sm font-bold text-slate-900 dark:text-white hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors duration-150 inline-flex items-center gap-1">
+                        <span class="truncate">Reducing Token Usage in Code Agents with RTK-AI, Graphify, Caveman, and LSP</span>
+                        <i class="ph ph-arrow-up-right text-xs shrink-0 opacity-50" aria-hidden="true"></i>
+                      </a>
+                      <p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">Antão Almada &middot; Blog &middot; Abr 2026</p>
+                      <div class="mt-2.5 rounded-lg bg-white dark:bg-slate-800 border border-slate-100 dark:border-slate-700 p-3 space-y-2">
+                        <p class="text-xs text-slate-700 dark:text-slate-300"><strong>Quando seguir:</strong> Para ver como RTK se encaixa num stack completo com Graphify, Caveman e LSP.</p>
+                        <p class="text-xs italic text-slate-500 dark:text-slate-400 border-l-2 border-indigo-300 dark:border-indigo-700 pl-2">
+                          <strong class="not-italic text-emerald-600 dark:text-emerald-400"><i class="ph ph-check-circle" aria-hidden="true"></i> Validado:</strong>
+                          "Token reduction is not just a cost optimization. It is also a quality optimization. Smaller, cleaner, better-targeted context usually means fewer hallucinations."
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </li>
+              </ul>
+            </div>
+            <div class="rounded-xl border border-amber-200 dark:border-amber-900/60 bg-amber-50 dark:bg-amber-950/30 p-4" role="note" aria-label="Check de avanço">
+              <p class="text-xs font-bold uppercase tracking-widest text-amber-700 dark:text-amber-500 mb-1.5 flex items-center gap-1.5"><i class="ph ph-compass-rose" aria-hidden="true"></i> Check de avanço</p>
+              <p class="text-sm font-medium text-amber-900 dark:text-amber-200 text-pretty">Instale o RTK e rode <code>rtk gain</code> após uma sessão de coding. Você consegue ver a redução de tokens? Qual o % economizado?</p>
+            </div>
+          </section>
+
+          <hr class="border-slate-200 dark:border-slate-800 mb-16" aria-hidden="true">
+
+          <!-- ESTAÇÃO 3 -->
+          <section id="estacao-3" class="mb-16 scroll-mt-20" aria-labelledby="estacao-3-titulo">
+            <div class="flex items-center gap-3 mb-5">
+              <span class="flex items-center justify-center w-8 h-8 rounded-full bg-indigo-600 text-white font-bold text-sm shrink-0 shadow" aria-hidden="true">3</span>
+              <h2 id="estacao-3-titulo" class="text-xl font-bold text-pretty">Headroom — Context Compression Layer (39K+ ⭐)</h2>
+            </div>
+            <p class="text-xs text-slate-400 dark:text-slate-500 mb-5 flex items-center gap-3 font-medium">
+              <span class="flex items-center gap-1"><i class="ph ph-clock" aria-hidden="true"></i> ~10 min leitura</span>
+              <span class="flex items-center gap-1"><i class="ph ph-plug" aria-hidden="true"></i> 3 nervo(s)</span>
+            </p>
+            <div class="text-slate-700 dark:text-slate-300 leading-relaxed mb-8 space-y-3 text-[1.0625rem]">
+              <p>Enquanto o RTK foca em comprimir outputs de CLI, o <strong>Headroom</strong> ataca o problema mais amplo: comprimir <em>tudo</em> que o agente lê antes de chegar ao LLM — tool outputs, logs, arquivos, chunks RAG e histórico de conversação. Criado por Tejas Chopra (engenheiro sênior da Netflix), o Headroom opera como um <strong>proxy transparente</strong> entre seu app e o provedor LLM, com 3 modos de integração: Library, Proxy e MCP Server.</p>
+              <p>O pipeline de compressão multi-stage usa: <strong>SmartCrusher</strong> para JSON (remove chaves redundantes), <strong>CodeCompressor</strong> para código (AST-aware), <strong>Kompress-base</strong> para prosa (modelo ML via HuggingFace), e <strong>CacheAligner</strong> para estabilizar prefixos e garantir KV cache hits. A propriedade chave é <strong>CCR (Content-Compressed Retrieval)</strong>: originais nunca são deletados; o LLM pode buscar a versão completa quando necessário.</p>
+            </div>
+            <div class="rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900/60 overflow-hidden mb-6">
+              <div class="flex items-center gap-2 px-4 py-3 border-b border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900">
+                <i class="ph ph-plug text-indigo-500 dark:text-indigo-400" aria-hidden="true"></i>
+                <h3 class="text-xs font-bold uppercase tracking-widest text-slate-600 dark:text-slate-300">Nervos Validados</h3>
+              </div>
+              <ul class="divide-y divide-slate-200 dark:divide-slate-800" role="list">
+                <li class="p-4">
+                  <div class="flex items-start gap-3">
+                    <div class="flex items-center justify-center w-9 h-9 rounded-lg bg-indigo-50 dark:bg-indigo-950 text-indigo-600 dark:text-indigo-400 shrink-0 mt-0.5" aria-hidden="true"><i class="ph-fill ph-github-logo text-lg"></i></div>
+                    <div class="min-w-0 flex-1">
+                      <a href="https://github.com/chopratejas/headroom" target="_blank" rel="noopener noreferrer" class="text-sm font-bold text-slate-900 dark:text-white hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors duration-150 inline-flex items-center gap-1">
+                        <span class="truncate">chopratejas/headroom — Context compression for AI agents</span>
+                        <i class="ph ph-arrow-up-right text-xs shrink-0 opacity-50" aria-hidden="true"></i>
+                      </a>
+                      <p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">GitHub &middot; Python/TypeScript &middot; Apache 2.0 &middot; 39K+ ⭐</p>
+                      <div class="mt-2.5 rounded-lg bg-white dark:bg-slate-800 border border-slate-100 dark:border-slate-700 p-3 space-y-2">
+                        <p class="text-xs text-slate-700 dark:text-slate-300"><strong>Quando seguir:</strong> Para comprimir context de agentes que fazem muitas tool calls. Instale: <code>pip install "headroom-ai[all]"</code> e use <code>headroom wrap claude</code></p>
+                        <p class="text-xs italic text-slate-500 dark:text-slate-400 border-l-2 border-indigo-300 dark:border-indigo-700 pl-2">
+                          <strong class="not-italic text-emerald-600 dark:text-emerald-400"><i class="ph ph-check-circle" aria-hidden="true"></i> Validado:</strong>
+                          "60–95% fewer tokens (for JSON data), 15-20% fewer tokens (for coding agents). Same answers, fraction of the tokens."
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </li>
+                <li class="p-4">
+                  <div class="flex items-start gap-3">
+                    <div class="flex items-center justify-center w-9 h-9 rounded-lg bg-indigo-50 dark:bg-indigo-950 text-indigo-600 dark:text-indigo-400 shrink-0 mt-0.5" aria-hidden="true"><i class="ph-fill ph-article text-lg"></i></div>
+                    <div class="min-w-0 flex-1">
+                      <a href="https://andrew.ooo/posts/headroom-context-compression-llm-agents-review" target="_blank" rel="noopener noreferrer" class="text-sm font-bold text-slate-900 dark:text-white hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors duration-150 inline-flex items-center gap-1">
+                        <span class="truncate">Headroom Review: 60-95% LLM Token Compression (2026)</span>
+                        <i class="ph ph-arrow-up-right text-xs shrink-0 opacity-50" aria-hidden="true"></i>
+                      </a>
+                      <p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">andrew.ooo &middot; Review &middot; Jun 2026</p>
+                      <div class="mt-2.5 rounded-lg bg-white dark:bg-slate-800 border border-slate-100 dark:border-slate-700 p-3 space-y-2">
+                        <p class="text-xs text-slate-700 dark:text-slate-300"><strong>Quando seguir:</strong> Para review imparcial com benchmarks reais e comparisons com RTK/Caveman.</p>
+                        <p class="text-xs italic text-slate-500 dark:text-slate-400 border-l-2 border-indigo-300 dark:border-indigo-700 pl-2">
+                          <strong class="not-italic text-emerald-600 dark:text-emerald-400"><i class="ph ph-check-circle" aria-hidden="true"></i> Validado:</strong>
+                          "Headroom compresses everything your AI agent reads — tool outputs, logs, RAG chunks, files, and conversation history — before it reaches the LLM."
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </li>
+                <li class="p-4">
+                  <div class="flex items-start gap-3">
+                    <div class="flex items-center justify-center w-9 h-9 rounded-lg bg-indigo-50 dark:bg-indigo-950 text-indigo-600 dark:text-indigo-400 shrink-0 mt-0.5" aria-hidden="true"><i class="ph-fill ph-article text-lg"></i></div>
+                    <div class="min-w-0 flex-1">
+                      <a href="https://note.com/shali_note/n/n2cfc530d531b?hl=en" target="_blank" rel="noopener noreferrer" class="text-sm font-bold text-slate-900 dark:text-white hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors duration-150 inline-flex items-center gap-1">
+                        <span class="truncate">Reducing LLM Token Consumption by Up to 95% — How 'headroom' Works</span>
+                        <i class="ph ph-arrow-up-right text-xs shrink-0 opacity-50" aria-hidden="true"></i>
+                      </a>
+                      <p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">Note.com &middot; Tutorial &middot; Jun 2026</p>
+                      <div class="mt-2.5 rounded-lg bg-white dark:bg-slate-800 border border-slate-100 dark:border-slate-700 p-3 space-y-2">
+                        <p class="text-xs text-slate-700 dark:text-slate-300"><strong>Quando seguir:</strong> Para 4 formas de integrar o Headroom: Agent Wrap, Proxy, Library e MCP Server.</p>
+                        <p class="text-xs italic text-slate-500 dark:text-slate-400 border-l-2 border-indigo-300 dark:border-indigo-700 pl-2">
+                          <strong class="not-italic text-emerald-600 dark:text-emerald-400"><i class="ph ph-check-circle" aria-hidden="true"></i> Validado:</strong>
+                          "In the actual demo, an example is shown where 10,144 tokens were compressed to 1,260 tokens — an 87% reduction with unchanged AI responses."
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </li>
+              </ul>
+            </div>
+            <div class="rounded-xl border border-amber-200 dark:border-amber-900/60 bg-amber-50 dark:bg-amber-950/30 p-4" role="note" aria-label="Check de avanço">
+              <p class="text-xs font-bold uppercase tracking-widest text-amber-700 dark:text-amber-500 mb-1.5 flex items-center gap-1.5"><i class="ph ph-compass-rose" aria-hidden="true"></i> Check de avanço</p>
+              <p class="text-sm font-medium text-amber-900 dark:text-amber-200 text-pretty">Qual a diferença fundamental entre Headroom (context compression) e RTK (output compression)? Em que cenário você usaria cada um?</p>
+            </div>
+          </section>
+
+          <hr class="border-slate-200 dark:border-slate-800 mb-16" aria-hidden="true">
+
+          <!-- ESTAÇÃO 4 -->
+          <section id="estacao-4" class="mb-16 scroll-mt-20" aria-labelledby="estacao-4-titulo">
+            <div class="flex items-center gap-3 mb-5">
+              <span class="flex items-center justify-center w-8 h-8 rounded-full bg-indigo-600 text-white font-bold text-sm shrink-0 shadow" aria-hidden="true">4</span>
+              <h2 id="estacao-4-titulo" class="text-xl font-bold text-pretty">Caveman — Output Token Efficiency (72K+ ⭐)</h2>
+            </div>
+            <p class="text-xs text-slate-400 dark:text-slate-500 mb-5 flex items-center gap-3 font-medium">
+              <span class="flex items-center gap-1"><i class="ph ph-clock" aria-hidden="true"></i> ~8 min leitura</span>
+              <span class="flex items-center gap-1"><i class="ph ph-plug" aria-hidden="true"></i> 3 nervo(s)</span>
+            </p>
+            <div class="text-slate-700 dark:text-slate-300 leading-relaxed mb-8 space-y-3 text-[1.0625rem]">
+              <p>O Caveman ataca o lado oposto da equação: enquanto RTK e Headroom comprimem o <em>input</em> (o que o agente lê), o Caveman comprime o <em>output</em> (o que o agente gera). Com 72K+ estrelas, é a skill/plugin mais viral do ecossistema. A premissa é simples: fazer o AI "falar como um cavaleiro" — fragmentos curtos, sem filler, sem "I'd be happy to help" — reduz significantemente os tokens de output.</p              <p>O projeto tem 3 níveis de intensidade: <strong>lite</strong> (remove filler, mantém gramática), <strong>full</strong> (caveman padrão), e <strong>ultra</strong> (abreviações telegráficas). Benchmarks independentes mostram economia real de 30-50% em uso normal (não os 75% do marketing). Um micro-prompt de 6 linhas (85 tokens) pode superar o skill completo de 552 tokens em tarefas complexas.</p>
+            </div>
+            <div class="rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900/60 overflow-hidden mb-6">
+              <div class="flex items-center gap-2 px-4 py-3 border-b border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900">
+                <i class="ph ph-plug text-indigo-500 dark:text-indigo-400" aria-hidden="true"></i>
+                <h3 class="text-xs font-bold uppercase tracking-widest text-slate-600 dark:text-slate-300">Nervos Validados</h3>
+              </div>
+              <ul class="divide-y divide-slate-200 dark:divide-slate-800" role="list">
+                <li class="p-4">
+                  <div class="flex items-start gap-3">
+                    <div class="flex items-center justify-center w-9 h-9 rounded-lg bg-indigo-50 dark:bg-indigo-950 text-indigo-600 dark:text-indigo-400 shrink-0 mt-0.5" aria-hidden="true"><i class="ph-fill ph-github-logo text-lg"></i></div>
+                    <div class="min-w-0 flex-1">
+                      <a href="https://github.com/JuliusBrussee/caveman" target="_blank" rel="noopener noreferrer" class="text-sm font-bold text-slate-900 dark:text-white hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors duration-150 inline-flex items-center gap-1">
+                        <span class="truncate">JuliusBrussee/caveman — why use many token when few token do trick</span>
+                        <i class="ph ph-arrow-up-right text-xs shrink-0 opacity-50" aria-hidden="true"></i>
+                      </a>
+                      <p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">GitHub &middot; Multi-agent &middot; MIT &middot; 72K+ ⭐</p>
+                      <div class="mt-2.5 rounded-lg bg-white dark:bg-slate-800 border border-slate-100 dark:border-slate-700 p-3 space-y-2">
+                        <p class="text-xs text-slate-700 dark:text-slate-300"><strong>Quando seguir:</strong> Para sessões com muita conversação/código verbose. Instale: <code>curl -fsSL https://raw.githubusercontent.com/JuliusBrussee/caveman/main/install.sh | bash</code></p>
+                        <p class="text-xs italic text-slate-500 dark:text-slate-400 border-l-2 border-indigo-300 dark:border-indigo-700 pl-2">
+                          <strong class="not-italic text-emerald-600 dark:text-emerald-400"><i class="ph ph-check-circle" aria-hidden="true"></i> Validado:</strong>
+                          "Same answers, 65% fewer output tokens. Brain still big. Mouth small."
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </li>
+                <li class="p-4">
+                  <div class="flex items-start gap-3">
+                    <div class="flex items-center justify-center w-9 h-9 rounded-lg bg-indigo-50 dark:bg-indigo-950 text-indigo-600 dark:text-indigo-400 shrink-0 mt-0.5" aria-hidden="true"><i class="ph-fill ph-article text-lg"></i></div>
+                    <div class="min-w-0 flex-1">
+                      <a href="https://andrew.ooo/posts/caveman-claude-code-skill-token-savings-review/" target="_blank" rel="noopener noreferrer" class="text-sm font-bold text-slate-900 dark:text-white hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors duration-150 inline-flex items-center gap-1">
+                        <span class="truncate">Caveman Review: The Claude Code Skill That Cuts 65% of Tokens</span>
+                        <i class="ph ph-arrow-up-right text-xs shrink-0 opacity-50" aria-hidden="true"></i>
+                      </a>
+                      <p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">andrew.ooo &middot; Review &middot; Mai 2026</p>
+                      <div class="mt-2.5 rounded-lg bg-white dark:bg-slate-800 border border-slate-100 dark:border-slate-700 p-3 space-y-2">
+                        <p class="text-xs text-slate-700 dark:text-slate-300"><strong>Quando seguir:</strong> Para review honesto com benchmarks reais e limits do Caveman.</p>
+                        <p class="text-xs italic text-slate-500 dark:text-slate-400 border-l-2 border-indigo-300 dark:border-indigo-700 pl-2">
+                          <strong class="not-italic text-emerald-600 dark:text-emerald-400"><i class="ph ph-check-circle" aria-hidden="true"></i> Validado:</strong>
+                          "The project's own ten-prompt benchmark suite shows a 65% mean output-token reduction with full technical accuracy preserved."
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </li>
+                <li class="p-4">
+                  <div class="flex items-start gap-3">
+                    <div class="flex items-center justify-center w-9 h-9 rounded-lg bg-indigo-50 dark:bg-indigo-950 text-indigo-600 dark:text-indigo-400 shrink-0 mt-0.5" aria-hidden="true"><i class="ph-fill ph-article text-lg"></i></div>
+                    <div class="min-w-0 flex-1">
+                      <a href="https://medium.com/@KubaGuzik/i-benchmarked-the-viral-caveman-prompt-to-save-llm-tokens-then-my-6-line-version-beat-it-d8e565f95e15" target="_blank" rel="noopener noreferrer" class="text-sm font-bold text-slate-900 dark:text-white hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors duration-150 inline-flex items-center gap-1">
+                        <span class="truncate">I Benchmarked the Viral "Caveman" Prompt — Then my 6-Line Version Beat It</span>
+                        <i class="ph ph-arrow-up-right text-xs shrink-0 opacity-50" aria-hidden="true"></i>
+                      </a>
+                      <p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">Kuba Guzik &middot; Medium &middot; Abr 2026</p>
+                      <div class="mt-2.5 rounded-lg bg-white dark:bg-slate-800 border border-slate-100 dark:border-slate-700 p-3 space-y-2">
+                        <p class="text-xs text-slate-700 dark:text-slate-300"><strong>Quando seguir:</strong> Para benchmarks independentes que desafiam as claims de marketing do Caveman.</p>
+                        <p class="text-xs italic text-slate-500 dark:text-slate-400 border-l-2 border-indigo-300 dark:border-indigo-700 pl-2">
+                          <strong class="not-italic text-emerald-600 dark:text-emerald-400"><i class="ph ph-check-circle" aria-hidden="true"></i> Validado:</strong>
+                          "The actual token savings landed between 14 and 21 percent — meaningful, but far from the headline figure."
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </li>
+              </ul>
+            </div>
+            <div class="rounded-xl border border-amber-200 dark:border-amber-900/60 bg-amber-50 dark:bg-amber-950/30 p-4" role="note" aria-label="Check de avanço">
+              <p class="text-xs font-bold uppercase tracking-widest text-amber-700 dark:text-amber-500 mb-1.5 flex items-center gap-1.5"><i class="ph ph-compass-rose" aria-hidden="true"></i> Check de avanço</p>
+              <p class="text-sm font-medium text-amber-900 dark:text-amber-200 text-pretty">O Caveman só afeta output tokens. Por que input tokens e thinking tokens não são comprimidos? Isso é uma limitação ou uma feature?</p>
+            </div>
+          </section>
+
+          <hr class="border-slate-200 dark:border-slate-800 mb-16" aria-hidden="true">
+
+          <!-- ESTAÇÃO 5 -->
+          <section id="estacao-5" class="mb-16 scroll-mt-20" aria-labelledby="estacao-5-titulo">
+            <div class="flex items-center gap-3 mb-5">
+              <span class="flex items-center justify-center w-8 h-8 rounded-full bg-indigo-600 text-white font-bold text-sm shrink-0 shadow" aria-hidden="true">5</span>
+              <h2 id="estacao-5-titulo" class="text-xl font-bold text-pretty">LLMLingua — Prompt Compression (Microsoft, 6.2K ⭐)</h2>
+            </div>
+            <p class="text-xs text-slate-400 dark:text-slate-500 mb-5 flex items-center gap-3 font-medium">
+              <span class="flex items-center gap-1"><i class="ph ph-clock" aria-hidden="true"></i> ~10 min leitura</span>
+              <span class="flex items-center gap-1"><i class="ph ph-plug" aria-hidden="true"></i> 3 nervo(s)</span>
+            </p>
+            <div class="text-slate-700 dark:text-slate-300 leading-relaxed mb-8 space-y-3 text-[1.0625rem]">
+              <p>O LLMLingua é a abordagem acadêmica mais madura para compressão de prompts. Publicado no EMNLP 2023 com 6 papers na série, ele usa um modelo de linguagem compacto (GPT2-small, LLaMA-7B) para identificar e remover tokens não essenciais, alcançando <strong>até 20x de compressão</strong> com perda mínima de performance. A diferença: LLMLingua não reescreve (comosummarization), ele <strong>seleciona</strong> quais tokens manter com base em perplexidade.</p>
+              <p>O LLMLingua-2 (ACL 2024 Findings) é 3-6x mais rápido, usando um encoder BERT-level destilado do GPT-4 para classificação de tokens. Integrado ao LangChain e LlamaIndex, funciona como um plugin drop-in para pipelines RAG. O LongLLMLingua (ACL 2024) mitiga o "lost in the middle" e melhora performance RAG em 21.4% usando apenas 1/4 dos tokens.</p>
+            </div>
+            <div class="rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900/60 overflow-hidden mb-6">
+              <div class="flex items-center gap-2 px-4 py-3 border-b border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900">
+                <i class="ph ph-plug text-indigo-500 dark:text-indigo-400" aria-hidden="true"></i>
+                <h3 class="text-xs font-bold uppercase tracking-widest text-slate-600 dark:text-slate-300">Nervos Validados</h3>
+              </div>
+              <ul class="divide-y divide-slate-200 dark:divide-slate-800" role="list">
+                <li class="p-4">
+                  <div class="flex items-start gap-3">
+                    <div class="flex items-center justify-center w-9 h-9 rounded-lg bg-indigo-50 dark:bg-indigo-950 text-indigo-600 dark:text-indigo-400 shrink-0 mt-0.5" aria-hidden="true"><i class="ph-fill ph-github-logo text-lg"></i></div>
+                    <div class="min-w-0 flex-1">
+                      <a href="https://github.com/microsoft/LLMLingua" target="_blank" rel="noopener noreferrer" class="text-sm font-bold text-slate-900 dark:text-white hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors duration-150 inline-flex items-center gap-1">
+                        <span class="truncate">microsoft/LLMLingua — Compressing Prompts for Accelerated Inference</span>
+                        <i class="ph ph-arrow-up-right text-xs shrink-0 opacity-50" aria-hidden="true"></i>
+                      </a>
+                      <p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">GitHub &middot; Python &middot; MIT &middot; 6.2K ⭐</p>
+                      <div class="mt-2.5 rounded-lg bg-white dark:bg-slate-800 border border-slate-100 dark:border-slate-700 p-3 space-y-2">
+                        <p class="text-xs text-slate-700 dark:text-slate-300"><strong>Quando seguir:</strong> Para pipelines RAG ou prompts longos que precisam de compressão acadêmica validada.</p>
+                        <p class="text-xs italic text-slate-500 dark:text-slate-400 border-l-2 border-indigo-300 dark:border-indigo-700 pl-2">
+                          <strong class="not-italic text-emerald-600 dark:text-emerald-400"><i class="ph ph-check-circle" aria-hidden="true"></i> Validado:</strong>
+                          "Achieves up to 20x compression with minimal performance loss. LLMLingua-2 is 3-6x faster and stronger out-of-domain."
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </li>
+                <li class="p-4">
+                  <div class="flex items-start gap-3">
+                    <div class="flex items-center justify-center w-9 h-9 rounded-lg bg-indigo-50 dark:bg-indigo-950 text-indigo-600 dark:text-indigo-400 shrink-0 mt-0.5" aria-hidden="true"><i class="ph-fill ph-article text-lg"></i></div>
+                    <div class="min-w-0 flex-1">
+                      <a href="https://ice-ice-bear.github.io/posts/2026-05-06-llmlingua-series" target="_blank" rel="noopener noreferrer" class="text-sm font-bold text-slate-900 dark:text-white hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors duration-150 inline-flex items-center gap-1">
+                        <span class="truncate">The LLMLingua Series — Microsoft's Underrated Prompt Compression Stack</span>
+                        <i class="ph ph-arrow-up-right text-xs shrink-0 opacity-50" aria-hidden="true"></i>
+                      </a>
+                      <p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">ice-ice-bear &middot; Blog &middot; Mai 2026</p>
+                      <div class="mt-2.5 rounded-lg bg-white dark:bg-slate-800 border border-slate-100 dark:border-slate-700 p-3 space-y-2">
+                        <p class="text-xs text-slate-700 dark:text-slate-300"><strong>Quando seguir:</strong> Para visão completa dos 6 papers da série LLMLingua e por que a adoção em produção é lenta.</p>
+                        <p class="text-xs italic text-slate-500 dark:text-slate-400 border-l-2 border-indigo-300 dark:border-indigo-700 pl-2">
+                          <strong class="not-italic text-emerald-600 dark:text-emerald-400"><i class="ph ph-check-circle" aria-hidden="true"></i> Validado:</strong>
+                          "Compression up to 20x with minimal performance loss should be a no-brainer; why isn't the adoption faster? You find the research-to-production gap in plain sight."
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </li>
+                <li class="p-4">
+                  <div class="flex items-start gap-3">
+                    <div class="flex items-center justify-center w-9 h-9 rounded-lg bg-indigo-50 dark:bg-indigo-950 text-indigo-600 dark:text-indigo-400 shrink-0 mt-0.5" aria-hidden="true"><i class="ph-fill ph-article text-lg"></i></div>
+                    <div class="min-w-0 flex-1">
+                      <a href="https://supercompress.dev/token-compression" target="_blank" rel="noopener noreferrer" class="text-sm font-bold text-slate-900 dark:text-white hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors duration-150 inline-flex items-center gap-1">
+                        <span class="truncate">Token Compression for LLMs: The Complete Guide (2026)</span>
+                        <i class="ph ph-arrow-up-right text-xs shrink-0 opacity-50" aria-hidden="true"></i>
+                      </a>
+                      <p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">SuperCompress &middot; Guia &middot; 2026</p>
+                      <div class="mt-2.5 rounded-lg bg-white dark:bg-slate-800 border border-slate-100 dark:border-slate-700 p-3 space-y-2">
+                        <p class="text-xs text-slate-700 dark:text-slate-300"><strong>Quando seguir:</strong> Para comparar métodos de compressão: summarization vs extraction vs selection-based.</p>
+                        <p class="text-xs italic text-slate-500 dark:text-slate-400 border-l-2 border-indigo-300 dark:border-indigo-700 pl-2">
+                          <strong class="not-italic text-emerald-600 dark:text-emerald-400"><i class="ph ph-check-circle" aria-hidden="true"></i> Validado:</strong>
+                          "Token compression is not summarization. Summarization rewrites context (costing an extra LLM call). Token compression selectively removes lines that score low against the current question."
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </li>
+              </ul>
+            </div>
+            <div class="rounded-xl border border-amber-200 dark:border-amber-900/60 bg-amber-50 dark:bg-amber-950/30 p-4" role="note" aria-label="Check de avanço">
+              <p class="text-xs font-bold uppercase tracking-widest text-amber-700 dark:text-amber-500 mb-1.5 flex items-center gap-1.5"><i class="ph ph-compass-rose" aria-hidden="true"></i> Check de avanço</p>
+              <p class="text-sm font-medium text-amber-900 dark:text-amber-200 text-pretty">Por que o LLMLingua é considerado "underrated" apesar dos 6 papers em venues de topo? Qual o gap entre pesquisa e produção?</p>
+            </div>
+          </section>
+
+          <hr class="border-slate-200 dark:border-slate-800 mb-16" aria-hidden="true">
+
+          <!-- ESTAÇÃO 6 -->
+          <section id="estacao-6" class="mb-16 scroll-mt-20" aria-labelledby="estacao-6-titulo">
+            <div class="flex items-center gap-3 mb-5">
+              <span class="flex items-center justify-center w-8 h-8 rounded-full bg-indigo-600 text-white font-bold text-sm shrink-0 shadow" aria-hidden="true">6</span>
+              <h2 id="estacao-6-titulo" class="text-xl font-bold text-pretty">KV Cache &amp; Prompt Caching — O Segundo Piso de Economia</h2>
+            </div>
+            <p class="text-xs text-slate-400 dark:text-slate-500 mb-5 flex items-center gap-3 font-medium">
+              <span class="flex items-center gap-1"><i class="ph ph-clock" aria-hidden="true"></i> ~10 min leitura</span>
+              <span class="flex items-center gap-1"><i class="ph ph-plug" aria-hidden="true"></i> 3 nervo(s)</span>
+            </p>
+            <div class="text-slate-700 dark:text-slate-300 leading-relaxed mb-8 space-y-3 text-[1.0625rem]">
+              <p>Prompt caching é a otimização de maior ROI para a maioria das equipes. Se o prefixo do seu prompt é byte-a-byte igual a um cache anterior, o provedor reutiliza attention states computados — <strong>desconto de 90% no input tokens</strong>. O Headroom's CacheAligner separa conteúdo dinâmico (timestamps, user context) do system prompt para manter prefixos cacheáveis estáveis.</p>
+              <p>No nível de infraestrutura, o <strong>KV cache</strong> é o gargalo de memória principal. Para um modelo de 30B parâmetros com batch 128 e input 1024 tokens, o KV cache pode ocupar 180 GB. Técnicas como <strong>H2O</strong> (token eviction), <strong>StreamingLLM</strong>, <strong>SnapKV</strong>, e <strong>quantização FP8</strong> do KV cache reduzem drasticamente esse overhead. O vLLM e SGLang implementam essas otimizações nativamente.</p>
+            </div>
+            <div class="rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900/60 overflow-hidden mb-6">
+              <div class="flex items-center gap-2 px-4 py-3 border-b border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900">
+                <i class="ph ph-plug text-indigo-500 dark:text-indigo-400" aria-hidden="true"></i>
+                <h3 class="text-xs font-bold uppercase tracking-widest text-slate-600 dark:text-slate-300">Nervos Validados</h3>
+              </div>
+              <ul class="divide-y divide-slate-200 dark:divide-slate-800" role="list">
+                <li class="p-4">
+                  <div class="flex items-start gap-3">
+                    <div class="flex items-center justify-center w-9 h-9 rounded-lg bg-indigo-50 dark:bg-indigo-950 text-indigo-600 dark:text-indigo-400 shrink-0 mt-0.5" aria-hidden="true"><i class="ph-fill ph-article text-lg"></i></div>
+                    <div class="min-w-0 flex-1">
+                      <a href="https://www.marktechpost.com/2026/04/29/top-10-kv-cache-compression-techniques-for-llm-inference-reducing-memory-overhead-across-eviction-quantization-and-low-rank-methods" target="_blank" rel="noopener noreferrer" class="text-sm font-bold text-slate-900 dark:text-white hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors duration-150 inline-flex items-center gap-1">
+                        <span class="truncate">Top 10 KV Cache Compression Techniques for LLM Inference</span>
+                        <i class="ph ph-arrow-up-right text-xs shrink-0 opacity-50" aria-hidden="true"></i>
+                      </a>
+                      <p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">MarkTechPost &middot; Survey &middot; Abr 2026</p>
+                      <div class="mt-2.5 rounded-lg bg-white dark:bg-slate-800 border border-slate-100 dark:border-slate-700 p-3 space-y-2">
+                        <p class="text-xs text-slate-700 dark:text-slate-300"><strong>Quando seguir:</strong> Para mapa completo das 10 técnicas de KV cache: H2O, StreamingLLM, SnapKV, PyramidKV, KIVI, KVQuant, TurboQuant.</p>
+                        <p class="text-xs italic text-slate-500 dark:text-slate-400 border-l-2 border-indigo-300 dark:border-indigo-700 pl-2">
+                          <strong class="not-italic text-emerald-600 dark:text-emerald-400"><i class="ph ph-check-circle" aria-hidden="true"></i> Validado:</strong>
+                          "Compressing the KV cache reduces memory pressure, increases batch sizes, and directly improves throughput without retraining the base model."
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </li>
+                <li class="p-4">
+                  <div class="flex items-start gap-3">
+                    <div class="flex items-center justify-center w-9 h-9 rounded-lg bg-indigo-50 dark:bg-indigo-950 text-indigo-600 dark:text-indigo-400 shrink-0 mt-0.5" aria-hidden="true"><i class="ph-fill ph-article text-lg"></i></div>
+                    <div class="min-w-0 flex-1">
+                      <a href="https://avchauzov.github.io/blog/2025/token-optimization-layered-architecture/" target="_blank" rel="noopener noreferrer" class="text-sm font-bold text-slate-900 dark:text-white hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors duration-150 inline-flex items-center gap-1">
+                        <span class="truncate">Token optimization: three production patterns that reduce LLM costs</span>
+                        <i class="ph ph-arrow-up-right text-xs shrink-0 opacity-50" aria-hidden="true"></i>
+                      </a>
+                      <p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">Andrey Chauzov &middot; Blog &middot; 2025</p>
+                      <div class="mt-2.5 rounded-lg bg-white dark:bg-slate-800 border border-slate-100 dark:border-slate-700 p-3 space-y-2">
+                        <p class="text-xs text-slate-700 dark:text-slate-300"><strong>Quando seguir:</strong> Para patterns de produção: API-level caching + semantic caching + dynamic compression.</p>
+                        <p class="text-xs italic text-slate-500 dark:text-slate-400 border-l-2 border-indigo-300 dark:border-indigo-700 pl-2">
+                          <strong class="not-italic text-emerald-600 dark:text-emerald-400"><i class="ph ph-check-circle" aria-hidden="true"></i> Validado:</strong>
+                          "API-level caching provides ~90% cost reduction for cached tokens. The constraint is positional: cached content must be at the start of the messages array."
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </li>
+                <li class="p-4">
+                  <div class="flex items-start gap-3">
+                    <div class="flex items-center justify-center w-9 h-9 rounded-lg bg-indigo-50 dark:bg-indigo-950 text-indigo-600 dark:text-indigo-400 shrink-0 mt-0.5" aria-hidden="true"><i class="ph-fill ph-article text-lg"></i></div>
+                    <div class="min-w-0 flex-1">
+                      <a href="https://www.morphllm.com/prompt-compression" target="_blank" rel="noopener noreferrer" class="text-sm font-bold text-slate-900 dark:text-white hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors duration-150 inline-flex items-center gap-1">
+                        <span class="truncate">Context Compaction: Delete Noise, Keep Signal</span>
+                        <i class="ph ph-arrow-up-right text-xs shrink-0 opacity-50" aria-hidden="true"></i>
+                      </a>
+                      <p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">Morph &middot; Guia técnico &middot; Mar 2026</p>
+                      <div class="mt-2.5 rounded-lg bg-white dark:bg-slate-800 border border-slate-100 dark:border-slate-700 p-3 space-y-2">
+                        <p class="text-xs text-slate-700 dark:text-slate-300"><strong>Quando seguir:</strong> Para entender compaction vs compression vs summarization — e por que deletion-based é melhor para coding agents.</p>
+                        <p class="text-xs italic text-slate-500 dark:text-slate-400 border-l-2 border-indigo-300 dark:border-indigo-700 pl-2">
+                          <strong class="not-italic text-emerald-600 dark:text-emerald-400"><i class="ph ph-check-circle" aria-hidden="true"></i> Validado:</strong>
+                          "Compaction removes tokens. Summarization rewrites tokens. Compression encodes tokens. Only compaction guarantees surviving output is identical to the original input."
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </li>
+              </ul>
+            </div>
+            <div class="rounded-xl border border-amber-200 dark:border-amber-900/60 bg-amber-50 dark:bg-amber-950/30 p-4" role="note" aria-label="Check de avanço">
+              <p class="text-xs font-bold uppercase tracking-widest text-amber-700 dark:text-amber-500 mb-1.5 flex items-center gap-1.5"><i class="ph ph-compass-rose" aria-hidden="true"></i> Check de avanço</p>
+              <p class="text-sm font-medium text-amber-900 dark:text-amber-200 text-pretty">Se o CacheAligner do Headroom estabiliza prefixos para KV cache hits, qual a relação entre ele e o prompt caching nativo do Anthropic/OpenAI?</p>
+            </div>
+          </section>
+
+          <hr class="border-slate-200 dark:border-slate-800 mb-16" aria-hidden="true">
+
+          <!-- ESTAÇÃO 7 -->
+          <section id="estacao-7" class="mb-16 scroll-mt-20" aria-labelledby="estacao-7-titulo">
+            <div class="flex items-center gap-3 mb-5">
+              <span class="flex items-center justify-center w-8 h-8 rounded-full bg-indigo-600 text-white font-bold text-sm shrink-0 shadow" aria-hidden="true">7</span>
+              <h2 id="estacao-7-titulo" class="text-xl font-bold text-pretty">Inference Engines — vLLM, SGLang, TensorRT-LLM</h2>
+            </div>
+            <p class="text-xs text-slate-400 dark:text-slate-500 mb-5 flex items-center gap-3 font-medium">
+              <span class="flex items-center gap-1"><i class="ph ph-clock" aria-hidden="true"></i> ~10 min leitura</span>
+              <span class="flex items-center gap-1"><i class="ph ph-plug" aria-hidden="true"></i> 3 nervo(s)</span>
+            </p>
+            <div class="text-slate-700 dark:text-slate-300 leading-relaxed mb-8 space-y-3 text-[1.0625rem]">
+              <p>Os três engines de inferência dominantes em 2026 atacam a eficiência em camadas diferentes. O <strong>vLLM</strong> é o baseline open-source com PagedAttention, continuous batching e prefix caching. O <strong>SGLang</strong> ganhou o argumento de prefix caching com RadixAttention (reduz TTFT para multi-turn chat). O <strong>TensorRT-LLM</strong> da NVIDIA extrai máximo throughput com compilação de kernels CUDA fusionados.</p>
+              <p>Em benchmarks H100 com Llama-3.3-70B: TensorRT-LLM lidera throughput bruto (~2,100 tok/s a 50 req), SGLang tem melhor TTFT para multi-turn com prefixos compartilhados, e vLLM tem a menor barreira de entrada. Para self-hosting, quantização FP8 corta footprint de memória pela metade e dobra velocidade de inferência com perda mínima de acurácia.</p>
+            </div>
+            <div class="rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900/60 overflow-hidden mb-6">
+              <div class="flex items-center gap-2 px-4 py-3 border-b border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900">
+                <i class="ph ph-plug text-indigo-500 dark:text-indigo-400" aria-hidden="true"></i>
+                <h3 class="text-xs font-bold uppercase tracking-widest text-slate-600 dark:text-slate-300">Nervos Validados</h3>
+              </div>
+              <ul class="divide-y divide-slate-200 dark:divide-slate-800" role="list">
+                <li class="p-4">
+                  <div class="flex items-start gap-3">
+                    <div class="flex items-center justify-center w-9 h-9 rounded-lg bg-indigo-50 dark:bg-indigo-950 text-indigo-600 dark:text-indigo-400 shrink-0 mt-0.5" aria-hidden="true"><i class="ph-fill ph-github-logo text-lg"></i></div>
+                    <div class="min-w-0 flex-1">
+                      <a href="https://github.com/vllm-project/vllm" target="_blank" rel="noopener noreferrer" class="text-sm font-bold text-slate-900 dark:text-white hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors duration-150 inline-flex items-center gap-1">
+                        <span class="truncate">vllm-project/vllm — High-throughput LLM inference engine</span>
+                        <i class="ph ph-arrow-up-right text-xs shrink-0 opacity-50" aria-hidden="true"></i>
+                      </a>
+                      <p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">GitHub &middot; Python &middot; Apache 2.0</p>
+                      <div class="mt-2.5 rounded-lg bg-white dark:bg-slate-800 border border-slate-100 dark:border-slate-700 p-3 space-y-2">
+                        <p class="text-xs text-slate-700 dark:text-slate-300"><strong>Quando seguir:</strong> Para serving geral com máxima compatibilidade de modelos. É o engine mais fácil para começar.</p>
+                        <p class="text-xs italic text-slate-500 dark:text-slate-400 border-l-2 border-indigo-300 dark:border-indigo-700 pl-2">
+                          <strong class="not-italic text-emerald-600 dark:text-emerald-400"><i class="ph ph-check-circle" aria-hidden="true"></i> Validado:</strong>
+                          "vLLM is fast with state-of-the-art serving throughput, efficient management of attention key and value memory with PagedAttention, continuous batching."
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </li>
+                <li class="p-4">
+                  <div class="flex items-start gap-3">
+                    <div class="flex items-center justify-center w-9 h-9 rounded-lg bg-indigo-50 dark:bg-indigo-950 text-indigo-600 dark:text-indigo-400 shrink-0 mt-0.5" aria-hidden="true"><i class="ph-fill ph-github-logo text-lg"></i></div>
+                    <div class="min-w-0 flex-1">
+                      <a href="https://github.com/sgl-project/sglang" target="_blank" rel="noopener noreferrer" class="text-sm font-bold text-slate-900 dark:text-white hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors duration-150 inline-flex items-center gap-1">
+                        <span class="truncate">sgl-project/sglang — High-performance LLM serving framework</span>
+                        <i class="ph ph-arrow-up-right text-xs shrink-0 opacity-50" aria-hidden="true"></i>
+                      </a>
+                      <p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">GitHub &middot; Python &middot; Apache 2.0</p>
+                      <div class="mt-2.5 rounded-lg bg-white dark:bg-slate-800 border border-slate-100 dark:border-slate-700 p-3 space-y-2">
+                        <p class="text-xs text-slate-700 dark:text-slate-300"><strong>Quando seguir:</strong> Para workloads com prefixos compartilhados (RAG, multi-turn chat). RadixAttention reduz TTFT.</p>
+                        <p class="text-xs italic text-slate-500 dark:text-slate-400 border-l-2 border-indigo-300 dark:border-indigo-700 pl-2">
+                          <strong class="not-italic text-emerald-600 dark:text-emerald-400"><i class="ph ph-check-circle" aria-hidden="true"></i> Validado:</strong>
+                          "RadixAttention for prefix caching, zero-overhead CPU scheduler, prefill-decode disaggregation, speculative decoding, continuous batching."
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </li>
+                <li class="p-4">
+                  <div class="flex items-start gap-3">
+                    <div class="flex items-center justify-center w-9 h-9 rounded-lg bg-indigo-50 dark:bg-indigo-950 text-indigo-600 dark:text-indigo-400 shrink-0 mt-0.5" aria-hidden="true"><i class="ph-fill ph-github-logo text-lg"></i></div>
+                    <div class="min-w-0 flex-1">
+                      <a href="https://github.com/NVIDIA/TensorRT-LLM" target="_blank" rel="noopener noreferrer" class="text-sm font-bold text-slate-900 dark:text-white hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors duration-150 inline-flex items-center gap-1">
+                        <span class="truncate">NVIDIA/TensorRT-LLM — Optimized inference for LLMs</span>
+                        <i class="ph ph-arrow-up-right text-xs shrink-0 opacity-50" aria-hidden="true"></i>
+                      </a>
+                      <p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">GitHub &middot; C++/Python &middot; Apache 2.0</p>
+                      <div class="mt-2.5 rounded-lg bg-white dark:bg-slate-800 border border-slate-100 dark:border-slate-700 p-3 space-y-2">
+                        <p class="text-xs text-slate-700 dark:text-slate-300"><strong>Quando seguir:</strong> Para deployments NVIDIA estáveis de longo prazo que precisam de máximo throughput. Requer build de engine (~28 min).</p>
+                        <p class="text-xs italic text-slate-500 dark:text-slate-400 border-l-2 border-indigo-300 dark:border-indigo-700 pl-2">
+                          <strong class="not-italic text-emerald-600 dark:text-emerald-400"><i class="ph ph-check-circle" aria-hidden="true"></i> Validado:</strong>
+                          "TensorRT-LLM is an open-sourced library for optimizing LLM and Visual Gen inference with state-of-the-art optimizations."
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </li>
+              </ul>
+            </div>
+            <div class="rounded-xl border border-amber-200 dark:border-amber-900/60 bg-amber-50 dark:bg-amber-950/30 p-4" role="note" aria-label="Check de avanço">
+              <p class="text-xs font-bold uppercase tracking-widest text-amber-700 dark:text-amber-500 mb-1.5 flex items-center gap-1.5"><i class="ph ph-compass-rose" aria-hidden="true"></i> Check de avanço</p>
+              <p class="text-sm font-medium text-amber-900 dark:text-amber-200 text-pretty">Se você tem um produto de chat multi-turn com RAG, qual engine escolheria e por quê? E se fosse batch processing de alta taxa?</p>
+            </div>
+          </section>
+
+          <hr class="border-slate-200 dark:border-slate-800 mb-16" aria-hidden="true">
+
+          <!-- ESTAÇÃO 8 -->
+          <section id="estacao-8" class="mb-16 scroll-mt-20" aria-labelledby="estacao-8-titulo">
+            <div class="flex items-center gap-3 mb-5">
+              <span class="flex items-center justify-center w-8 h-8 rounded-full bg-indigo-600 text-white font-bold text-sm shrink-0 shadow" aria-hidden="true">8</span>
+              <h2 id="estacao-8-titulo" class="text-xl font-bold text-pretty">Quantização &amp; Model Compression</h2>
+            </div>
+            <p class="text-xs text-slate-400 dark:text-slate-500 mb-5 flex items-center gap-3 font-medium">
+              <span class="flex items-center gap-1"><i class="ph ph-clock" aria-hidden="true"></i> ~8 min leitura</span>
+              <span class="flex items-center gap-1"><i class="ph ph-plug" aria-hidden="true"></i> 2 nervo(s)</span>
+            </p>
+            <div class="text-slate-700 dark:text-slate-300 leading-relaxed mb-8 space-y-3 text-[1.0625rem]">
+              <p>Quantização reduz a precisão numérica dos pesos do modelo de FP16 para INT8, INT4 ou inferior, cortando drasticamente requisitos de memória e compute. Um modelo 70B tem ~280 GB VRAM em FP32, mas apenas ~35 GB em INT4 — <strong>redução de 8x em memória</strong>. PTQ (Post-Training Quantization) com GPTQ ou AWQ é o ponto de entrada mais comum. O vLLM suporta FP8 nativamente em GPUs Hopper/Ada Lovelace.</p>
+              <p>Além de quantização de pesos, a <strong>quantização do KV cache</strong> (FP8, INT4) reduz o memory bottleneck sem retreino. Técnicas como QJL (1-bit) e TurboQuant (ICLR 2026) oferecem compressão extrema com bias zero. A combinação de quantização + sparsity (2:4 pattern) pode dar 30% mais throughput além da quantização isolada.</p>
+            </div>
+            <div class="rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900/60 overflow-hidden mb-6">
+              <div class="flex items-center gap-2 px-4 py-3 border-b border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900">
+                <i class="ph ph-plug text-indigo-500 dark:text-indigo-400" aria-hidden="true"></i>
+                <h3 class="text-xs font-bold uppercase tracking-widest text-slate-600 dark:text-slate-300">Nervos Validados</h3>
+              </div>
+              <ul class="divide-y divide-slate-200 dark:divide-slate-800" role="list">
+                <li class="p-4">
+                  <div class="flex items-start gap-3">
+                    <div class="flex items-center justify-center w-9 h-9 rounded-lg bg-indigo-50 dark:bg-indigo-950 text-indigo-600 dark:text-indigo-400 shrink-0 mt-0.5" aria-hidden="true"><i class="ph-fill ph-article text-lg"></i></div>
+                    <div class="min-w-0 flex-1">
+                      <a href="https://www.redhat.com/en/blog/llm-compression-and-optimization-cheaper-inference-fewer-hardware-resources" target="_blank" rel="noopener noreferrer" class="text-sm font-bold text-slate-900 dark:text-white hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors duration-150 inline-flex items-center gap-1">
+                        <span class="truncate">LLM compression and optimization: Cheaper inference with fewer hardware resources</span>
+                        <i class="ph ph-arrow-up-right text-xs shrink-0 opacity-50" aria-hidden="true"></i>
+                      </a>
+                      <p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">Red Hat &middot; Blog &middot; Jun 2026</p>
+                      <div class="mt-2.5 rounded-lg bg-white dark:bg-slate-800 border border-slate-100 dark:border-slate-700 p-3 space-y-2">
+                        <p class="text-xs text-slate-700 dark:text-slate-300"><strong>Quando seguir:</strong> Para visão prática de quantização + sparsity com repositórios de modelos pré-otimizados.</p>
+                        <p class="text-xs italic text-slate-500 dark:text-slate-400 border-l-2 border-indigo-300 dark:border-indigo-700 pl-2">
+                          <strong class="not-italic text-emerald-600 dark:text-emerald-400"><i class="ph ph-check-circle" aria-hidden="true"></i> Validado:</strong>
+                          "24-sparse-llama achieved 98.4% accuracy recovery... delivered up to 30% higher throughput and 20% lower latency from sparsity alone."
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </li>
+                <li class="p-4">
+                  <div class="flex items-start gap-3">
+                    <div class="flex items-center justify-center w-9 h-9 rounded-lg bg-indigo-50 dark:bg-indigo-950 text-indigo-600 dark:text-indigo-400 shrink-0 mt-0.5" aria-hidden="true"><i class="ph-fill ph-article text-lg"></i></div>
+                    <div class="min-w-0 flex-1">
+                      <a href="https://devstarsj.github.io/2026/04/02/llm-inference-optimization-quantization-speculative-decoding-kv-cache-2026/" target="_blank" rel="noopener noreferrer" class="text-sm font-bold text-slate-900 dark:text-white hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors duration-150 inline-flex items-center gap-1">
+                        <span class="truncate">LLM Inference Optimization in 2026: Quantization, Speculative Decoding, KV Cache</span>
+                        <i class="ph ph-arrow-up-right text-xs shrink-0 opacity-50" aria-hidden="true"></i>
+                      </a>
+                      <p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">Dev Note &middot; Blog &middot; Abr 2026</p>
+                      <div class="mt-2.5 rounded-lg bg-white dark:bg-slate-800 border border-slate-100 dark:border-slate-700 p-3 space-y-2">
+                        <p class="text-xs text-slate-700 dark:text-slate-300"><strong>Quando seguir:</strong> Para deep-dive técnico de PTQ com BitsAndBytes, GPTQ, AWQ e speculative decoding.</p>
+                        <p class="text-xs italic text-slate-500 dark:text-slate-400 border-l-2 border-indigo-300 dark:border-indigo-700 pl-2">
+                          <strong class="not-italic text-emerald-600 dark:text-emerald-400"><i class="ph ph-check-circle" aria-hidden="true"></i> Validado:</strong>
+                          "Modern quantization techniques can reduce model size by 75-90% while maintaining over 95% of original performance."
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </li>
+              </ul>
+            </div>
+            <div class="rounded-xl border border-amber-200 dark:border-amber-900/60 bg-amber-50 dark:bg-amber-950/30 p-4" role="note" aria-label="Check de avanço">
+              <p class="text-xs font-bold uppercase tracking-widest text-amber-700 dark:text-amber-500 mb-1.5 flex items-center gap-1.5"><i class="ph ph-compass-rose" aria-hidden="true"></i> Check de avanço</p>
+              <p class="text-sm font-medium text-amber-900 dark:text-amber-200 text-pretty">Quando FP8 não é suficiente e você precisa de INT4? Quais os trade-offs de acurácia versus ganho de memória?</p>
+            </div>
+          </section>
+
+          <hr class="border-slate-200 dark:border-slate-800 mb-16" aria-hidden="true">
+
+          <!-- ESTAÇÃO 9 -->
+          <section id="estacao-9" class="mb-16 scroll-mt-20" aria-labelledby="estacao-9-titulo">
+            <div class="flex items-center gap-3 mb-5">
+              <span class="flex items-center justify-center w-8 h-8 rounded-full bg-indigo-600 text-white font-bold text-sm shrink-0 shadow" aria-hidden="true">9</span>
+              <h2 id="estacao-9-titulo" class="text-xl font-bold text-pretty">Context Engineering — O Meta-Skill</h2>
+            </div>
+            <p class="text-xs text-slate-400 dark:text-slate-500 mb-5 flex items-center gap-3 font-medium">
+              <span class="flex items-center gap-1"><i class="ph ph-clock" aria-hidden="true"></i> ~10 min leitura</span>
+              <span class="flex items-center gap-1"><i class="ph ph-plug" aria-hidden="true"></i> 3 nervo(s)</span>
+            </p>
+            <div class="text-slate-700 dark:text-slate-300 leading-relaxed mb-8 space-y-3 text-[1.0625rem]">
+              <p>Context engineering é a disciplina de orquestrar <em>tudo</em> que entra e sai de um LLM para maximizar qualidade e minimizar custo. Não é sobre encurtar prompts — é sobre <strong>design de pipeline</strong>. O pipeline combinado mais agressivo: Cache prefix (90%) + route to cheapest model (60-95%) + batch non-urgent (50%) + compress prompts (5-20x) + cache responses (100% on repeats) = <strong>95-99% cost reduction</strong> vs. naive approach.</p>
+              <p>As equipes vencedoras em 2026 não são apenas boas em prompts — são boas em <strong>context engineering</strong>. RTK reduz output de CLI, Caveman comprime linguagem, LSP afina lookup por símbolo, Graphify fornece memória estrutural de longo alcance, e Headroom gerencia o contexto inteiro. Essas abordagens são complementares, não competidoras.</p>
+            </div>
+            <div class="rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900/60 overflow-hidden mb-6">
+              <div class="flex items-center gap-2 px-4 py-3 border-b border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900">
+                <i class="ph ph-plug text-indigo-500 dark:text-indigo-400" aria-hidden="true"></i>
+                <h3 class="text-xs font-bold uppercase tracking-widest text-slate-600 dark:text-slate-300">Nervos Validados</h3>
+              </div>
+              <ul class="divide-y divide-slate-200 dark:divide-slate-800" role="list">
+                <li class="p-4">
+                  <div class="flex items-start gap-3">
+                    <div class="flex items-center justify-center w-9 h-9 rounded-lg bg-indigo-50 dark:bg-indigo-950 text-indigo-600 dark:text-indigo-400 shrink-0 mt-0.5" aria-hidden="true"><i class="ph-fill ph-article text-lg"></i></div>
+                    <div class="min-w-0 flex-1">
+                      <a href="https://www.tokenoptimize.dev/guides/llm-token-optimization-strategies" target="_blank" rel="noopener noreferrer" class="text-sm font-bold text-slate-900 dark:text-white hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors duration-150 inline-flex items-center gap-1">
+                        <span class="truncate">LLM Token Optimization Strategies: The Complete Guide for 2026</span>
+                        <i class="ph ph-arrow-up-right text-xs shrink-0 opacity-50" aria-hidden="true"></i>
+                      </a>
+                      <p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">Token Optimize &middot; Guia completo &middot; Jun 2026</p>
+                      <div class="mt-2.5 rounded-lg bg-white dark:bg-slate-800 border border-slate-100 dark:border-slate-700 p-3 space-y-2">
+                        <p class="text-xs text-slate-700 dark:text-slate-300"><strong>Quando seguir:</strong> Para o mapa completo: context engineering, session management, model routing, batch APIs, prompt compression.</p>
+                        <p class="text-xs italic text-slate-500 dark:text-slate-400 border-l-2 border-indigo-300 dark:border-indigo-700 pl-2">
+                          <strong class="not-italic text-emerald-600 dark:text-emerald-400"><i class="ph ph-check-circle" aria-hidden="true"></i> Validado:</strong>
+                          "Token optimization is a context-engineering problem, not a prompt-shortening problem. Most teams waste time making prompts shorter when the real cost drivers are bloated context."
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </li>
+                <li class="p-4">
+                  <div class="flex items-start gap-3">
+                    <div class="flex items-center justify-center w-9 h-9 rounded-lg bg-indigo-50 dark:bg-indigo-950 text-indigo-600 dark:text-indigo-400 shrink-0 mt-0.5" aria-hidden="true"><i class="ph-fill ph-github-logo text-lg"></i></div>
+                    <div class="min-w-0 flex-1">
+                      <a href="https://github.com/pleasedodisturb/awesome-llm-token-optimization" target="_blank" rel="noopener noreferrer" class="text-sm font-bold text-slate-900 dark:text-white hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors duration-150 inline-flex items-center gap-1">
+                        <span class="truncate">awesome-llm-token-optimization — Curated list of strategies, tools, papers</span>
+                        <i class="ph ph-arrow-up-right text-xs shrink-0 opacity-50" aria-hidden="true"></i>
+                      </a>
+                      <p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">GitHub &middot; Curated list</p>
+                      <div class="mt-2.5 rounded-lg bg-white dark:bg-slate-800 border border-slate-100 dark:border-slate-700 p-3 space-y-2">
+                        <p class="text-xs text-slate-700 dark:text-slate-300"><strong>Quando seguir:</strong> Para referência rápida de todas as estratégias organizadas por ROI e esforço.</p>
+                        <p class="text-xs italic text-slate-500 dark:text-slate-400 border-l-2 border-indigo-300 dark:border-indigo-700 pl-2">
+                          <strong class="not-italic text-emerald-600 dark:text-emerald-400"><i class="ph ph-check-circle" aria-hidden="true"></i> Validado:</strong>
+                          "Combined pipeline: Cache prefix (90%) + route to cheapest model (60-95%) + batch non-urgent (50%) + compress prompts (5-20x) + cache responses (100% on repeats) = 95-99% cost reduction."
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </li>
+                <li class="p-4">
+                  <div class="flex items-start gap-3">
+                    <div class="flex items-center justify-center w-9 h-9 rounded-lg bg-indigo-50 dark:bg-indigo-950 text-indigo-600 dark:text-indigo-400 shrink-0 mt-0.5" aria-hidden="true"><i class="ph-fill ph-github-logo text-lg"></i></div>
+                    <div class="min-w-0 flex-1">
+                      <a href="https://github.com/ZLKong/Awesome-Collection-Token-Reduction" target="_blank" rel="noopener noreferrer" class="text-sm font-bold text-slate-900 dark:text-white hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors duration-150 inline-flex items-center gap-1">
+                        <span class="truncate">Awesome-Collection-Token-Reduction — Papers on token pruning, merging, compression</span>
+                        <i class="ph ph-arrow-up-right text-xs shrink-0 opacity-50" aria-hidden="true"></i>
+                      </a>
+                      <p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">GitHub &middot; Academic &middot; 473 ⭐</p>
+                      <div class="mt-2.5 rounded-lg bg-white dark:bg-slate-800 border border-slate-100 dark:border-slate-700 p-3 space-y-2">
+                        <p class="text-xs text-slate-700 dark:text-slate-300"><strong>Quando seguir:</strong> Para pesquisa acadêmica sobre token pruning, merging, clustering e adaptive thinking.</p>
+                        <p class="text-xs italic text-slate-500 dark:text-slate-400 border-l-2 border-indigo-300 dark:border-indigo-700 pl-2">
+                          <strong class="not-italic text-emerald-600 dark:text-emerald-400"><i class="ph ph-check-circle" aria-hidden="true"></i> Validado:</strong>
+                          "A curated list of recent papers on token reduction (token pruning, merging, clustering, compressing, adaptive thinking) for ML/Gen AI."
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </li>
+              </ul>
+            </div>
+            <div class="rounded-xl border border-amber-200 dark:border-amber-900/60 bg-amber-50 dark:bg-amber-950/30 p-4" role="note" aria-label="Check de avanço">
+              <p class="text-xs font-bold uppercase tracking-widest text-amber-700 dark:text-amber-500 mb-1.5 flex items-center gap-1.5"><i class="ph ph-compass-rose" aria-hidden="true"></i> Check de avanço</p>
+              <p class="text-sm font-medium text-amber-900 dark:text-amber-200 text-pretty">Se você pudesse implementar apenas UMA otimização hoje para reduzir custos de LLM em 50%+, qual seria? Justifique.</p>
+            </div>
+          </section>
+
+          <hr class="border-slate-200 dark:border-slate-800 mb-16" aria-hidden="true">
+
+          <!-- BOSS FINAL -->
+          <section id="boss-final" class="mb-16 scroll-mt-20" aria-labelledby="boss-titulo">
+            <div class="rounded-2xl bg-slate-900 dark:bg-slate-950 border border-slate-800 p-8 md:p-10 relative overflow-hidden">
+              <div class="absolute inset-0 overflow-hidden pointer-events-none" aria-hidden="true">
+                <div class="absolute -top-16 -right-16 w-56 h-56 bg-indigo-600 rounded-full opacity-10 blur-3xl"></div>
+                <div class="absolute -bottom-16 -left-16 w-56 h-56 bg-violet-600 rounded-full opacity-10 blur-3xl"></div>
+              </div>
+              <div class="relative z-10">
+                <div class="flex items-center gap-3 mb-5">
+                  <div class="flex items-center justify-center w-11 h-11 rounded-xl bg-white/10 border border-white/20">
+                    <i class="ph-fill ph-sword text-2xl text-amber-400" aria-hidden="true"></i>
+                  </div>
+                  <h2 id="boss-titulo" class="text-2xl font-extrabold text-white text-pretty">Boss Final</h2>
+                </div>
+                <p class="text-slate-400 mb-8 text-pretty">Sem gabarito. Responda mentalmente ou por escrito para provar retenção e síntese.</p>
+                <ol class="space-y-4" aria-label="Perguntas socráticas">
+                  <li class="rounded-xl border border-white/10 bg-white/5 hover:bg-white/10 transition-colors duration-150 p-4">
+                    <span class="block text-indigo-300 text-xs font-bold uppercase tracking-widest mb-1.5">1. Arquitetural</span>
+                    <p class="text-white font-medium text-pretty">Projet um pipeline de context engineering para um coding agent que faz 200 tool calls por sessão. Quais camadas de compressão você empilharia e em que ordem?</p>
+                  </li>
+                  <li class="rounded-xl border border-white/10 bg-white/5 hover:bg-white/10 transition-colors duration-150 p-4">
+                    <span class="block text-indigo-300 text-xs font-bold uppercase tracking-widest mb-1.5">2. Comparativa</span>
+                    <p class="text-white font-medium text-pretty">RTK comprime output de CLI, Headroom comprime context, Caveman comprime output gerado. Em que cenário você usaria os três juntos? Há sobreposição ou complementaridade?</p>
+                  </li>
+                  <li class="rounded-xl border border-white/10 bg-white/5 hover:bg-white/10 transition-colors duration-150 p-4">
+                    <span class="block text-indigo-300 text-xs font-bold uppercase tracking-widest mb-1.5">3. Decisão</span>
+                    <p class="text-white font-medium text-pretty">Sua empresa roda LLMs self-hosted em H100. Você pode investir em quantização FP8 OU em prompt compression com LLMLingua. Qual escolhe e por quê?</p>
+                  </li>
+                  <li class="rounded-xl border border-white/10 bg-white/5 hover:bg-white/10 transition-colors duration-150 p-4">
+                    <span class="block text-indigo-300 text-xs font-bold uppercase tracking-widest mb-1.5">4. Crítica</span>
+                    <p class="text-white font-medium text-pretty">O LLMLingua tem 6 papers mas baixa adoção em produção. O RTK tem 69K stars e adoção massiva. O que isso diz sobre o gap entre pesquisa acadêmica e engenharia prática?</p>
+                  </li>
+                  <li class="rounded-xl border border-white/10 bg-white/5 hover:bg-white/10 transition-colors duration-150 p-4">
+                    <span class="block text-indigo-300 text-xs font-bold uppercase tracking-widest mb-1.5">5. Síntese</span>
+                    <p class="text-white font-medium text-pretty">Se você pudesse explicar "token compression and economy for LLMs" para um CTO em 3 frases, quais seriam?</p>
+                  </li>
+                </ol>
+              </div>
+            </div>
+          </section>
+
+          <!-- RECURSOS ADICIONAIS -->
+          <section class="mb-16" aria-labelledby="recursos-adicionais-titulo">
+            <div class="rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-5">
+              <h3 id="recursos-adicionais-titulo" class="text-xs font-bold uppercase tracking-widest text-slate-400 dark:text-slate-500 mb-3 flex items-center gap-1.5">
+                <i class="ph ph-package" aria-hidden="true"></i> Recursos Adicionais Multimodais
+              </h3>
+              <p class="text-xs text-slate-500 dark:text-slate-400 mb-3">Vídeos, tutoriais, discussions recentes e livros que complementam a trilha.</p>
+              <ul class="space-y-2" role="list">
+                <li class="text-sm text-slate-700 dark:text-slate-300 flex items-start gap-2">
+                  <i class="ph ph-video text-indigo-500 mt-0.5 shrink-0" aria-hidden="true"></i>
+                  <span><a href="https://www.youtube.com/watch?v=wIXr22QTEHg" target="_blank" rel="noopener noreferrer" class="font-medium hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors">LLM Compression Explained: Build Faster, Efficient AI Models</a> — <span class="text-slate-500 dark:text-slate-400">🔍 IBM watsonx &middot; Mar 2026</span></span>
+                </li>
+                <li class="text-sm text-slate-700 dark:text-slate-300 flex items-start gap-2">
+                  <i class="ph ph-wrench text-indigo-500 mt-0.5 shrink-0" aria-hidden="true"></i>
+                  <span><a href="https://github.com/pleasedodisturb/awesome-llm-token-optimization" target="_blank" rel="noopener noreferrer" class="font-medium hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors">awesome-llm-token-optimization</a> — <span class="text-slate-500 dark:text-slate-400">🔍 Curated list com Quick Wins, strategies por ROI</span></span>
+                </li>
+                <li class="text-sm text-slate-700 dark:text-slate-300 flex items-start gap-2">
+                  <i class="ph ph-chats-circle text-indigo-500 mt-0.5 shrink-0" aria-hidden="true"></i>
+                  <span><a href="#exemplo-artigo-economia-de-contexto" class="font-medium hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors">Claude Code: 10 repositórios no GitHub que reduzem o uso em até 90%</a> — <span class="text-slate-500 dark:text-slate-400">🔍 Ranking por stars, testado em Abr 2026</span></span>
+                </li>
+                <li class="text-sm text-slate-700 dark:text-slate-300 flex items-start gap-2">
+                  <i class="ph ph-book text-indigo-500 mt-0.5 shrink-0" aria-hidden="true"></i>
+                  <span><a href="https://www.aussieai.com/research/token-reduction" target="_blank" rel="noopener noreferrer" class="font-medium hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors">Token Reduction — Aussie AI (David Spuler, Ph.D.)</a> — <span class="text-slate-500 dark:text-slate-400">🔍 Survey com 500+ técnicas de otimização</span></span>
+                </li>
+                <li class="text-sm text-slate-700 dark:text-slate-300 flex items-start gap-2">
+                  <i class="ph ph-article text-indigo-500 mt-0.5 shrink-0" aria-hidden="true"></i>
+                  <span><a href="https://redis.io/blog/llm-token-optimization-speed-up-apps" target="_blank" rel="noopener noreferrer" class="font-medium hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors">LLM Token Optimization: Cut Costs &amp; Latency in 2026</a> — <span class="text-slate-500 dark:text-slate-400">🔍 Redis &middot; Prompt caching, semantic caching, model routing</span></span>
+                </li>
+              </ul>
+            </div>
+          </section>
+
+          <!-- PRÓXIMOS PASSOS -->
+          <section class="mb-16" aria-labelledby="proximos-passos-titulo">
+            <div class="rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-5">
+              <h3 id="proximos-passos-titulo" class="text-xs font-bold uppercase tracking-widest text-slate-400 dark:text-slate-500 mb-3 flex items-center gap-1.5">
+                <i class="ph ph-arrow-fat-lines-right" aria-hidden="true"></i> Próximos Passos Sugeridos
+              </h3>
+              <ul class="space-y-2" role="list">
+                <li class="text-sm text-slate-700 dark:text-slate-300">
+                  <strong class="text-indigo-600 dark:text-indigo-400">Projeto prático:</strong> Implemente o stack completo RTK + Headroom + Caveman e meça economia real com <code>rtk gain</code> e <code>curl localhost:8787/stats</code>.
+                </li>
+                <li class="text-sm text-slate-700 dark:text-slate-300">
+                  <strong class="text-indigo-600 dark:text-indigo-400">Benchmark pessoal:</strong> Clone o caveman-micro e teste seu micro-prompt vs skill completo em suas tarefas reais.
+                </li>
+                <li class="text-sm text-slate-700 dark:text-slate-300">
+                  <strong class="text-indigo-600 dark:text-indigo-400">Self-hosting:</strong> Escolha vLLM ou SGLang, aplique quantização FP8, e compare throughput com a API managed.
+                </li>
+                <li class="text-sm text-slate-700 dark:text-slate-300">
+                  <strong class="text-indigo-600 dark:text-indigo-400">Pesquisa:</strong> Leia o paper LLMLingua-2 (ACL 2024 Findings) para entender compressão de prompts via token classification.
+                </li>
+              </ul>
+            </div>
+          </section>
+
+          <!-- AUDITORIA -->
+          <footer class="pt-8 border-t border-slate-200 dark:border-slate-800 text-sm" aria-label="Auditoria da trilha">
+            <p class="font-semibold text-slate-900 dark:text-slate-100 flex items-center gap-1.5 mb-3">
+              <i class="ph ph-shield-check text-emerald-500" aria-hidden="true"></i>
+              Auditoria Trust by Inspection
+            </p>
+            <ul class="space-y-1 text-slate-500 dark:text-slate-400 list-disc list-inside">
+              <li>Candidatos inspecionados: 45+</li>
+              <li>Aprovados e validados: 27 nervos</li>
+              <li>Mix multimodal: 1 vídeo, 0 áudios/podcasts, 0 tutoriais/labs, 15 artigos técnicos, 7 repositórios GitHub, 1 survey acadêmico, 3 livros/referências</li>
+              <li>Lacunas declaradas: podcasts/áudios (tema mais técnico, poucos podcasts dedicados), tutoriais hands-on (compensado pela documentação dos próprios projetos)</li>
+              <li>Gerado por <code class="px-1 py-0.5 rounded bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 text-xs">learning-trail-skill</code></li>
+            </ul>
+          </footer>
+
+        </div>
+      </main>
+    </div>
+  </div>
+</body>
+</html>

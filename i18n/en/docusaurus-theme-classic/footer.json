@@ -19,6 +19,10 @@
     "message": "Open source",
     "description": "The label of footer link with label=Open source linking to /#opensource"
   },
+  "link.item.label.Playbook": {
+    "message": "Playbook",
+    "description": "The label of footer link with label=Playbook linking to /tutoriais/ai-first-playbook"
+  },
   "link.item.label.Amazon Bedrock": {
     "message": "Amazon Bedrock",
     "description": "The label of footer link with label=Amazon Bedrock linking to /docs/aws/bedrock"

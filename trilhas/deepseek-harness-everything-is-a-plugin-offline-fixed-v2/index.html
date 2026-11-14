@@ -1,0 +1,385 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="description" content="Trilha avançada de engenharia reversa e arquitetura do DeepSeek Harness.">
+<title>OFFLINE · DeepSeek Harness — Everything is a Plugin · Learning Trail</title>
+<style>
+:root{--bg:#f6f7fb;--surface:#fff;--surface2:#eef1f7;--text:#111827;--muted:#667085;--border:#dfe3ea;--accent:#5b3fd6;--accent2:#7c5cff;--good:#087443;--shadow:0 18px 50px rgba(16,24,40,.08)}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--bg);color:var(--text);font-family:Inter,ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,sans-serif;line-height:1.65;overflow-x:hidden}
+a{color:var(--accent);text-decoration:none}a:hover{text-decoration:underline}.app{display:grid;grid-template-columns:280px minmax(0,1fr);min-height:100vh}
+aside{position:sticky;top:0;height:100vh;padding:28px 20px;border-right:1px solid var(--border);background:rgba(255,255,255,.92);backdrop-filter:blur(14px);overflow:auto}
+.brand{font-weight:900;font-size:18px;line-height:1.15}.eyebrow{font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--accent);font-weight:800}
+.stats{margin:20px 0;padding:16px;border:1px solid var(--border);border-radius:16px;background:var(--surface2);font-size:13px}.stats b{display:block;font-size:22px}.nav a{display:block;padding:9px 11px;border-radius:10px;color:var(--muted);font-size:13px}.nav a:hover{background:var(--surface2);text-decoration:none;color:var(--text)}
+main{max-width:1280px;width:100%;margin:0 auto;padding:40px 40px 80px;min-width:0}.hero{padding:48px;border-radius:28px;background:linear-gradient(135deg,#16122e,#4932a8 60%,#101828);color:#fff;box-shadow:0 25px 70px rgba(49,31,135,.22)}
+.hero h1{font-size:clamp(34px,6vw,64px);line-height:1.02;margin:12px 0 18px;letter-spacing:-.045em}.hero p{max-width:780px;color:#e7e5ff;font-size:18px}.chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:24px}.chip{padding:7px 11px;border:1px solid rgba(255,255,255,.18);background:rgba(255,255,255,.08);border-radius:999px;font-size:12px}
+.map{margin:28px 0}.map-card{padding:24px;background:var(--surface);border:1px solid var(--border);border-radius:20px;box-shadow:var(--shadow)}.map-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}.map-item{padding:15px;border:1px solid var(--border);border-radius:14px}.map-item b{display:block}.map-item span{font-size:12px;color:var(--muted)}
+.station{padding:54px 0;border-bottom:1px solid var(--border);scroll-margin-top:30px;min-width:0}.station-kicker{font-size:11px;font-weight:900;letter-spacing:.14em;color:var(--accent)}h2{font-size:38px;line-height:1.12;letter-spacing:-.035em;margin:7px 0 16px}h3{margin:0 0 10px}.goal{font-size:16px;color:var(--muted)}.narrative{margin:22px 0;padding:20px 22px;border-left:4px solid var(--accent);background:var(--surface2);border-radius:0 14px 14px 0}
+.grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:18px;align-items:start}.card{background:var(--surface);border:1px solid var(--border);border-radius:18px;padding:20px;box-shadow:var(--shadow);min-width:0;overflow:hidden}.checks{list-style:none;padding:0;margin:0}.checks li{margin:11px 0}.checks input{accent-color:var(--accent)}.lab pre{margin:0;background:#0b1020;color:#e6edf3;padding:16px;border-radius:12px;overflow:auto;overflow-wrap:anywhere;white-space:pre-wrap;max-width:100%;font-size:12px;line-height:1.6}
+.resources{margin-top:28px}.section-head{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:12px}.section-head span{font-size:12px;color:var(--muted)}.resource{background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:18px;margin:12px 0;min-width:0;overflow:hidden}.resource-top{display:flex;justify-content:space-between;gap:12px;font-size:10px;text-transform:uppercase;letter-spacing:.1em}.resource-type{color:var(--muted)}.validated{color:var(--good);font-weight:900}.resource h4{font-size:17px;margin:8px 0 0}.meta{font-size:12px;color:var(--muted)}.resource p{font-size:14px;margin:10px 0;color:var(--text)}.resource blockquote{margin:10px 0 0;padding:9px 12px;border-left:3px solid var(--border);color:#475467;font-size:13px;background:var(--surface2)}
+.audit{margin-top:38px;padding:24px;background:var(--surface);border:1px solid var(--border);border-radius:18px}.footer{margin-top:40px;color:var(--muted);font-size:12px}
+@media(max-width:1100px){.grid{grid-template-columns:minmax(0,1fr)}}
+@media(max-width:900px){.app{display:block}aside{position:relative;height:auto;border-right:0;border-bottom:1px solid var(--border);max-height:none}main{padding:22px}.grid,.map-grid{grid-template-columns:minmax(0,1fr)}.hero{padding:30px}h2{font-size:30px}}
+@media(prefers-color-scheme:dark){:root{--bg:#0b0d12;--surface:#11151c;--surface2:#171c25;--text:#f2f4f7;--muted:#98a2b3;--border:#293140;--accent:#9a86ff;--good:#5ce1a0;--shadow:none}aside{background:rgba(12,15,20,.92)}.resource blockquote{color:#b8c0cc}}
+@media print{aside{display:none}.app{display:block}main{max-width:none;padding:0}.hero{box-shadow:none}.station{break-inside:avoid}.resource{break-inside:avoid}}
+
+#trail-progress{margin-top:14px}.progress-label{display:flex;justify-content:space-between;font-size:11px;color:var(--muted);margin-bottom:6px}.progress-track{height:6px;border-radius:999px;background:var(--border);overflow:hidden}.progress-fill{height:100%;width:0;border-radius:999px;background:var(--accent);transition:width .25s ease}.nav a.active{background:var(--surface2);color:var(--text);font-weight:700}.reset-progress{width:100%;margin-top:14px;padding:8px 10px;border:1px solid var(--border);border-radius:9px;background:var(--surface);color:var(--muted);cursor:pointer;font-size:11px}
+</style>
+</head>
+<body>
+<div class="app">
+<aside>
+  <div class="eyebrow">Learning Trail</div>
+  <div class="brand">DeepSeek Harness<br>Everything is a Plugin</div>
+  <div class="stats"><span>Nível</span><b>Avançado</b><span>9 estações · 18 nervos validados</span></div>
+  <nav class="nav">
+    <a href="#mapa">Mapa</a>
+    <a href="#s1">01 · O Harness: o agente além do modelo</a><a href="#s2">02 · Cordis: o microkernel de composição</a><a href="#s3">03 · Boot, Profiles, Bundles e configuração como composição</a><a href="#s4">04 · O Agent Loop: turn, step, request e tool execution</a><a href="#s5">05 · Session Event Sourcing: tudo que o modelo vê é reconstruível</a><a href="#s6">06 · Persistência, crash recovery e replay operacional</a><a href="#s7">07 · Capability Seams: ferramentas, políticas, sandbox e modelos</a><a href="#s8">08 · Construindo extensões: Tool e LLM Adapter</a><a href="#s9">09 · Nível especialista: composição de agentes e harnesses próprios</a>
+    <a href="#boss">Boss final</a><a href="#auditoria">Auditoria</a>
+  </nav>
+</aside>
+<main>
+<section class="hero">
+  <div class="eyebrow" style="color:#c4b5fd">Trilha validada por inspeção</div>
+  <h1>DeepSeek Harness<br>Everything is a Plugin</h1>
+  <p>Engenharia reversa do <strong>deepseek-ai/deepseek-harness</strong> para entender como construir agent harnesses composáveis: Cordis, services, events, agent loop, event sourcing, persistence, capability seams e extensões.</p>
+  <div class="chips"><span class="chip">9 estações</span><span class="chip">18 nervos validados</span><span class="chip">Prático + arquitetura</span><span class="chip">TypeScript</span><span class="chip">Cordis</span></div>
+</section>
+<section class="map" id="mapa">
+<div class="map-card"><h2 style="font-size:28px">Mapa da trilha</h2><div class="map-grid">
+<div class="map-item"><b>01 · O Harness: o agente além do modelo</b><span>Construir o modelo mental correto de Agent = Model + Harness e entender por que o Harness é uma camada de execução, ferramentas, contexto, estado e controle.</span></div><div class="map-item"><b>02 · Cordis: o microkernel de composição</b><span>Dominar os conceitos de plugin, Context, service injection, eventos tipados, efeitos reversíveis e composição espacial/temporal.</span></div><div class="map-item"><b>03 · Boot, Profiles, Bundles e configuração como composição</b><span>Entender como um dsh real vira uma árvore de plugins a partir de profiles, bundles e camadas de patch.</span></div><div class="map-item"><b>04 · O Agent Loop: turn, step, request e tool execution</b><span>Reconstituir o ciclo de execução de um agente e localizar os pontos de extensão sem modificar o loop.</span></div><div class="map-item"><b>05 · Session Event Sourcing: tudo que o modelo vê é reconstruível</b><span>Aprender a sessão como log append-only e entender replay, derivação de histórico, fork, resume e invariantes de reconstruibilidade.</span></div><div class="map-item"><b>06 · Persistência, crash recovery e replay operacional</b><span>Entender como o log em memória ganha durabilidade, batching, recuperação após crash e backends intercambiáveis.</span></div><div class="map-item"><b>07 · Capability Seams: ferramentas, políticas, sandbox e modelos</b><span>Aprender a projetar capabilities substituíveis com Service Definition, Provider e Consumer e escolher o seam correto para cada comportamento.</span></div><div class="map-item"><b>08 · Construindo extensões: Tool e LLM Adapter</b><span>Passar da leitura arquitetural para autoria real de plugins: registrar uma ferramenta tipada e conectar um novo provider de modelo.</span></div><div class="map-item"><b>09 · Nível especialista: composição de agentes e harnesses próprios</b><span>Usar o projeto como laboratório para construir seu próprio agent harness: subagents, workflows, Code Mode, presets, UI/protocol bridges e runtime composable.</span></div>
+</div></div></section>
+
+    <section class="station" id="s1">
+      <div class="station-kicker">ESTAÇÃO 01</div>
+      <h2>1. O Harness: o agente além do modelo</h2>
+      <p class="goal"><strong>Objetivo:</strong> Construir o modelo mental correto de Agent = Model + Harness e entender por que o Harness é uma camada de execução, ferramentas, contexto, estado e controle.</p>
+      <div class="narrative">Comece pelo limite entre modelo e sistema. O DeepSeek Harness não é apenas uma UI para um LLM: ele organiza as capacidades que fazem um agente operar no mundo. A tese central do projeto é que essas capacidades podem ser trocadas e recompostas como plugins, sem transformar o núcleo do produto em um monólito.</div>
+      <div class="grid">
+        <div class="card">
+          <h3>Domínio de saída</h3>
+          <ul class="checks"><li><label><input type='checkbox'> <span>Explicar por que um modelo sozinho não constitui um agente operacional.</span></label></li><li><label><input type='checkbox'> <span>Distinguir modelo, harness, ferramenta, sessão e runtime.</span></label></li><li><label><input type='checkbox'> <span>Explicar o que significa &#x27;Everything is a Plugin&#x27; sem reduzir a ideia a um simples sistema de extensões.</span></label></li><li><label><input type='checkbox'> <span>Identificar quais capacidades são explicitamente tratadas como plugins no projeto.</span></label></li></ul>
+        </div>
+        <div class="card lab">
+          <h3>Laboratório</h3>
+          <pre><code>Instale o preview localmente, execute o Web UI e registre quais capacidades aparecem no runtime. Depois compare Standard, Code/Programmatic Tool Calling, Minimal e Creator como composições diferentes de capacidades.</code></pre>
+        </div>
+      </div>
+      <div class="resources">
+        <div class="section-head"><h3>Nervos validados</h3><span>2 recursos</span></div>
+        
+      <article class="resource">
+        <div class="resource-top"><span class="resource-type">Visão oficial / documentação de produto</span><span class="validated">VALIDADO</span></div>
+        <h4><a href="https://www.deepseek.com/harness/en/" target="_blank" rel="noopener noreferrer">DeepSeek Harness — developer preview</a></h4>
+        <div class="meta">DeepSeek AI</div>
+        <p><strong>Por que entra:</strong> É a fonte primária para o modelo mental Agent = Model + Harness, capacidades como plugins, rastreabilidade e modos de execução.</p>
+        <blockquote>“Every capability is a plugin that can be swapped or recomposed.”</blockquote>
+      </article>
+      <article class="resource">
+        <div class="resource-top"><span class="resource-type">README oficial</span><span class="validated">VALIDADO</span></div>
+        <h4><a href="https://github.com/deepseek-ai/deepseek-harness/blob/master/README.md" target="_blank" rel="noopener noreferrer">README — DeepSeek Harness</a></h4>
+        <div class="meta">deepseek-ai/deepseek-harness</div>
+        <p><strong>Por que entra:</strong> Confirma o propósito do projeto, o uso de Cordis, o estado de developer preview e a execução a partir do npm ou source.</p>
+        <blockquote>“everything is a plugin”</blockquote>
+      </article>
+      </div>
+    </section>
+    <section class="station" id="s2">
+      <div class="station-kicker">ESTAÇÃO 02</div>
+      <h2>2. Cordis: o microkernel de composição</h2>
+      <p class="goal"><strong>Objetivo:</strong> Dominar os conceitos de plugin, Context, service injection, eventos tipados, efeitos reversíveis e composição espacial/temporal.</p>
+      <div class="narrative">A segunda estação entra no mecanismo que torna a tese executável. Cordis é o framework sob o Harness. O ponto importante não é apenas &#x27;plugins&#x27;: é como serviços dependem de outros serviços, como eventos compõem comportamento e como registros são desmontados de forma reversível.</div>
+      <div class="grid">
+        <div class="card">
+          <h3>Domínio de saída</h3>
+          <ul class="checks"><li><label><input type='checkbox'> <span>Explicar Context como repositório de serviços.</span></label></li><li><label><input type='checkbox'> <span>Explicar inject como declaração de dependência, não como ordem manual de boot.</span></label></li><li><label><input type='checkbox'> <span>Diferenciar emit, waterfall, parallel e serial.</span></label></li><li><label><input type='checkbox'> <span>Explicar por que efeitos reversíveis são necessários para HMR, unload e recomposição.</span></label></li></ul>
+        </div>
+        <div class="card lab">
+          <h3>Laboratório</h3>
+          <pre><code>Crie um plugin mínimo que registre um serviço e um listener. Monte-o, altere a disponibilidade de uma dependência e observe a diferença entre acoplamento por import e dependência declarativa por Context.</code></pre>
+        </div>
+      </div>
+      <div class="resources">
+        <div class="section-head"><h3>Nervos validados</h3><span>2 recursos</span></div>
+        
+      <article class="resource">
+        <div class="resource-top"><span class="resource-type">Primer oficial do Cordis</span><span class="validated">VALIDADO</span></div>
+        <h4><a href="https://github.com/deepseek-ai/deepseek-harness/blob/master/docs/cordis-primer.md" target="_blank" rel="noopener noreferrer">Cordis Primer</a></h4>
+        <div class="meta">deepseek-ai/deepseek-harness</div>
+        <p><strong>Por que entra:</strong> Apresenta as cinco ideias fundamentais: Service, Context, inject, typed events e reversible effects.</p>
+        <blockquote>“A context is a repository of services.”</blockquote>
+      </article>
+      <article class="resource">
+        <div class="resource-top"><span class="resource-type">Paper / preprint</span><span class="validated">VALIDADO</span></div>
+        <h4><a href="https://github.com/cordiverse/paper" target="_blank" rel="noopener noreferrer">A Programming Paradigm for Spatiotemporal Composability</a></h4>
+        <div class="meta">cordiverse/paper</div>
+        <p><strong>Por que entra:</strong> É a fundamentação conceitual por trás de temporal composability, spatial composability, effects, coeffects e composição dinâmica.</p>
+        <blockquote>“temporal composability” e “spatial composability” são dimensões ortogonais.</blockquote>
+      </article>
+      </div>
+    </section>
+    <section class="station" id="s3">
+      <div class="station-kicker">ESTAÇÃO 03</div>
+      <h2>3. Boot, Profiles, Bundles e configuração como composição</h2>
+      <p class="goal"><strong>Objetivo:</strong> Entender como um dsh real vira uma árvore de plugins a partir de profiles, bundles e camadas de patch.</p>
+      <div class="narrative">Depois do kernel, a pergunta passa a ser: como o sistema decide quais plugins existem? A resposta é composição declarativa. Profiles agrupam bundles; bundles distribuem linhas de configuração e código; patches substituem ou inserem configurações. A arquitetura deixa de ser &#x27;qual código chama qual código&#x27; e passa a ser &#x27;qual árvore de capacidades foi montada&#x27;.</div>
+      <div class="grid">
+        <div class="card">
+          <h3>Domínio de saída</h3>
+          <ul class="checks"><li><label><input type='checkbox'> <span>Diferenciar profile de bundle.</span></label></li><li><label><input type='checkbox'> <span>Explicar a ordem de aplicação das camadas de configuração.</span></label></li><li><label><input type='checkbox'> <span>Usar dump-config para inspecionar a árvore efetivamente inicializada.</span></label></li><li><label><input type='checkbox'> <span>Explicar por que uma configuração pode substituir um provider sem alterar o código do Harness.</span></label></li></ul>
+        </div>
+        <div class="card lab">
+          <h3>Laboratório</h3>
+          <pre><code>Execute `dsh --profile web --dump-config`. Escolha uma linha de configuração e desenhe a cadeia: bundle → profile patch → home patch → --patch overlay.</code></pre>
+        </div>
+      </div>
+      <div class="resources">
+        <div class="section-head"><h3>Nervos validados</h3><span>2 recursos</span></div>
+        
+      <article class="resource">
+        <div class="resource-top"><span class="resource-type">Arquitetura oficial</span><span class="validated">VALIDADO</span></div>
+        <h4><a href="https://github.com/deepseek-ai/deepseek-harness/blob/master/docs/architecture.md" target="_blank" rel="noopener noreferrer">Architecture — Profiles and bundles</a></h4>
+        <div class="meta">deepseek-ai/deepseek-harness</div>
+        <p><strong>Por que entra:</strong> Define profile, bundle, dsh-base, dsh-web-app, dsh-headless e a ordem das camadas.</p>
+        <blockquote>“A running dsh is a plugin tree composed at boot from ordered layers.”</blockquote>
+      </article>
+      <article class="resource">
+        <div class="resource-top"><span class="resource-type">Mapa oficial de capabilities</span><span class="validated">VALIDADO</span></div>
+        <h4><a href="https://github.com/deepseek-ai/deepseek-harness/blob/master/docs/capability-seams.md" target="_blank" rel="noopener noreferrer">Capability Seams And Core Services</a></h4>
+        <div class="meta">deepseek-ai/deepseek-harness</div>
+        <p><strong>Por que entra:</strong> Mostra a separação entre service definition, providers e consumidores e a grande superfície de seams do runtime.</p>
+        <blockquote>“A service can be a core spine service, a swappable capability seam, or a bundle/composition point.”</blockquote>
+      </article>
+      </div>
+    </section>
+    <section class="station" id="s4">
+      <div class="station-kicker">ESTAÇÃO 04</div>
+      <h2>4. O Agent Loop: turn, step, request e tool execution</h2>
+      <p class="goal"><strong>Objetivo:</strong> Reconstituir o ciclo de execução de um agente e localizar os pontos de extensão sem modificar o loop.</p>
+      <div class="narrative">Aqui você deixa de pensar no agente como um while-loop abstrato. O Harness possui uma semântica operacional explícita: turn, step, inbox, pre-step, request, streaming, tool calls, resultados e encerramento. Essa precisão é o que permite interceptar comportamento por eventos sem fork do driver.</div>
+      <div class="grid">
+        <div class="card">
+          <h3>Domínio de saída</h3>
+          <ul class="checks"><li><label><input type='checkbox'> <span>Definir a diferença entre turn e step.</span></label></li><li><label><input type='checkbox'> <span>Reconstituir a sequência turn/start → step → request → tools → step/end → turn/end.</span></label></li><li><label><input type='checkbox'> <span>Explicar quais eventos são duráveis e quais são pontos de extensão ao vivo.</span></label></li><li><label><input type='checkbox'> <span>Identificar onde uma política pode rejeitar, transformar ou continuar uma execução.</span></label></li></ul>
+        </div>
+        <div class="card lab">
+          <h3>Laboratório</h3>
+          <pre><code>Desenhe o sequence diagram de uma interação com duas chamadas de ferramenta e uma segunda etapa. Marque quais fatos devem sobreviver a replay e quais são apenas coordenação em tempo real.</code></pre>
+        </div>
+      </div>
+      <div class="resources">
+        <div class="section-head"><h3>Nervos validados</h3><span>2 recursos</span></div>
+        
+      <article class="resource">
+        <div class="resource-top"><span class="resource-type">Diagrama oficial</span><span class="validated">VALIDADO</span></div>
+        <h4><a href="https://github.com/deepseek-ai/deepseek-harness/blob/master/docs/agent-lifecycle.md" target="_blank" rel="noopener noreferrer">Agent Turn And Step Lifecycle</a></h4>
+        <div class="meta">deepseek-ai/deepseek-harness</div>
+        <p><strong>Por que entra:</strong> Detalha o fluxo entre Agent, Driver, hooks, prompt, LLM, Tools e Session.</p>
+        <blockquote>“durable replay facts” ficam em session/event; controle ao vivo fica em agent/*.</blockquote>
+      </article>
+      <article class="resource">
+        <div class="resource-top"><span class="resource-type">Pipeline oficial</span><span class="validated">VALIDADO</span></div>
+        <h4><a href="https://github.com/deepseek-ai/deepseek-harness/blob/master/docs/tool-execution-pipeline.md" target="_blank" rel="noopener noreferrer">Tool Execution Pipeline</a></h4>
+        <div class="meta">deepseek-ai/deepseek-harness</div>
+        <p><strong>Por que entra:</strong> Explica pre-execute, guards, execute, post-execute, finalizeContent e result como pipeline sem alterar o loop.</p>
+        <blockquote>“The tools/pre-execute waterfall runs first, monotonic guards run next.”</blockquote>
+      </article>
+      </div>
+    </section>
+    <section class="station" id="s5">
+      <div class="station-kicker">ESTAÇÃO 05</div>
+      <h2>5. Session Event Sourcing: tudo que o modelo vê é reconstruível</h2>
+      <p class="goal"><strong>Objetivo:</strong> Aprender a sessão como log append-only e entender replay, derivação de histórico, fork, resume e invariantes de reconstruibilidade.</p>
+      <div class="narrative">Esta é uma das ideias arquiteturais mais importantes do projeto. A conversa não é armazenada como um histórico paralelo do LLM: ela é derivada de eventos. Isso transforma observabilidade, replay, fork, persistência e UI em projeções do mesmo stream.</div>
+      <div class="grid">
+        <div class="card">
+          <h3>Domínio de saída</h3>
+          <ul class="checks"><li><label><input type='checkbox'> <span>Explicar por que SessionEvent é a fonte de verdade.</span></label></li><li><label><input type='checkbox'> <span>Explicar deriveMessages() como projeção do log.</span></label></li><li><label><input type='checkbox'> <span>Distinguir eventos de superfície, chunks e metadados de request.</span></label></li><li><label><input type='checkbox'> <span>Explicar a regra &#x27;model-visible means logged&#x27;.</span></label></li></ul>
+        </div>
+        <div class="card lab">
+          <h3>Laboratório</h3>
+          <pre><code>Pegue uma sessão pequena e modele os eventos `turn/start`, `step/start`, `user/message`, `assistant/chunk`, `assistant/message`, `tool/call` e `tool/result`. Depois reconstrua a mensagem que o modelo receberia.</code></pre>
+        </div>
+      </div>
+      <div class="resources">
+        <div class="section-head"><h3>Nervos validados</h3><span>2 recursos</span></div>
+        
+      <article class="resource">
+        <div class="resource-top"><span class="resource-type">Subsystem oficial</span><span class="validated">VALIDADO</span></div>
+        <h4><a href="https://github.com/deepseek-ai/deepseek-harness/blob/master/docs/subsystems/session.md" target="_blank" rel="noopener noreferrer">Sessions — event-sourced model</a></h4>
+        <div class="meta">deepseek-ai/deepseek-harness</div>
+        <p><strong>Por que entra:</strong> Define Session como log append-only e descreve o vocabulário de SessionEvent.</p>
+        <blockquote>“The LLM message history is derived from the log, never stored separately.”</blockquote>
+      </article>
+      <article class="resource">
+        <div class="resource-top"><span class="resource-type">Arquitetura oficial</span><span class="validated">VALIDADO</span></div>
+        <h4><a href="https://github.com/deepseek-ai/deepseek-harness/blob/master/docs/architecture.md#session-log" target="_blank" rel="noopener noreferrer">Architecture — Session log</a></h4>
+        <div class="meta">deepseek-ai/deepseek-harness</div>
+        <p><strong>Por que entra:</strong> Explica a reconstruibilidade do contexto e por que novos inputs model-visible exigem eventos persistidos.</p>
+        <blockquote>“Anything that reaches a model request must be reconstructable from the log.”</blockquote>
+      </article>
+      </div>
+    </section>
+    <section class="station" id="s6">
+      <div class="station-kicker">ESTAÇÃO 06</div>
+      <h2>6. Persistência, crash recovery e replay operacional</h2>
+      <p class="goal"><strong>Objetivo:</strong> Entender como o log em memória ganha durabilidade, batching, recuperação após crash e backends intercambiáveis.</p>
+      <div class="narrative">Event sourcing só é útil operacionalmente quando o log sobrevive ao processo. O seam de persistence separa o modelo lógico da estratégia física. JSONL e SQLite podem implementar o mesmo contrato, enquanto flush, recovery e versionamento preservam as propriedades do stream.</div>
+      <div class="grid">
+        <div class="card">
+          <h3>Domínio de saída</h3>
+          <ul class="checks"><li><label><input type='checkbox'> <span>Explicar SessionPersistence como capability seam.</span></label></li><li><label><input type='checkbox'> <span>Diferenciar append lógico de batching físico.</span></label></li><li><label><input type='checkbox'> <span>Explicar como um turn interrompido é recuperado sem truncar eventos.</span></label></li><li><label><input type='checkbox'> <span>Distinguir SessionHeader de SessionEventMap.</span></label></li></ul>
+        </div>
+        <div class="card lab">
+          <h3>Laboratório</h3>
+          <pre><code>Implemente um pequeno simulador de persistência com append-only JSONL, simule uma interrupção entre turn/start e turn/end e produza uma recuperação equivalente à regra do Harness.</code></pre>
+        </div>
+      </div>
+      <div class="resources">
+        <div class="section-head"><h3>Nervos validados</h3><span>2 recursos</span></div>
+        
+      <article class="resource">
+        <div class="resource-top"><span class="resource-type">Subsystem oficial</span><span class="validated">VALIDADO</span></div>
+        <h4><a href="https://github.com/deepseek-ai/deepseek-harness/blob/master/docs/subsystems/persistence.md" target="_blank" rel="noopener noreferrer">Session Persistence</a></h4>
+        <div class="meta">deepseek-ai/deepseek-harness</div>
+        <p><strong>Por que entra:</strong> Descreve o seam de persistência, flush checkpoint, crash recovery, SessionHeader e backends JSONL/SQLite.</p>
+        <blockquote>“The durability seam for the event log.”</blockquote>
+      </article>
+      <article class="resource">
+        <div class="resource-top"><span class="resource-type">Subsystem oficial</span><span class="validated">VALIDADO</span></div>
+        <h4><a href="https://github.com/deepseek-ai/deepseek-harness/blob/master/docs/subsystems/session.md" target="_blank" rel="noopener noreferrer">Session subsystem</a></h4>
+        <div class="meta">deepseek-ai/deepseek-harness</div>
+        <p><strong>Por que entra:</strong> Complementa a persistência explicando o modelo lógico da Session e como resume/fork/replay reutilizam o mesmo log.</p>
+        <blockquote>“A Session is an append-only log of typed SessionEvents.”</blockquote>
+      </article>
+      </div>
+    </section>
+    <section class="station" id="s7">
+      <div class="station-kicker">ESTAÇÃO 07</div>
+      <h2>7. Capability Seams: ferramentas, políticas, sandbox e modelos</h2>
+      <p class="goal"><strong>Objetivo:</strong> Aprender a projetar capabilities substituíveis com Service Definition, Provider e Consumer e escolher o seam correto para cada comportamento.</p>
+      <div class="narrative">Agora a arquitetura vira método de engenharia. Um novo comportamento não deve entrar no loop por conveniência. Você identifica o seam: ctx.tools, ctx.llm, ctx.fs, ctx.sandbox, ctx.subagents, ctx.jobs, ctx.web, ctx.approval e outros. O desenho passa a ser orientado por contratos de capability.</div>
+      <div class="grid">
+        <div class="card">
+          <h3>Domínio de saída</h3>
+          <ul class="checks"><li><label><input type='checkbox'> <span>Definir os três papéis de um capability seam.</span></label></li><li><label><input type='checkbox'> <span>Escolher entre service method e event para um requisito.</span></label></li><li><label><input type='checkbox'> <span>Explicar como trocar filesystem + subprocess por um ambiente remoto sem forks por provider.</span></label></li><li><label><input type='checkbox'> <span>Separar capability, policy e observability.</span></label></li></ul>
+        </div>
+        <div class="card lab">
+          <h3>Laboratório</h3>
+          <pre><code>Escolha uma capability &#x27;executar shell remoto&#x27;. Modele Service Definition, Provider local e Consumer model-facing. Depois faça uma segunda implementação remota sem alterar o Consumer.</code></pre>
+        </div>
+      </div>
+      <div class="resources">
+        <div class="section-head"><h3>Nervos validados</h3><span>2 recursos</span></div>
+        
+      <article class="resource">
+        <div class="resource-top"><span class="resource-type">Arquitetura oficial</span><span class="validated">VALIDADO</span></div>
+        <h4><a href="https://github.com/deepseek-ai/deepseek-harness/blob/master/docs/architecture.md#capability-seams" target="_blank" rel="noopener noreferrer">Architecture — Capability seams</a></h4>
+        <div class="meta">deepseek-ai/deepseek-harness</div>
+        <p><strong>Por que entra:</strong> Formaliza seam como definição, provider e consumer e mostra o princípio de substituição sistêmica.</p>
+        <blockquote>“A seam is a swappable capability with three roles.”</blockquote>
+      </article>
+      <article class="resource">
+        <div class="resource-top"><span class="resource-type">Cookbook oficial</span><span class="validated">VALIDADO</span></div>
+        <h4><a href="https://github.com/deepseek-ai/deepseek-harness/blob/master/docs/cookbook/extension-cookbook.md" target="_blank" rel="noopener noreferrer">Extension Cookbook</a></h4>
+        <div class="meta">deepseek-ai/deepseek-harness</div>
+        <p><strong>Por que entra:</strong> Mapeia features para extension points e mostra padrões de tool, hook, UI e protocol driver.</p>
+        <blockquote>“Every product feature maps to a listener on a documented extension point.”</blockquote>
+      </article>
+      </div>
+    </section>
+    <section class="station" id="s8">
+      <div class="station-kicker">ESTAÇÃO 08</div>
+      <h2>8. Construindo extensões: Tool e LLM Adapter</h2>
+      <p class="goal"><strong>Objetivo:</strong> Passar da leitura arquitetural para autoria real de plugins: registrar uma ferramenta tipada e conectar um novo provider de modelo.</p>
+      <div class="narrative">Nesta estação você começa a escrever código contra os contratos do Harness. O objetivo não é copiar snippets, mas entender as fronteiras: schema e canonical output de tools; lifecycle e signal; stream chunks e replay state de adapters; e registro effect-based para HMR seguro.</div>
+      <div class="grid">
+        <div class="card">
+          <h3>Domínio de saída</h3>
+          <ul class="checks"><li><label><input type='checkbox'> <span>Criar uma tool com schema, execute, output schema e render.</span></label></li><li><label><input type='checkbox'> <span>Usar exec.signal e respeitar identidade de ToolExecution.</span></label></li><li><label><input type='checkbox'> <span>Entender pre-execute, execute, post-execute e result.</span></label></li><li><label><input type='checkbox'> <span>Criar um LlmAdapter com streaming, usage/finish e tratamento de abort/unsupported.</span></label></li></ul>
+        </div>
+        <div class="card lab">
+          <h3>Laboratório</h3>
+          <pre><code>Crie `hello-context` como tool que retorna JSON canônico e uma renderização humana. Em seguida crie um adapter fake que emite uma sequência mínima de StreamChunk e passe pelos testes do contrato.</code></pre>
+        </div>
+      </div>
+      <div class="resources">
+        <div class="section-head"><h3>Nervos validados</h3><span>2 recursos</span></div>
+        
+      <article class="resource">
+        <div class="resource-top"><span class="resource-type">Cookbook oficial</span><span class="validated">VALIDADO</span></div>
+        <h4><a href="https://github.com/deepseek-ai/deepseek-harness/blob/master/docs/cookbook/adding-a-tool.md" target="_blank" rel="noopener noreferrer">Tool authoring reference</a></h4>
+        <div class="meta">deepseek-ai/deepseek-harness</div>
+        <p><strong>Por que entra:</strong> É a referência detalhada para ToolDefinition, defineTool, execução, canonical JSON, policy e Code Mode.</p>
+        <blockquote>“Registration is effect-based: disposing the plugin fiber unregisters the tool.”</blockquote>
+      </article>
+      <article class="resource">
+        <div class="resource-top"><span class="resource-type">Cookbook oficial</span><span class="validated">VALIDADO</span></div>
+        <h4><a href="https://github.com/deepseek-ai/deepseek-harness/blob/master/docs/cookbook/adding-an-llm-adapter.md" target="_blank" rel="noopener noreferrer">Adding an LLM adapter</a></h4>
+        <div class="meta">deepseek-ai/deepseek-harness</div>
+        <p><strong>Por que entra:</strong> Define a implementação de adapters, protocolo de streaming, usage/finish, errors, signal e replay state.</p>
+        <blockquote>“Emit usage BEFORE finish; emit NOTHING after finish.”</blockquote>
+      </article>
+      </div>
+    </section>
+    <section class="station" id="s9">
+      <div class="station-kicker">ESTAÇÃO 09</div>
+      <h2>9. Nível especialista: composição de agentes e harnesses próprios</h2>
+      <p class="goal"><strong>Objetivo:</strong> Usar o projeto como laboratório para construir seu próprio agent harness: subagents, workflows, Code Mode, presets, UI/protocol bridges e runtime composable.</p>
+      <div class="narrative">A estação final muda o objetivo: você não está mais aprendendo a usar dsh, mas a reutilizar suas ideias para arquitetar sistemas agentic. O alvo é ser capaz de substituir loop, modelo, tools, sandbox, persistence e interface por composição, mantendo observabilidade e contratos.</div>
+      <div class="grid">
+        <div class="card">
+          <h3>Domínio de saída</h3>
+          <ul class="checks"><li><label><input type='checkbox'> <span>Projetar um Agent Preset como composição de capabilities.</span></label></li><li><label><input type='checkbox'> <span>Explicar subagent provider como seam e controlar profundidade/continuação.</span></label></li><li><label><input type='checkbox'> <span>Comparar tool-by-tool orchestration com Code Mode.</span></label></li><li><label><input type='checkbox'> <span>Projetar um harness próprio baseado em Context + Services + typed events + reversible effects.</span></label></li><li><label><input type='checkbox'> <span>Definir invariantes de replay, teardown e observabilidade antes de adicionar features.</span></label></li></ul>
+        </div>
+        <div class="card lab">
+          <h3>Laboratório</h3>
+          <pre><code>Projeto final: construa um mini-harness TypeScript inspirado no dsh. Ele deve ter Context, plugin lifecycle, tool registry, fake LLM, append-only session log, event waterfall, provider swap e um plugin de policy que possa ser montado/desmontado sem deixar efeitos.</code></pre>
+        </div>
+      </div>
+      <div class="resources">
+        <div class="section-head"><h3>Nervos validados</h3><span>2 recursos</span></div>
+        
+      <article class="resource">
+        <div class="resource-top"><span class="resource-type">Arquitetura oficial</span><span class="validated">VALIDADO</span></div>
+        <h4><a href="https://github.com/deepseek-ai/deepseek-harness/blob/master/docs/architecture.md#where-new-behavior-goes" target="_blank" rel="noopener noreferrer">Architecture — extension map</a></h4>
+        <div class="meta">deepseek-ai/deepseek-harness</div>
+        <p><strong>Por que entra:</strong> É o mapa decisório final para saber onde cada novo comportamento deve ser conectado.</p>
+        <blockquote>“New behavior attaches to a documented extension point.”</blockquote>
+      </article>
+      <article class="resource">
+        <div class="resource-top"><span class="resource-type">Design oficial</span><span class="validated">VALIDADO</span></div>
+        <h4><a href="https://www.deepseek.com/harness/en/" target="_blank" rel="noopener noreferrer">DeepSeek Harness — modes and traceability</a></h4>
+        <div class="meta">DeepSeek AI</div>
+        <p><strong>Por que entra:</strong> Fecha a trilha com Standard, Code, Minimal e Creator e com o princípio de reconstrução por session log.</p>
+        <blockquote>“Resume, fork, search, and replay all operate on the same event stream.”</blockquote>
+      </article>
+      </div>
+    </section>
+<section class="station" id="boss">
+  <div class="station-kicker">BOSS FINAL</div>
+  <h2>Construa seu próprio Mini Harness</h2>
+  <p class="goal"><strong>Entrega:</strong> um runtime TypeScript mínimo inspirado nas propriedades arquiteturais do dsh, não uma cópia do projeto.</p>
+  <div class="grid">
+    <div class="card"><h3>Obrigatórios</h3><ul>
+      <li>Context + service registry</li><li>Plugin mount/unmount com efeitos reversíveis</li><li>Dependency injection declarativa</li><li>Eventos tipados com pelo menos um waterfall</li><li>LLM provider substituível</li><li>Tool registry com policy hook</li><li>Append-only session log</li><li>Replay da execução</li><li>Teste de teardown sem vazamento de registro</li>
+    </ul></div>
+    <div class="card"><h3>Critério de especialista</h3><ul>
+      <li>Você consegue justificar cada seam.</li><li>Trocar provider não exige editar consumers.</li><li>Um plugin removido desfaz seus registros.</li><li>O contexto model-visible é reconstruível pelo log.</li><li>Policy não depende de modificar o loop.</li>
+    </ul></div>
+  </div>
+</section>
+<section class="audit" id="auditoria">
+<h2 style="font-size:28px">Auditoria da curadoria</h2>
+<ul>
+<li><strong>Fonte primária:</strong> repositório oficial deepseek-ai/deepseek-harness.</li>
+<li><strong>Arquitetura:</strong> README, architecture, Cordis primer, capability graph, lifecycle, tool pipeline, session e persistence.</li>
+<li><strong>Autoria:</strong> tool cookbook e LLM adapter cookbook foram inspecionados para contratos concretos de extensão.</li>
+<li><strong>Critério:</strong> cada nervo foi incluído porque seu conteúdo observado cobre diretamente o objetivo da estação.</li>
+<li><strong>Atualidade:</strong> o projeto está em developer preview e declara possibilidade de compatibility-breaking changes.</li>
+<li><strong>Data da auditoria:</strong> 22/08/2026.</li>
+</ul>
+</section>
+<div class="footer">Learning Trail · DeepSeek Harness · Gerado em 22/08/2026 · Use como trilha viva: valide a revisão do repositório antes de aplicar APIs em produção.</div>
+</main></div>
+<script>(()=>{const K="deepseek-harness-trail-progress-v1";let st={};try{st=JSON.parse(localStorage.getItem(K)||"{}")}catch(e){}const bs=[...document.querySelectorAll('.checks input[type="checkbox"]')];function up(){let d=bs.filter(x=>x.checked).length,p=bs.length?Math.round(d/bs.length*100):0,b=document.getElementById("trail-progress");if(!b){b=document.createElement("div");b.id="trail-progress";b.innerHTML='<div class="progress-label"><span>Progresso</span><strong></strong></div><div class="progress-track"><div class="progress-fill"></div></div>';document.querySelector("aside .stats")?.appendChild(b)}b.querySelector("strong").textContent=p+"%";b.querySelector(".progress-fill").style.width=p+"%"}bs.forEach((b,i)=>{b.checked=!!st[i];b.addEventListener("change",()=>{st[i]=b.checked;localStorage.setItem(K,JSON.stringify(st));up()})});const ls=[...document.querySelectorAll('.nav a[href^="#s"]')];if("IntersectionObserver"in window){const o=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){ls.forEach(a=>a.classList.remove("active"));document.querySelector('.nav a[href="#'+e.target.id+'"]')?.classList.add("active")}}),{rootMargin:"-20% 0px -65% 0px"});ls.map(a=>document.querySelector(a.getAttribute("href"))).filter(Boolean).forEach(s=>o.observe(s))}const r=document.createElement("button");r.className="reset-progress";r.textContent="Resetar progresso";r.onclick=()=>{if(confirm("Resetar o progresso desta trilha?")){bs.forEach(b=>b.checked=false);st={};localStorage.removeItem(K);up()}};document.querySelector("aside .stats")?.appendChild(r);up()})()</script></body></html>

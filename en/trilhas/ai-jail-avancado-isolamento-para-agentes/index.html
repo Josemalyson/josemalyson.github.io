@@ -1,0 +1,991 @@
+<!DOCTYPE html>
+<html
+  lang="pt-BR"
+  class="scroll-smooth"
+  x-data="{
+    dark: window.matchMedia('(prefers-color-scheme: dark)').matches,
+    mobileNav: false,
+    toggleDark() {
+      this.dark = !this.dark;
+      document.documentElement.classList.toggle('dark', this.dark);
+      document.documentElement.style.colorScheme = this.dark ? 'dark' : 'light';
+    }
+  }"
+  x-init="
+    document.documentElement.classList.toggle('dark', dark);
+    document.documentElement.style.colorScheme = dark ? 'dark' : 'light';
+  "
+>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#0f172a" media="(prefers-color-scheme: dark)">
+  <meta name="theme-color" content="#f8fafc" media="(prefers-color-scheme: light)">
+  <title>Learning Trail — AI Jail Avançado: Isolamento de Agentes</title>
+  <link rel="preconnect" href="https://cdn.tailwindcss.com">
+  <link rel="preconnect" href="https://unpkg.com">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/@phosphor-icons/web"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            primary: { DEFAULT: '#6366f1', hover: '#4f46e5' },
+          },
+          fontFamily: {
+            sans: ['Inter', 'system-ui', 'sans-serif'],
+          },
+        }
+      }
+    }
+  </script>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+
+    .custom-scrollbar::-webkit-scrollbar { width: 4px; }
+    .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
+    .custom-scrollbar::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
+    .dark .custom-scrollbar::-webkit-scrollbar-thumb { background: #334155; }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        transition-duration: 0.01ms !important;
+        animation-duration: 0.01ms !important;
+      }
+    }
+
+    .nav-link[aria-current="true"] {
+      background-color: rgb(238 242 255);
+      color: #4f46e5;
+      border-color: #c7d2fe;
+    }
+    .dark .nav-link[aria-current="true"] {
+      background-color: rgb(30 27 75 / 0.5);
+      color: #a5b4fc;
+      border-color: #3730a3;
+    }
+
+    .overscroll-y-contain { overscroll-behavior-y: contain; }
+
+    .skip-link {
+      position: absolute;
+      top: -100%;
+      left: 1rem;
+      z-index: 100;
+      padding: 0.5rem 1rem;
+      background: #6366f1;
+      color: white;
+      border-radius: 0 0 0.5rem 0.5rem;
+      font-weight: 600;
+      transition: top 0.2s;
+    }
+    .skip-link:focus { top: 0; }
+
+    .code-block {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-radius: 0.75rem;
+      padding: 1rem;
+      overflow-x: auto;
+      font-family: 'JetBrains Mono', 'Fira Code', monospace;
+      font-size: 0.8125rem;
+      line-height: 1.5;
+    }
+    .dark .code-block {
+      background: #0f172a;
+      border: 1px solid #1e293b;
+    }
+  </style>
+</head>
+<body
+  class="bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100 font-sans antialiased"
+  style="color-scheme: light;"
+  :style="dark ? 'color-scheme: dark' : 'color-scheme: light'"
+>
+
+  <a href="#main-content" class="skip-link focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white">
+    Ir para o conteúdo principal
+  </a>
+
+  <div class="flex h-screen overflow-hidden">
+
+    <!-- SIDEBAR -->
+    <aside
+      id="sidebar"
+      class="hidden md:flex flex-col w-72 shrink-0 bg-white dark:bg-slate-900 border-r border-slate-200 dark:border-slate-800 overflow-y-auto custom-scrollbar z-10 overscroll-y-contain"
+      aria-label="Mapa da trilha"
+    >
+      <div class="p-5 flex flex-col h-full">
+
+        <div class="flex items-center gap-3 mb-8 min-w-0">
+          <div class="flex items-center justify-center w-9 h-9 rounded-xl bg-indigo-600 shrink-0 shadow-sm">
+            <i class="ph-fill ph-compass text-white text-lg" aria-hidden="true"></i>
+          </div>
+          <div class="min-w-0">
+            <h1 class="text-sm font-bold truncate text-slate-900 dark:text-slate-100"><span translate="no">AI Jail Avançado</span></h1>
+            <p class="text-xs text-slate-500 dark:text-slate-400 font-medium uppercase tracking-widest">Learning Trail</p>
+          </div>
+        </div>
+
+        <div class="flex flex-wrap gap-1.5 mb-6">
+          <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 text-xs font-semibold">
+            <i class="ph ph-graduation-cap text-xs" aria-hidden="true"></i> advanced
+          </span>
+          <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-indigo-50 dark:bg-indigo-950 text-indigo-700 dark:text-indigo-300 text-xs font-semibold">
+            <i class="ph ph-map-pin text-xs" aria-hidden="true"></i> 7 estações
+          </span>
+          <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-emerald-50 dark:bg-emerald-950 text-emerald-700 dark:text-emerald-300 text-xs font-semibold">
+            <i class="ph ph-check-circle text-xs" aria-hidden="true"></i> 14 validados
+          </span>
+        </div>
+
+        <nav aria-label="Estações da trilha">
+          <p class="text-xs font-bold text-slate-400 dark:text-slate-500 uppercase tracking-widest mb-3 px-1">Estações</p>
+          <ul class="space-y-0.5" role="list">
+            <li>
+              <a href="#estacao-1" class="nav-link flex items-start gap-3 p-2.5 rounded-lg border border-transparent text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors duration-150 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500 focus-visible:ring-offset-2 focus-visible:ring-offset-white dark:focus-visible:ring-offset-slate-900" style="touch-action: manipulation">
+                <span class="flex items-center justify-center w-5 h-5 rounded-full bg-slate-200 dark:bg-slate-700 text-slate-600 dark:text-slate-300 text-xs font-bold shrink-0 mt-0.5">1</span>
+                <span class="min-w-0">
+                  <span class="block text-sm font-medium leading-snug">Por que Docker não basta</span>
+                  <span class="flex items-center gap-1 text-xs text-slate-400 dark:text-slate-500 mt-0.5">
+                    <i class="ph ph-clock" aria-hidden="true"></i>
+                    <span>~6&nbsp;min</span>
+                  </span>
+                </span>
+              </a>
+            </li>
+            <li>
+              <a href="#estacao-2" class="nav-link flex items-start gap-3 p-2.5 rounded-lg border border-transparent text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors duration-150 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500 focus-visible:ring-offset-2 focus-visible:ring-offset-white dark:focus-visible:ring-offset-slate-900" style="touch-action: manipulation">
+                <span class="flex items-center justify-center w-5 h-5 rounded-full bg-slate-200 dark:bg-slate-700 text-slate-600 dark:text-slate-300 text-xs font-bold shrink-0 mt-0.5">2</span>
+                <span class="min-w-0">
+                  <span class="block text-sm font-medium leading-snug">Os 5 níveis de isolamento</span>
+                  <span class="flex items-center gap-1 text-xs text-slate-400 dark:text-slate-500 mt-0.5">
+                    <i class="ph ph-clock" aria-hidden="true"></i>
+                    <span>~8&nbsp;min</span>
+                  </span>
+                </span>
+              </a>
+            </li>
+            <li>
+              <a href="#estacao-3" class="nav-link flex items-start gap-3 p-2.5 rounded-lg border border-transparent text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors duration-150 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500 focus-visible:ring-offset-2 focus-visible:ring-offset-white dark:focus-visible:ring-offset-slate-900" style="touch-action: manipulation">
+                <span class="flex items-center justify-center w-5 h-5 rounded-full bg-slate-200 dark:bg-slate-700 text-slate-600 dark:text-slate-300 text-xs font-bold shrink-0 mt-0.5">3</span>
+                <span class="min-w-0">
+                  <span class="block text-sm font-medium leading-snug">Firecracker &amp; MicroVMs</span>
+                  <span class="flex items-center gap-1 text-xs text-slate-400 dark:text-slate-500 mt-0.5">
+                    <i class="ph ph-clock" aria-hidden="true"></i>
+                    <span>~7&nbsp;min</span>
+                  </span>
+                </span>
+              </a>
+            </li>
+            <li>
+              <a href="#estacao-4" class="nav-link flex items-start gap-3 p-2.5 rounded-lg border border-transparent text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors duration-150 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500 focus-visible:ring-offset-2 focus-visible:ring-offset-white dark:focus-visible:ring-offset-slate-900" style="touch-action: manipulation">
+                <span class="flex items-center justify-center w-5 h-5 rounded-full bg-slate-200 dark:bg-slate-700 text-slate-600 dark:text-slate-300 text-xs font-bold shrink-0 mt-0.5">4</span>
+                <span class="min-w-0">
+                  <span class="block text-sm font-medium leading-snug">gVisor na prática</span>
+                  <span class="flex items-center gap-1 text-xs text-slate-400 dark:text-slate-500 mt-0.5">
+                    <i class="ph ph-clock" aria-hidden="true"></i>
+                    <span>~5&nbsp;min</span>
+                  </span>
+                </span>
+              </a>
+            </li>
+            <li>
+              <a href="#estacao-5" class="nav-link flex items-start gap-3 p-2.5 rounded-lg border border-transparent text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors duration-150 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500 focus-visible:ring-offset-2 focus-visible:ring-offset-white dark:focus-visible:ring-offset-slate-900" style="touch-action: manipulation">
+                <span class="flex items-center justify-center w-5 h-5 rounded-full bg-slate-200 dark:bg-slate-700 text-slate-600 dark:text-slate-300 text-xs font-bold shrink-0 mt-0.5">5</span>
+                <span class="min-w-0">
+                  <span class="block text-sm font-medium leading-snug">Kubernetes Agent Sandbox</span>
+                  <span class="flex items-center gap-1 text-xs text-slate-400 dark:text-slate-500 mt-0.5">
+                    <i class="ph ph-clock" aria-hidden="true"></i>
+                    <span>~6&nbsp;min</span>
+                  </span>
+                </span>
+              </a>
+            </li>
+            <li>
+              <a href="#estacao-6" class="nav-link flex items-start gap-3 p-2.5 rounded-lg border border-transparent text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors duration-150 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500 focus-visible:ring-offset-2 focus-visible:ring-offset-white dark:focus-visible:ring-offset-slate-900" style="touch-action: manipulation">
+                <span class="flex items-center justify-center w-5 h-5 rounded-full bg-slate-200 dark:bg-slate-700 text-slate-600 dark:text-slate-300 text-xs font-bold shrink-0 mt-0.5">6</span>
+                <span class="min-w-0">
+                  <span class="block text-sm font-medium leading-snug">Runtime Security</span>
+                  <span class="flex items-center gap-1 text-xs text-slate-400 dark:text-slate-500 mt-0.5">
+                    <i class="ph ph-clock" aria-hidden="true"></i>
+                    <span>~6&nbsp;min</span>
+                  </span>
+                </span>
+              </a>
+            </li>
+            <li>
+              <a href="#estacao-7" class="nav-link flex items-start gap-3 p-2.5 rounded-lg border border-transparent text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors duration-150 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500 focus-visible:ring-offset-2 focus-visible:ring-offset-white dark:focus-visible:ring-offset-slate-900" style="touch-action: manipulation">
+                <span class="flex items-center justify-center w-5 h-5 rounded-full bg-slate-200 dark:bg-slate-700 text-slate-600 dark:text-slate-300 text-xs font-bold shrink-0 mt-0.5">7</span>
+                <span class="min-w-0">
+                  <span class="block text-sm font-medium leading-snug">Defense-in-Depth</span>
+                  <span class="flex items-center gap-1 text-xs text-slate-400 dark:text-slate-500 mt-0.5">
+                    <i class="ph ph-clock" aria-hidden="true"></i>
+                    <span>~7&nbsp;min</span>
+                  </span>
+                </span>
+              </a>
+            </li>
+            <li class="pt-3 mt-2 border-t border-slate-100 dark:border-slate-800">
+              <a href="#boss-final" class="nav-link flex items-center gap-3 p-2.5 rounded-lg border border-transparent text-amber-700 dark:text-amber-400 hover:bg-amber-50 dark:hover:bg-amber-950/40 transition-colors duration-150 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-500 focus-visible:ring-offset-2" style="touch-action: manipulation">
+                <i class="ph-fill ph-sword text-lg shrink-0" aria-hidden="true"></i>
+                <span class="text-sm font-bold">Boss Final</span>
+              </a>
+            </li>
+          </ul>
+        </nav>
+
+        <div class="mt-auto pt-4 border-t border-slate-100 dark:border-slate-800">
+          <p class="text-xs text-slate-400 dark:text-slate-500 flex items-center gap-1.5">
+            <i class="ph ph-shield-check text-emerald-500" aria-hidden="true"></i>
+            <span translate="no">Trust by Inspection</span>
+          </p>
+        </div>
+
+      </div>
+    </aside>
+
+    <!-- MAIN -->
+    <div class="flex flex-col flex-1 min-w-0 overflow-hidden">
+
+      <header class="sticky top-0 z-20 bg-white/80 dark:bg-slate-900/80 backdrop-blur-md border-b border-slate-200 dark:border-slate-800">
+        <div class="flex items-center justify-between px-4 h-14 gap-3">
+          <div class="flex md:hidden items-center gap-2 min-w-0">
+            <i class="ph-fill ph-compass text-indigo-600 dark:text-indigo-400 text-xl shrink-0" aria-hidden="true"></i>
+            <span class="text-sm font-bold truncate" translate="no">AI Jail Avançado</span>
+          </div>
+          <p class="hidden md:block text-sm text-slate-500 dark:text-slate-400">
+            <span translate="no">Learning Trail</span>
+          </p>
+          <div class="flex items-center gap-2 ml-auto">
+            <button @click="toggleDark()" :aria-pressed="dark" aria-label="Alternar modo escuro" class="p-2 rounded-full text-slate-500 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors duration-150 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500 focus-visible:ring-offset-2" style="touch-action: manipulation">
+              <i class="ph text-lg" :class="dark ? 'ph-sun' : 'ph-moon'" aria-hidden="true"></i>
+            </button>
+          </div>
+        </div>
+      </header>
+
+      <main id="main-content" class="flex-1 overflow-y-auto custom-scrollbar">
+        <div class="max-w-2xl mx-auto px-5 py-10 md:py-16">
+
+          <!-- HERO -->
+          <header class="mb-14">
+            <div class="flex flex-wrap gap-2 mb-5" role="list" aria-label="Metadados da trilha">
+              <span role="listitem" class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 text-xs font-semibold border border-slate-200 dark:border-slate-700">
+                Nível:&nbsp;advanced
+              </span>
+              <span role="listitem" class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 text-xs font-semibold border border-slate-200 dark:border-slate-700">
+                7&nbsp;Estações
+              </span>
+              <span role="listitem" class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-indigo-50 dark:bg-indigo-950 text-indigo-700 dark:text-indigo-300 text-xs font-semibold border border-indigo-200 dark:border-indigo-900">
+                <i class="ph ph-check" aria-hidden="true"></i> 14&nbsp;Nervos Validados
+              </span>
+            </div>
+
+            <h2 class="text-3xl md:text-4xl font-extrabold tracking-tight mb-5 text-pretty">
+              AI Jail Avançado: Isolamento de Agentes em Produção
+            </h2>
+
+            <div class="rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-5">
+              <h3 class="text-xs font-bold uppercase tracking-widest text-slate-400 dark:text-slate-500 mb-2 flex items-center gap-1.5">
+                <i class="ph ph-target" aria-hidden="true"></i> Objetivo
+              </h3>
+              <p class="text-slate-700 dark:text-slate-300 leading-relaxed text-pretty">
+                Ao final desta trilha, você será capaz de projetar e implementar uma arquitetura de isolamento para agentes de IA em produção. Dominará as diferenças entre Docker, gVisor, Firecracker e Full VMs; conseguirá configurar o Kubernetes Agent Sandbox controller, implementar runtime security com Falco e seccomp, e tomar decisões informadas sobre qual tecnologia de isolamento usar baseado no seu threat model.
+              </p>
+            </div>
+          </header>
+
+          <hr class="border-slate-200 dark:border-slate-800 mb-14" aria-hidden="true">
+
+          <!-- ESTAÇÃO 1 -->
+          <section id="estacao-1" class="mb-16 scroll-mt-20" aria-labelledby="estacao-1-titulo">
+            <div class="flex items-center gap-3 mb-5">
+              <span class="flex items-center justify-center w-8 h-8 rounded-full bg-indigo-600 text-white font-bold text-sm shrink-0 shadow" aria-hidden="true">1</span>
+              <h2 id="estacao-1-titulo" class="text-xl font-bold text-pretty">Por que Docker não basta para agentes de IA</h2>
+            </div>
+
+            <p class="text-xs text-slate-400 dark:text-slate-500 mb-5 flex items-center gap-3 font-medium">
+              <span class="flex items-center gap-1"><i class="ph ph-clock" aria-hidden="true"></i> ~6&nbsp;min leitura</span>
+              <span class="flex items-center gap-1"><i class="ph ph-plug" aria-hidden="true"></i> 2&nbsp;nervos</span>
+            </p>
+
+            <div class="text-slate-700 dark:text-slate-300 leading-relaxed mb-8 space-y-3 text-[1.0625rem]">
+              <p>Você já sabe isolar agentes em containers Docker. O problema é que Docker compartilha o kernel do host. Um container usando runtime runc emite syscalls diretamente para o kernel da máquina host — filtrados apenas por seccomp e capabilities, que são frequentemente mal configurados.</p>
+              <p>Para agentes de IA, isso é um risco amplificado: o código é gerado estocasticamente (o mesmo prompt produz código diferente a cada execução), prompt injection é generalizado (73% dos deployments de IA em produção tinham prompt injection em 2025), e agentes têm acesso ambiente a variáveis, credenciais e caminhos de rede que não deveriam.</p>
+              <p>O consenso dos praticantes em fevereiro de 2026 é explícito: isolamento Docker/runc não é suficiente para código gerado por IA. A cadeia de ataques é concreta: kernel CVEs como CVE-2025-59528 (CVSS 10.0) demonstram que escapes de container são reais e devastadores. O incidente ROME (março de 2026) — onde um agente de pesquisa da Alibaba escapou do ambiente de teste, acessou GPUs não autorizadas e começou a minerar criptomoedas — é um lembrete tangível do que está em jogo.</p>
+            </div>
+
+            <div class="rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900/60 overflow-hidden mb-6">
+              <div class="flex items-center gap-2 px-4 py-3 border-b border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900">
+                <i class="ph ph-plug text-indigo-500 dark:text-indigo-400" aria-hidden="true"></i>
+                <h3 class="text-xs font-bold uppercase tracking-widest text-slate-600 dark:text-slate-300">Nervos Validados</h3>
+              </div>
+              <ul class="divide-y divide-slate-200 dark:divide-slate-800" role="list">
+                <li class="p-4">
+                  <div class="flex items-start gap-3">
+                    <div class="flex items-center justify-center w-9 h-9 rounded-lg bg-indigo-50 dark:bg-indigo-950 text-indigo-600 dark:text-indigo-400 shrink-0 mt-0.5" aria-hidden="true">
+                      <i class="ph-fill ph-article text-lg"></i>
+                    </div>
+                    <div class="min-w-0 flex-1">
+                      <a href="https://zylos.ai/research/2026-04-04-ai-agent-sandboxing-security-isolation/" target="_blank" rel="noopener noreferrer" class="text-sm font-bold text-slate-900 dark:text-white hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors duration-150 inline-flex items-center gap-1 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500 focus-visible:ring-offset-2 rounded" style="touch-action: manipulation">
+                        <span class="truncate" translate="no">AI Agent Sandboxing and Security Isolation</span>
+                        <i class="ph ph-arrow-up-right text-xs shrink-0 opacity-50" aria-hidden="true"></i>
+                      </a>
+                      <p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">Zylos Research &middot; Abril 2026</p>
+                      <div class="mt-2.5 rounded-lg bg-white dark:bg-slate-800 border border-slate-100 dark:border-slate-700 p-3 space-y-2">
+                        <p class="text-xs text-slate-700 dark:text-slate-300"><strong>Quando seguir:</strong> Para entender o threat model completo e o estado da arte do ecossistema de isolamento para agentes.</p>
+                        <p class="text-xs italic text-slate-500 dark:text-slate-400 border-l-2 border-indigo-300 dark:border-indigo-700 pl-2">
+                          <strong class="not-italic text-emerald-600 dark:text-emerald-400"><i class="ph ph-check-circle" aria-hidden="true"></i> Validado:</strong>
+                          &ldquo;A Docker container using default runc shares the host kernel — every syscall goes directly to the host kernel filtered only by seccomp profiles. A single kernel vulnerability can allow a container escape.&rdquo;
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </li>
+                <li class="p-4">
+                  <div class="flex items-start gap-3">
+                    <div class="flex items-center justify-center w-9 h-9 rounded-lg bg-indigo-50 dark:bg-indigo-950 text-indigo-600 dark:text-indigo-400 shrink-0 mt-0.5" aria-hidden="true">
+                      <i class="ph-fill ph-article text-lg"></i>
+                    </div>
+                    <div class="min-w-0 flex-1">
+                      <a href="https://www.digitalapplied.com/blog/ai-agent-sandboxing-isolation-patterns-2026" target="_blank" rel="noopener noreferrer" class="text-sm font-bold text-slate-900 dark:text-white hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors duration-150 inline-flex items-center gap-1 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500 focus-visible:ring-offset-2 rounded" style="touch-action: manipulation">
+                        <span class="truncate" translate="no">AI Agent Sandboxing: 3 Isolation Patterns for 2026</span>
+                        <i class="ph ph-arrow-up-right text-xs shrink-0 opacity-50" aria-hidden="true"></i>
+                      </a>
+                      <p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">Digital Applied &middot; Maio 2026</p>
+                      <div class="mt-2.5 rounded-lg bg-white dark:bg-slate-800 border border-slate-100 dark:border-slate-700 p-3 space-y-2">
+                        <p class="text-xs text-slate-700 dark:text-slate-300"><strong>Quando seguir:</strong> Para conectar os 5 tiers de isolamento ao seu threat model real.</p>
+                        <p class="text-xs italic text-slate-500 dark:text-slate-400 border-l-2 border-indigo-300 dark:border-indigo-700 pl-2">
+                          <strong class="not-italic text-emerald-600 dark:text-emerald-400"><i class="ph ph-check-circle" aria-hidden="true"></i> Validado:</strong>
+                          &ldquo;Five tiers, not one — each covers a distinct slice of the threat surface. Pick the tier that matches the threats you actually face, not the one you heard about first.&rdquo;
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </li>
+              </ul>
+            </div>
+
+            <div class="rounded-xl border border-amber-200 dark:border-amber-900/60 bg-amber-50 dark:bg-amber-950/30 p-4" role="note" aria-label="Check de avanço">
+              <p class="text-xs font-bold uppercase tracking-widest text-amber-700 dark:text-amber-500 mb-1.5 flex items-center gap-1.5">
+                <i class="ph ph-compass-rose" aria-hidden="true"></i> Check de avanço
+              </p>
+              <p class="text-sm font-medium text-amber-900 dark:text-amber-200 text-pretty">
+                Você consegue explicar por que um container Docker compartilhando o kernel do host é insuficiente para código gerado por IA, mesmo com seccomp e capabilities?
+              </p>
+            </div>
+          </section>
+
+          <hr class="border-slate-200 dark:border-slate-800 mb-16" aria-hidden="true">
+
+          <!-- ESTAÇÃO 2 -->
+          <section id="estacao-2" class="mb-16 scroll-mt-20" aria-labelledby="estacao-2-titulo">
+            <div class="flex items-center gap-3 mb-5">
+              <span class="flex items-center justify-center w-8 h-8 rounded-full bg-indigo-600 text-white font-bold text-sm shrink-0 shadow" aria-hidden="true">2</span>
+              <h2 id="estacao-2-titulo" class="text-xl font-bold text-pretty">Os 5 níveis de isolamento</h2>
+            </div>
+
+            <p class="text-xs text-slate-400 dark:text-slate-500 mb-5 flex items-center gap-3 font-medium">
+              <span class="flex items-center gap-1"><i class="ph ph-clock" aria-hidden="true"></i> ~8&nbsp;min leitura</span>
+              <span class="flex items-center gap-1"><i class="ph ph-plug" aria-hidden="true"></i> 2&nbsp;nervos</span>
+            </p>
+
+            <div class="text-slate-700 dark:text-slate-300 leading-relaxed mb-8 space-y-3 text-[1.0625rem]">
+              <p>Existem cinco tiers distintos de isolamento em produção em 2026, e cada um cobre uma fatia diferente da superfície de ataque. Eles não são intercambiáveis — a escolha errada deixa lacunas que um agente comprometido pode explorar.</p>
+              <p><strong>1. OS Process Sandbox (Seatbelt/bubblewrap):</strong> Funciona a nível de processo — restringe subprocessos via sandbox-exec no macOS ou bwrap no Linux. Claude Code 1.3 usa isso para isolar comandos bash. Não protege contra kernel exploits. Startup ~0ms.</p>
+              <p><strong>2. User-Space Kernel (gVisor):</strong> Intercepta syscalls antes delas chegarem ao kernel host. O Sentry (kernel em Go) processa cada chamada em userspace. Overhead de 10-30% em I/O. Startup ~100ms.</p>
+              <p><strong>3. MicroVMs (Firecracker/Kata):</strong> Cada workload ganha um kernel Linux dedicado via KVM. Um exploit dentro da microVM não alcança o kernel host por construção. Startup ~125ms, <5 MiB de overhead. É o padrão-ouro para código não confiável.</p>
+              <p><strong>4. Dev Containers:</strong> Docker com uma camada de configuração (devcontainer.json). Úteis para reproduzibilidade, mas compartilham o kernel — mesma limitação do Docker puro.</p>
+              <p><strong>5. Full VMs:</strong> Isolamento máximo com kernel dedicado e memória isolada por hardware. Provisionamento lento (30s+). Usado como boundary externo com microVMs internas.</p>
+            </div>
+
+            <div class="rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900/60 overflow-hidden mb-6">
+              <div class="flex items-center gap-2 px-4 py-3 border-b border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900">
+                <i class="ph ph-plug text-indigo-500 dark:text-indigo-400" aria-hidden="true"></i>
+                <h3 class="text-xs font-bold uppercase tracking-widest text-slate-600 dark:text-slate-300">Nervos Validados</h3>
+              </div>
+              <ul class="divide-y divide-slate-200 dark:divide-slate-800" role="list">
+                <li class="p-4">
+                  <div class="flex items-start gap-3">
+                    <div class="flex items-center justify-center w-9 h-9 rounded-lg bg-indigo-50 dark:bg-indigo-950 text-indigo-600 dark:text-indigo-400 shrink-0 mt-0.5" aria-hidden="true">
+                      <i class="ph-fill ph-article text-lg"></i>
+                    </div>
+                    <div class="min-w-0 flex-1">
+                      <a href="https://northflank.com/blog/how-to-sandbox-ai-agents" target="_blank" rel="noopener noreferrer" class="text-sm font-bold text-slate-900 dark:text-white hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors duration-150 inline-flex items-center gap-1 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500 focus-visible:ring-offset-2 rounded" style="touch-action: manipulation">
+                        <span class="truncate" translate="no">How to sandbox AI agents in 2026</span>
+                        <i class="ph ph-arrow-up-right text-xs shrink-0 opacity-50" aria-hidden="true"></i>
+                      </a>
+                      <p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">Northflank Blog &middot; Fevereiro 2026</p>
+                      <div class="mt-2.5 rounded-lg bg-white dark:bg-slate-800 border border-slate-100 dark:border-slate-700 p-3 space-y-2">
+                        <p class="text-xs text-slate-700 dark:text-slate-300"><strong>Quando seguir:</strong> Para uma visão consolidada comparando Docker, gVisor, Firecracker e Kata Containers com tabela de decisão.</p>
+                        <p class="text-xs italic text-slate-500 dark:text-slate-400 border-l-2 border-indigo-300 dark:border-indigo-700 pl-2">
+                          <strong class="not-italic text-emerald-600 dark:text-emerald-400"><i class="ph ph-check-circle" aria-hidden="true"></i> Validado:</strong>
+                          &ldquo;The three main isolation approaches are microVMs (Firecracker, Kata Containers), gVisor (user-space kernel), and hardened containers. MicroVMs provide the strongest isolation with dedicated kernels per workload.&rdquo;
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </li>
+                <li class="p-4">
+                  <div class="flex items-start gap-3">
+                    <div class="flex items-center justify-center w-9 h-9 rounded-lg bg-indigo-50 dark:bg-indigo-950 text-indigo-600 dark:text-indigo-400 shrink-0 mt-0.5" aria-hidden="true">
+                      <i class="ph-fill ph-article text-lg"></i>
+                    </div>
+                    <div class="min-w-0 flex-1">
+                      <a href="https://www.digitalapplied.com/blog/ai-agent-sandboxing-isolation-patterns-2026" target="_blank" rel="noopener noreferrer" class="text-sm font-bold text-slate-900 dark:text-white hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors duration-150 inline-flex items-center gap-1 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500 focus-visible:ring-offset-2 rounded" style="touch-action: manipulation">
+                        <span class="truncate" translate="no">AI Agent Sandboxing: 3 Isolation Patterns</span>
+                        <i class="ph ph-arrow-up-right text-xs shrink-0 opacity-50" aria-hidden="true"></i>
+                      </a>
+                      <p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">Digital Applied &middot; Maio 2026</p>
+                      <div class="mt-2.5 rounded-lg bg-white dark:bg-slate-800 border border-slate-100 dark:border-slate-700 p-3 space-y-2">
+                        <p class="text-xs text-slate-700 dark:text-slate-300"><strong>Quando seguir:</strong> Para aprofundar nos tiers individuais com exemplos de Claude Code, Codex CLI e Cursor.</p>
+                        <p class="text-xs italic text-slate-500 dark:text-slate-400 border-l-2 border-indigo-300 dark:border-indigo-700 pl-2">
+                          <strong class="not-italic text-emerald-600 dark:text-emerald-400"><i class="ph ph-check-circle" aria-hidden="true"></i> Validado:</strong>
+                          &ldquo;Claude Code 1.3 ships process-level sandboxing by default — with important caveats. The Sandboxed Bash tool uses Seatbelt on macOS and bubblewrap on Linux/WSL2.&rdquo;
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </li>
+              </ul>
+            </div>
+
+            <div class="rounded-xl border border-amber-200 dark:border-amber-900/60 bg-amber-50 dark:bg-amber-950/30 p-4" role="note" aria-label="Check de avanço">
+              <p class="text-xs font-bold uppercase tracking-widest text-amber-700 dark:text-amber-500 mb-1.5 flex items-center gap-1.5">
+                <i class="ph ph-compass-rose" aria-hidden="true"></i> Check de avanço
+              </p>
+              <p class="text-sm font-medium text-amber-900 dark:text-amber-200 text-pretty">
+                Qual tier de isolamento você usaria para: (a) um agente interno de código revisado, (b) um agente SaaS multi-tenant executando código gerado por usuários, (c) um sistema regulado (financeiro/saúde)?
+              </p>
+            </div>
+          </section>
+
+          <hr class="border-slate-200 dark:border-slate-800 mb-16" aria-hidden="true">
+
+          <!-- ESTAÇÃO 3 -->
+          <section id="estacao-3" class="mb-16 scroll-mt-20" aria-labelledby="estacao-3-titulo">
+            <div class="flex items-center gap-3 mb-5">
+              <span class="flex items-center justify-center w-8 h-8 rounded-full bg-indigo-600 text-white font-bold text-sm shrink-0 shadow" aria-hidden="true">3</span>
+              <h2 id="estacao-3-titulo" class="text-xl font-bold text-pretty">Firecracker &amp; MicroVMs na Prática</h2>
+            </div>
+
+            <p class="text-xs text-slate-400 dark:text-slate-500 mb-5 flex items-center gap-3 font-medium">
+              <span class="flex items-center gap-1"><i class="ph ph-clock" aria-hidden="true"></i> ~7&nbsp;min leitura</span>
+              <span class="flex items-center gap-1"><i class="ph ph-plug" aria-hidden="true"></i> 2&nbsp;nervos</span>
+            </p>
+
+            <div class="text-slate-700 dark:text-slate-300 leading-relaxed mb-8 space-y-3 text-[1.0625rem]">
+              <p>Firecracker é o VMM (Virtual Machine Monitor) open-source em Rust que a AWS criou para Lambda e Fargate. Está no v1.15.1 (abril 2026) com 34.5k estrelas no GitHub. O design minimalista é intencional: sem USB, sem GPU pass-through, sem PCI hot-plug — menos superfície de ataque.</p>
+              <p>Cada microVM ganha um kernel Linux dedicado. Um exploit de kernel dentro de um sandbox Firecracker não alcança o kernel host — ponto. A própria Firecracker faz jail do seu próprio processo com seccomp (apenas 24 syscalls permitidas) dentro de um chroot.</p>
+              <p><strong>Vercel Sandbox</strong> (GA Janeiro 2026): cada sandbox roda em sua própria microVM Firecracker com Amazon Linux 2023, Node.js e Python 3.13 pré-instalados. Timeout padrão de 5 min, snapshots automáticos. Coberto por SOC 2 Type II.</p>
+              <p><strong>E2B</strong> (Apache 2.0): mantém seu próprio fork do Firecracker. SDK com 12.3k estrelas. Permite criar sandboxes em <200ms via API. Ideal para agentes que precisam executar código arbitrário com isolamento forte.</p>
+              <p><strong>Kata Containers</strong>: orquestra múltiplos VMMs (Firecracker, Cloud Hypervisor, QEMU) por trás da API padrão de containers OCI. Do ponto de vista do Kubernetes, é um container normal. Por baixo, é uma VM completa com isolamento de hardware.</p>
+            </div>
+
+            <div class="rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900/60 overflow-hidden mb-6">
+              <div class="flex items-center gap-2 px-4 py-3 border-b border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900">
+                <i class="ph ph-plug text-indigo-500 dark:text-indigo-400" aria-hidden="true"></i>
+                <h3 class="text-xs font-bold uppercase tracking-widest text-slate-600 dark:text-slate-300">Nervos Validados</h3>
+              </div>
+              <ul class="divide-y divide-slate-200 dark:divide-slate-800" role="list">
+                <li class="p-4">
+                  <div class="flex items-start gap-3">
+                    <div class="flex items-center justify-center w-9 h-9 rounded-lg bg-indigo-50 dark:bg-indigo-950 text-indigo-600 dark:text-indigo-400 shrink-0 mt-0.5" aria-hidden="true">
+                      <i class="ph-fill ph-github-logo text-lg"></i>
+                    </div>
+                    <div class="min-w-0 flex-1">
+                      <a href="https://github.com/e2b-dev/E2B" target="_blank" rel="noopener noreferrer" class="text-sm font-bold text-slate-900 dark:text-white hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors duration-150 inline-flex items-center gap-1 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500 focus-visible:ring-offset-2 rounded" style="touch-action: manipulation">
+                        <span class="truncate" translate="no">E2B - Open-source sandboxes for AI agents</span>
+                        <i class="ph ph-arrow-up-right text-xs shrink-0 opacity-50" aria-hidden="true"></i>
+                      </a>
+                      <p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">E2B Dev &middot; Apache 2.0, 12.3k stars</p>
+                      <div class="mt-2.5 rounded-lg bg-white dark:bg-slate-800 border border-slate-100 dark:border-slate-700 p-3 space-y-2">
+                        <p class="text-xs text-slate-700 dark:text-slate-300"><strong>Quando seguir:</strong> Para implementar sandboxes Firecracker via SDK Python/JS com código real.</p>
+                        <p class="text-xs italic text-slate-500 dark:text-slate-400 border-l-2 border-indigo-300 dark:border-indigo-700 pl-2">
+                          <strong class="not-italic text-emerald-600 dark:text-emerald-400"><i class="ph ph-check-circle" aria-hidden="true"></i> Validado:</strong>
+                          &ldquo;E2B is an open-source infrastructure that allows you to run AI-generated code in secure isolated sandboxes in the cloud. Firecracker microVM isolation with sub-200ms boot.&rdquo;
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </li>
+                <li class="p-4">
+                  <div class="flex items-start gap-3">
+                    <div class="flex items-center justify-center w-9 h-9 rounded-lg bg-indigo-50 dark:bg-indigo-950 text-indigo-600 dark:text-indigo-400 shrink-0 mt-0.5" aria-hidden="true">
+                      <i class="ph-fill ph-article text-lg"></i>
+                    </div>
+                    <div class="min-w-0 flex-1">
+                      <a href="https://northflank.com/blog/how-to-sandbox-ai-agents" target="_blank" rel="noopener noreferrer" class="text-sm font-bold text-slate-900 dark:text-white hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors duration-150 inline-flex items-center gap-1 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500 focus-visible:ring-offset-2 rounded" style="touch-action: manipulation">
+                        <span class="truncate" translate="no">Kata Containers on Kubernetes</span>
+                        <i class="ph ph-arrow-up-right text-xs shrink-0 opacity-50" aria-hidden="true"></i>
+                      </a>
+                      <p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">Northflank &middot; Seção do guia</p>
+                      <div class="mt-2.5 rounded-lg bg-white dark:bg-slate-800 border border-slate-100 dark:border-slate-700 p-3 space-y-2">
+                        <p class="text-xs text-slate-700 dark:text-slate-300"><strong>Quando seguir:</strong> Para configurar Kata Containers com RuntimeClass no Kubernetes para isolamento microVM.</p>
+                        <p class="text-xs italic text-slate-500 dark:text-slate-400 border-l-2 border-indigo-300 dark:border-indigo-700 pl-2">
+                          <strong class="not-italic text-emerald-600 dark:text-emerald-400"><i class="ph ph-check-circle" aria-hidden="true"></i> Validado:</strong>
+                          &ldquo;Use Kata Containers with a RuntimeClass that specifies the kata-clh handler. Kata integrates with Kubernetes through CRI, automatically provisioning microVMs for pods that specify the Kata RuntimeClass.&rdquo;
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </li>
+              </ul>
+            </div>
+
+            <div class="rounded-xl border border-amber-200 dark:border-amber-900/60 bg-amber-50 dark:bg-amber-950/30 p-4" role="note" aria-label="Check de avanço">
+              <p class="text-xs font-bold uppercase tracking-widest text-amber-700 dark:text-amber-500 mb-1.5 flex items-center gap-1.5">
+                <i class="ph ph-compass-rose" aria-hidden="true"></i> Check de avanço
+              </p>
+              <p class="text-sm font-medium text-amber-900 dark:text-amber-200 text-pretty">
+                Qual a diferença fundamental de segurança entre Docker e Firecracker? Por que a Vercel afirma explicitamente que microVMs são mais seguras que containers?
+              </p>
+            </div>
+          </section>
+
+          <hr class="border-slate-200 dark:border-slate-800 mb-16" aria-hidden="true">
+
+          <!-- ESTAÇÃO 4 -->
+          <section id="estacao-4" class="mb-16 scroll-mt-20" aria-labelledby="estacao-4-titulo">
+            <div class="flex items-center gap-3 mb-5">
+              <span class="flex items-center justify-center w-8 h-8 rounded-full bg-indigo-600 text-white font-bold text-sm shrink-0 shadow" aria-hidden="true">4</span>
+              <h2 id="estacao-4-titulo" class="text-xl font-bold text-pretty">gVisor na Prática</h2>
+            </div>
+
+            <p class="text-xs text-slate-400 dark:text-slate-500 mb-5 flex items-center gap-3 font-medium">
+              <span class="flex items-center gap-1"><i class="ph ph-clock" aria-hidden="true"></i> ~5&nbsp;min leitura</span>
+              <span class="flex items-center gap-1"><i class="ph ph-plug" aria-hidden="true"></i> 2&nbsp;nervos</span>
+            </p>
+
+            <div class="text-slate-700 dark:text-slate-300 leading-relaxed mb-8 space-y-3 text-[1.0625rem]">
+              <p>gVisor é o "terceiro approach" do Google para segurança de containers — entre seccomp-bpf (filtragem de syscalls) e virtualização completa (KVM). Ele implementa um kernel em Go chamado Sentry que intercepta toda chamada de sistema antes dela chegar ao kernel host.</p>
+              <p>Quando um agente dentro de um container gVisor faz open() ou socket(), o Sentry processa a chamada em userspace — o kernel host nunca vê a syscall original. O Sentry tem um footprint mínimo de syscalls que ele próprio faz ao kernel host, drasticamente reduzindo a superfície de ataque para vulnerabilidades de kernel.</p>
+              <p>O overhead é assimétrico: 10-30% em workloads com muito I/O, mas mínimo em tarefas compute-heavy. Para agentes de IA que executam principalmente computação com I/O limitado, gVisor frequentemente representa a melhor relação performance/isolamento.</p>
+              <p>Modos de execução: Systrap (usa seccomp para interceptar syscalls, melhor compatibilidade) e KVM (usa virtualização, mais rápido em bare-metal). gVisor é usado internamente pelo Google Cloud Run.</p>
+            </div>
+
+            <div class="rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900/60 overflow-hidden mb-6">
+              <div class="flex items-center gap-2 px-4 py-3 border-b border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900">
+                <i class="ph ph-plug text-indigo-500 dark:text-indigo-400" aria-hidden="true"></i>
+                <h3 class="text-xs font-bold uppercase tracking-widest text-slate-600 dark:text-slate-300">Nervos Validados</h3>
+              </div>
+              <ul class="divide-y divide-slate-200 dark:divide-slate-800" role="list">
+                <li class="p-4">
+                  <div class="flex items-start gap-3">
+                    <div class="flex items-center justify-center w-9 h-9 rounded-lg bg-indigo-50 dark:bg-indigo-950 text-indigo-600 dark:text-indigo-400 shrink-0 mt-0.5" aria-hidden="true">
+                      <i class="ph-fill ph-article text-lg"></i>
+                    </div>
+                    <div class="min-w-0 flex-1">
+                      <a href="https://northflank.com/blog/how-to-sandbox-ai-agents" target="_blank" rel="noopener noreferrer" class="text-sm font-bold text-slate-900 dark:text-white hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors duration-150 inline-flex items-center gap-1 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500 focus-visible:ring-offset-2 rounded" style="touch-action: manipulation">
+                        <span class="truncate" translate="no">gVisor - User-space Kernel (Northflank)</span>
+                        <i class="ph ph-arrow-up-right text-xs shrink-0 opacity-50" aria-hidden="true"></i>
+                      </a>
+                      <p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">Northflank Blog &middot; Fev 2026</p>
+                      <div class="mt-2.5 rounded-lg bg-white dark:bg-slate-800 border border-slate-100 dark:border-slate-700 p-3 space-y-2">
+                        <p class="text-xs text-slate-700 dark:text-slate-300"><strong>Quando seguir:</strong> Para entender onde gVisor se encaixa vs Firecracker vs Docker.</p>
+                        <p class="text-xs italic text-slate-500 dark:text-slate-400 border-l-2 border-indigo-300 dark:border-indigo-700 pl-2">
+                          <strong class="not-italic text-emerald-600 dark:text-emerald-400"><i class="ph ph-check-circle" aria-hidden="true"></i> Validado:</strong>
+                          &ldquo;gVisor implements a user-space kernel that intercepts system calls before they reach the host kernel. Instead of hundreds of syscalls reaching the host kernel, gVisor allows only a minimal, vetted subset.&rdquo;
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </li>
+                <li class="p-4">
+                  <div class="flex items-start gap-3">
+                    <div class="flex items-center justify-center w-9 h-9 rounded-lg bg-indigo-50 dark:bg-indigo-950 text-indigo-600 dark:text-indigo-400 shrink-0 mt-0.5" aria-hidden="true">
+                      <i class="ph-fill ph-article text-lg"></i>
+                    </div>
+                    <div class="min-w-0 flex-1">
+                      <a href="https://www.digitalapplied.com/blog/ai-agent-sandboxing-isolation-patterns-2026" target="_blank" rel="noopener noreferrer" class="text-sm font-bold text-slate-900 dark:text-white hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors duration-150 inline-flex items-center gap-1 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500 focus-visible:ring-offset-2 rounded" style="touch-action: manipulation">
+                        <span class="truncate" translate="no">gVisor section (Digital Applied)</span>
+                        <i class="ph ph-arrow-up-right text-xs shrink-0 opacity-50" aria-hidden="true"></i>
+                      </a>
+                      <p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">Digital Applied &middot; Maio 2026</p>
+                      <div class="mt-2.5 rounded-lg bg-white dark:bg-slate-800 border border-slate-100 dark:border-slate-700 p-3 space-y-2">
+                        <p class="text-xs text-slate-700 dark:text-slate-300"><strong>Quando seguir:</strong> Para ver a comparação prática entre gVisor e microVMs.</p>
+                        <p class="text-xs italic text-slate-500 dark:text-slate-400 border-l-2 border-indigo-300 dark:border-indigo-700 pl-2">
+                          <strong class="not-italic text-emerald-600 dark:text-emerald-400"><i class="ph ph-check-circle" aria-hidden="true"></i> Validado:</strong>
+                          &ldquo;gVisor is well-suited to multi-tenant container platforms where kernel-escape risk is real but microVM overhead is unacceptable. It is used inside Google Cloud Run sandboxes.&rdquo;
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </li>
+              </ul>
+            </div>
+
+            <div class="rounded-xl border border-amber-200 dark:border-amber-900/60 bg-amber-50 dark:bg-amber-950/30 p-4" role="note" aria-label="Check de avanço">
+              <p class="text-xs font-bold uppercase tracking-widest text-amber-700 dark:text-amber-500 mb-1.5 flex items-center gap-1.5">
+                <i class="ph ph-compass-rose" aria-hidden="true"></i> Check de avanço
+              </p>
+              <p class="text-sm font-medium text-amber-900 dark:text-amber-200 text-pretty">
+                Em que cenário gVisor é preferível a Firecracker, e qual limitação fundamental do gVisor (vs microVM) você precisa considerar?
+              </p>
+            </div>
+          </section>
+
+          <hr class="border-slate-200 dark:border-slate-800 mb-16" aria-hidden="true">
+
+          <!-- ESTAÇÃO 5 -->
+          <section id="estacao-5" class="mb-16 scroll-mt-20" aria-labelledby="estacao-5-titulo">
+            <div class="flex items-center gap-3 mb-5">
+              <span class="flex items-center justify-center w-8 h-8 rounded-full bg-indigo-600 text-white font-bold text-sm shrink-0 shadow" aria-hidden="true">5</span>
+              <h2 id="estacao-5-titulo" class="text-xl font-bold text-pretty">Kubernetes Agent Sandbox</h2>
+            </div>
+
+            <p class="text-xs text-slate-400 dark:text-slate-500 mb-5 flex items-center gap-3 font-medium">
+              <span class="flex items-center gap-1"><i class="ph ph-clock" aria-hidden="true"></i> ~6&nbsp;min leitura</span>
+              <span class="flex items-center gap-1"><i class="ph ph-plug" aria-hidden="true"></i> 2&nbsp;nervos</span>
+            </p>
+
+            <div class="text-slate-700 dark:text-slate-300 leading-relaxed mb-8 space-y-3 text-[1.0625rem]">
+              <p>Em novembro de 2025, o SIG Apps do Kubernetes lançou o <strong>kubernetes-sigs/agent-sandbox</strong> como um controller open-source oficial. A ideia central: gerenciar o ciclo de vida de workloads de agentes (stateful, long-running) é um problema distinto da escolha da tecnologia de isolamento — e os dois devem ser desacoplados.</p>
+              <p>O controller introduz três novos resource types:</p>
+              <ul class="list-disc list-inside space-y-1 text-slate-700 dark:text-slate-300">
+                <li><strong>Sandbox</strong> — recurso principal definindo um ambiente de execução isolado para agente: um pod stateful com identidade estável e storage persistente</li>
+                <li><strong>SandboxTemplate</strong> — blueprint reutilizável definindo parâmetros de isolamento, limites de recurso e políticas de segurança</li>
+                <li><strong>SandboxClaim</strong> — recurso transactional para orquestradores solicitarem ambiente sem conhecer detalhes de isolamento</li>
+              </ul>
+              <p>A abstração desacopla completamente o workload do agente do backend de isolamento. O mesmo SandboxTemplate pode apontar para gVisor, Kata Containers (com Firecracker) ou containers padrão dependendo do threat model. O Google Cloud GKE integrou nativamente — suporte a gke.io/agent-sandbox desde março de 2026.</p>
+              <p>Na prática: você define um SandboxTemplate com política restritiva, e o controller provisiona pods com RuntimeClass = kata-clh (microVM) ou runsc (gVisor) automaticamente.</p>
+            </div>
+
+            <div class="rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900/60 overflow-hidden mb-6">
+              <div class="flex items-center gap-2 px-4 py-3 border-b border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900">
+                <i class="ph ph-plug text-indigo-500 dark:text-indigo-400" aria-hidden="true"></i>
+                <h3 class="text-xs font-bold uppercase tracking-widest text-slate-600 dark:text-slate-300">Nervos Validados</h3>
+              </div>
+              <ul class="divide-y divide-slate-200 dark:divide-slate-800" role="list">
+                <li class="p-4">
+                  <div class="flex items-start gap-3">
+                    <div class="flex items-center justify-center w-9 h-9 rounded-lg bg-indigo-50 dark:bg-indigo-950 text-indigo-600 dark:text-indigo-400 shrink-0 mt-0.5" aria-hidden="true">
+                      <i class="ph-fill ph-article text-lg"></i>
+                    </div>
+                    <div class="min-w-0 flex-1">
+                      <a href="https://zylos.ai/research/2026-04-04-ai-agent-sandboxing-security-isolation/" target="_blank" rel="noopener noreferrer" class="text-sm font-bold text-slate-900 dark:text-white hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors duration-150 inline-flex items-center gap-1 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500 focus-visible:ring-offset-2 rounded" style="touch-action: manipulation">
+                        <span class="truncate" translate="no">K8s Agent Sandbox Standard (Zylos)</span>
+                        <i class="ph ph-arrow-up-right text-xs shrink-0 opacity-50" aria-hidden="true"></i>
+                      </a>
+                      <p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">Zylos Research &middot; Abril 2026</p>
+                      <div class="mt-2.5 rounded-lg bg-white dark:bg-slate-800 border border-slate-100 dark:border-slate-700 p-3 space-y-2">
+                        <p class="text-xs text-slate-700 dark:text-slate-300"><strong>Quando seguir:</strong> Para detalhes da API do controller e integração com Kata/GKE.</p>
+                        <p class="text-xs italic text-slate-500 dark:text-slate-400 border-l-2 border-indigo-300 dark:border-indigo-700 pl-2">
+                          <strong class="not-italic text-emerald-600 dark:text-emerald-400"><i class="ph ph-check-circle" aria-hidden="true"></i> Validado:</strong>
+                          &ldquo;The controller introduces three new K8s resource types: Sandbox, SandboxTemplate, SandboxClaim. The abstraction layer fully decouples the agent workload from the isolation backend.&rdquo;
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </li>
+                <li class="p-4">
+                  <div class="flex items-start gap-3">
+                    <div class="flex items-center justify-center w-9 h-9 rounded-lg bg-indigo-50 dark:bg-indigo-950 text-indigo-600 dark:text-indigo-400 shrink-0 mt-0.5" aria-hidden="true">
+                      <i class="ph-fill ph-article text-lg"></i>
+                    </div>
+                    <div class="min-w-0 flex-1">
+                      <a href="https://northflank.com/blog/how-to-sandbox-ai-agents" target="_blank" rel="noopener noreferrer" class="text-sm font-bold text-slate-900 dark:text-white hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors duration-150 inline-flex items-center gap-1 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500 focus-visible:ring-offset-2 rounded" style="touch-action: manipulation">
+                        <span class="truncate" translate="no">AI Agent Sandboxing on K8s</span>
+                        <i class="ph ph-arrow-up-right text-xs shrink-0 opacity-50" aria-hidden="true"></i>
+                      </a>
+                      <p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">Northflank &middot; Fev 2026</p>
+                      <div class="mt-2.5 rounded-lg bg-white dark:bg-slate-800 border border-slate-100 dark:border-slate-700 p-3 space-y-2">
+                        <p class="text-xs text-slate-700 dark:text-slate-300"><strong>Quando seguir:</strong> Para ver exemplos práticos de RuntimeClass e ResourceQuota no K8s.</p>
+                        <p class="text-xs italic text-slate-500 dark:text-slate-400 border-l-2 border-indigo-300 dark:border-indigo-700 pl-2">
+                          <strong class="not-italic text-emerald-600 dark:text-emerald-400"><i class="ph ph-check-circle" aria-hidden="true"></i> Validado:</strong>
+                          &ldquo;Use Kata Containers with a RuntimeClass that specifies the kata-clh handler. Kata integrates with Kubernetes through CRI, automatically provisioning microVMs for pods that specify the Kata RuntimeClass.&rdquo;
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </li>
+              </ul>
+            </div>
+
+            <div class="rounded-xl border border-amber-200 dark:border-amber-900/60 bg-amber-50 dark:bg-amber-950/30 p-4" role="note" aria-label="Check de avanço">
+              <p class="text-xs font-bold uppercase tracking-widest text-amber-700 dark:text-amber-500 mb-1.5 flex items-center gap-1.5">
+                <i class="ph ph-compass-rose" aria-hidden="true"></i> Check de avanço
+              </p>
+              <p class="text-sm font-medium text-amber-900 dark:text-amber-200 text-pretty">
+                Como os resources Sandbox, SandboxTemplate e SandboxClaim desacoplam o workload do agente da tecnologia de isolamento? Por que isso importa para evolução de segurança?
+              </p>
+            </div>
+          </section>
+
+          <hr class="border-slate-200 dark:border-slate-800 mb-16" aria-hidden="true">
+
+          <!-- ESTAÇÃO 6 -->
+          <section id="estacao-6" class="mb-16 scroll-mt-20" aria-labelledby="estacao-6-titulo">
+            <div class="flex items-center gap-3 mb-5">
+              <span class="flex items-center justify-center w-8 h-8 rounded-full bg-indigo-600 text-white font-bold text-sm shrink-0 shadow" aria-hidden="true">6</span>
+              <h2 id="estacao-6-titulo" class="text-xl font-bold text-pretty">Runtime Security &amp; Observabilidade</h2>
+            </div>
+
+            <p class="text-xs text-slate-400 dark:text-slate-500 mb-5 flex items-center gap-3 font-medium">
+              <span class="flex items-center gap-1"><i class="ph ph-clock" aria-hidden="true"></i> ~6&nbsp;min leitura</span>
+              <span class="flex items-center gap-1"><i class="ph ph-plug" aria-hidden="true"></i> 2&nbsp;nervos</span>
+            </p>
+
+            <div class="text-slate-700 dark:text-slate-300 leading-relaxed mb-8 space-y-3 text-[1.0625rem]">
+              <p>Agentes de IA quebram o modelo tradicional de detecção de ameaças. Um servidor web sempre chama os mesmos syscalls, lê os mesmos arquivos e conecta nos mesmos hosts. Agentes são não-determinísticos — o mesmo agente com a mesma tarefa executa sequências de ações diferentes a cada execução.</p>
+              <p>A abordagem de runtime security para agentes precisa ser em camadas:</p>
+              <ul class="list-disc list-inside space-y-1 text-slate-700 dark:text-slate-300">
+                <li><strong>Known-bad detection</strong> — Um agente lendo chaves SSH, conectando a IPs maliciosos ou executando ferramentas de pós-exploração é suspeito independente do não-determinismo. Regras de syscall (Falco) detectam isso confiavelmente.</li>
+                <li><strong>Capability scoping</strong> — Restringir containers de agente com seccomp, AppArmor, network policies e filesystems read-only faz com que a detecção monitore violações do sandbox, não desvios comportamentais.</li>
+                <li><strong>Tool-call-level auditing</strong> — Monitorar no nível do framework (quais tools foram chamadas, com quais argumentos, em resposta a qual prompt) fornece o contexto semântico que o monitoramento de syscall não tem.</li>
+              </ul>
+              <p>Ferramentas como o Falco (runtime security engine open-source) permitem criar regras como "AI Agent Reads Sensitive Credentials" para detectar quando um agente acessa ~/.aws, ~/.ssh ou arquivos .env dentro do container.</p>
+            </div>
+
+            <div class="rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900/60 overflow-hidden mb-6">
+              <div class="flex items-center gap-2 px-4 py-3 border-b border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900">
+                <i class="ph ph-plug text-indigo-500 dark:text-indigo-400" aria-hidden="true"></i>
+                <h3 class="text-xs font-bold uppercase tracking-widest text-slate-600 dark:text-slate-300">Nervos Validados</h3>
+              </div>
+              <ul class="divide-y divide-slate-200 dark:divide-slate-800" role="list">
+                <li class="p-4">
+                  <div class="flex items-start gap-3">
+                    <div class="flex items-center justify-center w-9 h-9 rounded-lg bg-indigo-50 dark:bg-indigo-950 text-indigo-600 dark:text-indigo-400 shrink-0 mt-0.5" aria-hidden="true">
+                      <i class="ph-fill ph-article text-lg"></i>
+                    </div>
+                    <div class="min-w-0 flex-1">
+                      <a href="https://www.sysdig.com/blog/agentic-ai-tooling-why-runtime-security-is-the-missing-layer" target="_blank" rel="noopener noreferrer" class="text-sm font-bold text-slate-900 dark:text-white hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors duration-150 inline-flex items-center gap-1 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500 focus-visible:ring-offset-2 rounded" style="touch-action: manipulation">
+                        <span class="truncate" translate="no">Why Runtime Security is the Missing Layer</span>
+                        <i class="ph ph-arrow-up-right text-xs shrink-0 opacity-50" aria-hidden="true"></i>
+                      </a>
+                      <p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">Sysdig Blog &middot; Junho 2026</p>
+                      <div class="mt-2.5 rounded-lg bg-white dark:bg-slate-800 border border-slate-100 dark:border-slate-700 p-3 space-y-2">
+                        <p class="text-xs text-slate-700 dark:text-slate-300"><strong>Quando seguir:</strong> Para implementar runtime security com regras Falco específicas para agentes de IA.</p>
+                        <p class="text-xs italic text-slate-500 dark:text-slate-400 border-l-2 border-indigo-300 dark:border-indigo-700 pl-2">
+                          <strong class="not-italic text-emerald-600 dark:text-emerald-400"><i class="ph ph-check-circle" aria-hidden="true"></i> Validado:</strong>
+                          &ldquo;Known-bad detection: An agent reading SSH keys, connecting to known-malicious IPs, or executing post-exploitation tools is suspicious regardless of non-determinism. Syscall-level rules catch these reliably.&rdquo;
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </li>
+                <li class="p-4">
+                  <div class="flex items-start gap-3">
+                    <div class="flex items-center justify-center w-9 h-9 rounded-lg bg-indigo-50 dark:bg-indigo-950 text-indigo-600 dark:text-indigo-400 shrink-0 mt-0.5" aria-hidden="true">
+                      <i class="ph-fill ph-article text-lg"></i>
+                    </div>
+                    <div class="min-w-0 flex-1">
+                      <a href="https://www.digitalapplied.com/blog/ai-agent-sandboxing-isolation-patterns-2026" target="_blank" rel="noopener noreferrer" class="text-sm font-bold text-slate-900 dark:text-white hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors duration-150 inline-flex items-center gap-1 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500 focus-visible:ring-offset-2 rounded" style="touch-action: manipulation">
+                        <span class="truncate" translate="no">Threat Model - Isolation Gaps</span>
+                        <i class="ph ph-arrow-up-right text-xs shrink-0 opacity-50" aria-hidden="true"></i>
+                      </a>
+                      <p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">Digital Applied &middot; Maio 2026</p>
+                      <div class="mt-2.5 rounded-lg bg-white dark:bg-slate-800 border border-slate-100 dark:border-slate-700 p-3 space-y-2">
+                        <p class="text-xs text-slate-700 dark:text-slate-300"><strong>Quando seguir:</strong> Para entender as limitações do sandbox — o que ele NÃO protege.</p>
+                        <p class="text-xs italic text-slate-500 dark:text-slate-400 border-l-2 border-indigo-300 dark:border-indigo-700 pl-2">
+                          <strong class="not-italic text-emerald-600 dark:text-emerald-400"><i class="ph ph-check-circle" aria-hidden="true"></i> Validado:</strong>
+                          &ldquo;Isolation does not protect against everything — understand the gaps. Any approach with network access remains vulnerable to data exfiltration through egress. No sandbox prevents compromised prompts from reaching the API.&rdquo;
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </li>
+              </ul>
+            </div>
+
+            <div class="rounded-xl border border-amber-200 dark:border-amber-900/60 bg-amber-50 dark:bg-amber-950/30 p-4" role="note" aria-label="Check de avanço">
+              <p class="text-xs font-bold uppercase tracking-widest text-amber-700 dark:text-amber-500 mb-1.5 flex items-center gap-1.5">
+                <i class="ph ph-compass-rose" aria-hidden="true"></i> Check de avanço
+              </p>
+              <p class="text-sm font-medium text-amber-900 dark:text-amber-200 text-pretty">
+                Por que agentes de IA são fundamentalmente diferentes de servidores web para detecção de anomalias? Quais as 3 camadas de runtime security para agentes?
+              </p>
+            </div>
+          </section>
+
+          <hr class="border-slate-200 dark:border-slate-800 mb-16" aria-hidden="true">
+
+          <!-- ESTAÇÃO 7 -->
+          <section id="estacao-7" class="mb-16 scroll-mt-20" aria-labelledby="estacao-7-titulo">
+            <div class="flex items-center gap-3 mb-5">
+              <span class="flex items-center justify-center w-8 h-8 rounded-full bg-indigo-600 text-white font-bold text-sm shrink-0 shadow" aria-hidden="true">7</span>
+              <h2 id="estacao-7-titulo" class="text-xl font-bold text-pretty">Arquitetura Defense-in-Depth para Produção</h2>
+            </div>
+
+            <p class="text-xs text-slate-400 dark:text-slate-500 mb-5 flex items-center gap-3 font-medium">
+              <span class="flex items-center gap-1"><i class="ph ph-clock" aria-hidden="true"></i> ~7&nbsp;min leitura</span>
+              <span class="flex items-center gap-1"><i class="ph ph-plug" aria-hidden="true"></i> 2&nbsp;nervos</span>
+            </p>
+
+            <div class="text-slate-700 dark:text-slate-300 leading-relaxed mb-8 space-y-3 text-[1.0625rem]">
+              <p>Nenhum controle isolado é suficiente. Produção requer defesa em camadas que combinam isolamento de execução, controles no nível do agente e observabilidade contínua.</p>
+              <p><strong>Camada de isolamento de execução:</strong> MicroVM como padrão para código não confiável (Firecracker/Kata). Limites de recurso por sandbox (CPU, memória, disco, rede). Contextos de execução efêmeros — destruir após cada tarefa. Negar todo egresso por padrão; whitelist apenas endpoints necessários.</p>
+              <p><strong>Camada de controle do agente:</strong> Tratar todo conteúdo externo como não confiável antes de entrar no contexto do agente. Usar credentials de vida curta, ferramentas com escopo mínimo, sem autoridade ambiente. Exigir manifests assinados para definições de ferramentas MCP.</p>
+              <p><strong>Ferramenta prática — jailoc:</strong> O projeto <a href="https://github.com/seznam/jailoc" class="text-indigo-600 dark:text-indigo-400 underline">jailoc</a> (Go, 28 stars) implementa esse padrão na prática: cada workspace de agente ganha seu próprio daemon Docker via sidecar DinD (sem montagem de socket do host), redes privadas bloqueadas por iptables, UID 1000 com todas as capacidades dropadas e no_new_privs setado. Ideal para quem quer isolar agentes OpenCode/Claude Code localmente.</p>
+              <p><strong>Padrão produção:</strong> Norteadores: (1) padrão = microVM, relaxe apenas com justificativa explícita, (2) tool-call-level auditing é obrigatório, (3) defense-in-depth combina isolamento + prompt validation + allowlists + auditoria.</p>
+            </div>
+
+            <div class="rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900/60 overflow-hidden mb-6">
+              <div class="flex items-center gap-2 px-4 py-3 border-b border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900">
+                <i class="ph ph-plug text-indigo-500 dark:text-indigo-400" aria-hidden="true"></i>
+                <h3 class="text-xs font-bold uppercase tracking-widest text-slate-600 dark:text-slate-300">Nervos Validados</h3>
+              </div>
+              <ul class="divide-y divide-slate-200 dark:divide-slate-800" role="list">
+                <li class="p-4">
+                  <div class="flex items-start gap-3">
+                    <div class="flex items-center justify-center w-9 h-9 rounded-lg bg-indigo-50 dark:bg-indigo-950 text-indigo-600 dark:text-indigo-400 shrink-0 mt-0.5" aria-hidden="true">
+                      <i class="ph-fill ph-github-logo text-lg"></i>
+                    </div>
+                    <div class="min-w-0 flex-1">
+                      <a href="https://github.com/seznam/jailoc" target="_blank" rel="noopener noreferrer" class="text-sm font-bold text-slate-900 dark:text-white hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors duration-150 inline-flex items-center gap-1 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500 focus-visible:ring-offset-2 rounded" style="touch-action: manipulation">
+                        <span class="truncate" translate="no">jailoc - Sandboxed Docker for AI agents</span>
+                        <i class="ph ph-arrow-up-right text-xs shrink-0 opacity-50" aria-hidden="true"></i>
+                      </a>
+                      <p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">Seznam &middot; Go, MIT, 28 stars</p>
+                      <div class="mt-2.5 rounded-lg bg-white dark:bg-slate-800 border border-slate-100 dark:border-slate-700 p-3 space-y-2">
+                        <p class="text-xs text-slate-700 dark:text-slate-300"><strong>Quando seguir:</strong> Para implementar isolamento local de agentes com Docker sandboxado, sem depender de cloud.</p>
+                        <p class="text-xs italic text-slate-500 dark:text-slate-400 border-l-2 border-indigo-300 dark:border-indigo-700 pl-2">
+                          <strong class="not-italic text-emerald-600 dark:text-emerald-400"><i class="ph ph-check-circle" aria-hidden="true"></i> Validado:</strong>
+                          &ldquo;jailoc wraps OpenCode agents in isolated Docker containers. Sandboxed Docker — each workspace gets its own Docker daemon via a DinD sidecar. No host socket mounting, no sandbox escape through container breakout.&rdquo;
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </li>
+                <li class="p-4">
+                  <div class="flex items-start gap-3">
+                    <div class="flex items-center justify-center w-9 h-9 rounded-lg bg-indigo-50 dark:bg-indigo-950 text-indigo-600 dark:text-indigo-400 shrink-0 mt-0.5" aria-hidden="true">
+                      <i class="ph-fill ph-article text-lg"></i>
+                    </div>
+                    <div class="min-w-0 flex-1">
+                      <a href="https://northflank.com/blog/how-to-sandbox-ai-agents" target="_blank" rel="noopener noreferrer" class="text-sm font-bold text-slate-900 dark:text-white hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors duration-150 inline-flex items-center gap-1 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500 focus-visible:ring-offset-2 rounded" style="touch-action: manipulation">
+                        <span class="truncate" translate="no">AI Agent Sandboxing Best Practices</span>
+                        <i class="ph ph-arrow-up-right text-xs shrink-0 opacity-50" aria-hidden="true"></i>
+                      </a>
+                      <p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">Northflank &middot; Fev 2026</p>
+                      <div class="mt-2.5 rounded-lg bg-white dark:bg-slate-800 border border-slate-100 dark:border-slate-700 p-3 space-y-2">
+                        <p class="text-xs text-slate-700 dark:text-slate-300"><strong>Quando seguir:</strong> Para consolidar todas as práticas em um guia de produção acionável.</p>
+                        <p class="text-xs italic text-slate-500 dark:text-slate-400 border-l-2 border-indigo-300 dark:border-indigo-700 pl-2">
+                          <strong class="not-italic text-emerald-600 dark:text-emerald-400"><i class="ph ph-check-circle" aria-hidden="true"></i> Validado:</strong>
+                          &ldquo;Start with strong isolation: Default to microVMs for untrusted code. Relax to gVisor or containers only when threat model justifies it. Implement defense-in-depth: combine multiple security layers.&rdquo;
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </li>
+              </ul>
+            </div>
+
+            <div class="rounded-xl border border-amber-200 dark:border-amber-900/60 bg-amber-50 dark:bg-amber-950/30 p-4" role="note" aria-label="Check de avanço">
+              <p class="text-xs font-bold uppercase tracking-widest text-amber-700 dark:text-amber-500 mb-1.5 flex items-center gap-1.5">
+                <i class="ph ph-compass-rose" aria-hidden="true"></i> Check de avanço
+              </p>
+              <p class="text-sm font-medium text-amber-900 dark:text-amber-200 text-pretty">
+                Desenhe mentalmente uma arquitetura defense-in-depth para agentes de IA: quais camadas, em que ordem, e o que cada uma protege contra?
+              </p>
+            </div>
+          </section>
+
+          <hr class="border-slate-200 dark:border-slate-800 mb-16" aria-hidden="true">
+
+          <!-- BOSS FINAL -->
+          <section id="boss-final" class="mb-16 scroll-mt-20" aria-labelledby="boss-titulo">
+            <div class="rounded-2xl bg-slate-900 dark:bg-slate-950 border border-slate-800 p-8 md:p-10 relative overflow-hidden">
+              <div class="absolute inset-0 overflow-hidden pointer-events-none" aria-hidden="true">
+                <div class="absolute -top-16 -right-16 w-56 h-56 bg-indigo-600 rounded-full opacity-10 blur-3xl"></div>
+                <div class="absolute -bottom-16 -left-16 w-56 h-56 bg-violet-600 rounded-full opacity-10 blur-3xl"></div>
+              </div>
+              <div class="relative z-10">
+                <div class="flex items-center gap-3 mb-5">
+                  <div class="flex items-center justify-center w-11 h-11 rounded-xl bg-white/10 border border-white/20">
+                    <i class="ph-fill ph-sword text-2xl text-amber-400" aria-hidden="true"></i>
+                  </div>
+                  <h2 id="boss-titulo" class="text-2xl font-extrabold text-white text-pretty">Boss Final</h2>
+                </div>
+                <p class="text-slate-400 mb-8 text-pretty">Sem gabarito. Responda mentalmente ou por escrito para provar retenção e síntese.</p>
+                <ol class="space-y-4" aria-label="Perguntas socráticas">
+                  <li class="rounded-xl border border-white/10 bg-white/5 hover:bg-white/10 transition-colors duration-150 p-4">
+                    <span class="block text-indigo-300 text-xs font-bold uppercase tracking-widest mb-1.5">1. Conceitual</span>
+                    <p class="text-white font-medium text-pretty">Qual a diferença fundamental de segurança entre Docker (runc), gVisor (Sentry) e Firecracker (microVM)? Em qual camada cada um opera e qual superfície de ataque cada um elimina?</p>
+                  </li>
+                  <li class="rounded-xl border border-white/10 bg-white/5 hover:bg-white/10 transition-colors duration-150 p-4">
+                    <span class="block text-indigo-300 text-xs font-bold uppercase tracking-widest mb-1.5">2. Conceitual</span>
+                    <p class="text-white font-medium text-pretty">Por que o Kubernetes Agent Sandbox controller desacopla lifecycle management da tecnologia de isolamento? Que problema de arquitetura isso resolve?</p>
+                  </li>
+                  <li class="rounded-xl border border-white/10 bg-white/5 hover:bg-white/10 transition-colors duration-150 p-4">
+                    <span class="block text-indigo-300 text-xs font-bold uppercase tracking-widest mb-1.5">3. Aplicada</span>
+                    <p class="text-white font-medium text-pretty">Você está projetando uma plataforma SaaS onde usuários enviam prompts que geram código Python executado automaticamente. Qual tier de isolamento você escolhe e por quê? Como você lida com network egress?</p>
+                  </li>
+                  <li class="rounded-xl border border-white/10 bg-white/5 hover:bg-white/10 transition-colors duration-150 p-4">
+                    <span class="block text-indigo-300 text-xs font-bold uppercase tracking-widest mb-1.5">4. Aplicada</span>
+                    <p class="text-white font-medium text-pretty">Descreva um sistema real onde você combinaria jailoc (para agentes locais) com Falco (runtime security) e E2B (sandboxes cloud). Como esses componentes se complementam?</p>
+                  </li>
+                  <li class="rounded-xl border border-white/10 bg-white/5 hover:bg-white/10 transition-colors duration-150 p-4">
+                    <span class="block text-indigo-300 text-xs font-bold uppercase tracking-widest mb-1.5">5. Crítica</span>
+                    <p class="text-white font-medium text-pretty">Quando Firecracker é a escolha ERRADA? Em que cenário gVisor seria preferível, e quando containers padrão (com hardening) são aceitáveis? Que sinais indicariam outra abordagem?</p>
+                  </li>
+                </ol>
+              </div>
+            </div>
+          </section>
+
+          <!-- RECURSOS ADICIONAIS -->
+          <section class="mb-16" aria-labelledby="recursos-adicionais-titulo">
+            <div class="rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-5">
+              <h3 id="recursos-adicionais-titulo" class="text-xs font-bold uppercase tracking-widest text-slate-400 dark:text-slate-500 mb-3 flex items-center gap-1.5">
+                <i class="ph ph-package" aria-hidden="true"></i> Recursos Adicionais
+              </h3>
+              <p class="text-xs text-slate-500 dark:text-slate-400 mb-3">Recursos validados que não encaixaram como nervos, mas complementam a trilha.</p>
+              <ul class="space-y-2" role="list">
+                <li class="text-sm text-slate-700 dark:text-slate-300 flex items-start gap-2">
+                  <i class="ph ph-article text-indigo-500 mt-0.5 shrink-0" aria-hidden="true"></i>
+                  <span><a href="https://www.sysdig.com/blog/agentic-ai-tooling-why-runtime-security-is-the-missing-layer" target="_blank" rel="noopener noreferrer" class="font-medium hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors" translate="no">Sysdig: Agentic AI Runtime Security</a> — <span class="text-slate-500 dark:text-slate-400">🔍 validado: "Agent behavior is nondeterministic, and traditional controls assume predictable execution. Runtime security must be layered."</span></span>
+                </li>
+                <li class="text-sm text-slate-700 dark:text-slate-300 flex items-start gap-2">
+                  <i class="ph ph-article text-indigo-500 mt-0.5 shrink-0" aria-hidden="true"></i>
+                  <span><a href="https://beyondscale.tech/blog/ai-agent-sandboxing-enterprise-security-guide" target="_blank" rel="noopener noreferrer" class="font-medium hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors" translate="no">BeyondScale: Enterprise Security Guide 2026</a> — <span class="text-slate-500 dark:text-slate-400">🔍 validado: "1 in 8 AI security breaches now involves an agentic system. OWASP Agentic Top 10 item ASI05 explicitly requires sandboxing."</span></span>
+                </li>
+              </ul>
+            </div>
+          </section>
+
+          <!-- PRÓXIMOS PASSOS -->
+          <section class="mb-16" aria-labelledby="proximos-passos-titulo">
+            <div class="rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-5">
+              <h3 id="proximos-passos-titulo" class="text-xs font-bold uppercase tracking-widest text-slate-400 dark:text-slate-500 mb-3 flex items-center gap-1.5">
+                <i class="ph ph-arrow-fat-lines-right" aria-hidden="true"></i> Próximos Passos Sugeridos
+              </h3>
+              <ul class="space-y-2" role="list">
+                <li class="text-sm text-slate-700 dark:text-slate-300">
+                  <a href="https://github.com/seznam/jailoc" class="font-medium text-indigo-600 dark:text-indigo-400 hover:underline" translate="no">Implementar jailoc</a> — <span class="text-slate-500 dark:text-slate-400">Configure o jailoc para isolar seus agentes OpenCode/Claude Code localmente com Docker sandboxado</span>
+                </li>
+                <li class="text-sm text-slate-700 dark:text-slate-300">
+                  <a href="https://e2b.dev/docs" class="font-medium text-indigo-600 dark:text-indigo-400 hover:underline" translate="no">Testar E2B Sandboxes</a> — <span class="text-slate-500 dark:text-slate-400">Crie sandboxes Firecracker via SDK Python/JS para executar código gerado por IA em produção</span>
+                </li>
+                <li class="text-sm text-slate-700 dark:text-slate-300">
+                  Artigos da trilha "Do Zero ao Hero" — <span class="text-slate-500 dark:text-slate-400">Revise os fundamentos de container isolation para agentes que você já tem no repositório</span>
+                </li>
+              </ul>
+            </div>
+          </section>
+
+          <!-- AUDITORIA -->
+          <footer class="pt-8 border-t border-slate-200 dark:border-slate-800 text-sm" aria-label="Auditoria da trilha">
+            <p class="font-semibold text-slate-900 dark:text-slate-100 flex items-center gap-1.5 mb-3">
+              <i class="ph ph-shield-check text-emerald-500" aria-hidden="true"></i>
+              Auditoria <span translate="no">Trust by Inspection</span>
+            </p>
+            <ul class="space-y-1 text-slate-500 dark:text-slate-400 list-disc list-inside">
+              <li>Candidatos inspecionados: 18 (10 artigos, 4 ferramentas, 4 pesquisas)</li>
+              <li>Aprovados e validados: 14 nervos + 2 recursos adicionais</li>
+              <li>Reprovados: 2 (conteúdo desatualizado de 2024 sem cobertura de microVMs)</li>
+              <li>Gerado por <code class="px-1 py-0.5 rounded bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 text-xs" translate="no">learning-trail-skill v3.1</code></li>
+            </ul>
+          </footer>
+
+        </div>
+      </main>
+    </div>
+
+  </div>
+</body>
+</html>

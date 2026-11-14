@@ -2,8 +2,33 @@ import React, {type ReactNode} from 'react';
 import Link from '@docusaurus/Link';
 import useDocusaurusContext from '@docusaurus/useDocusaurusContext';
 import Layout from '@theme/Layout';
-import {formatDate, text, trails} from '@site/src/data/site';
+import {formatDate, text} from '@site/src/data/site';
+import {trailCount, trailThemes, type Trail} from '@site/src/data/trails';
 import styles from '../index.module.css';
+
+function TrailCard({trail, locale, en}: {trail: Trail; locale: string; en: boolean}): ReactNode {
+  return (
+    <article className={styles.card}>
+      <div className={styles.meta}>
+        {trail.version ? (
+          <span>
+            {en ? 'Version' : 'Versão'} {trail.version}
+          </span>
+        ) : null}
+        {trail.date ? <time dateTime={trail.date}>{formatDate(trail.date, locale)}</time> : null}
+        {trail.level ? <span>{text(trail.level, locale)}</span> : null}
+        {trail.duration ? <span>{text(trail.duration, locale)}</span> : null}
+      </div>
+      <h3>
+        <a href={trail.href}>{text(trail.title, locale)}</a>
+      </h3>
+      <p>{text(trail.summary, locale)}</p>
+      <p className={styles.links}>
+        <a href={trail.href}>{en ? 'Open lab' : 'Abrir lab'}</a>
+      </p>
+    </article>
+  );
+}
 
 export default function TrailsPage(): ReactNode {
   const {i18n} = useDocusaurusContext();
@@ -15,8 +40,8 @@ export default function TrailsPage(): ReactNode {
       title={en ? 'Learning trails' : 'Trilhas'}
       description={
         en
-          ? 'Runnable learning trails by Josemalyson Oliveira, with version and date.'
-          : 'Trilhas executáveis de Josemalyson Oliveira, com versão e data.'
+          ? `${trailCount} runnable learning trails by Josemalyson Oliveira, grouped by theme.`
+          : `${trailCount} trilhas executáveis de Josemalyson Oliveira, agrupadas por tema.`
       }>
       <main>
         <header className={styles.pageHead}>
@@ -24,38 +49,28 @@ export default function TrailsPage(): ReactNode {
           <h1>{en ? 'Learning trails' : 'Trilhas'}</h1>
           <p className={styles.support}>
             {en
-              ? 'Each card is a self-contained lab: version, date, level, and duration. Progress stays in this browser.'
-              : 'Cada card é um lab autocontido: versão, data, nível e duração. O progresso fica neste navegador.'}
+              ? `${trailCount} self-contained labs, in the study order of the ten themes. Progress stays in this browser. The lab files are in Portuguese.`
+              : `${trailCount} labs autocontidos, na ordem de estudo dos dez temas. O progresso fica neste navegador.`}
           </p>
         </header>
-        <section className={styles.section} aria-label={en ? 'Trail list' : 'Lista de trilhas'}>
-          {trails.length === 0 ? (
-            <p>{en ? 'No trails published yet.' : 'Nenhuma trilha publicada ainda.'}</p>
-          ) : (
+        {trailThemes.map((theme) => (
+          <section
+            key={theme.id}
+            id={theme.id}
+            className={styles.section}
+            aria-labelledby={`theme-${theme.id}`}>
+            <h2 id={`theme-${theme.id}`}>{text(theme.title, locale)}</h2>
+            <p className={styles.sectionLead}>{text(theme.summary, locale)}</p>
             <div className={styles.stack}>
-              {trails.map((trail) => (
-                <article key={trail.slug} className={styles.card}>
-                  <div className={styles.meta}>
-                    <span>
-                      {en ? 'Version' : 'Versão'} {trail.version}
-                    </span>
-                    <time dateTime={trail.date}>{formatDate(trail.date, locale)}</time>
-                    <span>{text(trail.level, locale)}</span>
-                    <span>{text(trail.duration, locale)}</span>
-                  </div>
-                  <h2>
-                    <a href={trail.href}>{text(trail.title, locale)}</a>
-                  </h2>
-                  <p>{text(trail.summary, locale)}</p>
-                  <p className={styles.links}>
-                    <a href={trail.href}>{en ? 'Open lab' : 'Abrir lab'}</a>
-                    <Link to="/">{en ? 'Back home' : 'Voltar ao início'}</Link>
-                  </p>
-                </article>
+              {theme.trails.map((trail) => (
+                <TrailCard key={trail.slug} trail={trail} locale={locale} en={en} />
               ))}
             </div>
-          )}
-        </section>
+          </section>
+        ))}
+        <p className={styles.section}>
+          <Link to="/">{en ? 'Back home' : 'Voltar ao início'}</Link>
+        </p>
       </main>
     </Layout>
   );
