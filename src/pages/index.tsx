@@ -34,7 +34,7 @@ export default function Home(): ReactNode {
   return (
     <Layout
       title={en ? 'Tutorials, trails, and open source' : 'Tutoriais, trilhas e open source'}
-      description={text(headline, locale)}>
+      description={text(heroLead, locale)}>
       <main>
         <section className={styles.hero} aria-labelledby="hero-title">
           <p className={styles.eyebrow}>{en ? 'Entry point' : 'Entrada'}</p>
@@ -47,14 +47,14 @@ export default function Home(): ReactNode {
             </a>
             <External href="https://br.linkedin.com/in/josemalysonoliveira">
               <span className={styles.secondary}>
-                {en ? 'Get in touch' : 'Fale comigo'}
+                {en ? 'Follow on LinkedIn' : 'Acompanhe no LinkedIn'}
               </span>
             </External>
           </div>
         </section>
 
-        <section className={styles.section} aria-labelledby="areas-title" id="resolvo">
-          <h2 id="areas-title">{en ? 'What I take on' : 'O que eu resolvo'}</h2>
+        <section className={styles.section} aria-labelledby="areas-title" id="estudo">
+          <h2 id="areas-title">{en ? 'What I study and use' : 'O que eu estudo e uso'}</h2>
           <div className={styles.grid3}>
             {areas.map((area) => (
               <article key={text(area.title, 'pt-BR')} className={styles.card}>
@@ -183,7 +183,7 @@ export default function Home(): ReactNode {
         </section>
 
         <section className={styles.section} aria-labelledby="method-title" id="metodo">
-          <h2 id="method-title">{en ? 'How I work' : 'Como trabalho'}</h2>
+          <h2 id="method-title">{en ? 'How I study' : 'Como eu estudo'}</h2>
           <ol className={styles.steps}>
             {methodSteps.map((step, index) => (
               <li key={text(step.title, 'pt-BR')}>
@@ -200,17 +200,17 @@ export default function Home(): ReactNode {
           <p className={clsx(styles.card, styles.note)}>{text(methodNote, locale)}</p>
         </section>
 
-        <section className={styles.section} aria-labelledby="contact-title" id="contato">
-          <h2 id="contact-title">{en ? 'Contact' : 'Contato'}</h2>
+        <section className={styles.section} aria-labelledby="follow-title" id="acompanhe">
+          <h2 id="follow-title">{en ? 'Follow' : 'Acompanhe'}</h2>
           <div className={styles.card}>
             <p>
               {en
-                ? 'LinkedIn is the channel for project and consulting work.'
-                : 'LinkedIn é o canal para projeto e consultoria.'}
+                ? 'Study notes also go out on LinkedIn, GitHub, and X.'
+                : 'Notas de estudo também saem no LinkedIn, no GitHub e no X.'}
             </p>
             <p className={styles.links}>
               <External href="https://br.linkedin.com/in/josemalysonoliveira">
-                LinkedIn
+                {en ? 'Follow on LinkedIn' : 'Acompanhe no LinkedIn'}
               </External>
               <External href="https://github.com/Josemalyson">GitHub</External>
               <External href="https://x.com/josemalyson">X</External>

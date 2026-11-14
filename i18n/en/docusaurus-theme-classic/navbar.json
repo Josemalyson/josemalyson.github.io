@@ -27,9 +27,9 @@
     "message": "Open source",
     "description": "Navbar item with label Open source"
   },
-  "item.label.Contato": {
-    "message": "Contact",
-    "description": "Navbar item with label Contato"
+  "item.label.Acompanhe": {
+    "message": "Follow",
+    "description": "Navbar item with label Acompanhe"
   },
   "item.label.GitHub": {
     "message": "GitHub",

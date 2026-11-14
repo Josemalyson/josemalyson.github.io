@@ -23,8 +23,8 @@ export const headline: Copy = {
 
 export const heroLead: Copy = {
   'pt-BR':
-    'Tutoriais com versão, trilhas executáveis e repositórios. Projeto e consultoria entram por uma conversa no LinkedIn.',
-  en: 'Versioned tutorials, runnable learning trails, and repositories. Project and consulting work starts with a LinkedIn conversation.',
+    'Tutoriais com versão, trilhas executáveis, vídeos de estudo e repositórios. O que eu estudo, construo e uso.',
+  en: 'Versioned tutorials, runnable learning trails, study videos, and repositories. What I study, build, and use.',
 };
 
 export const areas: {title: Copy; body: Copy}[] = [
@@ -179,35 +179,35 @@ export const references: {
 
 export const methodSteps: {title: Copy; body: Copy}[] = [
   {
-    title: {'pt-BR': 'Diagnóstico', en: 'Diagnosis'},
+    title: {'pt-BR': 'Estudo', en: 'Study'},
     body: {
       'pt-BR':
-        'Mapear o fluxo que existe hoje: quem aprova, onde o agente age e qual evidência falta.',
-      en: 'Map the flow that exists today: who approves, where the agent acts, and which evidence is missing.',
+        'Mapear o fluxo no material: quem aprova, onde o agente age e qual evidência falta.',
+      en: 'Map the flow in the material: who approves, where the agent acts, and which evidence is missing.',
     },
   },
   {
-    title: {'pt-BR': 'Piloto com uma squad', en: 'Pilot with one squad'},
+    title: {'pt-BR': 'Laboratório', en: 'Lab'},
     body: {
       'pt-BR':
-        'Um fluxo fechado com uma squad: intenção, spec, execução limitada e verificação.',
-      en: 'One closed flow with a single squad: intention, spec, bounded execution, and verification.',
+        'Um fluxo fechado no lab: intenção, spec, execução limitada e verificação.',
+      en: 'One closed flow in the lab: intention, spec, bounded execution, and verification.',
     },
   },
   {
     title: {'pt-BR': 'Playbook', en: 'Playbook'},
     body: {
       'pt-BR':
-        'O que passou no piloto vira passo reproduzível, com versão e data.',
-      en: 'What survived the pilot becomes a reproducible step, with a version and a date.',
+        'O que passa no lab vira passo reproduzível, com versão e data.',
+      en: 'What survives the lab becomes a reproducible step, with a version and a date.',
     },
   },
   {
-    title: {'pt-BR': 'Escala', en: 'Scale'},
+    title: {'pt-BR': 'Próximo tema', en: 'Next topic'},
     body: {
       'pt-BR':
-        'O mesmo loop em outras squads. O que quebra volta como guardrail na retro, não como exceção silenciosa.',
-      en: 'The same loop on other squads. What breaks comes back as a guardrail in the retro, not as a silent exception.',
+        'O mesmo loop no tema seguinte. O que quebra volta como guardrail na retro, não como exceção silenciosa.',
+      en: 'The same loop on the next topic. What breaks comes back as a guardrail in the retro, not as a silent exception.',
     },
   },
 ];
