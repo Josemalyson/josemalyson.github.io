@@ -34,5 +34,17 @@
   "item.label.GitHub": {
     "message": "GitHub",
     "description": "Navbar item with label GitHub"
+  },
+  "item.label.Guias de bolso": {
+    "message": "Pocket guides",
+    "description": "Navbar item with label Guias de bolso"
+  },
+  "item.label.Matt Pocock": {
+    "message": "Matt Pocock",
+    "description": "Navbar item with label Matt Pocock"
+  },
+  "item.label.BMAD": {
+    "message": "BMAD",
+    "description": "Navbar item with label BMAD"
   }
 }

@@ -43,6 +43,9 @@ O revisor consegue explicar o comportamento entregue.
 
 [Walk Through a Change](https://github.com/bmad-code-org/BMAD-METHOD/blob/V6.12/docs/build/walk-through-a-change.md)
 
+
+Guia de bolso: [passo 23 no guia BMAD](/guias/bmad/passo-23/).
+
 [← 22 · Code review independente](/playbook/ai-first/tutoriais/passo-22)
 
 [24 · Trailers da página 05 no commit do agente →](/playbook/ai-first/tutoriais/passo-24)

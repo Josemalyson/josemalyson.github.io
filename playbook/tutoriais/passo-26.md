@@ -53,6 +53,9 @@ Título e descrição com Story ID; base main.
 
 [GitHub: comparar branches no PR](https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/proposing-changes-to-your-work-with-pull-requests/about-comparing-branches-in-pull-requests)
 
+
+Guia de bolso: [passo 26 no guia BMAD](/guias/bmad/passo-26/).
+
 [← 25 · Push do branch](/playbook/ai-first/tutoriais/passo-25)
 
 [27 · CI, review humano e merge →](/playbook/ai-first/tutoriais/passo-27)

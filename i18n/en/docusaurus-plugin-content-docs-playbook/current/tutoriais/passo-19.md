@@ -53,6 +53,9 @@ git log -1 mostra o commit; git status limpo; story 1-1 em review.
 
 [Build a Change](https://github.com/bmad-code-org/BMAD-METHOD/blob/V6.12/docs/build/build-a-change.md)
 
+
+Guia de bolso: [passo 19 no guia BMAD](/guias/bmad/passo-19/).
+
 [← 18 · Commit the plan](/playbook/ai-first/tutoriais/passo-18)
 
 [20 · Self-correction loop on the agent commit →](/playbook/ai-first/tutoriais/passo-20)

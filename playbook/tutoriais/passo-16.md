@@ -43,6 +43,9 @@ PASS, ou CONCERNS aceitas por escrito.
 
 [Break Work into Stories and Track It](https://github.com/bmad-code-org/BMAD-METHOD/blob/V6.12/docs/plan/break-work-into-stories-and-track-it.md)
 
+
+Guia de bolso: [passo 16 no guia BMAD](/guias/bmad/passo-16/).
+
 [← 15 · Decomposição: épicos e stories](/playbook/ai-first/tutoriais/passo-15)
 
 [17 · Sprint planning →](/playbook/ai-first/tutoriais/passo-17)

@@ -49,6 +49,9 @@ Todo FR do PRD aparece no FR Coverage Map.
 
 [Break Work into Stories and Track It](https://github.com/bmad-code-org/BMAD-METHOD/blob/V6.12/docs/plan/break-work-into-stories-and-track-it.md)
 
+
+Guia de bolso: [passo 15 no guia BMAD](/guias/bmad/passo-15/).
+
 [← 14 · Spec: architecture (spine)](/playbook/ai-first/tutoriais/passo-14)
 
 [16 · Readiness gate →](/playbook/ai-first/tutoriais/passo-16)

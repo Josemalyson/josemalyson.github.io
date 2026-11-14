@@ -43,6 +43,9 @@ O nome carrega o Story ID (página 05). bmad-build confere se o branch combina c
 
 [Build a Change](https://github.com/bmad-code-org/BMAD-METHOD/blob/V6.12/docs/build/build-a-change.md)
 
+
+Guia de bolso: [passo 05 no guia BMAD](/guias/bmad/passo-05/).
+
 [← 04 · Commit da instalação](/playbook/ai-first/tutoriais/passo-04)
 
 [06 · Pedir orientação ao BMAD →](/playbook/ai-first/tutoriais/passo-06)

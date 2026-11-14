@@ -1,7 +1,9 @@
 ---
 title: "Tutoriais operacionais"
 sidebar_label: "Tutoriais operacionais"
-description: "06 · Runbooks Três fluxos: nova feature Tutorial A, passo a passo executável com BMAD 6.12.4 e quality gate de pre-commit com loop de…"
+description: "06 · Runbooks O mesmo passo a passo, em formato de guia de bolso, está em [/guias/bmad/](/guias/bmad/). Os workflows do Matt Pocock, com estes comandos nos passos correspondentes, estão em [/guias/matt-pocock/](/guias/matt-pocock/).
+
+Três fluxos: nova feature Tutorial A, passo a passo executável com BMAD 6.12.4 e quality gate de pre-commit com loop de…"
 hide_title: true
 published: "2026-11-14"
 reading_minutes: 5
@@ -11,6 +13,8 @@ pagination_next: "tutoriais/passo-00"
 
 *06 · Runbooks*
 
+
+O mesmo passo a passo, em formato de guia de bolso, está em [/guias/bmad/](/guias/bmad/). Os workflows do Matt Pocock, com estes comandos nos passos correspondentes, estão em [/guias/matt-pocock/](/guias/matt-pocock/).
 
 Três fluxos: nova feature (Tutorial A, passo a passo executável com BMAD 6.12.4 e quality gate de pre-commit com loop de autocorreção, do zero ao push e PR), evolução de feature e correção de bug.
 
@@ -48,7 +52,7 @@ Contrato de spec do piloto: BMAD v6.12.4, linha estável (npm `latest` em 14/11/
 
 ### Tutorial A — Nova feature, do zero ao push (hands-on)
 
-Roteiro sequencial com BMAD Method **v6.12.4** (linha estável, verificada em 14/11/2026). Exemplo genérico de ambiente bancário: `GET /contas/{id}/saldo` em Go, com dados sintéticos e Story `S-001`. Cada passo traz objetivo, entrada, comando exato, resultado esperado, artefatos, checkpoint e documentação oficial. **[REAL]** = saída capturada no ensaio de 14/11/2026; **[APROXIMADO]** = depende do modelo; o texto varia, mas arquivos e pastas vêm do código dos skills instalados.
+Roteiro sequencial com BMAD Method **v6.12.4** (linha estável, verificada em 14/11/2026). Exemplo fictício: `GET /contas/{id}/saldo` em Go, com dados sintéticos e Story `S-001`. Cada passo traz objetivo, entrada, comando exato, resultado esperado, artefatos, checkpoint e documentação oficial. **[REAL]** = saída capturada no ensaio de 14/11/2026; **[APROXIMADO]** = depende do modelo; o texto varia, mas arquivos e pastas vêm do código dos skills instalados.
 
 :::note
 
@@ -76,7 +80,7 @@ Os passos citam o skill pelo nome; os blocos usam o prefixo `/`. Os skills são 
 <tr><td>Claude Code</td><td>`.claude/skills/`</td><td>`/bmad-build`</td><td>[documentação](https://code.claude.com/docs/en/skills)</td></tr>
 <tr><td>Cursor</td><td>`.agents/skills/`</td><td>`/ no chat do Agent, depois bmad-build`</td><td>[documentação](https://cursor.com/docs/context/skills)</td></tr>
 <tr><td>Codex</td><td>`.agents/skills/`</td><td>`$bmad-build`</td><td>[documentação](https://developers.openai.com/codex/skills)</td></tr>
-<tr><td>Devin (contratado) e outros</td><td>`.agents/skills/ (Devin também lê .claude/skills/)`</td><td>`skill pelo nome; no Devin CLI, /bmad-build`</td><td>[documentação](https://docs.devin.ai/product-guides/skills)</td></tr>
+<tr><td>Devin e outros</td><td>`.agents/skills/ (Devin também lê .claude/skills/)`</td><td>`skill pelo nome; no Devin CLI, /bmad-build`</td><td>[documentação](https://docs.devin.ai/product-guides/skills)</td></tr>
 </table>
 </div>
 

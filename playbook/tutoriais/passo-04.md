@@ -46,6 +46,9 @@ git status limpo.
 
 [Adopt BMad Across a Team](https://github.com/bmad-code-org/BMAD-METHOD/blob/V6.12/docs/customize/adopt-bmad-across-a-team.md)
 
+
+Guia de bolso: [passo 04 no guia BMAD](/guias/bmad/passo-04/).
+
 [← 03 · Conferir os skills instalados](/playbook/ai-first/tutoriais/passo-03)
 
 [05 · Branch da story →](/playbook/ai-first/tutoriais/passo-05)

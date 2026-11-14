@@ -47,6 +47,9 @@ Trailers presentes; nada foi enviado ao remoto antes. O amend também passa pelo
 
 [git interpret-trailers](https://git-scm.com/docs/git-interpret-trailers)
 
+
+Guia de bolso: [passo 24 no guia BMAD](/guias/bmad/passo-24/).
+
 [← 23 · Walkthrough para o review humano](/playbook/ai-first/tutoriais/passo-23)
 
 [25 · Push do branch →](/playbook/ai-first/tutoriais/passo-25)

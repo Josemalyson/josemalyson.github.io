@@ -75,6 +75,9 @@ Documentação oficial
 
 Links verificados em 14/11/2026. BMAD: documentação da v6.12 (branch V6.12).
 
+
+Guias de bolso: [BMAD — outros fluxos](/guias/bmad/outros-fluxos/) · [Matt Pocock — bug difícil](/guias/matt-pocock/workflows/bug-dificil/).
+
 [← 28 · Retrospectiva do épico](/playbook/ai-first/tutoriais/passo-28)
 
 [Governança e segurança →](/playbook/ai-first/fundamentos/governanca)

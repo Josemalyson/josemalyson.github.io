@@ -50,6 +50,9 @@ git status → up to date with origin.
 
 [GitHub: comparar branches no PR](https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/proposing-changes-to-your-work-with-pull-requests/about-comparing-branches-in-pull-requests)
 
+
+Guia de bolso: [passo 25 no guia BMAD](/guias/bmad/passo-25/).
+
 [← 24 · Page 05 trailers on the agent commit](/playbook/ai-first/tutoriais/passo-24)
 
 [26 · Open the GitHub PR (web) →](/playbook/ai-first/tutoriais/passo-26)

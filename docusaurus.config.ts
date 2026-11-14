@@ -46,6 +46,30 @@ const config: Config = {
       },
     ],
     [
+      '@docusaurus/plugin-content-docs',
+      {
+        id: 'guia-matt-pocock',
+        path: 'guias/matt-pocock',
+        routeBasePath: 'guias/matt-pocock',
+        sidebarPath: require.resolve('./sidebarsGuiaMatt.ts'),
+        breadcrumbs: true,
+        showLastUpdateTime: false,
+        showLastUpdateAuthor: false,
+      },
+    ],
+    [
+      '@docusaurus/plugin-content-docs',
+      {
+        id: 'guia-bmad',
+        path: 'guias/bmad',
+        routeBasePath: 'guias/bmad',
+        sidebarPath: require.resolve('./sidebarsGuiaBmad.ts'),
+        breadcrumbs: true,
+        showLastUpdateTime: false,
+        showLastUpdateAuthor: false,
+      },
+    ],
+    [
       '@docusaurus/plugin-client-redirects',
       {
         redirects: [
@@ -104,6 +128,23 @@ const config: Config = {
         {to: '/trilhas/', label: 'Trilhas', position: 'left'},
         {to: '/videos/', label: 'Vídeos', position: 'left'},
         {
+          type: 'dropdown',
+          label: 'Guias de bolso',
+          position: 'left',
+          items: [
+            {
+              to: '/guias/matt-pocock/',
+              label: 'Matt Pocock',
+              activeBasePath: '/guias/matt-pocock/',
+            },
+            {
+              to: '/guias/bmad/',
+              label: 'BMAD',
+              activeBasePath: '/guias/bmad/',
+            },
+          ],
+        },
+        {
           to: '/playbook/ai-first/',
           label: 'Playbook',
           position: 'left',
@@ -146,6 +187,8 @@ const config: Config = {
             {label: 'Tutoriais', to: '/#tutoriais'},
             {label: 'Open source', to: '/#opensource'},
             {label: 'Playbook', to: '/playbook/ai-first/'},
+            {label: 'Guia Matt Pocock', to: '/guias/matt-pocock/'},
+            {label: 'Guia BMAD', to: '/guias/bmad/'},
             {label: 'Amazon Bedrock', to: '/docs/aws/bedrock/'},
           ],
         },

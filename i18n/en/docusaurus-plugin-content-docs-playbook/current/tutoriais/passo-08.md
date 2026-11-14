@@ -69,6 +69,9 @@ grep -c "&#123;&#123;" .githooks/pre-commit retorna 0. O Tech Lead lê o cabeça
 
 [govulncheck](https://pkg.go.dev/golang.org/x/vuln/cmd/govulncheck)
 
+
+Guia de bolso: [passo 08 no guia BMAD](/guias/bmad/passo-08/).
+
 [← 07 · Repository context (AGENTS.md)](/playbook/ai-first/tutoriais/passo-07)
 
 [09 · Quality gate: enable and dry-run →](/playbook/ai-first/tutoriais/passo-09)

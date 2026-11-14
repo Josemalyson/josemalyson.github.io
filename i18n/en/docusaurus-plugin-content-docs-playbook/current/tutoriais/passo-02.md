@@ -59,6 +59,9 @@ _bmad/_config/manifest.yaml mostra version: 6.12.4. IDs de ferramenta: npx bmad-
 
 [Install BMad (v6.12)](https://github.com/bmad-code-org/BMAD-METHOD/blob/V6.12/docs/start/install-bmad.md)
 
+
+Guia de bolso: [passo 02 no guia BMAD](/guias/bmad/passo-02/).
+
 [← 01 · GitHub repository and Go module](/playbook/ai-first/tutoriais/passo-01)
 
 [03 · Check the installed skills →](/playbook/ai-first/tutoriais/passo-03)

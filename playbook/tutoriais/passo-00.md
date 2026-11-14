@@ -55,6 +55,9 @@ Node ≥ 20.12, Python ≥ 3.10, uv presente. Sem uv o instalador só avisa, mas
 
 [Go: instalação](https://go.dev/doc/install)
 
+
+Guia de bolso: [passo 00 no guia BMAD](/guias/bmad/passo-00/).
+
 [← Tutoriais operacionais](/playbook/ai-first/tutoriais/indice)
 
 [01 · Repositório GitHub e módulo Go →](/playbook/ai-first/tutoriais/passo-01)

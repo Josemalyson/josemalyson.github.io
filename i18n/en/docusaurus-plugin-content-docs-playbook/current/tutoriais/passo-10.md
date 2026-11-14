@@ -82,6 +82,9 @@ git status limpo, como o bmad-build exige. Daqui em diante todo commit passa pel
 
 *Loop de autocorreção: git commit, pre-commit com 14 categorias; se der FAIL e houver tentativa, o agente lê o log, corrige só a categoria e repete o commit; na 3ª falha, para e entrega ao humano*
 
+
+Guia de bolso: [passo 10 no guia BMAD](/guias/bmad/passo-10/).
+
 [← 09 · Quality gate: enable and dry-run](/playbook/ai-first/tutoriais/passo-09)
 
 [11 · Discovery: product brief →](/playbook/ai-first/tutoriais/passo-11)

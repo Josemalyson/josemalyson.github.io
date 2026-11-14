@@ -98,6 +98,9 @@ Sem erro de sintaxe. [PASS] onde há ferramenta; [SKIP] nos steps Go enquanto n�
 
 [Gitleaks](https://github.com/gitleaks/gitleaks)
 
+
+Guia de bolso: [passo 09 no guia BMAD](/guias/bmad/passo-09/).
+
 [← 08 · Quality gate: install the skill and generate the hooks](/playbook/ai-first/tutoriais/passo-08)
 
 [10 · Self-correction loop: AGENTS.md rule and commit →](/playbook/ai-first/tutoriais/passo-10)

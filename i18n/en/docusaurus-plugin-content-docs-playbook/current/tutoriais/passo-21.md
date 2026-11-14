@@ -120,6 +120,9 @@ func run(addr string) error {
 }
 ```
 
+
+Guia de bolso: [passo 21 no guia BMAD](/guias/bmad/passo-21/).
+
 [← 20 · Self-correction loop on the agent commit](/playbook/ai-first/tutoriais/passo-20)
 
 [22 · Independent code review →](/playbook/ai-first/tutoriais/passo-22)

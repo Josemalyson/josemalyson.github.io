@@ -49,6 +49,9 @@ Todo requisito do brief aparece no PRD.
 
 [Define Requirements and a Specification](https://github.com/bmad-code-org/BMAD-METHOD/blob/V6.12/docs/plan/define-requirements-and-a-specification.md)
 
+
+Guia de bolso: [passo 12 no guia BMAD](/guias/bmad/passo-12/).
+
 [← 11 · Discovery: product brief](/playbook/ai-first/tutoriais/passo-11)
 
 [13 · Spec: PRD (validate) →](/playbook/ai-first/tutoriais/passo-13)

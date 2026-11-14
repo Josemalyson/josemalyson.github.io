@@ -1,0 +1,54 @@
+{
+  "version.label": {
+    "message": "Next",
+    "description": "The label for version current"
+  },
+  "sidebar.bmadSidebar.category.Guia de bolso": {
+    "message": "Pocket guide",
+    "description": "The label for category 'Guia de bolso' in sidebar"
+  },
+  "sidebar.bmadSidebar.category.Passo a passo": {
+    "message": "Step by step",
+    "description": "The label for category 'Passo a passo' in sidebar"
+  },
+  "sidebar.bmadSidebar.category.Setup": {
+    "message": "Setup",
+    "description": "The label for category 'Setup' in sidebar"
+  },
+  "sidebar.bmadSidebar.category.Guardrails e pre-commit loop": {
+    "message": "Guardrails and the pre-commit loop",
+    "description": "The label for category 'Guardrails e pre-commit loop' in sidebar"
+  },
+  "sidebar.bmadSidebar.category.Discovery": {
+    "message": "Discovery",
+    "description": "The label for category 'Discovery' in sidebar"
+  },
+  "sidebar.bmadSidebar.category.Spec": {
+    "message": "Spec",
+    "description": "The label for category 'Spec' in sidebar"
+  },
+  "sidebar.bmadSidebar.category.Decomposição": {
+    "message": "Decomposition",
+    "description": "The label for category 'Decomposição' in sidebar"
+  },
+  "sidebar.bmadSidebar.category.Implementação": {
+    "message": "Implementation",
+    "description": "The label for category 'Implementação' in sidebar"
+  },
+  "sidebar.bmadSidebar.category.Verificação": {
+    "message": "Verification",
+    "description": "The label for category 'Verificação' in sidebar"
+  },
+  "sidebar.bmadSidebar.category.Entrega": {
+    "message": "Delivery",
+    "description": "The label for category 'Entrega' in sidebar"
+  },
+  "sidebar.bmadSidebar.category.Fechamento": {
+    "message": "Closing",
+    "description": "The label for category 'Fechamento' in sidebar"
+  },
+  "sidebar.bmadSidebar.category.Referências": {
+    "message": "References",
+    "description": "The label for category 'Referências' in sidebar"
+  }
+}
