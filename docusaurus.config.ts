@@ -8,7 +8,10 @@ const config: Config = {
   favicon: 'img/favicon.svg',
   url: 'https://josemalyson.github.io',
   baseUrl: '/',
-  trailingSlash: false,
+  // GitHub Pages serves a directory index at /path/ and 301s /path to /path/.
+  // A sibling path.html 404s the slash form, which is what broke /trilhas/ and
+  // the other shared URLs. Every route is emitted as path/index.html.
+  trailingSlash: true,
   organizationName: 'Josemalyson',
   projectName: 'josemalyson.github.io',
   onBrokenLinks: 'throw',
@@ -48,7 +51,7 @@ const config: Config = {
         redirects: [
           {
             from: '/tutoriais/ai-first-playbook',
-            to: '/playbook/ai-first',
+            to: '/playbook/ai-first/',
           },
         ],
       },
@@ -98,13 +101,13 @@ const config: Config = {
         height: 32,
       },
       items: [
-        {to: '/trilhas', label: 'Trilhas', position: 'left'},
-        {to: '/videos', label: 'Vídeos', position: 'left'},
+        {to: '/trilhas/', label: 'Trilhas', position: 'left'},
+        {to: '/videos/', label: 'Vídeos', position: 'left'},
         {
-          to: '/playbook/ai-first',
+          to: '/playbook/ai-first/',
           label: 'Playbook',
           position: 'left',
-          activeBasePath: '/playbook/ai-first',
+          activeBasePath: '/playbook/ai-first/',
         },
         {
           to: '/#tutoriais',
@@ -138,12 +141,12 @@ const config: Config = {
         {
           title: 'Mapa',
           items: [
-            {label: 'Trilhas', to: '/trilhas'},
-            {label: 'Vídeos', to: '/videos'},
+            {label: 'Trilhas', to: '/trilhas/'},
+            {label: 'Vídeos', to: '/videos/'},
             {label: 'Tutoriais', to: '/#tutoriais'},
             {label: 'Open source', to: '/#opensource'},
-            {label: 'Playbook', to: '/playbook/ai-first'},
-            {label: 'Amazon Bedrock', to: '/docs/aws/bedrock'},
+            {label: 'Playbook', to: '/playbook/ai-first/'},
+            {label: 'Amazon Bedrock', to: '/docs/aws/bedrock/'},
           ],
         },
         {

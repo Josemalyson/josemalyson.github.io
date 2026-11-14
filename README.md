@@ -8,26 +8,19 @@ npm start
 npm run build
 ```
 
-The repository root also contains the built HTML (`index.html`, `docs/`, `en/`, `trilhas/`, `assets/`, `img/`) so GitHub Pages can serve the site from the `main` branch. After a source change, rebuild and copy the output before pushing:
+The repository root also contains the built HTML (`index.html`, `docs/`, `en/`, `trilhas/`, `assets/`, `img/`) so GitHub Pages can serve the site from the `main` branch. `trailingSlash` is `true`: every route is `path/index.html`, the canonical URL ends with `/`, and GitHub Pages 301s the no-slash URL to that canonical. Do not also emit `path.html`. A sibling file and directory (`trilhas.html` next to `trilhas/`) makes `/trilhas/` 404.
+
+After a source change, rebuild and copy the output before pushing:
 
 ```bash
 npm run build
-rm -rf assets en img trilhas
-rm -f index.html 404.html sitemap.xml tutoriais/ai-first-playbook.html
+rm -rf assets en img trilhas videos tutoriais playbook/ai-first
+rm -f index.html 404.html sitemap.xml
+find docs -name '*.html' -delete
 cp -a build/. .
-# GitHub Pages cannot serve a .html file and a directory of the same name.
-mv trilhas.html trilhas/index.html
-mv en/trilhas.html en/trilhas/index.html
-mkdir -p videos en/videos
-mv videos.html videos/index.html
-mv en/videos.html en/videos/index.html
-# /playbook/ai-first is both the intro page and the parent of the other docs.
-mkdir -p playbook/ai-first en/playbook/ai-first
-mv playbook/ai-first.html playbook/ai-first/index.html
-mv en/playbook/ai-first.html en/playbook/ai-first/index.html
 ```
 
-`docs/aws/bedrock.md` stays; the generated page is `docs/aws/bedrock.html`.
+`docs/aws/bedrock.md` stays; the generated page is `docs/aws/bedrock/index.html`.
 
 ## Add a tutorial card
 
@@ -43,7 +36,7 @@ A long tutorial can be a Markdown file in `tutoriais/`. That folder is a second 
 
 Then rebuild and sync the site output as above.
 
-The AI-First playbook (v0.4) is a docs section at `/playbook/ai-first` (English at `/en/playbook/ai-first`). Source pages live in `playbook/`. The sidebar is `sidebarsPlaybook.ts`. English titles and the intro note live in `i18n/en/docusaurus-plugin-content-docs-playbook/current/`; the body of each page stays in Portuguese. `/tutoriais/ai-first-playbook` redirects to the intro. The repository and PDF stay at https://github.com/Josemalyson/ai-first-playbook.
+The AI-First playbook (v0.4) is a docs section at `/playbook/ai-first/` (English at `/en/playbook/ai-first/`). Source pages live in `playbook/`. The sidebar is `sidebarsPlaybook.ts`. English titles and the intro note live in `i18n/en/docusaurus-plugin-content-docs-playbook/current/`; the body of each page stays in Portuguese. `/tutoriais/ai-first-playbook` redirects to the intro. The repository and PDF stay at https://github.com/Josemalyson/ai-first-playbook.
 
 Previous and next follow the reading order (fundamentals, then steps 00–28), even where the sidebar groups the guardrail steps together. To add a step, create `playbook/tutoriais/passo-NN.md`, mirror it under the English folder with an English title, and add the id to `sidebarsPlaybook.ts`.
 
@@ -54,11 +47,11 @@ Previous and next follow the reading order (fundamentals, then steps 00–28), e
 3. If a new file is a shorter copy of a trail already in the list, keep the more complete one.
 4. Rebuild and sync.
 
-The index at `/trilhas` reads that list, grouped by theme. The lab itself is a static HTML file, so the link is a normal `<a href>`, not a client-side route.
+The index at `/trilhas/` reads that list, grouped by theme. The lab itself is a static HTML file, so the link is a normal `<a href>`, not a client-side route.
 
 ## Add a video
 
-Append one object to `src/data/videos.json`. The `/videos` page reads that file only.
+Append one object to `src/data/videos.json`. The `/videos/` page reads that file only.
 
 - `id`: the 11-character YouTube id. The thumbnail is `https://i.ytimg.com/vi/<id>/hqdefault.jpg`.
 - `url`: `https://www.youtube.com/watch?v=<id>`
@@ -75,4 +68,4 @@ Then rebuild and sync the site output as above.
 
 ## Bedrock URLs
 
-The 2024 article stays at `/docs/aws/bedrock` and `/en/docs/aws/bedrock`.
+The 2024 article stays at `/docs/aws/bedrock/` and `/en/docs/aws/bedrock/`. The no-slash URLs redirect there.

@@ -83,7 +83,7 @@ export const tutorials: {
     id: 'ai-first-playbook',
     version: 'v0.4',
     date: '2026-11-14',
-    href: '/playbook/ai-first',
+    href: '/playbook/ai-first/',
     repo: 'https://github.com/Josemalyson/ai-first-playbook',
     repoLabel: {
       'pt-BR': 'Repositório e PDF',
@@ -103,7 +103,7 @@ export const tutorials: {
     id: 'bedrock',
     version: null,
     date: '2024-03-20',
-    href: '/docs/aws/bedrock',
+    href: '/docs/aws/bedrock/',
     repo: null,
     title: {
       'pt-BR': 'Amazon Bedrock',
