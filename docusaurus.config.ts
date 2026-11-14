@@ -122,8 +122,8 @@ const config: Config = {
           activeBaseRegex: 'a^',
         },
         {
-          to: '/#contato',
-          label: 'Contato',
+          to: '/#acompanhe',
+          label: 'Acompanhe',
           position: 'left',
           activeBaseRegex: 'a^',
         },
@@ -150,10 +150,10 @@ const config: Config = {
           ],
         },
         {
-          title: 'Contato',
+          title: 'Acompanhe',
           items: [
             {
-              label: 'LinkedIn',
+              label: 'Acompanhe no LinkedIn',
               href: 'https://br.linkedin.com/in/josemalysonoliveira',
             },
             {label: 'GitHub', href: 'https://github.com/Josemalyson'},
