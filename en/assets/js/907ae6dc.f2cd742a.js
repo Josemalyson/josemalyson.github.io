@@ -1,0 +1,1 @@
+"use strict";(globalThis.webpackChunkjosemalyson_github_io||=[]).push([[3550],{9571(s){s.exports=JSON.parse('{"name":"docusaurus-plugin-content-docs","id":"playbook"}')}}]);

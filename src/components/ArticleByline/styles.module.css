@@ -1,6 +1,7 @@
 .byline {
-  max-width: var(--reading);
+  max-width: min(var(--reading), 100%);
   margin: 2.5rem auto 1.5rem;
+  min-width: 0;
 }
 
 .byline h1 {
@@ -26,7 +27,7 @@
 }
 
 .name {
-  font-weight: 650;
+  font-weight: 600;
   text-decoration: none;
 }
 
@@ -49,4 +50,16 @@
   color: var(--subtle);
   font-family: var(--ifm-font-family-monospace);
   font-size: 0.75rem;
+}
+
+@media (max-width: 480px) {
+  .byline h1 {
+    font-size: 1.65rem;
+    line-height: 1.2;
+    letter-spacing: -0.02em;
+  }
+
+  .author {
+    align-items: flex-start;
+  }
 }

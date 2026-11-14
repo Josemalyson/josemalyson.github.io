@@ -83,7 +83,7 @@ export const tutorials: {
     id: 'ai-first-playbook',
     version: 'v0.4',
     date: '2026-11-14',
-    href: '/tutoriais/ai-first-playbook',
+    href: '/playbook/ai-first',
     repo: 'https://github.com/Josemalyson/ai-first-playbook',
     repoLabel: {
       'pt-BR': 'Repositório e PDF',

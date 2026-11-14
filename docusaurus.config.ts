@@ -33,13 +33,24 @@ const config: Config = {
     [
       '@docusaurus/plugin-content-docs',
       {
-        id: 'tutoriais',
-        path: 'tutoriais',
-        routeBasePath: 'tutoriais',
-        sidebarPath: false,
-        breadcrumbs: false,
+        id: 'playbook',
+        path: 'playbook',
+        routeBasePath: 'playbook/ai-first',
+        sidebarPath: require.resolve('./sidebarsPlaybook.ts'),
+        breadcrumbs: true,
         showLastUpdateTime: false,
         showLastUpdateAuthor: false,
+      },
+    ],
+    [
+      '@docusaurus/plugin-client-redirects',
+      {
+        redirects: [
+          {
+            from: '/tutoriais/ai-first-playbook',
+            to: '/playbook/ai-first',
+          },
+        ],
       },
     ],
   ],
@@ -88,6 +99,13 @@ const config: Config = {
       },
       items: [
         {to: '/trilhas', label: 'Trilhas', position: 'left'},
+        {to: '/videos', label: 'Vídeos', position: 'left'},
+        {
+          to: '/playbook/ai-first',
+          label: 'Playbook',
+          position: 'left',
+          activeBasePath: '/playbook/ai-first',
+        },
         {
           to: '/#tutoriais',
           label: 'Tutoriais',
@@ -121,9 +139,10 @@ const config: Config = {
           title: 'Mapa',
           items: [
             {label: 'Trilhas', to: '/trilhas'},
+            {label: 'Vídeos', to: '/videos'},
             {label: 'Tutoriais', to: '/#tutoriais'},
             {label: 'Open source', to: '/#opensource'},
-            {label: 'Playbook', to: '/tutoriais/ai-first-playbook'},
+            {label: 'Playbook', to: '/playbook/ai-first'},
             {label: 'Amazon Bedrock', to: '/docs/aws/bedrock'},
           ],
         },
