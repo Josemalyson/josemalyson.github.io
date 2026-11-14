@@ -9,11 +9,11 @@
   },
   "link.item.label.Trilhas": {
     "message": "Learning trails",
-    "description": "The label of footer link with label=Trilhas linking to /trilhas"
+    "description": "The label of footer link with label=Trilhas linking to /trilhas/"
   },
   "link.item.label.Vídeos": {
     "message": "Videos",
-    "description": "The label of footer link with label=Vídeos linking to /videos"
+    "description": "The label of footer link with label=Vídeos linking to /videos/"
   },
   "link.item.label.Tutoriais": {
     "message": "Tutorials",
@@ -25,11 +25,11 @@
   },
   "link.item.label.Playbook": {
     "message": "Playbook",
-    "description": "The label of footer link with label=Playbook linking to /playbook/ai-first"
+    "description": "The label of footer link with label=Playbook linking to /playbook/ai-first/"
   },
   "link.item.label.Amazon Bedrock": {
     "message": "Amazon Bedrock",
-    "description": "The label of footer link with label=Amazon Bedrock linking to /docs/aws/bedrock"
+    "description": "The label of footer link with label=Amazon Bedrock linking to /docs/aws/bedrock/"
   },
   "link.item.label.LinkedIn": {
     "message": "LinkedIn",
