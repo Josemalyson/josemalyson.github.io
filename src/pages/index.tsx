@@ -11,10 +11,11 @@ import {
   methodNote,
   methodSteps,
   projects,
+  references,
   text,
-  trails,
   tutorials,
 } from '@site/src/data/site';
+import {trailCount, trailThemes} from '@site/src/data/trails';
 import styles from './index.module.css';
 
 function External({href, children}: {href: string; children: ReactNode}) {
@@ -99,7 +100,13 @@ export default function Home(): ReactNode {
                       <External href={item.href}>{en ? 'Open site' : 'Abrir site'}</External>
                     )}
                     {item.repo ? (
-                      <External href={item.repo}>{en ? 'Repository' : 'Repositório'}</External>
+                      <External href={item.repo}>
+                        {item.repoLabel
+                          ? text(item.repoLabel, locale)
+                          : en
+                            ? 'Repository'
+                            : 'Repositório'}
+                      </External>
                     ) : null}
                   </p>
                 </article>
@@ -113,24 +120,26 @@ export default function Home(): ReactNode {
             <h2 id="trails-title">{en ? 'Learning trails' : 'Trilhas'}</h2>
             <Link to="/trilhas">{en ? 'All trails' : 'Todas as trilhas'}</Link>
           </div>
-          <div className={styles.stack}>
-            {trails.map((trail) => (
-              <article key={trail.slug} className={styles.card}>
+          <div className={styles.grid3}>
+            {trailThemes.map((theme) => (
+              <article key={theme.id} className={styles.card}>
                 <div className={styles.meta}>
                   <span>
-                    {en ? 'Version' : 'Versão'} {trail.version}
+                    {theme.trails.length} {en ? 'labs' : 'trilhas'}
                   </span>
-                  <time dateTime={trail.date}>{formatDate(trail.date, locale)}</time>
-                  <span>{text(trail.level, locale)}</span>
-                  <span>{text(trail.duration, locale)}</span>
                 </div>
                 <h3>
-                  <a href={trail.href}>{text(trail.title, locale)}</a>
+                  <Link to={`/trilhas#${theme.id}`}>{text(theme.title, locale)}</Link>
                 </h3>
-                <p>{text(trail.summary, locale)}</p>
+                <p>{text(theme.summary, locale)}</p>
               </article>
             ))}
           </div>
+          <p className={styles.links}>
+            <Link to="/trilhas">
+              {en ? `All ${trailCount} trails` : `Todas as ${trailCount} trilhas`}
+            </Link>
+          </p>
         </section>
 
         <section className={styles.section} aria-labelledby="oss-title" id="opensource">
@@ -146,6 +155,28 @@ export default function Home(): ReactNode {
                   <External href={project.href}>{project.name}</External>
                 </h3>
                 <p>{text(project.why, locale)}</p>
+              </article>
+            ))}
+          </div>
+        </section>
+
+        <section className={styles.section} aria-labelledby="refs-title" id="referencias">
+          <h2 id="refs-title">{en ? 'References' : 'Referências'}</h2>
+          <p className={styles.sectionLead}>
+            {en
+              ? 'Third-party tools I use. The repositories belong to their authors.'
+              : 'Ferramentas de terceiros que eu uso. Os repositórios são dos autores.'}
+          </p>
+          <div className={styles.stack}>
+            {references.map((item) => (
+              <article key={item.name} className={styles.card}>
+                <div className={styles.meta}>
+                  <span>{item.author}</span>
+                </div>
+                <h3>
+                  <External href={item.href}>{item.name}</External>
+                </h3>
+                <p>{text(item.why, locale)}</p>
               </article>
             ))}
           </div>

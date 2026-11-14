@@ -1,0 +1,983 @@
+<!doctype html>
+<html lang="pt-BR" data-theme="dark">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="description" content="Trilha completa do zero ao deploy para construir um agente no estilo Hermes da Nous Research.">
+<title>Trilha completa — Construindo um Hermes-like</title>
+<style>
+:root{--bg:#07111f;--surface:#0d1a2b;--surface2:#122238;--text:#e8eef8;--muted:#9fb0c7;--border:#263a54;--brand:#818cf8;--brand2:#38bdf8;--ok:#34d399;--warn:#fbbf24;--bad:#fb7185;--shadow:0 18px 60px rgba(0,0,0,.28);--sidebar:330px}
+html[data-theme="light"]{--bg:#f5f7fb;--surface:#fff;--surface2:#f0f4fa;--text:#172033;--muted:#5c6b80;--border:#d9e1ec;--brand:#4f46e5;--brand2:#0284c7;--ok:#059669;--warn:#d97706;--bad:#e11d48;--shadow:0 16px 45px rgba(30,41,59,.10)}
+*{box-sizing:border-box} html{scroll-behavior:smooth} body{margin:0;background:var(--bg);color:var(--text);font-family:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif;line-height:1.58}
+a{color:inherit} button,input{font:inherit} code,pre{font-family:"JetBrains Mono",ui-monospace,SFMono-Regular,Consolas,monospace}
+.layout{display:grid;grid-template-columns:var(--sidebar) 1fr;min-height:100vh} .sidebar{position:sticky;top:0;height:100vh;background:color-mix(in srgb,var(--surface) 94%,transparent);border-right:1px solid var(--border);padding:22px;overflow:auto;z-index:30}
+.brand{display:flex;gap:12px;align-items:center;padding-bottom:18px;border-bottom:1px solid var(--border)} .brand-mark{width:44px;height:44px;border-radius:14px;display:grid;place-items:center;background:linear-gradient(135deg,var(--brand),var(--brand2));font-weight:900;color:white;box-shadow:var(--shadow)} .brand strong{display:block;font-size:14px} .brand small{color:var(--muted)}
+.progress-card{margin:18px 0;padding:14px;border:1px solid var(--border);background:var(--surface2);border-radius:14px} .progress-meta{display:flex;justify-content:space-between;font-size:12px;color:var(--muted);margin-bottom:8px} .progress-track{height:8px;border-radius:999px;background:var(--border);overflow:hidden} .progress-fill{height:100%;width:0;background:linear-gradient(90deg,var(--brand),var(--ok));transition:.25s}
+.search{width:100%;border:1px solid var(--border);border-radius:12px;background:var(--bg);color:var(--text);padding:10px 12px;outline:none} .search:focus{border-color:var(--brand);box-shadow:0 0 0 3px color-mix(in srgb,var(--brand) 22%,transparent)}
+.filters{display:flex;gap:6px;flex-wrap:wrap;margin:12px 0 16px} .filter{border:1px solid var(--border);background:var(--surface2);color:var(--muted);padding:5px 8px;border-radius:999px;font-size:11px;cursor:pointer} .filter.active{background:var(--brand);border-color:var(--brand);color:white}
+.nav{display:flex;flex-direction:column;gap:5px} .nav-item{display:flex;gap:10px;text-decoration:none;padding:9px;border-radius:10px;color:var(--muted);border:1px solid transparent} .nav-item:hover,.nav-item.active{background:var(--surface2);border-color:var(--border);color:var(--text)} .nav-item>span{font-size:11px;font-weight:800;color:var(--brand2);padding-top:2px} .nav-item strong{display:block;font-size:12px;line-height:1.25} .nav-item small{display:block;font-size:10px;margin-top:3px;color:var(--muted)}
+.sidebar-actions{display:flex;gap:8px;position:sticky;bottom:-22px;padding:14px 0 2px;background:var(--surface)} .icon-btn{flex:1;border:1px solid var(--border);background:var(--surface2);color:var(--text);border-radius:10px;padding:8px;cursor:pointer}
+.main{min-width:0} .topbar{position:sticky;top:0;z-index:20;display:flex;align-items:center;justify-content:space-between;padding:12px 28px;background:color-mix(in srgb,var(--bg) 82%,transparent);backdrop-filter:blur(14px);border-bottom:1px solid var(--border)} .topbar small{color:var(--muted)} .mobile-menu{display:none}
+.content{max-width:1180px;margin:0 auto;padding:44px 28px 110px} .hero{padding:42px;border:1px solid var(--border);border-radius:28px;background:radial-gradient(circle at 80% 0,color-mix(in srgb,var(--brand) 20%,transparent),transparent 38%),linear-gradient(145deg,var(--surface),var(--surface2));box-shadow:var(--shadow)} .eyebrow{font-size:12px;letter-spacing:.15em;text-transform:uppercase;color:var(--brand2);font-weight:800} h1{font-size:clamp(2.2rem,5vw,4.5rem);line-height:1.03;margin:14px 0 18px;letter-spacing:-.04em} .lead{font-size:1.12rem;color:var(--muted);max-width:900px} .hero-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-top:28px} .stat{border:1px solid var(--border);background:color-mix(in srgb,var(--surface) 70%,transparent);padding:16px;border-radius:16px} .stat strong{font-size:1.55rem;display:block} .stat span{font-size:12px;color:var(--muted)}
+.callout{margin:24px 0;padding:18px 20px;border-left:4px solid var(--brand2);background:var(--surface);border-radius:0 14px 14px 0;color:var(--muted)} .callout strong{color:var(--text)}
+.section-title{margin:66px 0 20px} .section-title h2{font-size:2rem;margin:0} .section-title p{margin:6px 0;color:var(--muted)}
+.architecture{border:1px solid var(--border);background:var(--surface);border-radius:22px;padding:18px;overflow:auto} .architecture svg{min-width:760px;width:100%;height:auto} .svg-box{stroke:var(--border);stroke-width:2} .svg-box.entry{fill:color-mix(in srgb,var(--brand2) 12%,var(--surface))} .svg-box.core{fill:color-mix(in srgb,var(--brand) 14%,var(--surface))} .svg-box.edge{fill:color-mix(in srgb,#a78bfa 12%,var(--surface))} .svg-box.data{fill:color-mix(in srgb,#10b981 12%,var(--surface))} .svg-box.ops{fill:color-mix(in srgb,#f59e0b 12%,var(--surface))} .svg-box.runtime{fill:var(--surface2)} .svg-line{stroke:var(--muted);stroke-width:3;fill:none}
+.plan-grid{display:grid;grid-template-columns:1fr 1fr;gap:18px} .plan-card{border:1px solid var(--border);background:var(--surface);border-radius:18px;padding:20px} .plan-card h3{margin-top:0} pre{background:#050b14;color:#dbeafe;padding:18px;border-radius:14px;overflow:auto;border:1px solid #1f3048;font-size:12px;line-height:1.5}
+.station{scroll-margin-top:80px;margin-top:30px;border:1px solid var(--border);background:var(--surface);border-radius:22px;padding:26px;box-shadow:0 8px 30px rgba(0,0,0,.08)} .station.hidden{display:none} .station.completed{opacity:.73} .station.completed .station-number{box-shadow:0 0 0 4px color-mix(in srgb,var(--ok) 25%,transparent)} .station-head{display:grid;grid-template-columns:auto 1fr auto;gap:16px;align-items:start;padding-bottom:22px;border-bottom:1px solid var(--border)} .station-number{width:54px;height:54px;display:grid;place-items:center;border-radius:16px;background:color-mix(in srgb,var(--phase) 18%,var(--surface2));border:1px solid color-mix(in srgb,var(--phase) 45%,var(--border));color:var(--phase);font-weight:900;font-size:18px} .phase{font-size:11px;color:var(--phase);font-weight:800;text-transform:uppercase;letter-spacing:.08em} .station-heading h2{font-size:1.55rem;margin:4px 0 5px;line-height:1.2} .station-heading p{color:var(--muted);margin:0} .complete-control{display:flex;align-items:center;gap:7px;color:var(--muted);font-size:12px;cursor:pointer;white-space:nowrap} .complete{width:18px;height:18px;accent-color:var(--ok)}
+.station-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;margin-top:18px} .panel{border:1px solid var(--border);background:var(--surface2);border-radius:16px;padding:17px} .panel h3{font-size:13px;text-transform:uppercase;letter-spacing:.06em;margin:0 0 10px;color:var(--brand2)} .panel ul,.panel ol{margin:0;padding-left:20px} .panel li{margin:6px 0;color:var(--muted);font-size:14px} .build{grid-column:span 2} .acceptance h3{color:var(--ok)} .pitfalls h3{color:var(--bad)} .artifacts li{font-family:ui-monospace,monospace;color:var(--text)}
+.nerves{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:16px} .nerves-title{grid-column:span 2;display:flex;justify-content:space-between;align-items:center} .nerves-title span{font-weight:800} .nerves-title small{color:var(--muted)} .nerve{display:flex;gap:12px;border:1px solid var(--border);border-radius:14px;padding:14px;background:color-mix(in srgb,var(--surface2) 75%,transparent)} .nerve-icon{width:32px;height:32px;border-radius:10px;background:color-mix(in srgb,var(--brand) 20%,transparent);color:var(--brand);display:grid;place-items:center;flex:none} .nerve a{font-weight:750;text-decoration:none} .nerve a:hover{text-decoration:underline} .nerve p{font-size:12px;color:var(--muted);margin:5px 0} .validated{font-size:10px;color:var(--ok);font-weight:700} .checkpoint{margin-top:16px;padding:13px 15px;border:1px solid color-mix(in srgb,var(--warn) 35%,var(--border));background:color-mix(in srgb,var(--warn) 8%,var(--surface2));border-radius:13px;font-size:13px;color:var(--muted)} .checkpoint strong{color:var(--warn)}
+.table-wrap{overflow:auto;border:1px solid var(--border);border-radius:18px;background:var(--surface)} table{width:100%;border-collapse:collapse;min-width:760px} th,td{padding:12px 14px;border-bottom:1px solid var(--border);text-align:left;font-size:13px;vertical-align:top} th{position:sticky;top:0;background:var(--surface2);color:var(--muted);text-transform:uppercase;letter-spacing:.06em;font-size:10px} td:first-child{color:var(--muted);width:52px} .status-ok{color:var(--ok);font-weight:800}
+.boss{border-radius:24px;padding:30px;background:linear-gradient(145deg,#111827,#1e1b4b);color:#f8fafc;border:1px solid #3b3f74} .boss h2{font-size:2rem;margin-top:0} .boss ol{display:grid;grid-template-columns:1fr 1fr;gap:12px;padding:0;list-style:none;counter-reset:q} .boss li{counter-increment:q;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);padding:16px;border-radius:14px} .boss li:before{content:counter(q,decimal-leading-zero);display:block;color:#a5b4fc;font-weight:900;font-size:11px;margin-bottom:6px}
+footer{margin-top:60px;padding-top:30px;border-top:1px solid var(--border);color:var(--muted);font-size:13px}
+@media(max-width:1000px){:root{--sidebar:290px}.hero-stats{grid-template-columns:1fr 1fr}.station-grid{grid-template-columns:1fr}.build{grid-column:auto}.nerves{grid-template-columns:1fr}.nerves-title{grid-column:auto}}
+@media(max-width:780px){.layout{display:block}.sidebar{position:fixed;left:-100%;width:min(88vw,340px);transition:.25s;box-shadow:var(--shadow)}.sidebar.open{left:0}.mobile-menu{display:inline-flex;border:1px solid var(--border);background:var(--surface);color:var(--text);border-radius:9px;padding:7px 10px}.content{padding:28px 16px 80px}.topbar{padding:10px 16px}.hero{padding:26px 20px}.hero-stats{grid-template-columns:1fr 1fr}.plan-grid{grid-template-columns:1fr}.station{padding:18px}.station-head{grid-template-columns:auto 1fr}.complete-control{grid-column:2}.boss ol{grid-template-columns:1fr}}
+@media print{.sidebar,.topbar,.complete-control,.filters,.search{display:none!important}.layout{display:block}.content{max-width:none;padding:0}.station{break-inside:avoid;box-shadow:none}body{background:#fff;color:#111}}
+</style>
+</head>
+<body>
+<div class="layout">
+<aside class="sidebar" id="sidebar"><div class="brand"><div class="brand-mark">H</div><div><strong>Hermes-like Engineering</strong><small>Trilha do zero ao deploy</small></div></div>
+<div class="progress-card"><div class="progress-meta"><span>Progresso</span><strong id="progressText">0/26</strong></div><div class="progress-track"><div class="progress-fill" id="progressFill"></div></div></div>
+<input class="search" id="search" type="search" placeholder="Buscar estação ou assunto…" aria-label="Buscar na trilha">
+<div class="filters" id="filters"><button class="filter active" data-filter="all">Todas</button><button class="filter" data-filter="Fase 0 · Fundação">Fase 0</button><button class="filter" data-filter="Fase 1 · Núcleo Agentivo">Fase 1</button><button class="filter" data-filter="Fase 2 · Capacidades">Fase 2</button><button class="filter" data-filter="Fase 3 · Interfaces e Automação">Fase 3</button><button class="filter" data-filter="Fase 4 · Produção">Fase 4</button><button class="filter" data-filter="Fase 5 · Projeto Final">Fase 5</button></div>
+<nav class="nav" id="nav"><a class="nav-item" href="#station-1" data-phase="Fase 0 · Fundação">
+<span>01</span><div><strong>Defina o produto, os limites e a Definition of Done</strong><small>Fase 0 · Fundação</small></div></a><a class="nav-item" href="#station-2" data-phase="Fase 0 · Fundação">
+<span>02</span><div><strong>Prepare o monorepo, configuração, perfis e segredos</strong><small>Fase 0 · Fundação</small></div></a><a class="nav-item" href="#station-3" data-phase="Fase 0 · Fundação">
+<span>03</span><div><strong>Modele contratos, eventos e estados do domínio</strong><small>Fase 0 · Fundação</small></div></a><a class="nav-item" href="#station-4" data-phase="Fase 1 · Núcleo Agentivo">
+<span>04</span><div><strong>Construa a abstração de providers e transportes de inferência</strong><small>Fase 1 · Núcleo Agentivo</small></div></a><a class="nav-item" href="#station-5" data-phase="Fase 1 · Núcleo Agentivo">
+<span>05</span><div><strong>Projete o sistema de prompt, identidade e contexto estático</strong><small>Fase 1 · Núcleo Agentivo</small></div></a><a class="nav-item" href="#station-6" data-phase="Fase 1 · Núcleo Agentivo">
+<span>06</span><div><strong>Implemente o loop agentivo como máquina de estados</strong><small>Fase 1 · Núcleo Agentivo</small></div></a><a class="nav-item" href="#station-7" data-phase="Fase 1 · Núcleo Agentivo">
+<span>07</span><div><strong>Adicione streaming, interrupção, concorrência e resiliência</strong><small>Fase 1 · Núcleo Agentivo</small></div></a><a class="nav-item" href="#station-8" data-phase="Fase 1 · Núcleo Agentivo">
+<span>08</span><div><strong>Crie o registry de ferramentas, toolsets e pipeline de execução</strong><small>Fase 1 · Núcleo Agentivo</small></div></a><a class="nav-item" href="#station-9" data-phase="Fase 2 · Capacidades">
+<span>09</span><div><strong>Implemente arquivos, terminal, processos e sandboxes</strong><small>Fase 2 · Capacidades</small></div></a><a class="nav-item" href="#station-10" data-phase="Fase 2 · Capacidades">
+<span>10</span><div><strong>Construa persistência de sessões, transcrições e busca FTS5</strong><small>Fase 2 · Capacidades</small></div></a><a class="nav-item" href="#station-11" data-phase="Fase 2 · Capacidades">
+<span>11</span><div><strong>Implemente memória em camadas e política de aprendizado</strong><small>Fase 2 · Capacidades</small></div></a><a class="nav-item" href="#station-12" data-phase="Fase 2 · Capacidades">
+<span>12</span><div><strong>Construa o motor de contexto, compressão e cache</strong><small>Fase 2 · Capacidades</small></div></a><a class="nav-item" href="#station-13" data-phase="Fase 2 · Capacidades">
+<span>13</span><div><strong>Implemente skills e o ciclo fechado de autoaperfeiçoamento</strong><small>Fase 2 · Capacidades</small></div></a><a class="nav-item" href="#station-14" data-phase="Fase 2 · Capacidades">
+<span>14</span><div><strong>Crie plugins e hooks como fronteira principal de extensão</strong><small>Fase 2 · Capacidades</small></div></a><a class="nav-item" href="#station-15" data-phase="Fase 3 · Interfaces e Automação">
+<span>15</span><div><strong>Construa o gateway multicanal e seus adapters</strong><small>Fase 3 · Interfaces e Automação</small></div></a><a class="nav-item" href="#station-16" data-phase="Fase 3 · Interfaces e Automação">
+<span>16</span><div><strong>Implemente CLI, TUI, API, batch e integração com IDE</strong><small>Fase 3 · Interfaces e Automação</small></div></a><a class="nav-item" href="#station-17" data-phase="Fase 3 · Interfaces e Automação">
+<span>17</span><div><strong>Construa cron, jobs duráveis e execução em background</strong><small>Fase 3 · Interfaces e Automação</small></div></a><a class="nav-item" href="#station-18" data-phase="Fase 3 · Interfaces e Automação">
+<span>18</span><div><strong>Adicione delegação, subagentes e orquestração Kanban</strong><small>Fase 3 · Interfaces e Automação</small></div></a><a class="nav-item" href="#station-19" data-phase="Fase 3 · Interfaces e Automação">
+<span>19</span><div><strong>Integre MCP e conectores externos com governança</strong><small>Fase 3 · Interfaces e Automação</small></div></a><a class="nav-item" href="#station-20" data-phase="Fase 3 · Interfaces e Automação">
+<span>20</span><div><strong>Implemente web, browser, visão, voz e geração multimodal</strong><small>Fase 3 · Interfaces e Automação</small></div></a><a class="nav-item" href="#station-21" data-phase="Fase 4 · Produção">
+<span>21</span><div><strong>Implemente segurança, autorização e defesa em profundidade</strong><small>Fase 4 · Produção</small></div></a><a class="nav-item" href="#station-22" data-phase="Fase 4 · Produção">
+<span>22</span><div><strong>Adicione observabilidade, auditoria e FinOps</strong><small>Fase 4 · Produção</small></div></a><a class="nav-item" href="#station-23" data-phase="Fase 4 · Produção">
+<span>23</span><div><strong>Construa uma estratégia completa de testes e avaliações</strong><small>Fase 4 · Produção</small></div></a><a class="nav-item" href="#station-24" data-phase="Fase 4 · Produção">
+<span>24</span><div><strong>Empacote, implante e opere com persistência e recuperação</strong><small>Fase 4 · Produção</small></div></a><a class="nav-item" href="#station-25" data-phase="Fase 4 · Produção">
+<span>25</span><div><strong>Documente operação, extensibilidade e distribuição de perfis</strong><small>Fase 4 · Produção</small></div></a><a class="nav-item" href="#station-26" data-phase="Fase 5 · Projeto Final">
+<span>26</span><div><strong>Integre o Hermes-like por fatias verticais e valide paridade</strong><small>Fase 5 · Projeto Final</small></div></a></nav>
+<div class="sidebar-actions"><button class="icon-btn" id="themeBtn">◐ Tema</button><button class="icon-btn" onclick="window.print()">⎙ PDF</button></div></aside>
+<main class="main"><header class="topbar"><button class="mobile-menu" id="menuBtn">☰ Mapa</button><small>Atualizado e auditado em 10 de julho de 2026</small><strong id="visibleCount">26 estações</strong></header>
+<div class="content">
+<section class="hero"><span class="eyebrow">Learning Trail · Trust by Inspection</span><h1>Construa um agente completo no estilo Hermes</h1><p class="lead">Uma trilha de engenharia para implementar, do zero ao deploy, o núcleo agentivo, ferramentas, memória, contexto, gateway, cron, skills, plugins, MCP, subagentes, multimodalidade, segurança, observabilidade, testes e operação. A descrição do vídeo é o ponto de partida; a arquitetura atual do projeto oficial e os requisitos de produção completam a cobertura.</p>
+<div class="hero-stats"><div class="stat"><strong>26</strong><span>estações implementáveis</span></div><div class="stat"><strong>71</strong><span>módulos auditados</span></div><div class="stat"><strong>44</strong><span>fontes inspecionadas</span></div><div class="stat"><strong>18–26</strong><span>semanas sugeridas</span></div></div></section>
+<div class="callout"><strong>Condição de parada:</strong> o projeto só está concluído quando a matriz de cobertura estiver demonstrada por código, testes, telemetria e runbooks. “Conseguir conversar” não comprova memória, durabilidade, segurança nem operação.</div>
+<div class="section-title"><h2>Arquitetura-alvo</h2><p>Um único núcleo reutilizado por todas as interfaces, com capabilities nas bordas e estado durável separado.</p></div>
+<div class="architecture">
+<svg viewBox="0 0 1200 650" role="img" aria-label="Arquitetura completa do agente Hermes-like">
+<defs><filter id="shadow"><feDropShadow dx="0" dy="8" stdDeviation="10" flood-opacity=".18"/></filter></defs>
+<g font-family="Inter,system-ui" font-size="18" fill="currentColor">
+<rect x="35" y="25" width="1130" height="90" rx="20" class="svg-box entry" filter="url(#shadow)"/>
+<text x="600" y="58" text-anchor="middle" font-weight="800">ENTRADAS</text>
+<text x="600" y="91" text-anchor="middle">CLI · TUI · API · Gateway · ACP/IDE · Batch · Desktop</text>
+<path d="M600 115V155" class="svg-line"/>
+<rect x="250" y="155" width="700" height="120" rx="22" class="svg-box core" filter="url(#shadow)"/>
+<text x="600" y="190" text-anchor="middle" font-weight="800">NÚCLEO AGENTIVO</text>
+<text x="600" y="225" text-anchor="middle">Prompt Builder · Provider Resolver · Loop · Budgets · Callbacks</text>
+<text x="600" y="255" text-anchor="middle">Context Engine · Streaming · Retry/Fallback · Checkpoints</text>
+<path d="M390 275V330 M600 275V330 M810 275V330" class="svg-line"/>
+<rect x="35" y="330" width="335" height="135" rx="20" class="svg-box edge" filter="url(#shadow)"/>
+<text x="202" y="366" text-anchor="middle" font-weight="800">CAPACIDADES</text>
+<text x="202" y="402" text-anchor="middle">Tools · Terminal · Browser</text><text x="202" y="432" text-anchor="middle">MCP · Skills · Plugins</text>
+<rect x="432" y="330" width="335" height="135" rx="20" class="svg-box data" filter="url(#shadow)"/>
+<text x="600" y="366" text-anchor="middle" font-weight="800">ESTADO DURÁVEL</text>
+<text x="600" y="402" text-anchor="middle">SQLite/FTS5 · Sessions</text><text x="600" y="432" text-anchor="middle">Memory · Artifacts · Cron</text>
+<rect x="830" y="330" width="335" height="135" rx="20" class="svg-box ops" filter="url(#shadow)"/>
+<text x="997" y="366" text-anchor="middle" font-weight="800">CONTROLE</text>
+<text x="997" y="402" text-anchor="middle">Policy · Approval · Auth</text><text x="997" y="432" text-anchor="middle">Audit · OTel · Cost Budgets</text>
+<path d="M202 465V520 M600 465V520 M997 465V520" class="svg-line"/>
+<rect x="35" y="520" width="1130" height="95" rx="20" class="svg-box runtime" filter="url(#shadow)"/>
+<text x="600" y="557" text-anchor="middle" font-weight="800">RUNTIME E OPERAÇÃO</text>
+<text x="600" y="590" text-anchor="middle">Profiles · Sandboxes · Scheduler · Subagents/Kanban · Deploy · Backup/Restore</text>
+</g></svg></div>
+<div class="section-title"><h2>Estrutura recomendada</h2><p>O layout abaixo reduz acoplamento entre providers, interfaces, tools e persistência.</p></div>
+<div class="plan-grid"><div class="plan-card"><h3>Árvore de módulos</h3><pre>hermes-like/
+├── pyproject.toml
+├── src/hermes_like/
+│   ├── agent/              # loop, state machine, budgets, callbacks
+│   ├── context/            # token budget, compressor, cache
+│   ├── prompt/             # builder e blocos estáveis/voláteis
+│   ├── providers/          # resolução de provider/modelo/credencial
+│   ├── transports/         # OpenAI, Anthropic e futuros transports
+│   ├── tools/              # registry, toolsets, executor, approval
+│   ├── environments/       # local, Docker, SSH/cloud sandbox
+│   ├── storage/            # SQLite, FTS5, artifacts e backup
+│   ├── memory/             # arquivos, policy e providers externos
+│   ├── skills/             # discovery, loading e learning loop
+│   ├── plugins/            # manifests, hooks e registration context
+│   ├── gateway/            # runner, auth, inbox/outbox e adapters
+│   ├── scheduler/          # cron, leases, execution e delivery
+│   ├── delegation/         # subagentes, budgets e contracts
+│   ├── kanban/             # boards, workers, verifier, synthesizer
+│   ├── mcp/                # clients, transports, adapter e policy
+│   ├── multimodal/         # browser, web, vision, voice e artifacts
+│   ├── interfaces/         # CLI, TUI, API, batch e ACP
+│   ├── security/           # policy, capabilities, network, redaction
+│   └── observability/      # logs, traces, metrics, audit e custos
+├── tests/                  # unit, contract, integration, e2e, chaos
+├── evals/                  # datasets, rubrics e regression gates
+├── deploy/                 # Docker, systemd, Compose e Helm opcional
+├── docs/                   # ADRs, runbooks, threat model e referências
+└── examples/               # plugins, skills, MCP e platform adapters</pre></div><div class="plan-card"><h3>Sequenciamento</h3><ol><li><strong>Semanas 1–3:</strong> escopo, repo, contratos e provider fake.</li><li><strong>Semanas 4–7:</strong> prompt, loop, tools e sandbox.</li><li><strong>Semanas 8–11:</strong> sessões, FTS5, memória e compressão.</li><li><strong>Semanas 12–15:</strong> skills, plugins, gateway e interfaces.</li><li><strong>Semanas 16–19:</strong> cron, subagentes, MCP e multimodal.</li><li><strong>Semanas 20–23:</strong> segurança, OTel, evals e deploy.</li><li><strong>Semanas 24–26:</strong> capstone, chaos, restore e paridade.</li></ol><p style="color:var(--muted)">A sequência é orientada por dependências. Gateway e cron entram somente depois de loop, persistência e políticas estarem estáveis.</p></div></div>
+<div class="section-title"><h2>Estações</h2><p>Cada estação contém conhecimento, implementação, artefatos, testes, armadilhas e gate de avanço.</p></div>
+
+<section class="station" id="station-1" data-title="defina o produto, os limites e a definition of done" data-phase="Fase 0 · Fundação">
+  <div class="station-head">
+    <div class="station-number" style="--phase:#38bdf8">01</div>
+    <div class="station-heading"><span class="phase" style="--phase:#38bdf8">Fase 0 · Fundação</span>
+      <h2>Defina o produto, os limites e a Definition of Done</h2><p>Antes do código, transforme “um Hermes” em requisitos verificáveis e em um mapa de ameaças.</p></div>
+    <label class="complete-control"><input type="checkbox" class="complete" data-id="1"><span>Concluída</span></label>
+  </div>
+  <div class="station-grid">
+    <div class="panel"><h3>Conceitos obrigatórios</h3><ul><li class="">Agente pessoal versus chatbot stateless</li><li class="">Entradas: CLI, TUI, API, gateway, IDE e batch</li><li class="">Capacidades duráveis: sessões, memória, skills e cron</li><li class="">Trust boundaries entre usuário, modelo, ferramentas e sistemas externos</li><li class="">Requisitos funcionais, não funcionais e operacionais</li><li class="">Matriz de paridade com Hermes versus decisões próprias</li></ul></div>
+    <div class="panel build"><h3>Implementação prática</h3><ol><li class="">Crie `docs/PRODUCT.md` com personas, casos de uso e exclusões explícitas.</li><li class="">Crie `docs/ARCHITECTURE.md` com módulos, dependências permitidas e ownership de dados.</li><li class="">Defina SLOs iniciais: latência p95 do turno, taxa de sucesso de tools, recuperação de restart e limite de custo por tarefa.</li><li class="">Especifique níveis de autonomia: leitura, escrita reversível, escrita irreversível e ação externa.</li><li class="">Crie uma matriz de aceitação que mapeie cada módulo desta trilha para um teste demonstrável.</li><li class="">Escolha um nome de projeto diferente de Hermes para evitar acoplamento conceitual e de marca.</li></ol></div>
+    <div class="panel"><h3>Artefatos entregáveis</h3><ul class="artifacts"><li class="">PRODUCT.md</li><li class="">ARCHITECTURE.md</li><li class="">THREAT_MODEL.md</li><li class="">ACCEPTANCE_MATRIX.md</li><li class="">ADR-0001-scope.md</li></ul></div>
+    <div class="panel acceptance"><h3>Definition of Done</h3><ul><li class="">Todos os 49 módulos da matriz de cobertura possuem owner e critério de aceite.</li><li class="">Nenhuma ação irreversível pode ocorrer sem política de autorização definida.</li><li class="">O agente pode ser executado inicialmente sem gateway, memória externa ou MCP.</li><li class="">As extensões futuras não exigem aumentar permanentemente o prompt ou o toolset central.</li></ul></div>
+    <div class="panel"><h3>Testes mínimos</h3><ul><li class="">Revisão arquitetural baseada em cenários de falha.</li><li class="">Checklist de fronteiras de confiança.</li><li class="">Teste documental: cada requisito tem uma forma objetiva de comprovação.</li></ul></div>
+    <div class="panel pitfalls"><h3>Armadilhas</h3><ul><li class="">Começar pelo Telegram e esconder um núcleo acoplado ao canal.</li><li class="">Confundir memória com simplesmente reenviar todo o histórico.</li><li class="">Adicionar dezenas de tools ao core sem custo de contexto medido.</li></ul></div>
+  </div>
+  <div class="nerves"><div class="nerves-title"><span>Recursos validados</span><small>Trust by inspection</small></div><article class="nerve">
+          <div class="nerve-icon" aria-hidden="true">↗</div>
+          <div><a href="https://github.com/NousResearch/hermes-agent" target="_blank" rel="noopener noreferrer">Repositório oficial do Hermes Agent</a>
+          <p>Confirma o produto atual, suas superfícies de execução e o ciclo fechado de aprendizado.</p><span class="validated">✓ Inspecionado · fonte primária/oficial</span></div>
+        </article><article class="nerve">
+          <div class="nerve-icon" aria-hidden="true">↗</div>
+          <div><a href="https://github.com/NousResearch/hermes-agent/blob/main/website/docs/developer-guide/architecture.md" target="_blank" rel="noopener noreferrer">Architecture — Hermes Agent</a>
+          <p>Mapeia entry points, AIAgent, prompt builder, providers, ferramentas, persistência, gateway, cron, plugins e testes.</p><span class="validated">✓ Inspecionado · fonte primária/oficial</span></div>
+        </article><article class="nerve">
+          <div class="nerve-icon" aria-hidden="true">↗</div>
+          <div><a href="https://github.com/NousResearch/hermes-agent/blob/main/AGENTS.md" target="_blank" rel="noopener noreferrer">AGENTS.md — guia de desenvolvimento</a>
+          <p>Registra princípios de desenho: cache por conversa, core estreito, extensões por plugins/skills e padrões de contribuição.</p><span class="validated">✓ Inspecionado · fonte primária/oficial</span></div>
+        </article></div>
+  <div class="checkpoint"><strong>Gate de avanço:</strong> marque esta estação apenas quando todos os itens da Definition of Done estiverem demonstráveis por teste, log ou artefato.</div>
+</section>
+<section class="station" id="station-2" data-title="prepare o monorepo, configuração, perfis e segredos" data-phase="Fase 0 · Fundação">
+  <div class="station-head">
+    <div class="station-number" style="--phase:#38bdf8">02</div>
+    <div class="station-heading"><span class="phase" style="--phase:#38bdf8">Fase 0 · Fundação</span>
+      <h2>Prepare o monorepo, configuração, perfis e segredos</h2><p>Construa uma base reproduzível, profile-aware e capaz de evoluir sem quebrar dados do usuário.</p></div>
+    <label class="complete-control"><input type="checkbox" class="complete" data-id="2"><span>Concluída</span></label>
+  </div>
+  <div class="station-grid">
+    <div class="panel"><h3>Conceitos obrigatórios</h3><ul><li class="">Layout de pacotes e dependências direcionais</li><li class="">Config tipada com defaults e migrações</li><li class="">Separação `config.yaml` versus `.env`</li><li class="">Diretório de estado por perfil</li><li class="">Feature flags e capability detection</li><li class="">Versão de schema e migrações idempotentes</li></ul></div>
+    <div class="panel build"><h3>Implementação prática</h3><ol><li class="">Use Python 3.12+ e um gerenciador reprodutível como `uv`; fixe limites superiores de dependências.</li><li class="">Crie pacotes `agent/`, `providers/`, `tools/`, `storage/`, `memory/`, `gateway/`, `scheduler/`, `plugins/`, `interfaces/` e `observability/`.</li><li class="">Implemente `AgentHome` para resolver todos os paths a partir do perfil, nunca diretamente de `Path.home()`.</li><li class="">Implemente `Settings` tipado e carregamento em camadas: defaults → arquivo → ambiente → argumentos.</li><li class="">Adicione `config_schema_version` e um runner de migrações transacionais.</li><li class="">Implemente comandos `profile create/list/delete/export` com proteção contra exclusão acidental.</li></ol></div>
+    <div class="panel"><h3>Artefatos entregáveis</h3><ul class="artifacts"><li class="">pyproject.toml</li><li class="">src/&lt;projeto&gt;/paths.py</li><li class="">config.py</li><li class="">migrations/</li><li class="">profiles.py</li><li class="">config.example.yaml</li></ul></div>
+    <div class="panel acceptance"><h3>Definition of Done</h3><ul><li class="">Dois perfis executam simultaneamente sem compartilhar DB, memória, cache ou credenciais.</li><li class="">Segredos nunca aparecem em logs, exports ou stack traces.</li><li class="">Uma configuração antiga é migrada de forma repetível e com backup.</li><li class="">O projeto instala e executa a partir de um clone limpo.</li></ul></div>
+    <div class="panel"><h3>Testes mínimos</h3><ul><li class="">Testes de precedência de configuração.</li><li class="">Testes de isolamento de perfil com diretórios temporários.</li><li class="">Teste de migração forward e rollback lógico.</li><li class="">Scanner de segredo em fixtures e logs.</li></ul></div>
+    <div class="panel pitfalls"><h3>Armadilhas</h3><ul><li class="">Estado global import-time que ignora troca de perfil.</li><li class="">Misturar segredo e comportamento em um único arquivo.</li><li class="">Alterar schema sem registrar versão nem estratégia de migração.</li></ul></div>
+  </div>
+  <div class="nerves"><div class="nerves-title"><span>Recursos validados</span><small>Trust by inspection</small></div><article class="nerve">
+          <div class="nerve-icon" aria-hidden="true">↗</div>
+          <div><a href="https://github.com/NousResearch/hermes-agent/blob/main/website/docs/user-guide/configuration.md" target="_blank" rel="noopener noreferrer">Configuration</a>
+          <p>Centraliza configuração, terminal backends, delegation, timeouts e comportamento operacional.</p><span class="validated">✓ Inspecionado · fonte primária/oficial</span></div>
+        </article><article class="nerve">
+          <div class="nerve-icon" aria-hidden="true">↗</div>
+          <div><a href="https://github.com/NousResearch/hermes-agent/blob/main/website/docs/reference/environment-variables.md" target="_blank" rel="noopener noreferrer">Environment Variables Reference</a>
+          <p>Distingue segredos em .env de comportamento não secreto em config.yaml.</p><span class="validated">✓ Inspecionado · fonte primária/oficial</span></div>
+        </article><article class="nerve">
+          <div class="nerve-icon" aria-hidden="true">↗</div>
+          <div><a href="https://github.com/NousResearch/hermes-agent/blob/main/website/docs/user-guide/profiles.md" target="_blank" rel="noopener noreferrer">Profiles: Running Multiple Agents</a>
+          <p>Isola config, chaves, memória, sessões, skills, cron e estado para múltiplos agentes.</p><span class="validated">✓ Inspecionado · fonte primária/oficial</span></div>
+        </article><article class="nerve">
+          <div class="nerve-icon" aria-hidden="true">↗</div>
+          <div><a href="https://github.com/NousResearch/hermes-agent/releases" target="_blank" rel="noopener noreferrer">Hermes Agent Releases</a>
+          <p>Fonte para mudanças arquiteturais, migrações e compatibilidade entre versões.</p><span class="validated">✓ Inspecionado · fonte primária/oficial</span></div>
+        </article></div>
+  <div class="checkpoint"><strong>Gate de avanço:</strong> marque esta estação apenas quando todos os itens da Definition of Done estiverem demonstráveis por teste, log ou artefato.</div>
+</section>
+<section class="station" id="station-3" data-title="modele contratos, eventos e estados do domínio" data-phase="Fase 0 · Fundação">
+  <div class="station-head">
+    <div class="station-number" style="--phase:#38bdf8">03</div>
+    <div class="station-heading"><span class="phase" style="--phase:#38bdf8">Fase 0 · Fundação</span>
+      <h2>Modele contratos, eventos e estados do domínio</h2><p>Dê nomes e invariantes aos objetos que atravessam o sistema antes de implementar adapters.</p></div>
+    <label class="complete-control"><input type="checkbox" class="complete" data-id="3"><span>Concluída</span></label>
+  </div>
+  <div class="station-grid">
+    <div class="panel"><h3>Conceitos obrigatórios</h3><ul><li class="">Conversation, Session, Turn, Message e ToolCall</li><li class="">Run, Step, Usage, Artifact e Approval</li><li class="">IDs estáveis, correlação e idempotency keys</li><li class="">Estados finitos do agente e do job</li><li class="">Eventos de lifecycle e envelopes versionados</li><li class="">Erro recuperável, terminal e de política</li></ul></div>
+    <div class="panel build"><h3>Implementação prática</h3><ol><li class="">Defina modelos imutáveis para mensagens internas independentes do formato do provider.</li><li class="">Crie enums para `RunStatus`, `ToolStatus`, `JobStatus`, `ApprovalDecision` e `DeliveryStatus`.</li><li class="">Padronize `ErrorEnvelope` com código, retryable, categoria, causa sanitizada e metadados.</li><li class="">Adote IDs ULID/UUIDv7 e `correlation_id` propagado por todo o turno.</li><li class="">Defina eventos como `TurnStarted`, `ToolRequested`, `ToolCompleted`, `MemoryCommitted` e `DeliveryAttempted`.</li><li class="">Versione payloads persistidos para permitir leitura de dados antigos.</li></ol></div>
+    <div class="panel"><h3>Artefatos entregáveis</h3><ul class="artifacts"><li class="">domain/models.py</li><li class="">domain/events.py</li><li class="">domain/errors.py</li><li class="">docs/STATE_MACHINES.md</li><li class="">schemas/*.json</li></ul></div>
+    <div class="panel acceptance"><h3>Definition of Done</h3><ul><li class="">Nenhum adapter externo vaza seu formato específico para o loop.</li><li class="">Todo evento contém timestamp, profile, session, run e correlation IDs quando aplicável.</li><li class="">Estados inválidos são rejeitados por invariantes, não por convenção.</li><li class="">Payloads têm versão e estratégia de compatibilidade.</li></ul></div>
+    <div class="panel"><h3>Testes mínimos</h3><ul><li class="">Property tests de transições de estado.</li><li class="">Round-trip de serialização.</li><li class="">Testes de compatibilidade de schema.</li><li class="">Testes de deduplicação por idempotency key.</li></ul></div>
+    <div class="panel pitfalls"><h3>Armadilhas</h3><ul><li class="">Usar dicionários livres em todas as camadas.</li><li class="">Persistir objetos do SDK de um provider.</li><li class="">Confundir ID da conversa externa com ID de sessão interna.</li></ul></div>
+  </div>
+  <div class="nerves"><div class="nerves-title"><span>Recursos validados</span><small>Trust by inspection</small></div><article class="nerve">
+          <div class="nerve-icon" aria-hidden="true">↗</div>
+          <div><a href="https://github.com/NousResearch/hermes-agent/blob/main/website/docs/developer-guide/architecture.md" target="_blank" rel="noopener noreferrer">Architecture — Hermes Agent</a>
+          <p>Mapeia entry points, AIAgent, prompt builder, providers, ferramentas, persistência, gateway, cron, plugins e testes.</p><span class="validated">✓ Inspecionado · fonte primária/oficial</span></div>
+        </article><article class="nerve">
+          <div class="nerve-icon" aria-hidden="true">↗</div>
+          <div><a href="https://github.com/NousResearch/hermes-agent/blob/main/website/docs/developer-guide/agent-loop.md" target="_blank" rel="noopener noreferrer">Agent Loop Internals</a>
+          <p>Detalha ciclo do turno, tool calls, cancelamento, callbacks, budgets, fallback, compressão e persistência.</p><span class="validated">✓ Inspecionado · fonte primária/oficial</span></div>
+        </article><article class="nerve">
+          <div class="nerve-icon" aria-hidden="true">↗</div>
+          <div><a href="https://json-schema.org/" target="_blank" rel="noopener noreferrer">JSON Schema</a>
+          <p>Fornece o contrato padrão para validar argumentos e resultados estruturados de ferramentas.</p><span class="validated">✓ Inspecionado · fonte primária/oficial</span></div>
+        </article></div>
+  <div class="checkpoint"><strong>Gate de avanço:</strong> marque esta estação apenas quando todos os itens da Definition of Done estiverem demonstráveis por teste, log ou artefato.</div>
+</section>
+<section class="station" id="station-4" data-title="construa a abstração de providers e transportes de inferência" data-phase="Fase 1 · Núcleo Agentivo">
+  <div class="station-head">
+    <div class="station-number" style="--phase:#818cf8">04</div>
+    <div class="station-heading"><span class="phase" style="--phase:#818cf8">Fase 1 · Núcleo Agentivo</span>
+      <h2>Construa a abstração de providers e transportes de inferência</h2><p>Permita trocar de modelo, API e credencial sem alterar o loop ou as ferramentas.</p></div>
+    <label class="complete-control"><input type="checkbox" class="complete" data-id="4"><span>Concluída</span></label>
+  </div>
+  <div class="station-grid">
+    <div class="panel"><h3>Conceitos obrigatórios</h3><ul><li class="">Provider registry e model catalog</li><li class="">Transport versus provider versus modelo</li><li class="">Chat Completions, Responses e Anthropic Messages</li><li class="">Normalização de mensagens, tool calls e usage</li><li class="">Streaming incremental e raciocínio separado</li><li class="">Credential pools, OAuth, retry e fallback</li></ul></div>
+    <div class="panel build"><h3>Implementação prática</h3><ol><li class="">Defina `ModelTransport` com `complete()`, `stream()`, `count_tokens()` e `capabilities()`.</li><li class="">Implemente transports OpenAI-compatible e Anthropic; mantenha um formato interno único.</li><li class="">Crie `ProviderResolver` que devolve transport, credencial, base URL, modelo e capabilities.</li><li class="">Implemente catálogo de contexto máximo, suporte a visão, tools, streaming e reasoning.</li><li class="">Adicione pool de credenciais com cooldown para 429 e refresh para OAuth.</li><li class="">Crie fallback chain separada para turno principal e tarefas auxiliares.</li></ol></div>
+    <div class="panel"><h3>Artefatos entregáveis</h3><ul class="artifacts"><li class="">providers/base.py</li><li class="">providers/resolver.py</li><li class="">transports/openai.py</li><li class="">transports/anthropic.py</li><li class="">models/catalog.py</li><li class="">credentials/pool.py</li></ul></div>
+    <div class="panel acceptance"><h3>Definition of Done</h3><ul><li class="">O mesmo teste de conversa passa em pelo menos dois transports.</li><li class="">Tool calls são normalizadas sem perda de IDs ou argumentos.</li><li class="">Falha 429 troca credencial/provider conforme política e preserva a sessão.</li><li class="">Usage e custo estimado são retornados de forma uniforme.</li></ul></div>
+    <div class="panel"><h3>Testes mínimos</h3><ul><li class="">Contract test suite para qualquer transport.</li><li class="">Fake provider determinístico para testes.</li><li class="">Testes de streaming fragmentado e JSON parcial.</li><li class="">Testes de fallback, timeout e refresh de credencial.</li></ul></div>
+    <div class="panel pitfalls"><h3>Armadilhas</h3><ul><li class="">Colocar if/else de providers dentro do loop.</li><li class="">Assumir que todos os modelos aceitam as mesmas roles.</li><li class="">Reenviar tools não suportadas ou exceder contexto silenciosamente.</li></ul></div>
+  </div>
+  <div class="nerves"><div class="nerves-title"><span>Recursos validados</span><small>Trust by inspection</small></div><article class="nerve">
+          <div class="nerve-icon" aria-hidden="true">↗</div>
+          <div><a href="https://github.com/NousResearch/hermes-agent/blob/main/website/docs/developer-guide/provider-runtime.md" target="_blank" rel="noopener noreferrer">Provider Runtime Resolution</a>
+          <p>Mostra como provider, modelo, credencial, base URL e modo de API são resolvidos em runtime.</p><span class="validated">✓ Inspecionado · fonte primária/oficial</span></div>
+        </article><article class="nerve">
+          <div class="nerve-icon" aria-hidden="true">↗</div>
+          <div><a href="https://github.com/NousResearch/hermes-agent/blob/main/website/docs/developer-guide/model-provider-plugin.md" target="_blank" rel="noopener noreferrer">Model Provider Plugins</a>
+          <p>Define a extensão de novos backends sem alterar o núcleo.</p><span class="validated">✓ Inspecionado · fonte primária/oficial</span></div>
+        </article><article class="nerve">
+          <div class="nerve-icon" aria-hidden="true">↗</div>
+          <div><a href="https://github.com/NousResearch/hermes-agent/blob/main/website/docs/user-guide/features/fallback-providers.md" target="_blank" rel="noopener noreferrer">Fallback Providers</a>
+          <p>Cobre failover ordenado, credenciais e overrides de subagentes.</p><span class="validated">✓ Inspecionado · fonte primária/oficial</span></div>
+        </article><article class="nerve">
+          <div class="nerve-icon" aria-hidden="true">↗</div>
+          <div><a href="https://github.com/NousResearch/hermes-agent/blob/main/website/docs/developer-guide/agent-loop.md" target="_blank" rel="noopener noreferrer">Agent Loop Internals</a>
+          <p>Detalha ciclo do turno, tool calls, cancelamento, callbacks, budgets, fallback, compressão e persistência.</p><span class="validated">✓ Inspecionado · fonte primária/oficial</span></div>
+        </article></div>
+  <div class="checkpoint"><strong>Gate de avanço:</strong> marque esta estação apenas quando todos os itens da Definition of Done estiverem demonstráveis por teste, log ou artefato.</div>
+</section>
+<section class="station" id="station-5" data-title="projete o sistema de prompt, identidade e contexto estático" data-phase="Fase 1 · Núcleo Agentivo">
+  <div class="station-head">
+    <div class="station-number" style="--phase:#818cf8">05</div>
+    <div class="station-heading"><span class="phase" style="--phase:#818cf8">Fase 1 · Núcleo Agentivo</span>
+      <h2>Projete o sistema de prompt, identidade e contexto estático</h2><p>Separe o que deve permanecer cacheável do que muda a cada turno.</p></div>
+    <label class="complete-control"><input type="checkbox" class="complete" data-id="5"><span>Concluída</span></label>
+  </div>
+  <div class="station-grid">
+    <div class="panel"><h3>Conceitos obrigatórios</h3><ul><li class="">SOUL.md, USER.md e MEMORY.md</li><li class="">Camadas stable, contextual e volatile</li><li class="">Prompt caching e invalidação de prefixo</li><li class="">Arquivos de contexto do projeto</li><li class="">Instruções de tools e skills</li><li class="">Budget de tokens do system prompt</li></ul></div>
+    <div class="panel build"><h3>Implementação prática</h3><ol><li class="">Crie `PromptBuilder` com blocos ordenados e identificados por versão/hash.</li><li class="">Carregue identidade, política, guia de ferramentas e skills estáveis antes de contexto variável.</li><li class="">Inclua `SOUL.md` como persona/valores; `USER.md` como preferências; `MEMORY.md` como conhecimento curado.</li><li class="">Adicione limites por arquivo, truncamento explícito e diagnóstico de tokens.</li><li class="">Implemente `PromptSnapshot` para depurar exatamente o que foi enviado.</li><li class="">Evite reconstruir camadas estáveis no meio da sessão; aplique mudanças na próxima sessão ou após compressão controlada.</li></ol></div>
+    <div class="panel"><h3>Artefatos entregáveis</h3><ul class="artifacts"><li class="">prompt/builder.py</li><li class="">prompt/blocks.py</li><li class="">templates/SOUL.md</li><li class="">templates/USER.md</li><li class="">templates/MEMORY.md</li><li class="">prompt/snapshot.py</li></ul></div>
+    <div class="panel acceptance"><h3>Definition of Done</h3><ul><li class="">Blocos estáveis têm hash constante entre turnos sem alteração de configuração.</li><li class="">Cada bloco reporta origem e custo aproximado de tokens.</li><li class="">Arquivos ausentes ou corrompidos geram fallback seguro.</li><li class="">Conteúdo não confiável nunca é promovido automaticamente a instrução de sistema.</li></ul></div>
+    <div class="panel"><h3>Testes mínimos</h3><ul><li class="">Golden tests do prompt montado.</li><li class="">Teste de estabilidade de hash.</li><li class="">Teste de limites e Unicode.</li><li class="">Teste contra injeção em arquivo de contexto não confiável.</li></ul></div>
+    <div class="panel pitfalls"><h3>Armadilhas</h3><ul><li class="">Misturar timestamp e memória dinâmica no início do prompt.</li><li class="">Permitir que qualquer tool reescreva SOUL.md.</li><li class="">Ocultar origem de blocos e tornar bugs de prompt não reproduzíveis.</li></ul></div>
+  </div>
+  <div class="nerves"><div class="nerves-title"><span>Recursos validados</span><small>Trust by inspection</small></div><article class="nerve">
+          <div class="nerve-icon" aria-hidden="true">↗</div>
+          <div><a href="https://github.com/NousResearch/hermes-agent/blob/main/website/docs/developer-guide/prompt-assembly.md" target="_blank" rel="noopener noreferrer">Prompt Assembly</a>
+          <p>Explica camadas estáveis, contextuais e voláteis do prompt e sua relação com cache.</p><span class="validated">✓ Inspecionado · fonte primária/oficial</span></div>
+        </article><article class="nerve">
+          <div class="nerve-icon" aria-hidden="true">↗</div>
+          <div><a href="https://github.com/NousResearch/hermes-agent/blob/main/AGENTS.md" target="_blank" rel="noopener noreferrer">AGENTS.md — guia de desenvolvimento</a>
+          <p>Registra princípios de desenho: cache por conversa, core estreito, extensões por plugins/skills e padrões de contribuição.</p><span class="validated">✓ Inspecionado · fonte primária/oficial</span></div>
+        </article><article class="nerve">
+          <div class="nerve-icon" aria-hidden="true">↗</div>
+          <div><a href="https://github.com/NousResearch/hermes-agent/blob/main/website/docs/developer-guide/context-compression-and-caching.md" target="_blank" rel="noopener noreferrer">Context Compression and Caching</a>
+          <p>Cobre compressão, proteção de mensagens recentes e cache de prefixo.</p><span class="validated">✓ Inspecionado · fonte primária/oficial</span></div>
+        </article></div>
+  <div class="checkpoint"><strong>Gate de avanço:</strong> marque esta estação apenas quando todos os itens da Definition of Done estiverem demonstráveis por teste, log ou artefato.</div>
+</section>
+<section class="station" id="station-6" data-title="implemente o loop agentivo como máquina de estados" data-phase="Fase 1 · Núcleo Agentivo">
+  <div class="station-head">
+    <div class="station-number" style="--phase:#818cf8">06</div>
+    <div class="station-heading"><span class="phase" style="--phase:#818cf8">Fase 1 · Núcleo Agentivo</span>
+      <h2>Implemente o loop agentivo como máquina de estados</h2><p>O coração deve ser pequeno, observável e independente das interfaces.</p></div>
+    <label class="complete-control"><input type="checkbox" class="complete" data-id="6"><span>Concluída</span></label>
+  </div>
+  <div class="station-grid">
+    <div class="panel"><h3>Conceitos obrigatórios</h3><ul><li class="">Turn lifecycle</li><li class="">Modelo → tool calls → resultados → modelo</li><li class="">Alternância válida de roles</li><li class="">Iteration budget e stop conditions</li><li class="">Persistência por checkpoint</li><li class="">Callbacks e eventos de progresso</li></ul></div>
+    <div class="panel build"><h3>Implementação prática</h3><ol><li class="">Implemente `AgentRunner.run_turn()` como máquina de estados explícita.</li><li class="">Faça preflight: carregar sessão, construir prompt, verificar contexto e validar toolset.</li><li class="">Chame o transport; normalize resposta, texto, reasoning e tool calls.</li><li class="">Execute tools; anexe resultados preservando a ordem original; repita até resposta final.</li><li class="">Pare por resposta final, cancelamento, policy denial, budget, erro terminal ou timeout global.</li><li class="">Persista checkpoints após cada passo relevante para recuperação.</li></ol></div>
+    <div class="panel"><h3>Artefatos entregáveis</h3><ul class="artifacts"><li class="">agent/runner.py</li><li class="">agent/state_machine.py</li><li class="">agent/budget.py</li><li class="">agent/callbacks.py</li><li class="">agent/checkpoint.py</li></ul></div>
+    <div class="panel acceptance"><h3>Definition of Done</h3><ul><li class="">O loop funciona sem CLI, gateway ou banco externo.</li><li class="">Nunca produz duas mensagens assistant inválidas em sequência.</li><li class="">Cada iteração consome um budget visível e auditável.</li><li class="">Após crash entre tool e próxima chamada, o run pode ser retomado ou encerrado deterministicamente.</li></ul></div>
+    <div class="panel"><h3>Testes mínimos</h3><ul><li class="">Teste de resposta direta.</li><li class="">Teste de um e múltiplos tool calls.</li><li class="">Teste de tool error recuperável.</li><li class="">Teste de budget esgotado e resposta de encerramento.</li><li class="">Replay determinístico com provider fake.</li></ul></div>
+    <div class="panel pitfalls"><h3>Armadilhas</h3><ul><li class="">Implementar o loop como while True sem estados.</li><li class="">Salvar apenas no fim do turno.</li><li class="">Deixar o modelo decidir sozinho quando encerrar ações perigosas.</li></ul></div>
+  </div>
+  <div class="nerves"><div class="nerves-title"><span>Recursos validados</span><small>Trust by inspection</small></div><article class="nerve">
+          <div class="nerve-icon" aria-hidden="true">↗</div>
+          <div><a href="https://github.com/NousResearch/hermes-agent/blob/main/website/docs/developer-guide/agent-loop.md" target="_blank" rel="noopener noreferrer">Agent Loop Internals</a>
+          <p>Detalha ciclo do turno, tool calls, cancelamento, callbacks, budgets, fallback, compressão e persistência.</p><span class="validated">✓ Inspecionado · fonte primária/oficial</span></div>
+        </article><article class="nerve">
+          <div class="nerve-icon" aria-hidden="true">↗</div>
+          <div><a href="https://github.com/NousResearch/hermes-agent/blob/main/website/docs/developer-guide/architecture.md" target="_blank" rel="noopener noreferrer">Architecture — Hermes Agent</a>
+          <p>Mapeia entry points, AIAgent, prompt builder, providers, ferramentas, persistência, gateway, cron, plugins e testes.</p><span class="validated">✓ Inspecionado · fonte primária/oficial</span></div>
+        </article><article class="nerve">
+          <div class="nerve-icon" aria-hidden="true">↗</div>
+          <div><a href="https://docs.python.org/3/library/asyncio-task.html" target="_blank" rel="noopener noreferrer">Python asyncio — coroutines and tasks</a>
+          <p>Referência de structured concurrency, timeouts, cancelamento e cleanup assíncrono.</p><span class="validated">✓ Inspecionado · fonte primária/oficial</span></div>
+        </article></div>
+  <div class="checkpoint"><strong>Gate de avanço:</strong> marque esta estação apenas quando todos os itens da Definition of Done estiverem demonstráveis por teste, log ou artefato.</div>
+</section>
+<section class="station" id="station-7" data-title="adicione streaming, interrupção, concorrência e resiliência" data-phase="Fase 1 · Núcleo Agentivo">
+  <div class="station-head">
+    <div class="station-number" style="--phase:#818cf8">07</div>
+    <div class="station-heading"><span class="phase" style="--phase:#818cf8">Fase 1 · Núcleo Agentivo</span>
+      <h2>Adicione streaming, interrupção, concorrência e resiliência</h2><p>Um agente operacional precisa parar, redirecionar e recuperar sem corromper a conversa.</p></div>
+    <label class="complete-control"><input type="checkbox" class="complete" data-id="7"><span>Concluída</span></label>
+  </div>
+  <div class="station-grid">
+    <div class="panel"><h3>Conceitos obrigatórios</h3><ul><li class="">Cooperative cancellation</li><li class="">Structured concurrency</li><li class="">Timeout por chamada, tool e turno</li><li class="">Backpressure e filas</li><li class="">Execução paralela com ordem lógica preservada</li><li class="">Retry com jitter, circuit breaker e bulkhead</li></ul></div>
+    <div class="panel build"><h3>Implementação prática</h3><ol><li class="">Use `asyncio.TaskGroup` para tarefas filhas e propague `CancelledError` após cleanup.</li><li class="">Crie `CancellationToken` por run e suporte `/stop`, novo input e shutdown.</li><li class="">Faça parser incremental de streaming e não persista mensagens parciais como final.</li><li class="">Execute tools independentes em paralelo apenas quando a política permitir.</li><li class="">Adote timeout hierárquico: request &lt; tool &lt; iteration &lt; run.</li><li class="">Implemente retry apenas para operações idempotentes ou com idempotency key.</li></ol></div>
+    <div class="panel"><h3>Artefatos entregáveis</h3><ul class="artifacts"><li class="">runtime/cancellation.py</li><li class="">runtime/concurrency.py</li><li class="">runtime/retry.py</li><li class="">runtime/timeouts.py</li><li class="">streaming/parser.py</li></ul></div>
+    <div class="panel acceptance"><h3>Definition of Done</h3><ul><li class="">Interromper uma chamada não injeta resposta parcial no histórico.</li><li class="">Nenhuma task fica órfã após cancelamento.</li><li class="">Resultados paralelos retornam na ordem dos tool_call IDs.</li><li class="">Retries não duplicam efeitos externos.</li></ul></div>
+    <div class="panel"><h3>Testes mínimos</h3><ul><li class="">Teste de cancelamento em cada await boundary.</li><li class="">Teste de tool lenta e timeout.</li><li class="">Teste de shutdown do gateway com runs ativos.</li><li class="">Teste de backpressure sob rajada de mensagens.</li></ul></div>
+    <div class="panel pitfalls"><h3>Armadilhas</h3><ul><li class="">Engolir `CancelledError`.</li><li class="">Executar em paralelo tools com dependência implícita.</li><li class="">Repetir POST externo sem chave idempotente.</li></ul></div>
+  </div>
+  <div class="nerves"><div class="nerves-title"><span>Recursos validados</span><small>Trust by inspection</small></div><article class="nerve">
+          <div class="nerve-icon" aria-hidden="true">↗</div>
+          <div><a href="https://docs.python.org/3/library/asyncio-task.html" target="_blank" rel="noopener noreferrer">Python asyncio — coroutines and tasks</a>
+          <p>Referência de structured concurrency, timeouts, cancelamento e cleanup assíncrono.</p><span class="validated">✓ Inspecionado · fonte primária/oficial</span></div>
+        </article><article class="nerve">
+          <div class="nerve-icon" aria-hidden="true">↗</div>
+          <div><a href="https://github.com/NousResearch/hermes-agent/blob/main/website/docs/developer-guide/agent-loop.md" target="_blank" rel="noopener noreferrer">Agent Loop Internals</a>
+          <p>Detalha ciclo do turno, tool calls, cancelamento, callbacks, budgets, fallback, compressão e persistência.</p><span class="validated">✓ Inspecionado · fonte primária/oficial</span></div>
+        </article><article class="nerve">
+          <div class="nerve-icon" aria-hidden="true">↗</div>
+          <div><a href="https://github.com/NousResearch/hermes-agent/blob/main/website/docs/developer-guide/gateway-internals.md" target="_blank" rel="noopener noreferrer">Gateway Internals</a>
+          <p>Explica boot, autorização, session keys, roteamento, entrega e adaptadores multicanal.</p><span class="validated">✓ Inspecionado · fonte primária/oficial</span></div>
+        </article></div>
+  <div class="checkpoint"><strong>Gate de avanço:</strong> marque esta estação apenas quando todos os itens da Definition of Done estiverem demonstráveis por teste, log ou artefato.</div>
+</section>
+<section class="station" id="station-8" data-title="crie o registry de ferramentas, toolsets e pipeline de execução" data-phase="Fase 1 · Núcleo Agentivo">
+  <div class="station-head">
+    <div class="station-number" style="--phase:#818cf8">08</div>
+    <div class="station-heading"><span class="phase" style="--phase:#818cf8">Fase 1 · Núcleo Agentivo</span>
+      <h2>Crie o registry de ferramentas, toolsets e pipeline de execução</h2><p>Ferramentas são uma API privilegiada; trate schema, policy e resultado como contratos.</p></div>
+    <label class="complete-control"><input type="checkbox" class="complete" data-id="8"><span>Concluída</span></label>
+  </div>
+  <div class="station-grid">
+    <div class="panel"><h3>Conceitos obrigatórios</h3><ul><li class="">Tool schema e validação</li><li class="">Registry, discovery e availability check</li><li class="">Toolset por plataforma/perfil</li><li class="">Pre/post hooks</li><li class="">Resultado estruturado e limite de output</li><li class="">Tools interativas versus automáticas</li></ul></div>
+    <div class="panel build"><h3>Implementação prática</h3><ol><li class="">Defina `ToolSpec` com nome, descrição, JSON Schema, handler, riscos, requisitos e versão.</li><li class="">Valide argumentos antes do handler e normalize exceções para `ToolResult`.</li><li class="">Implemente registry com descoberta explícita e detecção de conflito de nomes.</li><li class="">Separe tools centrais mínimas de toolsets opcionais.</li><li class="">Aplique pipeline: resolve → authorize → approve → execute → sanitize → truncate/store artifact → emit events.</li><li class="">Permita que resultados grandes sejam armazenados como artefato e retornem resumo + referência.</li></ol></div>
+    <div class="panel"><h3>Artefatos entregáveis</h3><ul class="artifacts"><li class="">tools/spec.py</li><li class="">tools/registry.py</li><li class="">tools/executor.py</li><li class="">tools/toolsets.py</li><li class="">tools/result.py</li><li class="">tools/approval.py</li></ul></div>
+    <div class="panel acceptance"><h3>Definition of Done</h3><ul><li class="">Tool inválida nunca chega ao handler.</li><li class="">Tool indisponível não é enviada ao modelo.</li><li class="">Outputs têm tamanho máximo e referência ao conteúdo completo.</li><li class="">Cada execução registra latência, status, risco e aprovação.</li></ul></div>
+    <div class="panel"><h3>Testes mínimos</h3><ul><li class="">Contract tests de schemas.</li><li class="">Teste de registro duplicado.</li><li class="">Teste de output gigante e binário.</li><li class="">Teste de hook que bloqueia a chamada.</li><li class="">Fuzzing de argumentos JSON.</li></ul></div>
+    <div class="panel pitfalls"><h3>Armadilhas</h3><ul><li class="">Handler retornar texto arbitrário sem status.</li><li class="">Expor todas as ferramentas em todos os canais.</li><li class="">Colocar segredo em descrição/schema enviado ao modelo.</li></ul></div>
+  </div>
+  <div class="nerves"><div class="nerves-title"><span>Recursos validados</span><small>Trust by inspection</small></div><article class="nerve">
+          <div class="nerve-icon" aria-hidden="true">↗</div>
+          <div><a href="https://github.com/NousResearch/hermes-agent/blob/main/website/docs/developer-guide/tools-runtime.md" target="_blank" rel="noopener noreferrer">Tools Runtime</a>
+          <p>Documenta registro, descoberta, schemas, dispatch, disponibilidade, erros e ambientes de execução.</p><span class="validated">✓ Inspecionado · fonte primária/oficial</span></div>
+        </article><article class="nerve">
+          <div class="nerve-icon" aria-hidden="true">↗</div>
+          <div><a href="https://github.com/NousResearch/hermes-agent/blob/main/website/docs/reference/tools-reference.md" target="_blank" rel="noopener noreferrer">Built-in Tools Reference</a>
+          <p>Inventaria toolsets e ferramentas de terminal, arquivos, browser, memória, cron, delegação e multimodal.</p><span class="validated">✓ Inspecionado · fonte primária/oficial</span></div>
+        </article><article class="nerve">
+          <div class="nerve-icon" aria-hidden="true">↗</div>
+          <div><a href="https://github.com/NousResearch/hermes-agent/blob/main/website/docs/reference/toolsets-reference.md" target="_blank" rel="noopener noreferrer">Toolsets Reference</a>
+          <p>Confirma a exposição deliberada de ferramentas por conjuntos e presets de plataforma.</p><span class="validated">✓ Inspecionado · fonte primária/oficial</span></div>
+        </article><article class="nerve">
+          <div class="nerve-icon" aria-hidden="true">↗</div>
+          <div><a href="https://json-schema.org/" target="_blank" rel="noopener noreferrer">JSON Schema</a>
+          <p>Fornece o contrato padrão para validar argumentos e resultados estruturados de ferramentas.</p><span class="validated">✓ Inspecionado · fonte primária/oficial</span></div>
+        </article></div>
+  <div class="checkpoint"><strong>Gate de avanço:</strong> marque esta estação apenas quando todos os itens da Definition of Done estiverem demonstráveis por teste, log ou artefato.</div>
+</section>
+<section class="station" id="station-9" data-title="implemente arquivos, terminal, processos e sandboxes" data-phase="Fase 2 · Capacidades">
+  <div class="station-head">
+    <div class="station-number" style="--phase:#a78bfa">09</div>
+    <div class="station-heading"><span class="phase" style="--phase:#a78bfa">Fase 2 · Capacidades</span>
+      <h2>Implemente arquivos, terminal, processos e sandboxes</h2><p>Dê poder de execução com isolamento, controle de caminho e supervisão.</p></div>
+    <label class="complete-control"><input type="checkbox" class="complete" data-id="9"><span>Concluída</span></label>
+  </div>
+  <div class="station-grid">
+    <div class="panel"><h3>Conceitos obrigatórios</h3><ul><li class="">Virtual filesystem boundary</li><li class="">Path canonicalization e symlink attacks</li><li class="">Process lifecycle, PTY e background jobs</li><li class="">Sandbox local, Docker, SSH e cloud</li><li class="">Env passthrough allowlist</li><li class="">Quotas de CPU, memória, disco e tempo</li></ul></div>
+    <div class="panel build"><h3>Implementação prática</h3><ol><li class="">Crie `ExecutionEnvironment` com operações de arquivo e processo, não comandos soltos acoplados ao host.</li><li class="">Implemente backend local apenas para desenvolvimento; use Docker como padrão seguro do projeto.</li><li class="">Valide paths após `resolve()` e bloqueie escape do workspace.</li><li class="">Separe `terminal`, `process status/kill` e `read_terminal`.</li><li class="">Passe apenas variáveis permitidas; monte credenciais read-only quando indispensável.</li><li class="">Registre PID/container/session e faça cleanup no shutdown.</li></ol></div>
+    <div class="panel"><h3>Artefatos entregáveis</h3><ul class="artifacts"><li class="">environments/base.py</li><li class="">environments/local.py</li><li class="">environments/docker.py</li><li class="">tools/files.py</li><li class="">tools/terminal.py</li><li class="">runtime/process_store.py</li></ul></div>
+    <div class="panel acceptance"><h3>Definition of Done</h3><ul><li class="">O agente não lê fora do workspace sem capability explícita.</li><li class="">Processo em background sobrevive ao turno, mas é rastreável e cancelável.</li><li class="">Timeout encerra árvore de processos.</li><li class="">Sandbox reinicia sem perder apenas os volumes declarados.</li></ul></div>
+    <div class="panel"><h3>Testes mínimos</h3><ul><li class="">Path traversal e symlink escape.</li><li class="">Fork bomb simulado com quotas baixas.</li><li class="">Timeout de subprocesso filho.</li><li class="">Env leak test.</li><li class="">Testes de parity local/Docker.</li></ul></div>
+    <div class="panel pitfalls"><h3>Armadilhas</h3><ul><li class="">Executar `shell=True` com concatenação.</li><li class="">Montar `$HOME` inteiro no container.</li><li class="">Confiar em bloqueio por regex de comandos.</li></ul></div>
+  </div>
+  <div class="nerves"><div class="nerves-title"><span>Recursos validados</span><small>Trust by inspection</small></div><article class="nerve">
+          <div class="nerve-icon" aria-hidden="true">↗</div>
+          <div><a href="https://github.com/NousResearch/hermes-agent/blob/main/website/docs/user-guide/configuration.md" target="_blank" rel="noopener noreferrer">Configuration</a>
+          <p>Centraliza configuração, terminal backends, delegation, timeouts e comportamento operacional.</p><span class="validated">✓ Inspecionado · fonte primária/oficial</span></div>
+        </article><article class="nerve">
+          <div class="nerve-icon" aria-hidden="true">↗</div>
+          <div><a href="https://github.com/NousResearch/hermes-agent/blob/main/website/docs/user-guide/docker.md" target="_blank" rel="noopener noreferrer">Hermes Agent — Docker</a>
+          <p>Distingue executar o agente em container de usar Docker como sandbox de terminal.</p><span class="validated">✓ Inspecionado · fonte primária/oficial</span></div>
+        </article><article class="nerve">
+          <div class="nerve-icon" aria-hidden="true">↗</div>
+          <div><a href="https://github.com/NousResearch/hermes-agent/blob/main/website/docs/developer-guide/tools-runtime.md" target="_blank" rel="noopener noreferrer">Tools Runtime</a>
+          <p>Documenta registro, descoberta, schemas, dispatch, disponibilidade, erros e ambientes de execução.</p><span class="validated">✓ Inspecionado · fonte primária/oficial</span></div>
+        </article></div>
+  <div class="checkpoint"><strong>Gate de avanço:</strong> marque esta estação apenas quando todos os itens da Definition of Done estiverem demonstráveis por teste, log ou artefato.</div>
+</section>
+<section class="station" id="station-10" data-title="construa persistência de sessões, transcrições e busca fts5" data-phase="Fase 2 · Capacidades">
+  <div class="station-head">
+    <div class="station-number" style="--phase:#a78bfa">10</div>
+    <div class="station-heading"><span class="phase" style="--phase:#a78bfa">Fase 2 · Capacidades</span>
+      <h2>Construa persistência de sessões, transcrições e busca FTS5</h2><p>A sessão é a fonte de verdade operacional; memória é uma visão curada sobre ela.</p></div>
+    <label class="complete-control"><input type="checkbox" class="complete" data-id="10"><span>Concluída</span></label>
+  </div>
+  <div class="station-grid">
+    <div class="panel"><h3>Conceitos obrigatórios</h3><ul><li class="">SQLite WAL e transações</li><li class="">Sessions, messages, runs, steps e artifacts</li><li class="">FTS5 para recall textual</li><li class="">Session lineage após compressão</li><li class="">Resume, fork e archive</li><li class="">Retention e vacuum</li></ul></div>
+    <div class="panel build"><h3>Implementação prática</h3><ol><li class="">Crie schema com tabelas `sessions`, `messages`, `runs`, `steps`, `tool_calls`, `artifacts` e `deliveries`.</li><li class="">Use WAL, foreign keys, busy timeout e transações curtas.</li><li class="">Mantenha FTS5 sincronizado por triggers ou escrita transacional.</li><li class="">Modele `parent_session_id` e `compression_summary_message_id`.</li><li class="">Implemente `session_search` com ranking, filtros e snippets sanitizados.</li><li class="">Adicione export, archive, retention e backup consistente.</li></ol></div>
+    <div class="panel"><h3>Artefatos entregáveis</h3><ul class="artifacts"><li class="">storage/schema.sql</li><li class="">storage/sqlite.py</li><li class="">storage/session_store.py</li><li class="">storage/search.py</li><li class="">storage/backup.py</li></ul></div>
+    <div class="panel acceptance"><h3>Definition of Done</h3><ul><li class="">Um restart retoma a última sessão sem perder o turno confirmado.</li><li class="">Busca retorna resultados relevantes em milhares de mensagens.</li><li class="">Compressão cria lineage navegável.</li><li class="">Backup restaura DB e artefatos com integridade verificada.</li></ul></div>
+    <div class="panel"><h3>Testes mínimos</h3><ul><li class="">Migrações em DBs de versões anteriores.</li><li class="">Concorrência gateway + cron.</li><li class="">FTS ranking e filtros.</li><li class="">Crash injection entre inserts.</li><li class="">Restore drill automatizado.</li></ul></div>
+    <div class="panel pitfalls"><h3>Armadilhas</h3><ul><li class="">Guardar tudo em um JSON crescente.</li><li class="">Usar memória como única fonte de histórico.</li><li class="">Excluir sessões sem tratar artifacts e lineage.</li></ul></div>
+  </div>
+  <div class="nerves"><div class="nerves-title"><span>Recursos validados</span><small>Trust by inspection</small></div><article class="nerve">
+          <div class="nerve-icon" aria-hidden="true">↗</div>
+          <div><a href="https://github.com/NousResearch/hermes-agent/blob/main/website/docs/developer-guide/session-storage.md" target="_blank" rel="noopener noreferrer">Session Storage</a>
+          <p>Cobre SQLite, schema, FTS5, retomada e lineage de sessões.</p><span class="validated">✓ Inspecionado · fonte primária/oficial</span></div>
+        </article><article class="nerve">
+          <div class="nerve-icon" aria-hidden="true">↗</div>
+          <div><a href="https://www.sqlite.org/fts5.html" target="_blank" rel="noopener noreferrer">SQLite FTS5</a>
+          <p>Referência primária da extensão de busca textual usada para recuperar transcrições.</p><span class="validated">✓ Inspecionado · fonte primária/oficial</span></div>
+        </article><article class="nerve">
+          <div class="nerve-icon" aria-hidden="true">↗</div>
+          <div><a href="https://github.com/NousResearch/hermes-agent/blob/main/website/docs/developer-guide/architecture.md" target="_blank" rel="noopener noreferrer">Architecture — Hermes Agent</a>
+          <p>Mapeia entry points, AIAgent, prompt builder, providers, ferramentas, persistência, gateway, cron, plugins e testes.</p><span class="validated">✓ Inspecionado · fonte primária/oficial</span></div>
+        </article></div>
+  <div class="checkpoint"><strong>Gate de avanço:</strong> marque esta estação apenas quando todos os itens da Definition of Done estiverem demonstráveis por teste, log ou artefato.</div>
+</section>
+<section class="station" id="station-11" data-title="implemente memória em camadas e política de aprendizado" data-phase="Fase 2 · Capacidades">
+  <div class="station-head">
+    <div class="station-number" style="--phase:#a78bfa">11</div>
+    <div class="station-heading"><span class="phase" style="--phase:#a78bfa">Fase 2 · Capacidades</span>
+      <h2>Implemente memória em camadas e política de aprendizado</h2><p>Memória útil é seletiva, rastreável, corrigível e separada do histórico bruto.</p></div>
+    <label class="complete-control"><input type="checkbox" class="complete" data-id="11"><span>Concluída</span></label>
+  </div>
+  <div class="station-grid">
+    <div class="panel"><h3>Conceitos obrigatórios</h3><ul><li class="">Working, episodic, semantic e procedural memory</li><li class="">USER.md versus MEMORY.md</li><li class="">Candidate → review → commit</li><li class="">Proveniência, confiança e expiração</li><li class="">Recall lexical/semântico</li><li class="">Provider externo aditivo</li></ul></div>
+    <div class="panel build"><h3>Implementação prática</h3><ol><li class="">Defina tipos de memória: preferência, fato, workflow, restrição, decisão e habilidade candidata.</li><li class="">Após o turno, gere candidatos com evidência e score; não grave diretamente texto do modelo.</li><li class="">Aplique deduplicação, conflito, TTL e sensibilidade antes do commit.</li><li class="">Mantenha memória editável e com comando para listar, corrigir e esquecer.</li><li class="">Implemente `MemoryProvider` com `prefetch`, `sync_turn`, `search`, `store` e `shutdown`.</li><li class="">Combine built-in files + session search + no máximo um provider externo ativo.</li></ol></div>
+    <div class="panel"><h3>Artefatos entregáveis</h3><ul class="artifacts"><li class="">memory/manager.py</li><li class="">memory/policy.py</li><li class="">memory/files.py</li><li class="">memory/provider.py</li><li class="">memory/candidates.py</li><li class="">memory/audit.py</li></ul></div>
+    <div class="panel acceptance"><h3>Definition of Done</h3><ul><li class="">Cada memória aponta para origem ou é marcada como inferida.</li><li class="">Informação sensível não é persistida sem regra/consentimento.</li><li class="">Correção do usuário invalida ou substitui fato anterior.</li><li class="">Falha do provider externo não impede o turno principal.</li></ul></div>
+    <div class="panel"><h3>Testes mínimos</h3><ul><li class="">Conflito e deduplicação.</li><li class="">Right-to-forget por usuário/perfil.</li><li class="">Provider timeout e circuit breaker.</li><li class="">Recall com baixa similaridade não injeta ruído.</li><li class="">Redaction de dados sensíveis.</li></ul></div>
+    <div class="panel pitfalls"><h3>Armadilhas</h3><ul><li class="">Gravar a conversa inteira em MEMORY.md.</li><li class="">Tratar resumo do modelo como fato confirmado.</li><li class="">Misturar usuários em gateway multi-tenant.</li></ul></div>
+  </div>
+  <div class="nerves"><div class="nerves-title"><span>Recursos validados</span><small>Trust by inspection</small></div><article class="nerve">
+          <div class="nerve-icon" aria-hidden="true">↗</div>
+          <div><a href="https://github.com/NousResearch/hermes-agent/blob/main/website/docs/user-guide/features/memory.md" target="_blank" rel="noopener noreferrer">Memory</a>
+          <p>Explica memória interna por arquivos, gravação curada e recuperação entre sessões.</p><span class="validated">✓ Inspecionado · fonte primária/oficial</span></div>
+        </article><article class="nerve">
+          <div class="nerve-icon" aria-hidden="true">↗</div>
+          <div><a href="https://github.com/NousResearch/hermes-agent/blob/main/website/docs/user-guide/features/memory-providers.md" target="_blank" rel="noopener noreferrer">Memory Providers</a>
+          <p>Confirma providers externos aditivos, prefetch, sync de turnos e ferramentas específicas.</p><span class="validated">✓ Inspecionado · fonte primária/oficial</span></div>
+        </article><article class="nerve">
+          <div class="nerve-icon" aria-hidden="true">↗</div>
+          <div><a href="https://github.com/NousResearch/hermes-agent/blob/main/website/docs/developer-guide/memory-provider-plugin.md" target="_blank" rel="noopener noreferrer">Building a Memory Provider Plugin</a>
+          <p>Define ABC e ciclo de vida de um provider de memória.</p><span class="validated">✓ Inspecionado · fonte primária/oficial</span></div>
+        </article><article class="nerve">
+          <div class="nerve-icon" aria-hidden="true">↗</div>
+          <div><a href="https://github.com/NousResearch/hermes-agent/blob/main/website/docs/developer-guide/session-storage.md" target="_blank" rel="noopener noreferrer">Session Storage</a>
+          <p>Cobre SQLite, schema, FTS5, retomada e lineage de sessões.</p><span class="validated">✓ Inspecionado · fonte primária/oficial</span></div>
+        </article></div>
+  <div class="checkpoint"><strong>Gate de avanço:</strong> marque esta estação apenas quando todos os itens da Definition of Done estiverem demonstráveis por teste, log ou artefato.</div>
+</section>
+<section class="station" id="station-12" data-title="construa o motor de contexto, compressão e cache" data-phase="Fase 2 · Capacidades">
+  <div class="station-head">
+    <div class="station-number" style="--phase:#a78bfa">12</div>
+    <div class="station-heading"><span class="phase" style="--phase:#a78bfa">Fase 2 · Capacidades</span>
+      <h2>Construa o motor de contexto, compressão e cache</h2><p>Controle pressão de tokens sem apagar compromissos, tool pairs ou informação operacional.</p></div>
+    <label class="complete-control"><input type="checkbox" class="complete" data-id="12"><span>Concluída</span></label>
+  </div>
+  <div class="station-grid">
+    <div class="panel"><h3>Conceitos obrigatórios</h3><ul><li class="">Token budget por modelo</li><li class="">Preflight compression</li><li class="">Resumo incremental e protected tail</li><li class="">Tool call/result atomicity</li><li class="">Prompt prefix caching</li><li class="">ContextEngine plugável</li></ul></div>
+    <div class="panel build"><h3>Implementação prática</h3><ol><li class="">Calcule tokens por bloco, histórico, schemas e reserva de saída.</li><li class="">Dispare compressão por limiar configurável e também ao receber erro de contexto.</li><li class="">Faça flush de memória e checkpoint antes de comprimir.</li><li class="">Preserve mensagens recentes, decisões, approvals pendentes e pares tool call/result.</li><li class="">Gere resumo estruturado com objetivos, estado, decisões, arquivos, riscos e próximos passos.</li><li class="">Valide o resumo e crie child session; meça cache hit/miss e tokens economizados.</li></ol></div>
+    <div class="panel"><h3>Artefatos entregáveis</h3><ul class="artifacts"><li class="">context/engine.py</li><li class="">context/compressor.py</li><li class="">context/budget.py</li><li class="">context/summary_schema.py</li><li class="">context/cache.py</li></ul></div>
+    <div class="panel acceptance"><h3>Definition of Done</h3><ul><li class="">O histórico enviado nunca ultrapassa o orçamento calculado.</li><li class="">Nenhum tool result fica órfão.</li><li class="">Após múltiplas compressões, a tarefa ainda preserva decisões e estado verificável.</li><li class="">Mudança volátil não invalida o prefixo estável desnecessariamente.</li></ul></div>
+    <div class="panel"><h3>Testes mínimos</h3><ul><li class="">Conversation torture test longa.</li><li class="">Compressão com tool calls paralelos.</li><li class="">Falha do summarizer e fallback extrativo.</li><li class="">Teste de invariantes do resumo.</li><li class="">Métrica de cache por provider.</li></ul></div>
+    <div class="panel pitfalls"><h3>Armadilhas</h3><ul><li class="">Resumir toda a conversa em prosa livre.</li><li class="">Comprimir depois que o provider já rejeitou repetidamente.</li><li class="">Reordenar blocos estáveis a cada turno.</li></ul></div>
+  </div>
+  <div class="nerves"><div class="nerves-title"><span>Recursos validados</span><small>Trust by inspection</small></div><article class="nerve">
+          <div class="nerve-icon" aria-hidden="true">↗</div>
+          <div><a href="https://github.com/NousResearch/hermes-agent/blob/main/website/docs/developer-guide/context-compression-and-caching.md" target="_blank" rel="noopener noreferrer">Context Compression and Caching</a>
+          <p>Cobre compressão, proteção de mensagens recentes e cache de prefixo.</p><span class="validated">✓ Inspecionado · fonte primária/oficial</span></div>
+        </article><article class="nerve">
+          <div class="nerve-icon" aria-hidden="true">↗</div>
+          <div><a href="https://github.com/NousResearch/hermes-agent/blob/main/website/docs/developer-guide/prompt-assembly.md" target="_blank" rel="noopener noreferrer">Prompt Assembly</a>
+          <p>Explica camadas estáveis, contextuais e voláteis do prompt e sua relação com cache.</p><span class="validated">✓ Inspecionado · fonte primária/oficial</span></div>
+        </article><article class="nerve">
+          <div class="nerve-icon" aria-hidden="true">↗</div>
+          <div><a href="https://github.com/NousResearch/hermes-agent/blob/main/website/docs/developer-guide/agent-loop.md" target="_blank" rel="noopener noreferrer">Agent Loop Internals</a>
+          <p>Detalha ciclo do turno, tool calls, cancelamento, callbacks, budgets, fallback, compressão e persistência.</p><span class="validated">✓ Inspecionado · fonte primária/oficial</span></div>
+        </article></div>
+  <div class="checkpoint"><strong>Gate de avanço:</strong> marque esta estação apenas quando todos os itens da Definition of Done estiverem demonstráveis por teste, log ou artefato.</div>
+</section>
+<section class="station" id="station-13" data-title="implemente skills e o ciclo fechado de autoaperfeiçoamento" data-phase="Fase 2 · Capacidades">
+  <div class="station-head">
+    <div class="station-number" style="--phase:#a78bfa">13</div>
+    <div class="station-heading"><span class="phase" style="--phase:#a78bfa">Fase 2 · Capacidades</span>
+      <h2>Implemente skills e o ciclo fechado de autoaperfeiçoamento</h2><p>Transforme experiência repetida em instruções versionadas sem poluir o núcleo.</p></div>
+    <label class="complete-control"><input type="checkbox" class="complete" data-id="13"><span>Concluída</span></label>
+  </div>
+  <div class="station-grid">
+    <div class="panel"><h3>Conceitos obrigatórios</h3><ul><li class="">Skill como instrução progressivamente carregada</li><li class="">Trigger, prerequisites e workflow</li><li class="">Skill candidate e revisão</li><li class="">Versionamento, rollback e métricas</li><li class="">Distribuição bundled/optional/user</li><li class="">Prevenção de self-modification perigosa</li></ul></div>
+    <div class="panel build"><h3>Implementação prática</h3><ol><li class="">Defina manifesto de skill com nome, descrição, versão, plataformas, requisitos e arquivos.</li><li class="">Implemente discovery por perfil e comandos list/view/install/enable/disable.</li><li class="">Carregue apenas metadados mínimos; injete conteúdo completo quando a skill for escolhida.</li><li class="">Após tarefas complexas, gere proposta de skill em staging, nunca direto em produção.</li><li class="">Execute lint, testes de segurança e avaliação de regressão antes da promoção.</li><li class="">Registre uso, sucesso, falhas e feedback para sugerir melhoria versionada.</li></ol></div>
+    <div class="panel"><h3>Artefatos entregáveis</h3><ul class="artifacts"><li class="">skills/manifest.py</li><li class="">skills/registry.py</li><li class="">skills/loader.py</li><li class="">skills/learner.py</li><li class="">skills/reviewer.py</li><li class="">skills/evaluator.py</li></ul></div>
+    <div class="panel acceptance"><h3>Definition of Done</h3><ul><li class="">Uma nova skill é instalada sem reiniciar o core quando suportado.</li><li class="">Skill defeituosa pode ser desativada/rollback.</li><li class="">Conteúdo da skill não recebe acesso implícito a novos privilégios.</li><li class="">A promoção exige evidência de melhoria e não só opinião do mesmo LLM.</li></ul></div>
+    <div class="panel"><h3>Testes mínimos</h3><ul><li class="">Trigger precision/recall em dataset pequeno.</li><li class="">Skill injection adversarial.</li><li class="">Rollback e compatibilidade de versão.</li><li class="">A/B offline entre versões.</li></ul></div>
+    <div class="panel pitfalls"><h3>Armadilhas</h3><ul><li class="">Carregar todas as skills no system prompt.</li><li class="">Permitir autoedição sem staging.</li><li class="">Confundir skill com tool: instrução não é capability.</li></ul></div>
+  </div>
+  <div class="nerves"><div class="nerves-title"><span>Recursos validados</span><small>Trust by inspection</small></div><article class="nerve">
+          <div class="nerve-icon" aria-hidden="true">↗</div>
+          <div><a href="https://github.com/NousResearch/hermes-agent/blob/main/website/docs/reference/skills-catalog.md" target="_blank" rel="noopener noreferrer">Skills Catalog</a>
+          <p>Mostra skills como instruções progressivamente carregadas e extensões reutilizáveis.</p><span class="validated">✓ Inspecionado · fonte primária/oficial</span></div>
+        </article><article class="nerve">
+          <div class="nerve-icon" aria-hidden="true">↗</div>
+          <div><a href="https://github.com/NousResearch/hermes-agent/blob/main/AGENTS.md" target="_blank" rel="noopener noreferrer">AGENTS.md — guia de desenvolvimento</a>
+          <p>Registra princípios de desenho: cache por conversa, core estreito, extensões por plugins/skills e padrões de contribuição.</p><span class="validated">✓ Inspecionado · fonte primária/oficial</span></div>
+        </article><article class="nerve">
+          <div class="nerve-icon" aria-hidden="true">↗</div>
+          <div><a href="https://github.com/NousResearch/hermes-agent" target="_blank" rel="noopener noreferrer">Repositório oficial do Hermes Agent</a>
+          <p>Confirma o produto atual, suas superfícies de execução e o ciclo fechado de aprendizado.</p><span class="validated">✓ Inspecionado · fonte primária/oficial</span></div>
+        </article></div>
+  <div class="checkpoint"><strong>Gate de avanço:</strong> marque esta estação apenas quando todos os itens da Definition of Done estiverem demonstráveis por teste, log ou artefato.</div>
+</section>
+<section class="station" id="station-14" data-title="crie plugins e hooks como fronteira principal de extensão" data-phase="Fase 2 · Capacidades">
+  <div class="station-head">
+    <div class="station-number" style="--phase:#a78bfa">14</div>
+    <div class="station-heading"><span class="phase" style="--phase:#a78bfa">Fase 2 · Capacidades</span>
+      <h2>Crie plugins e hooks como fronteira principal de extensão</h2><p>Mantenha o core estreito e desloque integrações, policies e ferramentas para bordas governadas.</p></div>
+    <label class="complete-control"><input type="checkbox" class="complete" data-id="14"><span>Concluída</span></label>
+  </div>
+  <div class="station-grid">
+    <div class="panel"><h3>Conceitos obrigatórios</h3><ul><li class="">Plugin manifest e discovery</li><li class="">Registration context</li><li class="">Lifecycle hooks</li><li class="">Capabilities e dependency gates</li><li class="">Plugin isolation e failure containment</li><li class="">Compatibilidade e version ranges</li></ul></div>
+    <div class="panel build"><h3>Implementação prática</h3><ol><li class="">Implemente `PluginManager` para diretório do usuário, projeto e entry points.</li><li class="">Defina hooks pre/post LLM, pre/post tool, session start/end, gateway events e shutdown.</li><li class="">Registre tools, comandos, providers e observers via contexto limitado.</li><li class="">Imponha timeout, prioridade e política de falha por hook.</li><li class="">Valide compatibilidade de versão do core e dependências opcionais.</li><li class="">Adicione comando doctor que lista plugins, capabilities, erros e conflitos.</li></ol></div>
+    <div class="panel"><h3>Artefatos entregáveis</h3><ul class="artifacts"><li class="">plugins/manager.py</li><li class="">plugins/manifest.py</li><li class="">plugins/context.py</li><li class="">plugins/hooks.py</li><li class="">plugins/doctor.py</li><li class="">examples/plugin/</li></ul></div>
+    <div class="panel acceptance"><h3>Definition of Done</h3><ul><li class="">Plugin quebrado não impede inicialização quando marcado opcional.</li><li class="">Conflitos de tool/comando são detectados antes da conversa.</li><li class="">Hooks não podem alterar objetos internos sem API pública.</li><li class="">Unload/reload não deixa handlers duplicados.</li></ul></div>
+    <div class="panel"><h3>Testes mínimos</h3><ul><li class="">Plugin fixture de exemplo.</li><li class="">Timeout e exception em hook.</li><li class="">Compatibilidade incompatível.</li><li class="">Ordem determinística de hooks.</li><li class="">Teste de supply-chain metadata.</li></ul></div>
+    <div class="panel pitfalls"><h3>Armadilhas</h3><ul><li class="">Import arbitrário antes de validar manifesto.</li><li class="">Hooks sem timeout.</li><li class="">Plugins manipulando singletons privados do core.</li></ul></div>
+  </div>
+  <div class="nerves"><div class="nerves-title"><span>Recursos validados</span><small>Trust by inspection</small></div><article class="nerve">
+          <div class="nerve-icon" aria-hidden="true">↗</div>
+          <div><a href="https://github.com/NousResearch/hermes-agent/blob/main/website/docs/user-guide/features/plugins.md" target="_blank" rel="noopener noreferrer">Plugins</a>
+          <p>Apresenta manifest, ferramentas, hooks e integrações customizadas fora do core.</p><span class="validated">✓ Inspecionado · fonte primária/oficial</span></div>
+        </article><article class="nerve">
+          <div class="nerve-icon" aria-hidden="true">↗</div>
+          <div><a href="https://github.com/NousResearch/hermes-agent/blob/main/website/docs/guides/build-a-hermes-plugin.md" target="_blank" rel="noopener noreferrer">Build a Hermes Plugin</a>
+          <p>Guia completo com ferramentas, hooks, dados e skill empacotada.</p><span class="validated">✓ Inspecionado · fonte primária/oficial</span></div>
+        </article><article class="nerve">
+          <div class="nerve-icon" aria-hidden="true">↗</div>
+          <div><a href="https://github.com/NousResearch/hermes-agent/blob/main/website/docs/user-guide/features/hooks.md" target="_blank" rel="noopener noreferrer">Hooks</a>
+          <p>Demonstra eventos de lifecycle e automações disparadas pelo gateway.</p><span class="validated">✓ Inspecionado · fonte primária/oficial</span></div>
+        </article><article class="nerve">
+          <div class="nerve-icon" aria-hidden="true">↗</div>
+          <div><a href="https://github.com/NousResearch/hermes-agent/blob/main/AGENTS.md" target="_blank" rel="noopener noreferrer">AGENTS.md — guia de desenvolvimento</a>
+          <p>Registra princípios de desenho: cache por conversa, core estreito, extensões por plugins/skills e padrões de contribuição.</p><span class="validated">✓ Inspecionado · fonte primária/oficial</span></div>
+        </article></div>
+  <div class="checkpoint"><strong>Gate de avanço:</strong> marque esta estação apenas quando todos os itens da Definition of Done estiverem demonstráveis por teste, log ou artefato.</div>
+</section>
+<section class="station" id="station-15" data-title="construa o gateway multicanal e seus adapters" data-phase="Fase 3 · Interfaces e Automação">
+  <div class="station-head">
+    <div class="station-number" style="--phase:#f59e0b">15</div>
+    <div class="station-heading"><span class="phase" style="--phase:#f59e0b">Fase 3 · Interfaces e Automação</span>
+      <h2>Construa o gateway multicanal e seus adapters</h2><p>O gateway deve ser um roteador durável, não uma segunda implementação do agente.</p></div>
+    <label class="complete-control"><input type="checkbox" class="complete" data-id="15"><span>Concluída</span></label>
+  </div>
+  <div class="station-grid">
+    <div class="panel"><h3>Conceitos obrigatórios</h3><ul><li class="">Unified inbound/outbound events</li><li class="">Adapter por plataforma</li><li class="">Session key e identidade do usuário</li><li class="">Pairing, allowlist e RBAC</li><li class="">Polling, webhook e websocket</li><li class="">Delivery, chunking, media e idempotência</li></ul></div>
+    <div class="panel build"><h3>Implementação prática</h3><ol><li class="">Defina `PlatformAdapter.start/stop/send/edit/delete/ack` e eventos normalizados.</li><li class="">Implemente `GatewayRunner` que autoriza, resolve sessão, enfileira, executa o mesmo `AgentRunner` e entrega.</li><li class="">Crie `SessionKeyBuilder` separando plataforma, workspace, chat, thread e usuário.</li><li class="">Implemente pairing para DM, allowlists e roles por capability.</li><li class="">Use inbox/outbox persistentes para deduplicar eventos e repetir entregas com segurança.</li><li class="">Adicione chunking por limite do canal, upload de artifacts, progress updates e resposta a threads.</li></ol></div>
+    <div class="panel"><h3>Artefatos entregáveis</h3><ul class="artifacts"><li class="">gateway/runner.py</li><li class="">gateway/events.py</li><li class="">gateway/session_keys.py</li><li class="">gateway/auth.py</li><li class="">gateway/outbox.py</li><li class="">gateway/platforms/telegram.py</li></ul></div>
+    <div class="panel acceptance"><h3>Definition of Done</h3><ul><li class="">A mesma conversa continua entre mensagens sem reconstrução inconsistente.</li><li class="">Evento duplicado da plataforma não duplica tool execution.</li><li class="">Restart retoma entregas pendentes.</li><li class="">Usuário não autorizado não cria sessão nem consome modelo.</li></ul></div>
+    <div class="panel"><h3>Testes mínimos</h3><ul><li class="">Contract suite para adapters.</li><li class="">Webhook replay e assinatura inválida.</li><li class="">Rate limit da plataforma.</li><li class="">Chunking Unicode/Markdown.</li><li class="">Restart com outbox pendente.</li></ul></div>
+    <div class="panel pitfalls"><h3>Armadilhas</h3><ul><li class="">Guardar estado apenas na memória do processo.</li><li class="">Usar chat ID como identidade global.</li><li class="">Enviar resposta diretamente de tools, contornando outbox e auditoria.</li></ul></div>
+  </div>
+  <div class="nerves"><div class="nerves-title"><span>Recursos validados</span><small>Trust by inspection</small></div><article class="nerve">
+          <div class="nerve-icon" aria-hidden="true">↗</div>
+          <div><a href="https://github.com/NousResearch/hermes-agent/blob/main/website/docs/developer-guide/gateway-internals.md" target="_blank" rel="noopener noreferrer">Gateway Internals</a>
+          <p>Explica boot, autorização, session keys, roteamento, entrega e adaptadores multicanal.</p><span class="validated">✓ Inspecionado · fonte primária/oficial</span></div>
+        </article><article class="nerve">
+          <div class="nerve-icon" aria-hidden="true">↗</div>
+          <div><a href="https://docs.python.org/3/library/asyncio-task.html" target="_blank" rel="noopener noreferrer">Python asyncio — coroutines and tasks</a>
+          <p>Referência de structured concurrency, timeouts, cancelamento e cleanup assíncrono.</p><span class="validated">✓ Inspecionado · fonte primária/oficial</span></div>
+        </article><article class="nerve">
+          <div class="nerve-icon" aria-hidden="true">↗</div>
+          <div><a href="https://github.com/NousResearch/hermes-agent/blob/main/website/docs/user-guide/profiles.md" target="_blank" rel="noopener noreferrer">Profiles: Running Multiple Agents</a>
+          <p>Isola config, chaves, memória, sessões, skills, cron e estado para múltiplos agentes.</p><span class="validated">✓ Inspecionado · fonte primária/oficial</span></div>
+        </article></div>
+  <div class="checkpoint"><strong>Gate de avanço:</strong> marque esta estação apenas quando todos os itens da Definition of Done estiverem demonstráveis por teste, log ou artefato.</div>
+</section>
+<section class="station" id="station-16" data-title="implemente cli, tui, api, batch e integração com ide" data-phase="Fase 3 · Interfaces e Automação">
+  <div class="station-head">
+    <div class="station-number" style="--phase:#f59e0b">16</div>
+    <div class="station-heading"><span class="phase" style="--phase:#f59e0b">Fase 3 · Interfaces e Automação</span>
+      <h2>Implemente CLI, TUI, API, batch e integração com IDE</h2><p>Todas as superfícies devem reutilizar contratos, sessões e callbacks do mesmo runtime.</p></div>
+    <label class="complete-control"><input type="checkbox" class="complete" data-id="16"><span>Concluída</span></label>
+  </div>
+  <div class="station-grid">
+    <div class="panel"><h3>Conceitos obrigatórios</h3><ul><li class="">Hexagonal interfaces</li><li class="">Streaming e progress callbacks</li><li class="">Slash command registry</li><li class="">OpenAI-compatible API</li><li class="">Stateless versus stateful endpoints</li><li class="">ACP/IDE protocol mapping</li></ul></div>
+    <div class="panel build"><h3>Implementação prática</h3><ol><li class="">Implemente CLI mínimo com chat, resume, new, stop, status, usage e doctor.</li><li class="">Crie registry único de comandos compartilhado por CLI e gateway.</li><li class="">Adicione TUI apenas como renderer/input sobre o mesmo controller.</li><li class="">Implemente API com auth, CORS restrito, rate limit, streaming SSE e limites de payload.</li><li class="">Crie batch runner com input JSONL, concurrency e trajectory export.</li><li class="">Mapeie eventos internos para ACP/IDE sem permitir acesso extra implícito.</li></ol></div>
+    <div class="panel"><h3>Artefatos entregáveis</h3><ul class="artifacts"><li class="">interfaces/cli.py</li><li class="">interfaces/commands.py</li><li class="">interfaces/tui/</li><li class="">interfaces/api.py</li><li class="">interfaces/batch.py</li><li class="">interfaces/acp.py</li></ul></div>
+    <div class="panel acceptance"><h3>Definition of Done</h3><ul><li class="">Uma sessão criada no CLI pode ser retomada por uma superfície autorizada.</li><li class="">Comandos têm comportamento consistente entre canais.</li><li class="">API stateless não grava memória sem opção explícita.</li><li class="">Streaming encerra corretamente em cancelamento e erro.</li></ul></div>
+    <div class="panel"><h3>Testes mínimos</h3><ul><li class="">Snapshot de comandos/help.</li><li class="">API auth, CORS e rate limit.</li><li class="">SSE disconnect.</li><li class="">Batch partial failure.</li><li class="">ACP mapping contract.</li></ul></div>
+    <div class="panel pitfalls"><h3>Armadilhas</h3><ul><li class="">Duplicar lógica do loop em cada interface.</li><li class="">Expor API em 0.0.0.0 sem chave.</li><li class="">Tratar disconnect do cliente como sucesso completo.</li></ul></div>
+  </div>
+  <div class="nerves"><div class="nerves-title"><span>Recursos validados</span><small>Trust by inspection</small></div><article class="nerve">
+          <div class="nerve-icon" aria-hidden="true">↗</div>
+          <div><a href="https://github.com/NousResearch/hermes-agent/blob/main/website/docs/user-guide/features/api-server.md" target="_blank" rel="noopener noreferrer">API Server</a>
+          <p>Define endpoint OpenAI-compatible, streaming, autenticação e execução com o toolset completo.</p><span class="validated">✓ Inspecionado · fonte primária/oficial</span></div>
+        </article><article class="nerve">
+          <div class="nerve-icon" aria-hidden="true">↗</div>
+          <div><a href="https://github.com/NousResearch/hermes-agent/blob/main/website/docs/user-guide/tui.md" target="_blank" rel="noopener noreferrer">TUI</a>
+          <p>Confirma uma interface moderna usando o mesmo runtime, sessões e comandos do CLI.</p><span class="validated">✓ Inspecionado · fonte primária/oficial</span></div>
+        </article><article class="nerve">
+          <div class="nerve-icon" aria-hidden="true">↗</div>
+          <div><a href="https://github.com/NousResearch/hermes-agent/blob/main/website/docs/developer-guide/acp-internals.md" target="_blank" rel="noopener noreferrer">ACP Internals</a>
+          <p>Documenta integração com IDEs via Agent Client Protocol.</p><span class="validated">✓ Inspecionado · fonte primária/oficial</span></div>
+        </article><article class="nerve">
+          <div class="nerve-icon" aria-hidden="true">↗</div>
+          <div><a href="https://github.com/NousResearch/hermes-agent/blob/main/website/docs/developer-guide/architecture.md" target="_blank" rel="noopener noreferrer">Architecture — Hermes Agent</a>
+          <p>Mapeia entry points, AIAgent, prompt builder, providers, ferramentas, persistência, gateway, cron, plugins e testes.</p><span class="validated">✓ Inspecionado · fonte primária/oficial</span></div>
+        </article></div>
+  <div class="checkpoint"><strong>Gate de avanço:</strong> marque esta estação apenas quando todos os itens da Definition of Done estiverem demonstráveis por teste, log ou artefato.</div>
+</section>
+<section class="station" id="station-17" data-title="construa cron, jobs duráveis e execução em background" data-phase="Fase 3 · Interfaces e Automação">
+  <div class="station-head">
+    <div class="station-number" style="--phase:#f59e0b">17</div>
+    <div class="station-heading"><span class="phase" style="--phase:#f59e0b">Fase 3 · Interfaces e Automação</span>
+      <h2>Construa cron, jobs duráveis e execução em background</h2><p>Automação exige scheduler, locks, políticas de custo, entrega e prevenção de loops.</p></div>
+    <label class="complete-control"><input type="checkbox" class="complete" data-id="17"><span>Concluída</span></label>
+  </div>
+  <div class="station-grid">
+    <div class="panel"><h3>Conceitos obrigatórios</h3><ul><li class="">One-shot, interval e cron expression</li><li class="">Persistent job store</li><li class="">Tick, lease e misfire policy</li><li class="">Fresh session por execução</li><li class="">Agent mode versus no-agent mode</li><li class="">Delivery target e notification routing</li></ul></div>
+    <div class="panel build"><h3>Implementação prática</h3><ol><li class="">Modele job com schedule, timezone, prompt/script, skills, provider/model pin, workdir, budget e delivery.</li><li class="">Persista `next_run_at`, `last_run_at`, status, attempts e lease owner.</li><li class="">Implemente scheduler com lock para evitar dupla execução em múltiplas instâncias.</li><li class="">Execute cada run em sessão nova e desabilite criação recursiva de cron por padrão.</li><li class="">Suporte no-agent script com stdout limitado e exit status.</li><li class="">Entregue pela camada de delivery do gateway ou em arquivo, nunca por tool arbitrária.</li></ol></div>
+    <div class="panel"><h3>Artefatos entregáveis</h3><ul class="artifacts"><li class="">scheduler/models.py</li><li class="">scheduler/store.py</li><li class="">scheduler/engine.py</li><li class="">scheduler/executor.py</li><li class="">scheduler/delivery.py</li><li class="">scheduler/parser.py</li></ul></div>
+    <div class="panel acceptance"><h3>Definition of Done</h3><ul><li class="">Restart não perde jobs nem duplica run confirmado.</li><li class="">Timezone e horário de verão possuem testes.</li><li class="">Job sem provider/model autorizado falha fechado.</li><li class="">Run tem limite de custo, tentativas e falhas consecutivas.</li></ul></div>
+    <div class="panel"><h3>Testes mínimos</h3><ul><li class="">Fake clock.</li><li class="">Misfire após downtime.</li><li class="">Lease concorrente.</li><li class="">Job pause/resume/update.</li><li class="">No-agent timeout e output limit.</li><li class="">Delivery retry idempotente.</li></ul></div>
+    <div class="panel pitfalls"><h3>Armadilhas</h3><ul><li class="">Ler `jobs.json` sem lock e sobrescrever concorrência.</li><li class="">Permitir que job agende jobs infinitamente.</li><li class="">Executar sempre com credencial/modelo global mutável.</li></ul></div>
+  </div>
+  <div class="nerves"><div class="nerves-title"><span>Recursos validados</span><small>Trust by inspection</small></div><article class="nerve">
+          <div class="nerve-icon" aria-hidden="true">↗</div>
+          <div><a href="https://github.com/NousResearch/hermes-agent/blob/main/website/docs/user-guide/features/cron.md" target="_blank" rel="noopener noreferrer">Scheduled Tasks (Cron)</a>
+          <p>Cobre jobs únicos/recorrentes, skills, entrega, no-agent mode e restrições contra recursão.</p><span class="validated">✓ Inspecionado · fonte primária/oficial</span></div>
+        </article><article class="nerve">
+          <div class="nerve-icon" aria-hidden="true">↗</div>
+          <div><a href="https://docs.python.org/3/library/asyncio-task.html" target="_blank" rel="noopener noreferrer">Python asyncio — coroutines and tasks</a>
+          <p>Referência de structured concurrency, timeouts, cancelamento e cleanup assíncrono.</p><span class="validated">✓ Inspecionado · fonte primária/oficial</span></div>
+        </article><article class="nerve">
+          <div class="nerve-icon" aria-hidden="true">↗</div>
+          <div><a href="https://github.com/NousResearch/hermes-agent/blob/main/website/docs/developer-guide/gateway-internals.md" target="_blank" rel="noopener noreferrer">Gateway Internals</a>
+          <p>Explica boot, autorização, session keys, roteamento, entrega e adaptadores multicanal.</p><span class="validated">✓ Inspecionado · fonte primária/oficial</span></div>
+        </article></div>
+  <div class="checkpoint"><strong>Gate de avanço:</strong> marque esta estação apenas quando todos os itens da Definition of Done estiverem demonstráveis por teste, log ou artefato.</div>
+</section>
+<section class="station" id="station-18" data-title="adicione delegação, subagentes e orquestração kanban" data-phase="Fase 3 · Interfaces e Automação">
+  <div class="station-head">
+    <div class="station-number" style="--phase:#f59e0b">18</div>
+    <div class="station-heading"><span class="phase" style="--phase:#f59e0b">Fase 3 · Interfaces e Automação</span>
+      <h2>Adicione delegação, subagentes e orquestração Kanban</h2><p>Use isolamento e contratos de resultado; não replique contexto inteiro entre agentes.</p></div>
+    <label class="complete-control"><input type="checkbox" class="complete" data-id="18"><span>Concluída</span></label>
+  </div>
+  <div class="station-grid">
+    <div class="panel"><h3>Conceitos obrigatórios</h3><ul><li class="">Synchronous delegation</li><li class="">Isolated child context</li><li class="">Leaf versus orchestrator</li><li class="">Spawn depth e concurrency caps</li><li class="">Blackboard e task graph</li><li class="">Verifier e synthesizer</li></ul></div>
+    <div class="panel build"><h3>Implementação prática</h3><ol><li class="">Implemente `delegate_task` com goal, context mínimo, toolset, model override, budget e timeout.</li><li class="">Faça filhos retornarem summary estruturado + artifacts; não copie todos os steps para o pai.</li><li class="">Defina depth, fan-out e max_concurrent_children.</li><li class="">Cancele filhos quando o pai for interrompido, salvo workflow durável explícito.</li><li class="">Para trabalhos longos, modele board, task dependencies, claims, leases, retry fingerprint e verifier.</li><li class="">Adicione síntese final que referencia resultados e divergências, sem mascarar falhas.</li></ol></div>
+    <div class="panel"><h3>Artefatos entregáveis</h3><ul class="artifacts"><li class="">delegation/manager.py</li><li class="">delegation/contracts.py</li><li class="">delegation/budget.py</li><li class="">kanban/board.py</li><li class="">kanban/worker.py</li><li class="">kanban/verifier.py</li></ul></div>
+    <div class="panel acceptance"><h3>Definition of Done</h3><ul><li class="">Subagente não herda segredo/toolset além do necessário.</li><li class="">Falha de um filho não é reportada como sucesso agregado.</li><li class="">Depth e custo total são limitados.</li><li class="">Tasks duráveis sobrevivem ao processo e não são executadas por dois workers.</li></ul></div>
+    <div class="panel"><h3>Testes mínimos</h3><ul><li class="">Fan-out paralelo e cancelamento.</li><li class="">Child timeout.</li><li class="">Verifier rejeitando falso sucesso.</li><li class="">Lease expiry e worker crash.</li><li class="">DAG com dependência falha.</li></ul></div>
+    <div class="panel pitfalls"><h3>Armadilhas</h3><ul><li class="">Delegar a mesma tarefa recursivamente.</li><li class="">Retornar apenas “concluído” sem evidência.</li><li class="">Usar subagente para qualquer tool call simples.</li></ul></div>
+  </div>
+  <div class="nerves"><div class="nerves-title"><span>Recursos validados</span><small>Trust by inspection</small></div><article class="nerve">
+          <div class="nerve-icon" aria-hidden="true">↗</div>
+          <div><a href="https://github.com/NousResearch/hermes-agent/blob/main/website/docs/reference/tools-reference.md" target="_blank" rel="noopener noreferrer">Built-in Tools Reference</a>
+          <p>Inventaria toolsets e ferramentas de terminal, arquivos, browser, memória, cron, delegação e multimodal.</p><span class="validated">✓ Inspecionado · fonte primária/oficial</span></div>
+        </article><article class="nerve">
+          <div class="nerve-icon" aria-hidden="true">↗</div>
+          <div><a href="https://github.com/NousResearch/hermes-agent/blob/main/website/docs/user-guide/configuration.md" target="_blank" rel="noopener noreferrer">Configuration</a>
+          <p>Centraliza configuração, terminal backends, delegation, timeouts e comportamento operacional.</p><span class="validated">✓ Inspecionado · fonte primária/oficial</span></div>
+        </article><article class="nerve">
+          <div class="nerve-icon" aria-hidden="true">↗</div>
+          <div><a href="https://github.com/NousResearch/hermes-agent/blob/main/AGENTS.md" target="_blank" rel="noopener noreferrer">AGENTS.md — guia de desenvolvimento</a>
+          <p>Registra princípios de desenho: cache por conversa, core estreito, extensões por plugins/skills e padrões de contribuição.</p><span class="validated">✓ Inspecionado · fonte primária/oficial</span></div>
+        </article><article class="nerve">
+          <div class="nerve-icon" aria-hidden="true">↗</div>
+          <div><a href="https://github.com/NousResearch/hermes-agent/releases" target="_blank" rel="noopener noreferrer">Hermes Agent Releases</a>
+          <p>Fonte para mudanças arquiteturais, migrações e compatibilidade entre versões.</p><span class="validated">✓ Inspecionado · fonte primária/oficial</span></div>
+        </article></div>
+  <div class="checkpoint"><strong>Gate de avanço:</strong> marque esta estação apenas quando todos os itens da Definition of Done estiverem demonstráveis por teste, log ou artefato.</div>
+</section>
+<section class="station" id="station-19" data-title="integre mcp e conectores externos com governança" data-phase="Fase 3 · Interfaces e Automação">
+  <div class="station-head">
+    <div class="station-number" style="--phase:#f59e0b">19</div>
+    <div class="station-heading"><span class="phase" style="--phase:#f59e0b">Fase 3 · Interfaces e Automação</span>
+      <h2>Integre MCP e conectores externos com governança</h2><p>MCP amplia capabilities dinamicamente; isso exige discovery, namespacing e políticas fortes.</p></div>
+    <label class="complete-control"><input type="checkbox" class="complete" data-id="19"><span>Concluída</span></label>
+  </div>
+  <div class="station-grid">
+    <div class="panel"><h3>Conceitos obrigatórios</h3><ul><li class="">Host, client e server MCP</li><li class="">Lifecycle, initialize e capability negotiation</li><li class="">stdio e transportes remotos</li><li class="">Tools, resources e prompts</li><li class="">Namespacing e schema translation</li><li class="">Trust e tool poisoning</li></ul></div>
+    <div class="panel build"><h3>Implementação prática</h3><ol><li class="">Implemente `MCPManager` com config por servidor e lifecycle supervisionado.</li><li class="">Negocie capabilities e registre tools como `mcp_&lt;server&gt;_&lt;tool&gt;`.</li><li class="">Mapeie JSON Schema MCP para o registry interno sem remover constraints.</li><li class="">Aplique allowlist por servidor, timeout, max output e approval por risco.</li><li class="">Isole stdio servers em subprocesso/sandbox e proteja env.</li><li class="">Registre versão, fingerprint e mudança de schemas para exigir revisão.</li></ol></div>
+    <div class="panel"><h3>Artefatos entregáveis</h3><ul class="artifacts"><li class="">mcp/manager.py</li><li class="">mcp/client.py</li><li class="">mcp/transport_stdio.py</li><li class="">mcp/transport_http.py</li><li class="">mcp/adapter.py</li><li class="">mcp/policy.py</li></ul></div>
+    <div class="panel acceptance"><h3>Definition of Done</h3><ul><li class="">Servidor indisponível não bloqueia tools locais.</li><li class="">Mudança inesperada de schema não entra silenciosamente em produção.</li><li class="">Names não colidem entre servidores.</li><li class="">Resource externo é tratado como dado não confiável, não como system instruction.</li></ul></div>
+    <div class="panel"><h3>Testes mínimos</h3><ul><li class="">Fake MCP server.</li><li class="">Initialize timeout.</li><li class="">Schema change detection.</li><li class="">Tool poisoning fixture.</li><li class="">Server crash/restart.</li><li class="">Output oversized.</li></ul></div>
+    <div class="panel pitfalls"><h3>Armadilhas</h3><ul><li class="">Confiar em descrição fornecida pelo servidor.</li><li class="">Passar todas as variáveis de ambiente ao subprocesso.</li><li class="">Permitir tools remotas sem mesma pipeline de approval.</li></ul></div>
+  </div>
+  <div class="nerves"><div class="nerves-title"><span>Recursos validados</span><small>Trust by inspection</small></div><article class="nerve">
+          <div class="nerve-icon" aria-hidden="true">↗</div>
+          <div><a href="https://modelcontextprotocol.io/docs/getting-started/intro" target="_blank" rel="noopener noreferrer">Model Context Protocol — documentação</a>
+          <p>Define o padrão host/cliente/servidor para conectar agentes a ferramentas e fontes externas.</p><span class="validated">✓ Inspecionado · fonte primária/oficial</span></div>
+        </article><article class="nerve">
+          <div class="nerve-icon" aria-hidden="true">↗</div>
+          <div><a href="https://modelcontextprotocol.io/specification/2025-11-25" target="_blank" rel="noopener noreferrer">MCP Specification</a>
+          <p>Especificação normativa para capabilities, transportes, lifecycle e mensagens do protocolo.</p><span class="validated">✓ Inspecionado · fonte primária/oficial</span></div>
+        </article><article class="nerve">
+          <div class="nerve-icon" aria-hidden="true">↗</div>
+          <div><a href="https://github.com/NousResearch/hermes-agent/blob/main/website/docs/developer-guide/tools-runtime.md" target="_blank" rel="noopener noreferrer">Tools Runtime</a>
+          <p>Documenta registro, descoberta, schemas, dispatch, disponibilidade, erros e ambientes de execução.</p><span class="validated">✓ Inspecionado · fonte primária/oficial</span></div>
+        </article><article class="nerve">
+          <div class="nerve-icon" aria-hidden="true">↗</div>
+          <div><a href="https://genai.owasp.org/llm-top-10/" target="_blank" rel="noopener noreferrer">OWASP Top 10 for LLM and GenAI Applications</a>
+          <p>Base para threat modeling de prompt injection, tool misuse, exposição de dados e autonomia excessiva.</p><span class="validated">✓ Inspecionado · fonte primária/oficial</span></div>
+        </article></div>
+  <div class="checkpoint"><strong>Gate de avanço:</strong> marque esta estação apenas quando todos os itens da Definition of Done estiverem demonstráveis por teste, log ou artefato.</div>
+</section>
+<section class="station" id="station-20" data-title="implemente web, browser, visão, voz e geração multimodal" data-phase="Fase 3 · Interfaces e Automação">
+  <div class="station-head">
+    <div class="station-number" style="--phase:#f59e0b">20</div>
+    <div class="station-heading"><span class="phase" style="--phase:#f59e0b">Fase 3 · Interfaces e Automação</span>
+      <h2>Implemente web, browser, visão, voz e geração multimodal</h2><p>Separe captura, interpretação e ação; conteúdo externo deve permanecer não confiável.</p></div>
+    <label class="complete-control"><input type="checkbox" class="complete" data-id="20"><span>Concluída</span></label>
+  </div>
+  <div class="station-grid">
+    <div class="panel"><h3>Conceitos obrigatórios</h3><ul><li class="">Search versus extract versus browser automation</li><li class="">DOM/CDP versus visão</li><li class="">Uploads e artifacts</li><li class="">STT, TTS e voice sessions</li><li class="">Model capability routing</li><li class="">Indirect prompt injection</li></ul></div>
+    <div class="panel build"><h3>Implementação prática</h3><ol><li class="">Crie interfaces separadas para web search, page extract, browser session, vision, STT, TTS e generation.</li><li class="">Armazene imagens/áudios como artifacts com MIME, hash, tamanho e política de retenção.</li><li class="">Use modelo auxiliar para visão/compressão quando apropriado.</li><li class="">No browser, mantenha session ID, domínio atual, screenshots e ações auditadas.</li><li class="">Exija aprovação para login, envio, compra, exclusão ou publicação.</li><li class="">Marque texto extraído como untrusted e não permita que ele altere policies.</li></ol></div>
+    <div class="panel"><h3>Artefatos entregáveis</h3><ul class="artifacts"><li class="">multimodal/artifacts.py</li><li class="">web/search.py</li><li class="">browser/session.py</li><li class="">vision/analyzer.py</li><li class="">voice/stt.py</li><li class="">voice/tts.py</li></ul></div>
+    <div class="panel acceptance"><h3>Definition of Done</h3><ul><li class="">Arquivo inválido ou enorme é rejeitado antes do provider.</li><li class="">Browser não acessa redes privadas por URL externa sem policy.</li><li class="">Conteúdo de página não pode autorizar ação.</li><li class="">Transcrição e áudio têm controles de privacidade e retenção.</li></ul></div>
+    <div class="panel"><h3>Testes mínimos</h3><ul><li class="">MIME spoofing e zip bomb simulada.</li><li class="">SSRF fixtures.</li><li class="">Prompt injection em página.</li><li class="">Browser action approval.</li><li class="">STT/TTS provider failure.</li></ul></div>
+    <div class="panel pitfalls"><h3>Armadilhas</h3><ul><li class="">Usar a mesma tool para busca e ação no browser.</li><li class="">Enviar imagem sem limite/base64 gigante no histórico.</li><li class="">Interpretar instrução encontrada na web como pedido do usuário.</li></ul></div>
+  </div>
+  <div class="nerves"><div class="nerves-title"><span>Recursos validados</span><small>Trust by inspection</small></div><article class="nerve">
+          <div class="nerve-icon" aria-hidden="true">↗</div>
+          <div><a href="https://github.com/NousResearch/hermes-agent/blob/main/website/docs/user-guide/features/overview.md" target="_blank" rel="noopener noreferrer">Features Overview</a>
+          <p>Confirma voz, browser, visão, imagens e outras capacidades multimodais.</p><span class="validated">✓ Inspecionado · fonte primária/oficial</span></div>
+        </article><article class="nerve">
+          <div class="nerve-icon" aria-hidden="true">↗</div>
+          <div><a href="https://github.com/NousResearch/hermes-agent/blob/main/website/docs/user-guide/features/tool-gateway.md" target="_blank" rel="noopener noreferrer">Nous Tool Gateway</a>
+          <p>Agrupa web search, imagem, TTS e browser cloud por backends configuráveis.</p><span class="validated">✓ Inspecionado · fonte primária/oficial</span></div>
+        </article><article class="nerve">
+          <div class="nerve-icon" aria-hidden="true">↗</div>
+          <div><a href="https://github.com/NousResearch/hermes-agent/blob/main/website/docs/reference/tools-reference.md" target="_blank" rel="noopener noreferrer">Built-in Tools Reference</a>
+          <p>Inventaria toolsets e ferramentas de terminal, arquivos, browser, memória, cron, delegação e multimodal.</p><span class="validated">✓ Inspecionado · fonte primária/oficial</span></div>
+        </article><article class="nerve">
+          <div class="nerve-icon" aria-hidden="true">↗</div>
+          <div><a href="https://genai.owasp.org/llm-top-10/" target="_blank" rel="noopener noreferrer">OWASP Top 10 for LLM and GenAI Applications</a>
+          <p>Base para threat modeling de prompt injection, tool misuse, exposição de dados e autonomia excessiva.</p><span class="validated">✓ Inspecionado · fonte primária/oficial</span></div>
+        </article></div>
+  <div class="checkpoint"><strong>Gate de avanço:</strong> marque esta estação apenas quando todos os itens da Definition of Done estiverem demonstráveis por teste, log ou artefato.</div>
+</section>
+<section class="station" id="station-21" data-title="implemente segurança, autorização e defesa em profundidade" data-phase="Fase 4 · Produção">
+  <div class="station-head">
+    <div class="station-number" style="--phase:#10b981">21</div>
+    <div class="station-heading"><span class="phase" style="--phase:#10b981">Fase 4 · Produção</span>
+      <h2>Implemente segurança, autorização e defesa em profundidade</h2><p>O modelo é um componente não confiável com poder delegado; políticas devem existir fora dele.</p></div>
+    <label class="complete-control"><input type="checkbox" class="complete" data-id="21"><span>Concluída</span></label>
+  </div>
+  <div class="station-grid">
+    <div class="panel"><h3>Conceitos obrigatórios</h3><ul><li class="">Confused deputy e prompt injection</li><li class="">Capability-based access</li><li class="">Human-in-the-loop approval</li><li class="">Secret isolation e redaction</li><li class="">SSRF, path traversal e command injection</li><li class="">Supply-chain e plugin trust</li></ul></div>
+    <div class="panel build"><h3>Implementação prática</h3><ol><li class="">Crie threat model por data flow e classifique cada tool por leitura/escrita/reversibilidade/impacto.</li><li class="">Implemente `PolicyEngine` determinístico antes da aprovação humana.</li><li class="">Mostre ao aprovador ação, alvo, parâmetros sanitizados, efeito, origem e validade.</li><li class="">Use least privilege por perfil, canal, usuário, toolset, workspace e ambiente.</li><li class="">Bloqueie acesso a metadata endpoints, loopback/private ranges e file URLs quando não autorizados.</li><li class="">Assine/audite plugins distribuídos, fixe dependências e rode scanners no CI.</li></ol></div>
+    <div class="panel"><h3>Artefatos entregáveis</h3><ul class="artifacts"><li class="">security/policy.py</li><li class="">security/capabilities.py</li><li class="">security/approvals.py</li><li class="">security/redaction.py</li><li class="">security/network.py</li><li class="">THREAT_MODEL.md</li></ul></div>
+    <div class="panel acceptance"><h3>Definition of Done</h3><ul><li class="">Prompt injection não consegue elevar capability.</li><li class="">Segredo não aparece em prompt, tool output, log ou delivery.</li><li class="">Aprovação expira e está vinculada ao hash exato da ação.</li><li class="">Ações externas têm audit trail imutável suficiente para investigação.</li></ul></div>
+    <div class="panel"><h3>Testes mínimos</h3><ul><li class="">Adversarial prompt suite.</li><li class="">SSRF/path traversal/command injection.</li><li class="">Approval replay e parameter swap.</li><li class="">Cross-user isolation.</li><li class="">Secret canary test.</li><li class="">Plugin malicious fixture.</li></ul></div>
+    <div class="panel pitfalls"><h3>Armadilhas</h3><ul><li class="">Pedir ao próprio LLM para decidir se uma ação é segura.</li><li class="">Aprovar “qualquer comando pelos próximos 10 minutos”.</li><li class="">Redigir apenas logs e esquecer traces/artifacts.</li></ul></div>
+  </div>
+  <div class="nerves"><div class="nerves-title"><span>Recursos validados</span><small>Trust by inspection</small></div><article class="nerve">
+          <div class="nerve-icon" aria-hidden="true">↗</div>
+          <div><a href="https://genai.owasp.org/llm-top-10/" target="_blank" rel="noopener noreferrer">OWASP Top 10 for LLM and GenAI Applications</a>
+          <p>Base para threat modeling de prompt injection, tool misuse, exposição de dados e autonomia excessiva.</p><span class="validated">✓ Inspecionado · fonte primária/oficial</span></div>
+        </article><article class="nerve">
+          <div class="nerve-icon" aria-hidden="true">↗</div>
+          <div><a href="https://owasp.org/Top10/2025/en/" target="_blank" rel="noopener noreferrer">OWASP Top 10:2025</a>
+          <p>Complementa riscos tradicionais da API e do gateway: autenticação, autorização, SSRF e configuração.</p><span class="validated">✓ Inspecionado · fonte primária/oficial</span></div>
+        </article><article class="nerve">
+          <div class="nerve-icon" aria-hidden="true">↗</div>
+          <div><a href="https://github.com/NousResearch/hermes-agent/blob/main/AGENTS.md" target="_blank" rel="noopener noreferrer">AGENTS.md — guia de desenvolvimento</a>
+          <p>Registra princípios de desenho: cache por conversa, core estreito, extensões por plugins/skills e padrões de contribuição.</p><span class="validated">✓ Inspecionado · fonte primária/oficial</span></div>
+        </article><article class="nerve">
+          <div class="nerve-icon" aria-hidden="true">↗</div>
+          <div><a href="https://modelcontextprotocol.io/specification/2025-11-25" target="_blank" rel="noopener noreferrer">MCP Specification</a>
+          <p>Especificação normativa para capabilities, transportes, lifecycle e mensagens do protocolo.</p><span class="validated">✓ Inspecionado · fonte primária/oficial</span></div>
+        </article></div>
+  <div class="checkpoint"><strong>Gate de avanço:</strong> marque esta estação apenas quando todos os itens da Definition of Done estiverem demonstráveis por teste, log ou artefato.</div>
+</section>
+<section class="station" id="station-22" data-title="adicione observabilidade, auditoria e finops" data-phase="Fase 4 · Produção">
+  <div class="station-head">
+    <div class="station-number" style="--phase:#10b981">22</div>
+    <div class="station-heading"><span class="phase" style="--phase:#10b981">Fase 4 · Produção</span>
+      <h2>Adicione observabilidade, auditoria e FinOps</h2><p>Sem telemetria por run, o agente é caro, opaco e impossível de depurar.</p></div>
+    <label class="complete-control"><input type="checkbox" class="complete" data-id="22"><span>Concluída</span></label>
+  </div>
+  <div class="station-grid">
+    <div class="panel"><h3>Conceitos obrigatórios</h3><ul><li class="">Structured logs</li><li class="">Distributed traces e spans</li><li class="">Metrics e exemplars</li><li class="">Token/cost accounting</li><li class="">Audit log versus application log</li><li class="">SLO, alertas e cardinalidade</li></ul></div>
+    <div class="panel build"><h3>Implementação prática</h3><ol><li class="">Instrumente spans: inbound, context build, provider call, tool execution, memory, persistence e delivery.</li><li class="">Use logs JSON com IDs de correlação, mas sem conteúdo sensível por padrão.</li><li class="">Mensure latência p50/p95/p99, erro, retries, tool success, queue depth, compression e cache hits.</li><li class="">Calcule tokens e custo por provider/model/run/profile/job/tool.</li><li class="">Crie budgets com alertas e hard limits para cron/subagentes.</li><li class="">Separe audit events append-only de logs rotativos de aplicação.</li></ol></div>
+    <div class="panel"><h3>Artefatos entregáveis</h3><ul class="artifacts"><li class="">observability/logging.py</li><li class="">observability/tracing.py</li><li class="">observability/metrics.py</li><li class="">observability/cost.py</li><li class="">dashboards/</li><li class="">alerts/</li></ul></div>
+    <div class="panel acceptance"><h3>Definition of Done</h3><ul><li class="">Um run pode ser reconstruído por IDs sem ler dados privados.</li><li class="">É possível identificar custo e latência por módulo.</li><li class="">Cardinalidade é limitada e não usa prompt como label.</li><li class="">Alertas cobrem scheduler parado, fila crescendo, taxa de erro e gasto anormal.</li></ul></div>
+    <div class="panel"><h3>Testes mínimos</h3><ul><li class="">Telemetry exporter indisponível.</li><li class="">Redaction em todos os signals.</li><li class="">Cost calculation golden tests.</li><li class="">Load test de cardinalidade.</li><li class="">Trace continuity gateway→agent→tool→delivery.</li></ul></div>
+    <div class="panel pitfalls"><h3>Armadilhas</h3><ul><li class="">Logar prompts completos em produção.</li><li class="">Usar session ID como label de métrica.</li><li class="">Não contar custo de summarizer, visão e subagentes.</li></ul></div>
+  </div>
+  <div class="nerves"><div class="nerves-title"><span>Recursos validados</span><small>Trust by inspection</small></div><article class="nerve">
+          <div class="nerve-icon" aria-hidden="true">↗</div>
+          <div><a href="https://opentelemetry.io/docs/languages/python/" target="_blank" rel="noopener noreferrer">OpenTelemetry Python</a>
+          <p>Referência para traces, métricas e logs correlacionados.</p><span class="validated">✓ Inspecionado · fonte primária/oficial</span></div>
+        </article><article class="nerve">
+          <div class="nerve-icon" aria-hidden="true">↗</div>
+          <div><a href="https://github.com/NousResearch/hermes-agent/blob/main/website/docs/developer-guide/agent-loop.md" target="_blank" rel="noopener noreferrer">Agent Loop Internals</a>
+          <p>Detalha ciclo do turno, tool calls, cancelamento, callbacks, budgets, fallback, compressão e persistência.</p><span class="validated">✓ Inspecionado · fonte primária/oficial</span></div>
+        </article><article class="nerve">
+          <div class="nerve-icon" aria-hidden="true">↗</div>
+          <div><a href="https://github.com/NousResearch/hermes-agent/blob/main/website/docs/developer-guide/gateway-internals.md" target="_blank" rel="noopener noreferrer">Gateway Internals</a>
+          <p>Explica boot, autorização, session keys, roteamento, entrega e adaptadores multicanal.</p><span class="validated">✓ Inspecionado · fonte primária/oficial</span></div>
+        </article></div>
+  <div class="checkpoint"><strong>Gate de avanço:</strong> marque esta estação apenas quando todos os itens da Definition of Done estiverem demonstráveis por teste, log ou artefato.</div>
+</section>
+<section class="station" id="station-23" data-title="construa uma estratégia completa de testes e avaliações" data-phase="Fase 4 · Produção">
+  <div class="station-head">
+    <div class="station-number" style="--phase:#10b981">23</div>
+    <div class="station-heading"><span class="phase" style="--phase:#10b981">Fase 4 · Produção</span>
+      <h2>Construa uma estratégia completa de testes e avaliações</h2><p>Teste determinismo ao redor do componente probabilístico e avalie comportamento fim a fim.</p></div>
+    <label class="complete-control"><input type="checkbox" class="complete" data-id="23"><span>Concluída</span></label>
+  </div>
+  <div class="station-grid">
+    <div class="panel"><h3>Conceitos obrigatórios</h3><ul><li class="">Unit, contract, integration e E2E</li><li class="">Fake model e replay</li><li class="">Golden trajectories</li><li class="">Evals de tool selection e task success</li><li class="">Chaos e fault injection</li><li class="">Security regression e load testing</li></ul></div>
+    <div class="panel build"><h3>Implementação prática</h3><ol><li class="">Crie provider fake scriptável para respostas, streams, tool calls e erros.</li><li class="">Mantenha contract suites reutilizadas por providers, tools, stores, adapters e plugins.</li><li class="">Grave trajectories sanitizadas para replay determinístico.</li><li class="">Monte eval set com tarefas reais, critérios objetivos e judge apenas como sinal secundário.</li><li class="">Adicione fault injection para DB locked, provider 429, webhook duplicado, process crash e disk full.</li><li class="">Execute pipeline: lint → types → unit → integration → security → mutation → performance → E2E.</li></ol></div>
+    <div class="panel"><h3>Artefatos entregáveis</h3><ul class="artifacts"><li class="">tests/fakes/</li><li class="">tests/contracts/</li><li class="">tests/integration/</li><li class="">evals/datasets/</li><li class="">evals/runner.py</li><li class="">chaos/scenarios.py</li></ul></div>
+    <div class="panel acceptance"><h3>Definition of Done</h3><ul><li class="">Core logic possui cobertura de branches relevante, não só linhas.</li><li class="">Toda correção de incidente adiciona teste de regressão.</li><li class="">Evals reportam sucesso, custo, latência e segurança.</li><li class="">Build falha em regressão acima de thresholds definidos.</li></ul></div>
+    <div class="panel"><h3>Testes mínimos</h3><ul><li class="">Parametrização de providers e backends.</li><li class="">Mutation testing em policy e scheduler.</li><li class="">K6/Locust para API/gateway.</li><li class="">Soak test de 24h com fake model.</li><li class="">Red-team corpus automatizado.</li></ul></div>
+    <div class="panel pitfalls"><h3>Armadilhas</h3><ul><li class="">Testes chamando API paga por padrão.</li><li class="">Usar snapshot gigante sem invariantes.</li><li class="">Aceitar LLM judge como única verdade.</li></ul></div>
+  </div>
+  <div class="nerves"><div class="nerves-title"><span>Recursos validados</span><small>Trust by inspection</small></div><article class="nerve">
+          <div class="nerve-icon" aria-hidden="true">↗</div>
+          <div><a href="https://docs.pytest.org/en/stable/" target="_blank" rel="noopener noreferrer">pytest documentation</a>
+          <p>Base para fixtures, parametrização, mocks, integração e testes assíncronos.</p><span class="validated">✓ Inspecionado · fonte primária/oficial</span></div>
+        </article><article class="nerve">
+          <div class="nerve-icon" aria-hidden="true">↗</div>
+          <div><a href="https://github.com/NousResearch/hermes-agent/blob/main/website/docs/developer-guide/architecture.md" target="_blank" rel="noopener noreferrer">Architecture — Hermes Agent</a>
+          <p>Mapeia entry points, AIAgent, prompt builder, providers, ferramentas, persistência, gateway, cron, plugins e testes.</p><span class="validated">✓ Inspecionado · fonte primária/oficial</span></div>
+        </article><article class="nerve">
+          <div class="nerve-icon" aria-hidden="true">↗</div>
+          <div><a href="https://github.com/NousResearch/hermes-agent/blob/main/AGENTS.md" target="_blank" rel="noopener noreferrer">AGENTS.md — guia de desenvolvimento</a>
+          <p>Registra princípios de desenho: cache por conversa, core estreito, extensões por plugins/skills e padrões de contribuição.</p><span class="validated">✓ Inspecionado · fonte primária/oficial</span></div>
+        </article></div>
+  <div class="checkpoint"><strong>Gate de avanço:</strong> marque esta estação apenas quando todos os itens da Definition of Done estiverem demonstráveis por teste, log ou artefato.</div>
+</section>
+<section class="station" id="station-24" data-title="empacote, implante e opere com persistência e recuperação" data-phase="Fase 4 · Produção">
+  <div class="station-head">
+    <div class="station-number" style="--phase:#10b981">24</div>
+    <div class="station-heading"><span class="phase" style="--phase:#10b981">Fase 4 · Produção</span>
+      <h2>Empacote, implante e opere com persistência e recuperação</h2><p>O daemon deve sobreviver a restart, upgrade, indisponibilidade e corrupção parcial.</p></div>
+    <label class="complete-control"><input type="checkbox" class="complete" data-id="24"><span>Concluída</span></label>
+  </div>
+  <div class="station-grid">
+    <div class="panel"><h3>Conceitos obrigatórios</h3><ul><li class="">Immutable artifact + mutable state</li><li class="">systemd, Docker e Kubernetes</li><li class="">Health, readiness e graceful shutdown</li><li class="">Backup e restore</li><li class="">Schema migration e rollback</li><li class="">Upgrade channels e compatibility</li></ul></div>
+    <div class="panel build"><h3>Implementação prática</h3><ol><li class="">Produza wheel e imagem multi-stage não-root; gere SBOM e assine artefatos.</li><li class="">Para single node, ofereça systemd e Docker Compose com volume persistente.</li><li class="">Implemente `/health`, `/ready` e status de subsistemas; readiness falha quando não pode aceitar trabalho.</li><li class="">No shutdown, pare ingress, aguarde runs, renove/solte leases, feche DB e providers.</li><li class="">Faça backup consistente de DB, memories, config sem segredos exportáveis e artifacts.</li><li class="">Implemente upgrade preflight, migration backup, smoke test e rollback documentado.</li></ol></div>
+    <div class="panel"><h3>Artefatos entregáveis</h3><ul class="artifacts"><li class="">Dockerfile</li><li class="">compose.yaml</li><li class="">deploy/hermes.service</li><li class="">deploy/helm/</li><li class="">scripts/backup.sh</li><li class="">RUNBOOK.md</li></ul></div>
+    <div class="panel acceptance"><h3>Definition of Done</h3><ul><li class="">Restart automático mantém sessões/jobs e não duplica execução.</li><li class="">Restore drill em ambiente limpo passa.</li><li class="">Upgrade incompatível é bloqueado antes de alterar estado.</li><li class="">Processo roda sem root e com filesystem read-only quando viável.</li></ul></div>
+    <div class="panel"><h3>Testes mínimos</h3><ul><li class="">Container smoke test.</li><li class="">SIGTERM durante provider e tool.</li><li class="">Restart policy.</li><li class="">Migration/rollback rehearsal.</li><li class="">Disaster recovery game day.</li><li class="">Kubernetes disruption test opcional.</li></ul></div>
+    <div class="panel pitfalls"><h3>Armadilhas</h3><ul><li class="">Colocar DB dentro da camada efêmera da imagem.</li><li class="">Health retornar 200 mesmo com scheduler morto.</li><li class="">Atualizar automaticamente sem backup nem compatibilidade.</li></ul></div>
+  </div>
+  <div class="nerves"><div class="nerves-title"><span>Recursos validados</span><small>Trust by inspection</small></div><article class="nerve">
+          <div class="nerve-icon" aria-hidden="true">↗</div>
+          <div><a href="https://github.com/NousResearch/hermes-agent/blob/main/website/docs/user-guide/docker.md" target="_blank" rel="noopener noreferrer">Hermes Agent — Docker</a>
+          <p>Distingue executar o agente em container de usar Docker como sandbox de terminal.</p><span class="validated">✓ Inspecionado · fonte primária/oficial</span></div>
+        </article><article class="nerve">
+          <div class="nerve-icon" aria-hidden="true">↗</div>
+          <div><a href="https://docs.docker.com/engine/containers/start-containers-automatically/" target="_blank" rel="noopener noreferrer">Docker restart policies</a>
+          <p>Define reinício supervisionado e limites operacionais de containers persistentes.</p><span class="validated">✓ Inspecionado · fonte primária/oficial</span></div>
+        </article><article class="nerve">
+          <div class="nerve-icon" aria-hidden="true">↗</div>
+          <div><a href="https://www.freedesktop.org/software/systemd/man/systemd.service.html" target="_blank" rel="noopener noreferrer">systemd.service</a>
+          <p>Referência de supervisão, restart, ambiente, usuário e lifecycle de serviços Linux.</p><span class="validated">✓ Inspecionado · fonte primária/oficial</span></div>
+        </article><article class="nerve">
+          <div class="nerve-icon" aria-hidden="true">↗</div>
+          <div><a href="https://github.com/NousResearch/hermes-agent/releases" target="_blank" rel="noopener noreferrer">Hermes Agent Releases</a>
+          <p>Fonte para mudanças arquiteturais, migrações e compatibilidade entre versões.</p><span class="validated">✓ Inspecionado · fonte primária/oficial</span></div>
+        </article></div>
+  <div class="checkpoint"><strong>Gate de avanço:</strong> marque esta estação apenas quando todos os itens da Definition of Done estiverem demonstráveis por teste, log ou artefato.</div>
+</section>
+<section class="station" id="station-25" data-title="documente operação, extensibilidade e distribuição de perfis" data-phase="Fase 4 · Produção">
+  <div class="station-head">
+    <div class="station-number" style="--phase:#10b981">25</div>
+    <div class="station-heading"><span class="phase" style="--phase:#10b981">Fase 4 · Produção</span>
+      <h2>Documente operação, extensibilidade e distribuição de perfis</h2><p>Um sistema completo precisa ser instalável, diagnosticável e transferível sem vazar estado pessoal.</p></div>
+    <label class="complete-control"><input type="checkbox" class="complete" data-id="25"><span>Concluída</span></label>
+  </div>
+  <div class="station-grid">
+    <div class="panel"><h3>Conceitos obrigatórios</h3><ul><li class="">Install/setup/doctor</li><li class="">Runbooks e troubleshooting</li><li class="">Plugin/skill authoring guides</li><li class="">Profile distribution</li><li class="">Config reference gerada</li><li class="">Deprecation policy</li></ul></div>
+    <div class="panel build"><h3>Implementação prática</h3><ol><li class="">Crie setup wizard idempotente e `doctor` com checks de DB, provider, tools, gateway, cron e permissions.</li><li class="">Gere referência de config e env a partir dos modelos, evitando documentação divergente.</li><li class="">Publique guias para criar tool, plugin, memory provider, platform adapter e skill.</li><li class="">Implemente export de distribuição contendo personalidade, skills, jobs desabilitados, MCP e config sem secrets/memory.</li><li class="">Adote changelog, migration notes e janela de depreciação.</li><li class="">Inclua runbooks para 429, DB locked, gateway offline, job duplicado, memória incorreta e tool perigosa.</li></ol></div>
+    <div class="panel"><h3>Artefatos entregáveis</h3><ul class="artifacts"><li class="">docs/INSTALL.md</li><li class="">docs/OPERATIONS.md</li><li class="">docs/EXTENDING.md</li><li class="">docs/CONFIG_REFERENCE.md</li><li class="">doctor.py</li><li class="">distribution.py</li></ul></div>
+    <div class="panel acceptance"><h3>Definition of Done</h3><ul><li class="">Um operador novo instala e executa pelo guia sem conhecimento tribal.</li><li class="">Doctor aponta causa provável e correção, sem imprimir segredo.</li><li class="">Distribuição instalada cria agente funcional com memória vazia.</li><li class="">Toda breaking change tem migração e nota de release.</li></ul></div>
+    <div class="panel"><h3>Testes mínimos</h3><ul><li class="">Docs code blocks no CI.</li><li class="">Golden output do doctor.</li><li class="">Export/import de distribuição.</li><li class="">Secret scanning do pacote exportado.</li></ul></div>
+    <div class="panel pitfalls"><h3>Armadilhas</h3><ul><li class="">Exportar `.env` junto do perfil.</li><li class="">Documentar comandos que não são testados.</li><li class="">Manter configuração duplicada em vários lugares.</li></ul></div>
+  </div>
+  <div class="nerves"><div class="nerves-title"><span>Recursos validados</span><small>Trust by inspection</small></div><article class="nerve">
+          <div class="nerve-icon" aria-hidden="true">↗</div>
+          <div><a href="https://github.com/NousResearch/hermes-agent/blob/main/website/docs/user-guide/profile-distributions.md" target="_blank" rel="noopener noreferrer">Profile Distributions</a>
+          <p>Empacota personalidade, skills, cron, MCP e configuração sem transportar memórias ou segredos.</p><span class="validated">✓ Inspecionado · fonte primária/oficial</span></div>
+        </article><article class="nerve">
+          <div class="nerve-icon" aria-hidden="true">↗</div>
+          <div><a href="https://github.com/NousResearch/hermes-agent/blob/main/website/docs/user-guide/profiles.md" target="_blank" rel="noopener noreferrer">Profiles: Running Multiple Agents</a>
+          <p>Isola config, chaves, memória, sessões, skills, cron e estado para múltiplos agentes.</p><span class="validated">✓ Inspecionado · fonte primária/oficial</span></div>
+        </article><article class="nerve">
+          <div class="nerve-icon" aria-hidden="true">↗</div>
+          <div><a href="https://github.com/NousResearch/hermes-agent/blob/main/website/docs/guides/build-a-hermes-plugin.md" target="_blank" rel="noopener noreferrer">Build a Hermes Plugin</a>
+          <p>Guia completo com ferramentas, hooks, dados e skill empacotada.</p><span class="validated">✓ Inspecionado · fonte primária/oficial</span></div>
+        </article><article class="nerve">
+          <div class="nerve-icon" aria-hidden="true">↗</div>
+          <div><a href="https://github.com/NousResearch/hermes-agent/blob/main/website/docs/reference/environment-variables.md" target="_blank" rel="noopener noreferrer">Environment Variables Reference</a>
+          <p>Distingue segredos em .env de comportamento não secreto em config.yaml.</p><span class="validated">✓ Inspecionado · fonte primária/oficial</span></div>
+        </article></div>
+  <div class="checkpoint"><strong>Gate de avanço:</strong> marque esta estação apenas quando todos os itens da Definition of Done estiverem demonstráveis por teste, log ou artefato.</div>
+</section>
+<section class="station" id="station-26" data-title="integre o hermes-like por fatias verticais e valide paridade" data-phase="Fase 5 · Projeto Final">
+  <div class="station-head">
+    <div class="station-number" style="--phase:#f43f5e">26</div>
+    <div class="station-heading"><span class="phase" style="--phase:#f43f5e">Fase 5 · Projeto Final</span>
+      <h2>Integre o Hermes-like por fatias verticais e valide paridade</h2><p>Conclua com um agente funcional do zero ao deploy, sem big-bang e com gates objetivos.</p></div>
+    <label class="complete-control"><input type="checkbox" class="complete" data-id="26"><span>Concluída</span></label>
+  </div>
+  <div class="station-grid">
+    <div class="panel"><h3>Conceitos obrigatórios</h3><ul><li class="">Vertical slices</li><li class="">Progressive hardening</li><li class="">Feature parity matrix</li><li class="">Production readiness review</li><li class="">Canary e rollback</li><li class="">Backlog pós-MVP</li></ul></div>
+    <div class="panel build"><h3>Implementação prática</h3><ol><li class="">Slice 1: CLI + provider fake/real + resposta direta + SQLite.</li><li class="">Slice 2: registry + arquivos + terminal Docker + approvals.</li><li class="">Slice 3: sessions/resume + FTS5 + memória built-in + compressão.</li><li class="">Slice 4: Telegram/Slack adapter + outbox + auth + restart.</li><li class="">Slice 5: cron + delivery + background process + budgets.</li><li class="">Slice 6: plugins + skills + MCP + subagentes.</li><li class="">Slice 7: multimodal + observabilidade + security evals.</li><li class="">Slice 8: Docker/systemd deploy, backup/restore, canary e documentação.</li></ol></div>
+    <div class="panel"><h3>Artefatos entregáveis</h3><ul class="artifacts"><li class="">demo/</li><li class="">PARITY_MATRIX.md</li><li class="">PRODUCTION_READINESS_REVIEW.md</li><li class="">SECURITY_REVIEW.md</li><li class="">PERFORMANCE_REPORT.md</li><li class="">RELEASE_1_0.md</li></ul></div>
+    <div class="panel acceptance"><h3>Definition of Done</h3><ul><li class="">Usuário conversa por CLI e um canal, retoma sessão e pesquisa histórico.</li><li class="">Agente usa tools com approval, sandbox e audit trail.</li><li class="">Memória é aprendida, exibida, corrigida e esquecida.</li><li class="">Cron executa e entrega após restart sem duplicação.</li><li class="">Provider falha e fallback preserva o turno.</li><li class="">Backup restaura um perfil em máquina limpa.</li><li class="">Security/eval suite e SLOs definidos passam.</li></ul></div>
+    <div class="panel"><h3>Testes mínimos</h3><ul><li class="">Demo automatizada end-to-end.</li><li class="">Chaos day com provider, DB, gateway e process failures.</li><li class="">Red-team final.</li><li class="">Load/soak test.</li><li class="">Restore drill.</li><li class="">Revisão independente da matriz de cobertura.</li></ul></div>
+    <div class="panel pitfalls"><h3>Armadilhas</h3><ul><li class="">Declarar concluído porque “responde no Telegram”.</li><li class="">Pular restore e migração.</li><li class="">Medir apenas qualidade da resposta e ignorar efeito de ferramentas.</li></ul></div>
+  </div>
+  <div class="nerves"><div class="nerves-title"><span>Recursos validados</span><small>Trust by inspection</small></div><article class="nerve">
+          <div class="nerve-icon" aria-hidden="true">↗</div>
+          <div><a href="https://github.com/NousResearch/hermes-agent" target="_blank" rel="noopener noreferrer">Repositório oficial do Hermes Agent</a>
+          <p>Confirma o produto atual, suas superfícies de execução e o ciclo fechado de aprendizado.</p><span class="validated">✓ Inspecionado · fonte primária/oficial</span></div>
+        </article><article class="nerve">
+          <div class="nerve-icon" aria-hidden="true">↗</div>
+          <div><a href="https://github.com/NousResearch/hermes-agent/blob/main/website/docs/developer-guide/architecture.md" target="_blank" rel="noopener noreferrer">Architecture — Hermes Agent</a>
+          <p>Mapeia entry points, AIAgent, prompt builder, providers, ferramentas, persistência, gateway, cron, plugins e testes.</p><span class="validated">✓ Inspecionado · fonte primária/oficial</span></div>
+        </article><article class="nerve">
+          <div class="nerve-icon" aria-hidden="true">↗</div>
+          <div><a href="https://github.com/NousResearch/hermes-agent/releases" target="_blank" rel="noopener noreferrer">Hermes Agent Releases</a>
+          <p>Fonte para mudanças arquiteturais, migrações e compatibilidade entre versões.</p><span class="validated">✓ Inspecionado · fonte primária/oficial</span></div>
+        </article><article class="nerve">
+          <div class="nerve-icon" aria-hidden="true">↗</div>
+          <div><a href="https://github.com/NousResearch/hermes-agent/blob/main/AGENTS.md" target="_blank" rel="noopener noreferrer">AGENTS.md — guia de desenvolvimento</a>
+          <p>Registra princípios de desenho: cache por conversa, core estreito, extensões por plugins/skills e padrões de contribuição.</p><span class="validated">✓ Inspecionado · fonte primária/oficial</span></div>
+        </article></div>
+  <div class="checkpoint"><strong>Gate de avanço:</strong> marque esta estação apenas quando todos os itens da Definition of Done estiverem demonstráveis por teste, log ou artefato.</div>
+</section>
+<div class="section-title" id="coverage"><h2>Matriz de cobertura arquitetural</h2><p>Auditoria explícita para evitar módulos ausentes.</p></div><div class="table-wrap"><table><thead><tr><th>#</th><th>Módulo/assunto</th><th>Estações</th><th>Status</th></tr></thead><tbody><tr><td>01</td><td>Product scope e requisitos</td><td>1</td><td><span class="status-ok">Coberto</span></td></tr><tr><td>02</td><td>Threat model inicial</td><td>1</td><td><span class="status-ok">Coberto</span></td></tr><tr><td>03</td><td>Arquitetura modular/hexagonal</td><td>1–3</td><td><span class="status-ok">Coberto</span></td></tr><tr><td>04</td><td>Config tipada</td><td>2</td><td><span class="status-ok">Coberto</span></td></tr><tr><td>05</td><td>Segredos e credential lifecycle</td><td>2, 4, 21</td><td><span class="status-ok">Coberto</span></td></tr><tr><td>06</td><td>Perfis e isolamento multiagente</td><td>2, 15, 25</td><td><span class="status-ok">Coberto</span></td></tr><tr><td>07</td><td>Migrações de config/DB</td><td>2, 10, 24</td><td><span class="status-ok">Coberto</span></td></tr><tr><td>08</td><td>Contratos e eventos</td><td>3</td><td><span class="status-ok">Coberto</span></td></tr><tr><td>09</td><td>Provider registry</td><td>4</td><td><span class="status-ok">Coberto</span></td></tr><tr><td>10</td><td>Transportes de API</td><td>4</td><td><span class="status-ok">Coberto</span></td></tr><tr><td>11</td><td>Catálogo/capabilities de modelos</td><td>4</td><td><span class="status-ok">Coberto</span></td></tr><tr><td>12</td><td>Fallback e credential pools</td><td>4, 7</td><td><span class="status-ok">Coberto</span></td></tr><tr><td>13</td><td>Prompt builder</td><td>5</td><td><span class="status-ok">Coberto</span></td></tr><tr><td>14</td><td>SOUL.md</td><td>5</td><td><span class="status-ok">Coberto</span></td></tr><tr><td>15</td><td>USER.md</td><td>5, 11</td><td><span class="status-ok">Coberto</span></td></tr><tr><td>16</td><td>MEMORY.md</td><td>5, 11</td><td><span class="status-ok">Coberto</span></td></tr><tr><td>17</td><td>Prompt caching</td><td>5, 12</td><td><span class="status-ok">Coberto</span></td></tr><tr><td>18</td><td>Loop agentivo</td><td>6</td><td><span class="status-ok">Coberto</span></td></tr><tr><td>19</td><td>Streaming</td><td>4, 7, 16</td><td><span class="status-ok">Coberto</span></td></tr><tr><td>20</td><td>Cancelamento e shutdown</td><td>7, 24</td><td><span class="status-ok">Coberto</span></td></tr><tr><td>21</td><td>Timeout/retry/bulkhead</td><td>7</td><td><span class="status-ok">Coberto</span></td></tr><tr><td>22</td><td>Iteration/cost budgets</td><td>6, 7, 17, 19, 22</td><td><span class="status-ok">Coberto</span></td></tr><tr><td>23</td><td>Tool registry</td><td>8</td><td><span class="status-ok">Coberto</span></td></tr><tr><td>24</td><td>JSON Schema</td><td>8</td><td><span class="status-ok">Coberto</span></td></tr><tr><td>25</td><td>Toolsets/capability exposure</td><td>8, 21</td><td><span class="status-ok">Coberto</span></td></tr><tr><td>26</td><td>Approvals</td><td>8, 9, 21</td><td><span class="status-ok">Coberto</span></td></tr><tr><td>27</td><td>File tools</td><td>9</td><td><span class="status-ok">Coberto</span></td></tr><tr><td>28</td><td>Terminal/process/PTY</td><td>9</td><td><span class="status-ok">Coberto</span></td></tr><tr><td>29</td><td>Sandbox backends</td><td>9</td><td><span class="status-ok">Coberto</span></td></tr><tr><td>30</td><td>SQLite session store</td><td>10</td><td><span class="status-ok">Coberto</span></td></tr><tr><td>31</td><td>FTS5/session_search</td><td>10</td><td><span class="status-ok">Coberto</span></td></tr><tr><td>32</td><td>Session lineage/resume/fork</td><td>10, 12</td><td><span class="status-ok">Coberto</span></td></tr><tr><td>33</td><td>Artifact store</td><td>8, 10, 20</td><td><span class="status-ok">Coberto</span></td></tr><tr><td>34</td><td>Memória interna</td><td>11</td><td><span class="status-ok">Coberto</span></td></tr><tr><td>35</td><td>Memória externa/plugins</td><td>11</td><td><span class="status-ok">Coberto</span></td></tr><tr><td>36</td><td>Política de aprendizado/forget</td><td>11</td><td><span class="status-ok">Coberto</span></td></tr><tr><td>37</td><td>Context engine/compressão</td><td>12</td><td><span class="status-ok">Coberto</span></td></tr><tr><td>38</td><td>Skills</td><td>13</td><td><span class="status-ok">Coberto</span></td></tr><tr><td>39</td><td>Self-improvement staging</td><td>13</td><td><span class="status-ok">Coberto</span></td></tr><tr><td>40</td><td>Plugins</td><td>14</td><td><span class="status-ok">Coberto</span></td></tr><tr><td>41</td><td>Lifecycle hooks</td><td>14</td><td><span class="status-ok">Coberto</span></td></tr><tr><td>42</td><td>Gateway runner</td><td>15</td><td><span class="status-ok">Coberto</span></td></tr><tr><td>43</td><td>Platform adapters</td><td>15</td><td><span class="status-ok">Coberto</span></td></tr><tr><td>44</td><td>Auth/pairing/RBAC</td><td>15, 21</td><td><span class="status-ok">Coberto</span></td></tr><tr><td>45</td><td>Inbox/outbox/idempotência</td><td>15</td><td><span class="status-ok">Coberto</span></td></tr><tr><td>46</td><td>CLI/TUI</td><td>16</td><td><span class="status-ok">Coberto</span></td></tr><tr><td>47</td><td>API OpenAI-compatible</td><td>16</td><td><span class="status-ok">Coberto</span></td></tr><tr><td>48</td><td>Batch/trajectories</td><td>16, 23</td><td><span class="status-ok">Coberto</span></td></tr><tr><td>49</td><td>ACP/IDE</td><td>16</td><td><span class="status-ok">Coberto</span></td></tr><tr><td>50</td><td>Cron scheduler</td><td>17</td><td><span class="status-ok">Coberto</span></td></tr><tr><td>51</td><td>Background/no-agent jobs</td><td>17</td><td><span class="status-ok">Coberto</span></td></tr><tr><td>52</td><td>Delivery/notifications</td><td>15, 17</td><td><span class="status-ok">Coberto</span></td></tr><tr><td>53</td><td>Subagentes/delegação</td><td>18</td><td><span class="status-ok">Coberto</span></td></tr><tr><td>54</td><td>Kanban/workers</td><td>18</td><td><span class="status-ok">Coberto</span></td></tr><tr><td>55</td><td>MCP client/servers</td><td>19</td><td><span class="status-ok">Coberto</span></td></tr><tr><td>56</td><td>Web/browser</td><td>20</td><td><span class="status-ok">Coberto</span></td></tr><tr><td>57</td><td>Vision/voice/generation</td><td>20</td><td><span class="status-ok">Coberto</span></td></tr><tr><td>58</td><td>Prompt-injection defenses</td><td>19–21</td><td><span class="status-ok">Coberto</span></td></tr><tr><td>59</td><td>Network/filesystem safety</td><td>9, 20, 21</td><td><span class="status-ok">Coberto</span></td></tr><tr><td>60</td><td>Observabilidade</td><td>22</td><td><span class="status-ok">Coberto</span></td></tr><tr><td>61</td><td>FinOps/cost accounting</td><td>22</td><td><span class="status-ok">Coberto</span></td></tr><tr><td>62</td><td>Audit trail</td><td>21–22</td><td><span class="status-ok">Coberto</span></td></tr><tr><td>63</td><td>Unit/contract/integration/E2E</td><td>23</td><td><span class="status-ok">Coberto</span></td></tr><tr><td>64</td><td>Evals/chaos/red-team/load</td><td>23</td><td><span class="status-ok">Coberto</span></td></tr><tr><td>65</td><td>Packaging/SBOM/signing</td><td>24</td><td><span class="status-ok">Coberto</span></td></tr><tr><td>66</td><td>Docker/systemd/Kubernetes</td><td>24</td><td><span class="status-ok">Coberto</span></td></tr><tr><td>67</td><td>Backup/restore/DR</td><td>10, 24</td><td><span class="status-ok">Coberto</span></td></tr><tr><td>68</td><td>Upgrade/rollback</td><td>2, 24–25</td><td><span class="status-ok">Coberto</span></td></tr><tr><td>69</td><td>Doctor/runbooks/docs</td><td>25</td><td><span class="status-ok">Coberto</span></td></tr><tr><td>70</td><td>Profile distributions</td><td>25</td><td><span class="status-ok">Coberto</span></td></tr><tr><td>71</td><td>Capstone/parity review</td><td>26</td><td><span class="status-ok">Coberto</span></td></tr></tbody></table></div>
+<div class="section-title"><h2>Boss final — revisão de arquitetura</h2><p>Responda com diagramas, testes e evidências; não apenas explicações.</p></div>
+<section class="boss"><h2>12 perguntas sem gabarito</h2><ol>
+<li>Como o sistema evita duplicar uma ação externa quando o gateway reenvia o mesmo evento?</li><li>Qual é a fonte de verdade quando MEMORY.md contradiz a transcrição original?</li><li>Como uma mudança de tool schema afeta prompt cache, sessões em andamento e jobs agendados?</li><li>O que acontece se o processo cair depois da tool executar, mas antes do resultado ser persistido?</li><li>Como provar que um subagente não recebeu capability ou segredo além do necessário?</li><li>Quais dados precisam sobreviver a compressão para retomar uma tarefa de engenharia?</li><li>Como um cron job evita gasto ilimitado e loops de reagendamento?</li><li>Como diferenciar conteúdo web não confiável de uma instrução autorizada do usuário?</li><li>Qual estratégia permite trocar de Anthropic para endpoint OpenAI-compatible sem alterar o loop?</li><li>Como restaurar um perfil completo em outra máquina sem exportar segredos ou memória de outro usuário?</li><li>Quais métricas indicam que FTS5 ou memória externa estão piorando, e não melhorando, as respostas?</li><li>Que evidência objetiva autoriza declarar a versão 1.0 pronta para produção?</li></ol></section>
+<div class="section-title"><h2>Auditoria das fontes</h2><p>Recursos priorizam documentação oficial, especificações e referências primárias.</p></div><div class="table-wrap"><table><thead><tr><th>#</th><th>Recurso</th><th>Prova de relevância</th></tr></thead><tbody><tr><td>01</td><td><a href="https://github.com/NousResearch/hermes-agent" target="_blank" rel="noopener">Repositório oficial do Hermes Agent</a></td><td>Confirma o produto atual, suas superfícies de execução e o ciclo fechado de aprendizado.</td></tr><tr><td>02</td><td><a href="https://github.com/NousResearch/hermes-agent/blob/main/website/docs/developer-guide/architecture.md" target="_blank" rel="noopener">Architecture — Hermes Agent</a></td><td>Mapeia entry points, AIAgent, prompt builder, providers, ferramentas, persistência, gateway, cron, plugins e testes.</td></tr><tr><td>03</td><td><a href="https://github.com/NousResearch/hermes-agent/blob/main/AGENTS.md" target="_blank" rel="noopener">AGENTS.md — guia de desenvolvimento</a></td><td>Registra princípios de desenho: cache por conversa, core estreito, extensões por plugins/skills e padrões de contribuição.</td></tr><tr><td>04</td><td><a href="https://github.com/NousResearch/hermes-agent/blob/main/website/docs/user-guide/configuration.md" target="_blank" rel="noopener">Configuration</a></td><td>Centraliza configuração, terminal backends, delegation, timeouts e comportamento operacional.</td></tr><tr><td>05</td><td><a href="https://github.com/NousResearch/hermes-agent/blob/main/website/docs/reference/environment-variables.md" target="_blank" rel="noopener">Environment Variables Reference</a></td><td>Distingue segredos em .env de comportamento não secreto em config.yaml.</td></tr><tr><td>06</td><td><a href="https://github.com/NousResearch/hermes-agent/blob/main/website/docs/user-guide/profiles.md" target="_blank" rel="noopener">Profiles: Running Multiple Agents</a></td><td>Isola config, chaves, memória, sessões, skills, cron e estado para múltiplos agentes.</td></tr><tr><td>07</td><td><a href="https://github.com/NousResearch/hermes-agent/releases" target="_blank" rel="noopener">Hermes Agent Releases</a></td><td>Fonte para mudanças arquiteturais, migrações e compatibilidade entre versões.</td></tr><tr><td>08</td><td><a href="https://github.com/NousResearch/hermes-agent/blob/main/website/docs/developer-guide/agent-loop.md" target="_blank" rel="noopener">Agent Loop Internals</a></td><td>Detalha ciclo do turno, tool calls, cancelamento, callbacks, budgets, fallback, compressão e persistência.</td></tr><tr><td>09</td><td><a href="https://json-schema.org/" target="_blank" rel="noopener">JSON Schema</a></td><td>Fornece o contrato padrão para validar argumentos e resultados estruturados de ferramentas.</td></tr><tr><td>10</td><td><a href="https://github.com/NousResearch/hermes-agent/blob/main/website/docs/developer-guide/provider-runtime.md" target="_blank" rel="noopener">Provider Runtime Resolution</a></td><td>Mostra como provider, modelo, credencial, base URL e modo de API são resolvidos em runtime.</td></tr><tr><td>11</td><td><a href="https://github.com/NousResearch/hermes-agent/blob/main/website/docs/developer-guide/model-provider-plugin.md" target="_blank" rel="noopener">Model Provider Plugins</a></td><td>Define a extensão de novos backends sem alterar o núcleo.</td></tr><tr><td>12</td><td><a href="https://github.com/NousResearch/hermes-agent/blob/main/website/docs/user-guide/features/fallback-providers.md" target="_blank" rel="noopener">Fallback Providers</a></td><td>Cobre failover ordenado, credenciais e overrides de subagentes.</td></tr><tr><td>13</td><td><a href="https://github.com/NousResearch/hermes-agent/blob/main/website/docs/developer-guide/prompt-assembly.md" target="_blank" rel="noopener">Prompt Assembly</a></td><td>Explica camadas estáveis, contextuais e voláteis do prompt e sua relação com cache.</td></tr><tr><td>14</td><td><a href="https://github.com/NousResearch/hermes-agent/blob/main/website/docs/developer-guide/context-compression-and-caching.md" target="_blank" rel="noopener">Context Compression and Caching</a></td><td>Cobre compressão, proteção de mensagens recentes e cache de prefixo.</td></tr><tr><td>15</td><td><a href="https://docs.python.org/3/library/asyncio-task.html" target="_blank" rel="noopener">Python asyncio — coroutines and tasks</a></td><td>Referência de structured concurrency, timeouts, cancelamento e cleanup assíncrono.</td></tr><tr><td>16</td><td><a href="https://github.com/NousResearch/hermes-agent/blob/main/website/docs/developer-guide/gateway-internals.md" target="_blank" rel="noopener">Gateway Internals</a></td><td>Explica boot, autorização, session keys, roteamento, entrega e adaptadores multicanal.</td></tr><tr><td>17</td><td><a href="https://github.com/NousResearch/hermes-agent/blob/main/website/docs/developer-guide/tools-runtime.md" target="_blank" rel="noopener">Tools Runtime</a></td><td>Documenta registro, descoberta, schemas, dispatch, disponibilidade, erros e ambientes de execução.</td></tr><tr><td>18</td><td><a href="https://github.com/NousResearch/hermes-agent/blob/main/website/docs/reference/tools-reference.md" target="_blank" rel="noopener">Built-in Tools Reference</a></td><td>Inventaria toolsets e ferramentas de terminal, arquivos, browser, memória, cron, delegação e multimodal.</td></tr><tr><td>19</td><td><a href="https://github.com/NousResearch/hermes-agent/blob/main/website/docs/reference/toolsets-reference.md" target="_blank" rel="noopener">Toolsets Reference</a></td><td>Confirma a exposição deliberada de ferramentas por conjuntos e presets de plataforma.</td></tr><tr><td>20</td><td><a href="https://github.com/NousResearch/hermes-agent/blob/main/website/docs/user-guide/docker.md" target="_blank" rel="noopener">Hermes Agent — Docker</a></td><td>Distingue executar o agente em container de usar Docker como sandbox de terminal.</td></tr><tr><td>21</td><td><a href="https://github.com/NousResearch/hermes-agent/blob/main/website/docs/developer-guide/session-storage.md" target="_blank" rel="noopener">Session Storage</a></td><td>Cobre SQLite, schema, FTS5, retomada e lineage de sessões.</td></tr><tr><td>22</td><td><a href="https://www.sqlite.org/fts5.html" target="_blank" rel="noopener">SQLite FTS5</a></td><td>Referência primária da extensão de busca textual usada para recuperar transcrições.</td></tr><tr><td>23</td><td><a href="https://github.com/NousResearch/hermes-agent/blob/main/website/docs/user-guide/features/memory.md" target="_blank" rel="noopener">Memory</a></td><td>Explica memória interna por arquivos, gravação curada e recuperação entre sessões.</td></tr><tr><td>24</td><td><a href="https://github.com/NousResearch/hermes-agent/blob/main/website/docs/user-guide/features/memory-providers.md" target="_blank" rel="noopener">Memory Providers</a></td><td>Confirma providers externos aditivos, prefetch, sync de turnos e ferramentas específicas.</td></tr><tr><td>25</td><td><a href="https://github.com/NousResearch/hermes-agent/blob/main/website/docs/developer-guide/memory-provider-plugin.md" target="_blank" rel="noopener">Building a Memory Provider Plugin</a></td><td>Define ABC e ciclo de vida de um provider de memória.</td></tr><tr><td>26</td><td><a href="https://github.com/NousResearch/hermes-agent/blob/main/website/docs/reference/skills-catalog.md" target="_blank" rel="noopener">Skills Catalog</a></td><td>Mostra skills como instruções progressivamente carregadas e extensões reutilizáveis.</td></tr><tr><td>27</td><td><a href="https://github.com/NousResearch/hermes-agent/blob/main/website/docs/user-guide/features/plugins.md" target="_blank" rel="noopener">Plugins</a></td><td>Apresenta manifest, ferramentas, hooks e integrações customizadas fora do core.</td></tr><tr><td>28</td><td><a href="https://github.com/NousResearch/hermes-agent/blob/main/website/docs/guides/build-a-hermes-plugin.md" target="_blank" rel="noopener">Build a Hermes Plugin</a></td><td>Guia completo com ferramentas, hooks, dados e skill empacotada.</td></tr><tr><td>29</td><td><a href="https://github.com/NousResearch/hermes-agent/blob/main/website/docs/user-guide/features/hooks.md" target="_blank" rel="noopener">Hooks</a></td><td>Demonstra eventos de lifecycle e automações disparadas pelo gateway.</td></tr><tr><td>30</td><td><a href="https://github.com/NousResearch/hermes-agent/blob/main/website/docs/user-guide/features/api-server.md" target="_blank" rel="noopener">API Server</a></td><td>Define endpoint OpenAI-compatible, streaming, autenticação e execução com o toolset completo.</td></tr><tr><td>31</td><td><a href="https://github.com/NousResearch/hermes-agent/blob/main/website/docs/user-guide/tui.md" target="_blank" rel="noopener">TUI</a></td><td>Confirma uma interface moderna usando o mesmo runtime, sessões e comandos do CLI.</td></tr><tr><td>32</td><td><a href="https://github.com/NousResearch/hermes-agent/blob/main/website/docs/developer-guide/acp-internals.md" target="_blank" rel="noopener">ACP Internals</a></td><td>Documenta integração com IDEs via Agent Client Protocol.</td></tr><tr><td>33</td><td><a href="https://github.com/NousResearch/hermes-agent/blob/main/website/docs/user-guide/features/cron.md" target="_blank" rel="noopener">Scheduled Tasks (Cron)</a></td><td>Cobre jobs únicos/recorrentes, skills, entrega, no-agent mode e restrições contra recursão.</td></tr><tr><td>34</td><td><a href="https://modelcontextprotocol.io/docs/getting-started/intro" target="_blank" rel="noopener">Model Context Protocol — documentação</a></td><td>Define o padrão host/cliente/servidor para conectar agentes a ferramentas e fontes externas.</td></tr><tr><td>35</td><td><a href="https://modelcontextprotocol.io/specification/2025-11-25" target="_blank" rel="noopener">MCP Specification</a></td><td>Especificação normativa para capabilities, transportes, lifecycle e mensagens do protocolo.</td></tr><tr><td>36</td><td><a href="https://genai.owasp.org/llm-top-10/" target="_blank" rel="noopener">OWASP Top 10 for LLM and GenAI Applications</a></td><td>Base para threat modeling de prompt injection, tool misuse, exposição de dados e autonomia excessiva.</td></tr><tr><td>37</td><td><a href="https://github.com/NousResearch/hermes-agent/blob/main/website/docs/user-guide/features/overview.md" target="_blank" rel="noopener">Features Overview</a></td><td>Confirma voz, browser, visão, imagens e outras capacidades multimodais.</td></tr><tr><td>38</td><td><a href="https://github.com/NousResearch/hermes-agent/blob/main/website/docs/user-guide/features/tool-gateway.md" target="_blank" rel="noopener">Nous Tool Gateway</a></td><td>Agrupa web search, imagem, TTS e browser cloud por backends configuráveis.</td></tr><tr><td>39</td><td><a href="https://owasp.org/Top10/2025/en/" target="_blank" rel="noopener">OWASP Top 10:2025</a></td><td>Complementa riscos tradicionais da API e do gateway: autenticação, autorização, SSRF e configuração.</td></tr><tr><td>40</td><td><a href="https://opentelemetry.io/docs/languages/python/" target="_blank" rel="noopener">OpenTelemetry Python</a></td><td>Referência para traces, métricas e logs correlacionados.</td></tr><tr><td>41</td><td><a href="https://docs.pytest.org/en/stable/" target="_blank" rel="noopener">pytest documentation</a></td><td>Base para fixtures, parametrização, mocks, integração e testes assíncronos.</td></tr><tr><td>42</td><td><a href="https://docs.docker.com/engine/containers/start-containers-automatically/" target="_blank" rel="noopener">Docker restart policies</a></td><td>Define reinício supervisionado e limites operacionais de containers persistentes.</td></tr><tr><td>43</td><td><a href="https://www.freedesktop.org/software/systemd/man/systemd.service.html" target="_blank" rel="noopener">systemd.service</a></td><td>Referência de supervisão, restart, ambiente, usuário e lifecycle de serviços Linux.</td></tr><tr><td>44</td><td><a href="https://github.com/NousResearch/hermes-agent/blob/main/website/docs/user-guide/profile-distributions.md" target="_blank" rel="noopener">Profile Distributions</a></td><td>Empacota personalidade, skills, cron, MCP e configuração sem transportar memórias ou segredos.</td></tr></tbody></table></div>
+<footer><strong>Learning Trail Generator</strong><br>Formato: HTML interativo completo. Conteúdo organizado no padrão spine + nerves. Progresso salvo localmente no navegador. Nenhum segredo, chave ou dado pessoal é armazenado por este arquivo.</footer>
+</div></main></div>
+<script>
+const qs=s=>document.querySelector(s), qsa=s=>[...document.querySelectorAll(s)];
+const key='hermes-trail-progress-v1'; let completed=new Set(JSON.parse(localStorage.getItem(key)||'[]'));
+function updateProgress(){qsa('.complete').forEach(c=>{c.checked=completed.has(c.dataset.id);c.closest('.station').classList.toggle('completed',c.checked)});const n=completed.size;qs('#progressText').textContent=`${n}/26`;qs('#progressFill').style.width=`${n/26*100}%`;localStorage.setItem(key,JSON.stringify([...completed]));}
+qsa('.complete').forEach(c=>c.addEventListener('change',()=>{c.checked?completed.add(c.dataset.id):completed.delete(c.dataset.id);updateProgress()}));updateProgress();
+let activeFilter='all'; function applyFilters(){const term=qs('#search').value.toLowerCase().trim();let visible=0;qsa('.station').forEach(s=>{const matchText=!term||s.textContent.toLowerCase().includes(term);const matchPhase=activeFilter==='all'||s.dataset.phase===activeFilter;const show=matchText&&matchPhase;s.classList.toggle('hidden',!show);if(show)visible++;});qs('#visibleCount').textContent=`${visible} estações`;qsa('.nav-item').forEach(n=>{const target=qs(n.getAttribute('href'));n.style.display=target&&!target.classList.contains('hidden')?'flex':'none';})}
+qs('#search').addEventListener('input',applyFilters);qsa('.filter').forEach(b=>b.addEventListener('click',()=>{qsa('.filter').forEach(x=>x.classList.remove('active'));b.classList.add('active');activeFilter=b.dataset.filter;applyFilters()}));
+qs('#themeBtn').addEventListener('click',()=>{const h=document.documentElement;h.dataset.theme=h.dataset.theme==='dark'?'light':'dark';localStorage.setItem('hermes-trail-theme',h.dataset.theme)});document.documentElement.dataset.theme=localStorage.getItem('hermes-trail-theme')||'dark';
+qs('#menuBtn').addEventListener('click',()=>qs('#sidebar').classList.toggle('open'));qsa('.nav-item').forEach(a=>a.addEventListener('click',()=>qs('#sidebar').classList.remove('open')));
+const observer=new IntersectionObserver(entries=>{entries.forEach(e=>{if(e.isIntersecting){qsa('.nav-item').forEach(a=>a.classList.toggle('active',a.getAttribute('href')==='#'+e.target.id));}})},{rootMargin:'-20% 0px -70% 0px'});qsa('.station').forEach(s=>observer.observe(s));
+</script></body></html>

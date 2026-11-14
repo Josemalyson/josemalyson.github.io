@@ -1,0 +1,2085 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Trilha Validada — Fullstack Next.js, Node, PostgreSQL, DevOps e Segurança</title>
+  <style>
+    :root {
+      --bg: #0f172a;
+      --panel: #111827;
+      --panel-2: #172033;
+      --text: #e5e7eb;
+      --muted: #94a3b8;
+      --line: #263244;
+      --accent: #818cf8;
+      --accent-2: #22c55e;
+      --warn: #f59e0b;
+      --danger: #fb7185;
+      --chip: #1e293b;
+      --table: #0b1120;
+    }
+    * { box-sizing: border-box; }
+    body { margin: 0; font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; background: radial-gradient(circle at top left, #1e1b4b 0, var(--bg) 34rem); color: var(--text); }
+    a { color: #c7d2fe; text-decoration: none; }
+    a:hover { text-decoration: underline; }
+    .layout { display: grid; grid-template-columns: 300px 1fr; min-height: 100vh; }
+    aside { position: sticky; top: 0; height: 100vh; overflow: auto; padding: 24px; border-right: 1px solid var(--line); background: rgba(15,23,42,.92); backdrop-filter: blur(10px); }
+    main { padding: 36px; max-width: 1280px; width: 100%; }
+    .brand { display: flex; align-items: center; gap: 12px; margin-bottom: 24px; }
+    .logo { width: 42px; height: 42px; border-radius: 14px; display: grid; place-items: center; background: linear-gradient(135deg,#6366f1,#22c55e); font-weight: 900; color: white; }
+    .brand h1 { font-size: 15px; line-height: 1.2; margin: 0; }
+    .brand p { font-size: 11px; color: var(--muted); margin: 4px 0 0; text-transform: uppercase; letter-spacing: .1em; }
+    .nav-title { font-size: 11px; text-transform: uppercase; color: var(--muted); letter-spacing: .14em; margin: 22px 0 10px; }
+    .nav-item { display: grid; grid-template-columns: 42px 1fr; gap: 8px; align-items: start; padding: 10px 8px; border-radius: 12px; color: #cbd5e1; font-size: 13px; }
+    .nav-item:hover { background: #1e293b; text-decoration: none; }
+    .nav-item span { color: var(--accent); font-weight: 800; }
+    .hero { padding: 34px; border: 1px solid var(--line); background: linear-gradient(180deg,rgba(30,41,59,.92),rgba(15,23,42,.78)); border-radius: 24px; box-shadow: 0 20px 60px rgba(0,0,0,.25); }
+    .hero h1 { font-size: clamp(32px, 5vw, 58px); margin: 12px 0 18px; letter-spacing: -0.04em; line-height: 1; }
+    .hero p { color: #cbd5e1; max-width: 880px; font-size: 17px; line-height: 1.65; }
+    .meta { display: flex; flex-wrap: wrap; gap: 8px; }
+    .pill { display: inline-flex; align-items: center; gap: 6px; padding: 7px 10px; border-radius: 999px; font-size: 12px; font-weight: 700; background: var(--chip); color: #cbd5e1; border: 1px solid var(--line); }
+    .pill-green { color: #bbf7d0; background: rgba(34,197,94,.12); border-color: rgba(34,197,94,.3); }
+    .pill-indigo { color: #c7d2fe; background: rgba(99,102,241,.16); border-color: rgba(99,102,241,.35); }
+    .pill-amber { color: #fde68a; background: rgba(245,158,11,.12); border-color: rgba(245,158,11,.35); }
+    .toc-cards { display: grid; grid-template-columns: repeat(auto-fit,minmax(220px,1fr)); gap: 14px; margin: 28px 0; }
+    .toc-card { padding: 16px; background: rgba(17,24,39,.88); border: 1px solid var(--line); border-radius: 18px; }
+    .toc-card strong { display:block; margin-bottom: 6px; }
+    .toc-card small { color: var(--muted); line-height: 1.45; }
+    .station { margin: 34px 0; padding: 28px; border: 1px solid var(--line); border-radius: 24px; background: rgba(17,24,39,.86); }
+    .station-number { color: var(--accent); font-weight: 900; text-transform: uppercase; font-size: 12px; letter-spacing: .12em; }
+    .station h2 { margin: 8px 0 12px; font-size: 28px; letter-spacing: -.02em; }
+    .station h3 { color: #e2e8f0; font-size: 15px; margin-top: 0; }
+    .goal { color: #cbd5e1; line-height: 1.6; }
+    .station-grid { display: grid; grid-template-columns: minmax(240px, .8fr) 1.2fr; gap: 22px; margin-top: 24px; }
+    .topic-list { margin: 0; padding-left: 18px; color: #cbd5e1; line-height: 1.75; }
+    .nerves { display: grid; gap: 12px; }
+    .nerve-card { background: rgba(15,23,42,.8); border: 1px solid var(--line); border-radius: 16px; padding: 14px; }
+    .nerve-head { display: flex; gap: 8px; align-items: center; font-weight: 800; }
+    .status-dot { width: 9px; height: 9px; background: var(--accent-2); border-radius: 999px; box-shadow: 0 0 0 4px rgba(34,197,94,.15); flex: none; }
+    .nerve-card p { color: #cbd5e1; margin: 8px 0 6px; line-height: 1.5; }
+    .nerve-card small { color: var(--muted); }
+    .lab, .check { margin-top: 16px; padding: 14px 16px; border-radius: 16px; line-height: 1.55; }
+    .lab { background: rgba(99,102,241,.12); border: 1px solid rgba(99,102,241,.32); }
+    .check { background: rgba(245,158,11,.10); border: 1px solid rgba(245,158,11,.32); color: #fde68a; }
+    .audit { margin: 34px 0; padding: 28px; border-radius: 24px; border: 1px solid var(--line); background: rgba(2,6,23,.72); }
+    .audit h2 { margin-top: 0; font-size: 28px; }
+    .audit-list { color: #cbd5e1; line-height: 1.7; }
+    .filters { display: flex; gap: 12px; flex-wrap: wrap; margin: 18px 0; }
+    input, select { background: #0b1120; color: var(--text); border: 1px solid var(--line); border-radius: 12px; padding: 12px 14px; min-width: 220px; }
+    table { width: 100%; border-collapse: collapse; background: var(--table); border-radius: 16px; overflow: hidden; }
+    th, td { padding: 12px 14px; border-bottom: 1px solid var(--line); text-align: left; vertical-align: top; font-size: 13px; }
+    th { color: #cbd5e1; background: #111827; position: sticky; top: 0; z-index: 1; }
+    td { color: #d1d5db; }
+    .table-wrap { overflow: auto; max-height: 700px; border: 1px solid var(--line); border-radius: 18px; }
+    .station-badge { display: inline-grid; place-items: center; width: 32px; height: 24px; border-radius: 8px; background: #1e293b; color: var(--accent); font-weight: 900; }
+    .ok { display: inline-flex; color: #bbf7d0; background: rgba(34,197,94,.12); border: 1px solid rgba(34,197,94,.3); padding: 4px 8px; border-radius: 999px; font-weight: 800; font-size: 12px; }
+    .boss { background: linear-gradient(135deg, #111827, #1e1b4b); border: 1px solid #312e81; border-radius: 24px; padding: 28px; margin: 34px 0; }
+    .boss h2 { margin-top: 0; font-size: 30px; }
+    .boss ol { line-height: 1.8; color: #e5e7eb; }
+    footer { color: var(--muted); padding: 30px 0 60px; }
+    code { color: #fde68a; }
+    @media (max-width: 900px) {
+      .layout { grid-template-columns: 1fr; }
+      aside { position: static; height: auto; }
+      main { padding: 18px; }
+      .station-grid { grid-template-columns: 1fr; }
+      .hero { padding: 22px; }
+      th:nth-child(6), td:nth-child(6) { min-width: 260px; }
+    }
+    @media print {
+      body { background: white; color: black; }
+      aside, .filters { display:none; }
+      .layout { display:block; }
+      main { max-width:none; padding:0; }
+      .hero, .station, .audit, .boss { background:white; color:black; border:1px solid #ddd; box-shadow:none; }
+      a { color:#111; text-decoration:underline; }
+    }
+  </style>
+</head>
+<body>
+<div class="layout">
+  <aside>
+    <div class="brand"><div class="logo">LT</div><div><h1>Trilha Fullstack Validada</h1><p>Trust by Inspection</p></div></div>
+    <div class="meta">
+      <span class="pill pill-indigo">10 estações</span>
+      <span class="pill pill-green">111 assuntos mapeados</span>
+      <span class="pill pill-amber">76 fontes únicas</span>
+    </div>
+    <div class="nav-title">Mapa</div>
+    <nav><a href="#s1" class="nav-item"><span>01</span>Controle de versão, colaboração e governança de mudanças</a>
+<a href="#s2" class="nav-item"><span>02</span>Linguagem, runtime e cadeia de dependências Node.js</a>
+<a href="#s3" class="nav-item"><span>03</span>Framework full-stack: React, Next.js, routing e data fetching</a>
+<a href="#s4" class="nav-item"><span>04</span>Qualidade de código, formatação e testes automatizados</a>
+<a href="#s5" class="nav-item"><span>05</span>Persistência relacional com PostgreSQL e migrations</a>
+<a href="#s6" class="nav-item"><span>06</span>Containerização, IaC, deploy e CI/CD</a>
+<a href="#s7" class="nav-item"><span>07</span>Segurança defensiva: senhas, sessões, injeção e segredos</a>
+<a href="#s8" class="nav-item"><span>08</span>APIs, comunicação, protocolos e rede</a>
+<a href="#s9" class="nav-item"><span>09</span>Arquitetura, gestão de projeto e modos de evolução</a>
+<a href="#s10" class="nav-item"><span>10</span>Ferramentas, formatos, conceitos avançados e manutenção contínua</a><a href="#auditoria" class="nav-item"><span>✓</span>Auditoria de links</a><a href="#boss" class="nav-item"><span>⚔</span>Boss final</a></nav>
+  </aside>
+  <main>
+    <header class="hero">
+      <div class="meta">
+        <span class="pill pill-indigo">Nível: intermediário → avançado</span>
+        <span class="pill pill-green">Foco: prático + arquitetura</span>
+        <span class="pill pill-amber">HTML interativo completo</span>
+        <span class="pill pill-green">Segurança: defensiva</span>
+      </div>
+      <h1>Trilha de Engenharia Fullstack: Next.js, Node.js, PostgreSQL, DevOps, Segurança e Colaboração</h1>
+      <p>Objetivo: sair de tópicos isolados e formar uma linha de construção de produto real. A trilha começa com colaboração e versionamento, passa por runtime, frontend, qualidade, banco, deploy, segurança, rede, arquitetura, gestão e fecha com manutenção contínua. Cada assunto informado recebeu pelo menos uma referência funcional validada.</p>
+      <div class="toc-cards">
+        <div class="toc-card"><strong>Condição de parada</strong><small>Todos os assuntos possuem referência funcional na matriz de auditoria. Links com erro foram substituídos por fontes equivalentes ou superiores.</small></div>
+        <div class="toc-card"><strong>Critério de fonte</strong><small>Prioridade para docs oficiais, RFCs, OWASP, MDN, GitHub Docs, Docker, PostgreSQL, React/Next e mantenedores de libs.</small></div>
+        <div class="toc-card"><strong>Projeto final sugerido</strong><small>Sistema fullstack com autenticação, PostgreSQL, migrations, API versionada, envio de email local, Docker Compose, CI/CD e deploy preview.</small></div>
+      </div>
+    </header>
+
+    
+    <section id="s1" class="station">
+      <div class="station-number">Estação 01</div>
+      <h2>Controle de versão, colaboração e governança de mudanças</h2>
+      <p class="goal">Sair do uso mecânico de Git e passar a operar fluxo de entrega: branches curtas, PRs revisáveis, commits semânticos, hooks locais e regras de proteção no repositório remoto.</p>
+      <div class="station-grid">
+        <div>
+          <h3>Assuntos cobertos</h3>
+          <ul class="topic-list"><li>Git</li><li>GitHub</li><li>GitHub Codespaces</li><li>Estratégias de branching</li><li>Git hooks com Husky</li><li>Commitizen</li><li>Commitlint</li><li>Conventional Commits</li><li>Pull Requests</li><li>Code Review</li><li>Branch protection rules</li></ul>
+        </div>
+        <div>
+          <h3>Nervos validados</h3>
+          <div class="nerves">
+        <article class="nerve-card">
+          <div class="nerve-head">
+            <span class="status-dot"></span>
+            <a href="https://git-scm.com/book/en/v2" target="_blank" rel="noopener noreferrer">Pro Git Book — Git SCM</a>
+          </div>
+          <p>Livro oficial/primário para Git: versionamento, branching, remotes, hooks e internals.</p>
+          <small>Validação: aberto/inspecionado durante a montagem; incluído por cobrir diretamente os assuntos desta estação.</small>
+        </article>
+        <article class="nerve-card">
+          <div class="nerve-head">
+            <span class="status-dot"></span>
+            <a href="https://docs.github.com/en/get-started" target="_blank" rel="noopener noreferrer">GitHub Docs — Get started</a>
+          </div>
+          <p>Documentação oficial do GitHub para repositórios, colaboração e fluxo inicial.</p>
+          <small>Validação: aberto/inspecionado durante a montagem; incluído por cobrir diretamente os assuntos desta estação.</small>
+        </article>
+        <article class="nerve-card">
+          <div class="nerve-head">
+            <span class="status-dot"></span>
+            <a href="https://trunkbaseddevelopment.com/" target="_blank" rel="noopener noreferrer">Trunk Based Development</a>
+          </div>
+          <p>Referência dedicada a trunk-based development e integração contínua por branch curta.</p>
+          <small>Validação: aberto/inspecionado durante a montagem; incluído por cobrir diretamente os assuntos desta estação.</small>
+        </article>
+        <article class="nerve-card">
+          <div class="nerve-head">
+            <span class="status-dot"></span>
+            <a href="https://typicode.github.io/husky/" target="_blank" rel="noopener noreferrer">Husky Docs</a>
+          </div>
+          <p>Documentação oficial da ferramenta Husky para Git hooks em projetos JS.</p>
+          <small>Validação: aberto/inspecionado durante a montagem; incluído por cobrir diretamente os assuntos desta estação.</small>
+        </article>
+        <article class="nerve-card">
+          <div class="nerve-head">
+            <span class="status-dot"></span>
+            <a href="https://www.conventionalcommits.org/en/v1.0.0/" target="_blank" rel="noopener noreferrer">Conventional Commits 1.0.0</a>
+          </div>
+          <p>Especificação oficial de mensagens de commit semânticas.</p>
+          <small>Validação: aberto/inspecionado durante a montagem; incluído por cobrir diretamente os assuntos desta estação.</small>
+        </article></div>
+        </div>
+      </div>
+      <div class="lab"><strong>Laboratório:</strong> Criar um repositório com branch protection, PR obrigatório, commitlint + husky + commitizen e uma política de squash/rebase documentada.</div>
+      <div class="check"><strong>Check de avanço:</strong> Você consegue explicar por que trunk-based exige CI forte e branches pequenas, enquanto Git Flow cria mais filas de integração?</div>
+    </section>
+    
+    <section id="s2" class="station">
+      <div class="station-number">Estação 02</div>
+      <h2>Linguagem, runtime e cadeia de dependências Node.js</h2>
+      <p class="goal">Dominar JavaScript moderno, Node.js, versões de runtime, npm, manifesto, lockfile, peer dependencies e os impactos de supply chain em um projeto real.</p>
+      <div class="station-grid">
+        <div>
+          <h3>Assuntos cobertos</h3>
+          <ul class="topic-list"><li>JavaScript</li><li>Node.js</li><li>NVM</li><li>NPM</li><li>package.json e package-lock.json</li><li>Peer dependencies</li></ul>
+        </div>
+        <div>
+          <h3>Nervos validados</h3>
+          <div class="nerves">
+        <article class="nerve-card">
+          <div class="nerve-head">
+            <span class="status-dot"></span>
+            <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript" target="_blank" rel="noopener noreferrer">MDN — JavaScript</a>
+          </div>
+          <p>Referência consolidada para linguagem JavaScript, guias e APIs fundamentais.</p>
+          <small>Validação: aberto/inspecionado durante a montagem; incluído por cobrir diretamente os assuntos desta estação.</small>
+        </article>
+        <article class="nerve-card">
+          <div class="nerve-head">
+            <span class="status-dot"></span>
+            <a href="https://nodejs.org/learn/getting-started/introduction-to-nodejs" target="_blank" rel="noopener noreferrer">Node.js Learn — Introduction</a>
+          </div>
+          <p>Introdução oficial ao runtime Node.js.</p>
+          <small>Validação: aberto/inspecionado durante a montagem; incluído por cobrir diretamente os assuntos desta estação.</small>
+        </article>
+        <article class="nerve-card">
+          <div class="nerve-head">
+            <span class="status-dot"></span>
+            <a href="https://github.com/nvm-sh/nvm" target="_blank" rel="noopener noreferrer">nvm-sh/nvm</a>
+          </div>
+          <p>Repositório oficial do Node Version Manager.</p>
+          <small>Validação: aberto/inspecionado durante a montagem; incluído por cobrir diretamente os assuntos desta estação.</small>
+        </article>
+        <article class="nerve-card">
+          <div class="nerve-head">
+            <span class="status-dot"></span>
+            <a href="https://docs.npmjs.com/about-npm/" target="_blank" rel="noopener noreferrer">npm Docs — About npm</a>
+          </div>
+          <p>Documentação oficial do npm como registry e gerenciador de pacotes.</p>
+          <small>Validação: aberto/inspecionado durante a montagem; incluído por cobrir diretamente os assuntos desta estação.</small>
+        </article>
+        <article class="nerve-card">
+          <div class="nerve-head">
+            <span class="status-dot"></span>
+            <a href="https://docs.npmjs.com/cli/v11/configuring-npm/package-json/" target="_blank" rel="noopener noreferrer">npm Docs — package.json</a>
+          </div>
+          <p>Referência oficial para manifesto de pacotes Node.js.</p>
+          <small>Validação: aberto/inspecionado durante a montagem; incluído por cobrir diretamente os assuntos desta estação.</small>
+        </article>
+        <article class="nerve-card">
+          <div class="nerve-head">
+            <span class="status-dot"></span>
+            <a href="https://docs.npmjs.com/cli/v11/configuring-npm/package-lock-json/" target="_blank" rel="noopener noreferrer">npm Docs — package-lock.json</a>
+          </div>
+          <p>Referência oficial para lockfile de dependências npm.</p>
+          <small>Validação: aberto/inspecionado durante a montagem; incluído por cobrir diretamente os assuntos desta estação.</small>
+        </article></div>
+        </div>
+      </div>
+      <div class="lab"><strong>Laboratório:</strong> Criar um projeto Node com .nvmrc, engines no package.json, npm ci no pipeline e um teste demonstrando diferença entre package-lock e instalação solta.</div>
+      <div class="check"><strong>Check de avanço:</strong> Você sabe diferenciar dependência direta, transitive dependency, devDependency, peerDependency e lock determinístico?</div>
+    </section>
+    
+    <section id="s3" class="station">
+      <div class="station-number">Estação 03</div>
+      <h2>Framework full-stack: React, Next.js, routing e data fetching</h2>
+      <p class="goal">Construir UI com React, entender renderização no DOM, Hooks, App Router/File-Based Routing no Next.js e data fetching com cache/deduplicação via SWR.</p>
+      <div class="station-grid">
+        <div>
+          <h3>Assuntos cobertos</h3>
+          <ul class="topic-list"><li>Next.js</li><li>React</li><li>React DOM</li><li>React Hooks</li><li>SWR</li><li>File-Based Routing</li></ul>
+        </div>
+        <div>
+          <h3>Nervos validados</h3>
+          <div class="nerves">
+        <article class="nerve-card">
+          <div class="nerve-head">
+            <span class="status-dot"></span>
+            <a href="https://nextjs.org/docs" target="_blank" rel="noopener noreferrer">Next.js Docs</a>
+          </div>
+          <p>Documentação oficial do framework Next.js.</p>
+          <small>Validação: aberto/inspecionado durante a montagem; incluído por cobrir diretamente os assuntos desta estação.</small>
+        </article>
+        <article class="nerve-card">
+          <div class="nerve-head">
+            <span class="status-dot"></span>
+            <a href="https://nextjs.org/docs/app/getting-started/layouts-and-pages" target="_blank" rel="noopener noreferrer">Next.js — Layouts and Pages</a>
+          </div>
+          <p>Fonte oficial para roteamento baseado em arquivos no App Router.</p>
+          <small>Validação: aberto/inspecionado durante a montagem; incluído por cobrir diretamente os assuntos desta estação.</small>
+        </article>
+        <article class="nerve-card">
+          <div class="nerve-head">
+            <span class="status-dot"></span>
+            <a href="https://react.dev/learn" target="_blank" rel="noopener noreferrer">React Docs — Learn</a>
+          </div>
+          <p>Documentação oficial de React para componentes, estado e UI.</p>
+          <small>Validação: aberto/inspecionado durante a montagem; incluído por cobrir diretamente os assuntos desta estação.</small>
+        </article>
+        <article class="nerve-card">
+          <div class="nerve-head">
+            <span class="status-dot"></span>
+            <a href="https://react.dev/reference/react-dom" target="_blank" rel="noopener noreferrer">React Docs — React DOM APIs</a>
+          </div>
+          <p>Referência oficial de renderização DOM em React.</p>
+          <small>Validação: aberto/inspecionado durante a montagem; incluído por cobrir diretamente os assuntos desta estação.</small>
+        </article>
+        <article class="nerve-card">
+          <div class="nerve-head">
+            <span class="status-dot"></span>
+            <a href="https://react.dev/reference/react/hooks" target="_blank" rel="noopener noreferrer">React Docs — Built-in Hooks</a>
+          </div>
+          <p>Referência oficial para Hooks do React.</p>
+          <small>Validação: aberto/inspecionado durante a montagem; incluído por cobrir diretamente os assuntos desta estação.</small>
+        </article>
+        <article class="nerve-card">
+          <div class="nerve-head">
+            <span class="status-dot"></span>
+            <a href="https://swr.vercel.app/docs/getting-started" target="_blank" rel="noopener noreferrer">SWR Docs — Getting Started</a>
+          </div>
+          <p>Documentação oficial de SWR para data fetching, cache e deduplicação.</p>
+          <small>Validação: aberto/inspecionado durante a montagem; incluído por cobrir diretamente os assuntos desta estação.</small>
+        </article></div>
+        </div>
+      </div>
+      <div class="lab"><strong>Laboratório:</strong> Criar uma página Next.js com rota baseada em arquivo, componente cliente com Hook, chamada REST via SWR e tratamento explícito de loading/error/success.</div>
+      <div class="check"><strong>Check de avanço:</strong> Você sabe dizer quando o dado pertence ao servidor, ao cliente, ao cache SWR ou ao estado local do componente?</div>
+    </section>
+    
+    <section id="s4" class="station">
+      <div class="station-number">Estação 04</div>
+      <h2>Qualidade de código, formatação e testes automatizados</h2>
+      <p class="goal">Montar uma malha de qualidade com EditorConfig, Prettier, ESLint, Jest, TDD/BDD, testes unitários e integração, dados falsos e watch mode.</p>
+      <div class="station-grid">
+        <div>
+          <h3>Assuntos cobertos</h3>
+          <ul class="topic-list"><li>EditorConfig</li><li>Prettier</li><li>ESLint</li><li>Jest</li><li>Test-Driven Development (TDD)</li><li>Behavior-Driven Development (BDD)</li><li>Testes unitários e de integração</li><li>@faker-js/faker</li><li>Orquestrador de testes</li><li>Watch mode</li></ul>
+        </div>
+        <div>
+          <h3>Nervos validados</h3>
+          <div class="nerves">
+        <article class="nerve-card">
+          <div class="nerve-head">
+            <span class="status-dot"></span>
+            <a href="https://editorconfig.org/" target="_blank" rel="noopener noreferrer">EditorConfig</a>
+          </div>
+          <p>Especificação e documentação oficial para configuração consistente entre editores.</p>
+          <small>Validação: aberto/inspecionado durante a montagem; incluído por cobrir diretamente os assuntos desta estação.</small>
+        </article>
+        <article class="nerve-card">
+          <div class="nerve-head">
+            <span class="status-dot"></span>
+            <a href="https://prettier.io/docs/" target="_blank" rel="noopener noreferrer">Prettier Docs</a>
+          </div>
+          <p>Documentação oficial do formatador Prettier.</p>
+          <small>Validação: aberto/inspecionado durante a montagem; incluído por cobrir diretamente os assuntos desta estação.</small>
+        </article>
+        <article class="nerve-card">
+          <div class="nerve-head">
+            <span class="status-dot"></span>
+            <a href="https://eslint.org/docs/latest/use/getting-started" target="_blank" rel="noopener noreferrer">ESLint Docs — Getting Started</a>
+          </div>
+          <p>Documentação oficial do linter ESLint.</p>
+          <small>Validação: aberto/inspecionado durante a montagem; incluído por cobrir diretamente os assuntos desta estação.</small>
+        </article>
+        <article class="nerve-card">
+          <div class="nerve-head">
+            <span class="status-dot"></span>
+            <a href="https://jestjs.io/docs/getting-started" target="_blank" rel="noopener noreferrer">Jest Docs — Getting Started</a>
+          </div>
+          <p>Documentação oficial do framework Jest.</p>
+          <small>Validação: aberto/inspecionado durante a montagem; incluído por cobrir diretamente os assuntos desta estação.</small>
+        </article>
+        <article class="nerve-card">
+          <div class="nerve-head">
+            <span class="status-dot"></span>
+            <a href="https://martinfowler.com/bliki/TestDrivenDevelopment.html" target="_blank" rel="noopener noreferrer">Martin Fowler — Test Driven Development</a>
+          </div>
+          <p>Referência conceitual para TDD por autor reconhecido em engenharia de software.</p>
+          <small>Validação: aberto/inspecionado durante a montagem; incluído por cobrir diretamente os assuntos desta estação.</small>
+        </article>
+        <article class="nerve-card">
+          <div class="nerve-head">
+            <span class="status-dot"></span>
+            <a href="https://cucumber.io/docs/bdd/" target="_blank" rel="noopener noreferrer">Cucumber — BDD</a>
+          </div>
+          <p>Documentação do Cucumber para Behavior-Driven Development.</p>
+          <small>Validação: aberto/inspecionado durante a montagem; incluído por cobrir diretamente os assuntos desta estação.</small>
+        </article>
+        <article class="nerve-card">
+          <div class="nerve-head">
+            <span class="status-dot"></span>
+            <a href="https://fakerjs.dev/guide/" target="_blank" rel="noopener noreferrer">Faker Docs</a>
+          </div>
+          <p>Documentação oficial do @faker-js/faker.</p>
+          <small>Validação: aberto/inspecionado durante a montagem; incluído por cobrir diretamente os assuntos desta estação.</small>
+        </article></div>
+        </div>
+      </div>
+      <div class="lab"><strong>Laboratório:</strong> Implementar uma feature começando por teste vermelho, gerando dados com faker, separando unit/integration e rodando Jest em watch mode.</div>
+      <div class="check"><strong>Check de avanço:</strong> Você consegue decidir o que validar em teste unitário, integração e comportamento sem duplicar cenários?</div>
+    </section>
+    
+    <section id="s5" class="station">
+      <div class="station-number">Estação 05</div>
+      <h2>Persistência relacional com PostgreSQL e migrations</h2>
+      <p class="goal">Projetar persistência com SQL, PostgreSQL, pg, migrations, queries parametrizadas, pooling, psql e strings de conexão sem expor segredo.</p>
+      <div class="station-grid">
+        <div>
+          <h3>Assuntos cobertos</h3>
+          <ul class="topic-list"><li>PostgreSQL</li><li>node-postgres (pg)</li><li>Database Migrations</li><li>node-pg-migrate</li><li>SQL</li><li>Queries parametrizadas</li><li>Connection pooling</li><li>psql</li><li>Connection strings</li></ul>
+        </div>
+        <div>
+          <h3>Nervos validados</h3>
+          <div class="nerves">
+        <article class="nerve-card">
+          <div class="nerve-head">
+            <span class="status-dot"></span>
+            <a href="https://www.postgresql.org/docs/current/" target="_blank" rel="noopener noreferrer">PostgreSQL Docs</a>
+          </div>
+          <p>Documentação oficial do PostgreSQL.</p>
+          <small>Validação: aberto/inspecionado durante a montagem; incluído por cobrir diretamente os assuntos desta estação.</small>
+        </article>
+        <article class="nerve-card">
+          <div class="nerve-head">
+            <span class="status-dot"></span>
+            <a href="https://node-postgres.com/" target="_blank" rel="noopener noreferrer">node-postgres Docs</a>
+          </div>
+          <p>Documentação do cliente pg para Node.js e PostgreSQL.</p>
+          <small>Validação: aberto/inspecionado durante a montagem; incluído por cobrir diretamente os assuntos desta estação.</small>
+        </article>
+        <article class="nerve-card">
+          <div class="nerve-head">
+            <span class="status-dot"></span>
+            <a href="https://node-postgres.com/features/queries" target="_blank" rel="noopener noreferrer">node-postgres — Queries</a>
+          </div>
+          <p>Fonte para queries parametrizadas, prepared statements e query API.</p>
+          <small>Validação: aberto/inspecionado durante a montagem; incluído por cobrir diretamente os assuntos desta estação.</small>
+        </article>
+        <article class="nerve-card">
+          <div class="nerve-head">
+            <span class="status-dot"></span>
+            <a href="https://node-postgres.com/features/pooling" target="_blank" rel="noopener noreferrer">node-postgres — Pooling</a>
+          </div>
+          <p>Fonte para connection pooling em Node.js com PostgreSQL.</p>
+          <small>Validação: aberto/inspecionado durante a montagem; incluído por cobrir diretamente os assuntos desta estação.</small>
+        </article>
+        <article class="nerve-card">
+          <div class="nerve-head">
+            <span class="status-dot"></span>
+            <a href="https://salsita.github.io/node-pg-migrate/" target="_blank" rel="noopener noreferrer">node-pg-migrate</a>
+          </div>
+          <p>Documentação da ferramenta de migrations node-pg-migrate.</p>
+          <small>Validação: aberto/inspecionado durante a montagem; incluído por cobrir diretamente os assuntos desta estação.</small>
+        </article>
+        <article class="nerve-card">
+          <div class="nerve-head">
+            <span class="status-dot"></span>
+            <a href="https://www.postgresql.org/docs/current/app-psql.html" target="_blank" rel="noopener noreferrer">PostgreSQL Docs — psql</a>
+          </div>
+          <p>Referência oficial do cliente CLI psql.</p>
+          <small>Validação: aberto/inspecionado durante a montagem; incluído por cobrir diretamente os assuntos desta estação.</small>
+        </article></div>
+        </div>
+      </div>
+      <div class="lab"><strong>Laboratório:</strong> Criar schema versionado com node-pg-migrate, rodar migration up/down, conectar com Pool e implementar uma query parametrizada protegida contra injection.</div>
+      <div class="check"><strong>Check de avanço:</strong> Você sabe explicar por que pool mal configurado derruba banco mesmo quando a aplicação parece leve?</div>
+    </section>
+    
+    <section id="s6" class="station">
+      <div class="station-number">Estação 06</div>
+      <h2>Containerização, IaC, deploy e CI/CD</h2>
+      <p class="goal">Containerizar aplicação, orquestrar dependências locais, publicar imagem, declarar infraestrutura, automatizar CI/CD e promover entre ambientes.</p>
+      <div class="station-grid">
+        <div>
+          <h3>Assuntos cobertos</h3>
+          <ul class="topic-list"><li>Docker</li><li>Docker Compose</li><li>Docker Hub</li><li>Dockerfile</li><li>Infraestrutura como Código (IaC)</li><li>Vercel</li><li>Serverless/Lambda Functions</li><li>Ambientes</li><li>Continuous Integration (CI)</li><li>Continuous Delivery/Deployment (CD)</li><li>GitHub Actions</li><li>Branch protection rules</li></ul>
+        </div>
+        <div>
+          <h3>Nervos validados</h3>
+          <div class="nerves">
+        <article class="nerve-card">
+          <div class="nerve-head">
+            <span class="status-dot"></span>
+            <a href="https://docs.docker.com/get-started/docker-overview/" target="_blank" rel="noopener noreferrer">Docker Docs — Overview</a>
+          </div>
+          <p>Documentação oficial para conceitos de Docker.</p>
+          <small>Validação: aberto/inspecionado durante a montagem; incluído por cobrir diretamente os assuntos desta estação.</small>
+        </article>
+        <article class="nerve-card">
+          <div class="nerve-head">
+            <span class="status-dot"></span>
+            <a href="https://docs.docker.com/compose/" target="_blank" rel="noopener noreferrer">Docker Docs — Compose</a>
+          </div>
+          <p>Documentação oficial do Docker Compose.</p>
+          <small>Validação: aberto/inspecionado durante a montagem; incluído por cobrir diretamente os assuntos desta estação.</small>
+        </article>
+        <article class="nerve-card">
+          <div class="nerve-head">
+            <span class="status-dot"></span>
+            <a href="https://docs.docker.com/reference/dockerfile/" target="_blank" rel="noopener noreferrer">Docker Docs — Dockerfile reference</a>
+          </div>
+          <p>Referência oficial de Dockerfile.</p>
+          <small>Validação: aberto/inspecionado durante a montagem; incluído por cobrir diretamente os assuntos desta estação.</small>
+        </article>
+        <article class="nerve-card">
+          <div class="nerve-head">
+            <span class="status-dot"></span>
+            <a href="https://developer.hashicorp.com/terraform/intro" target="_blank" rel="noopener noreferrer">Terraform Docs — What is Terraform</a>
+          </div>
+          <p>Fonte primária para IaC declarativa com Terraform.</p>
+          <small>Validação: aberto/inspecionado durante a montagem; incluído por cobrir diretamente os assuntos desta estação.</small>
+        </article>
+        <article class="nerve-card">
+          <div class="nerve-head">
+            <span class="status-dot"></span>
+            <a href="https://vercel.com/docs" target="_blank" rel="noopener noreferrer">Vercel Docs</a>
+          </div>
+          <p>Documentação oficial da plataforma Vercel.</p>
+          <small>Validação: aberto/inspecionado durante a montagem; incluído por cobrir diretamente os assuntos desta estação.</small>
+        </article>
+        <article class="nerve-card">
+          <div class="nerve-head">
+            <span class="status-dot"></span>
+            <a href="https://vercel.com/docs/functions" target="_blank" rel="noopener noreferrer">Vercel Docs — Functions</a>
+          </div>
+          <p>Fonte oficial para funções serverless na Vercel.</p>
+          <small>Validação: aberto/inspecionado durante a montagem; incluído por cobrir diretamente os assuntos desta estação.</small>
+        </article>
+        <article class="nerve-card">
+          <div class="nerve-head">
+            <span class="status-dot"></span>
+            <a href="https://docs.github.com/en/actions/get-started/understand-github-actions" target="_blank" rel="noopener noreferrer">GitHub Actions — Understanding workflows</a>
+          </div>
+          <p>Fonte oficial sobre workflow, event, job, step e action.</p>
+          <small>Validação: aberto/inspecionado durante a montagem; incluído por cobrir diretamente os assuntos desta estação.</small>
+        </article></div>
+        </div>
+      </div>
+      <div class="lab"><strong>Laboratório:</strong> Criar Dockerfile multi-stage, docker-compose com Postgres/MailCatcher, workflow GitHub Actions com npm ci/test/lint e deploy preview na Vercel.</div>
+      <div class="check"><strong>Check de avanço:</strong> Você consegue separar o que roda no build, no container local, na função serverless e no ambiente de produção?</div>
+    </section>
+    
+    <section id="s7" class="station">
+      <div class="station-number">Estação 07</div>
+      <h2>Segurança defensiva: senhas, sessões, injeção e segredos</h2>
+      <p class="goal">Aplicar segurança defensiva sem cair em tutorial ofensivo: hashing de senha, salt/pepper, prevenção de SQL Injection, proteção de sessão/cookies, TLS, UUID e .env.</p>
+      <div class="station-grid">
+        <div>
+          <h3>Assuntos cobertos</h3>
+          <ul class="topic-list"><li>bcryptjs</li><li>Hash, salt e pepper</li><li>Rainbow tables</li><li>SQL Injection</li><li>Session hijacking</li><li>UUID</li><li>SSL/TLS</li><li>Autenticação e autorização</li><li>Cookies e sessões</li><li>Variáveis de ambiente (.env)</li></ul>
+        </div>
+        <div>
+          <h3>Nervos validados</h3>
+          <div class="nerves">
+        <article class="nerve-card">
+          <div class="nerve-head">
+            <span class="status-dot"></span>
+            <a href="https://cheatsheetseries.owasp.org/cheatsheets/Password_Storage_Cheat_Sheet.html" target="_blank" rel="noopener noreferrer">OWASP — Password Storage Cheat Sheet</a>
+          </div>
+          <p>Fonte defensiva para armazenamento seguro de senhas, hash, salt e pepper.</p>
+          <small>Validação: aberto/inspecionado durante a montagem; incluído por cobrir diretamente os assuntos desta estação.</small>
+        </article>
+        <article class="nerve-card">
+          <div class="nerve-head">
+            <span class="status-dot"></span>
+            <a href="https://github.com/dcodeIO/bcrypt.js/" target="_blank" rel="noopener noreferrer">bcrypt.js GitHub</a>
+          </div>
+          <p>Repositório/documentação da biblioteca bcryptjs.</p>
+          <small>Validação: aberto/inspecionado durante a montagem; incluído por cobrir diretamente os assuntos desta estação.</small>
+        </article>
+        <article class="nerve-card">
+          <div class="nerve-head">
+            <span class="status-dot"></span>
+            <a href="https://cheatsheetseries.owasp.org/cheatsheets/SQL_Injection_Prevention_Cheat_Sheet.html" target="_blank" rel="noopener noreferrer">OWASP — SQL Injection Prevention</a>
+          </div>
+          <p>Fonte defensiva para prevenção de SQL Injection.</p>
+          <small>Validação: aberto/inspecionado durante a montagem; incluído por cobrir diretamente os assuntos desta estação.</small>
+        </article>
+        <article class="nerve-card">
+          <div class="nerve-head">
+            <span class="status-dot"></span>
+            <a href="https://cheatsheetseries.owasp.org/cheatsheets/Session_Management_Cheat_Sheet.html" target="_blank" rel="noopener noreferrer">OWASP — Session Management Cheat Sheet</a>
+          </div>
+          <p>Fonte defensiva para cookies, sessão e mitigação de roubo de sessão.</p>
+          <small>Validação: aberto/inspecionado durante a montagem; incluído por cobrir diretamente os assuntos desta estação.</small>
+        </article>
+        <article class="nerve-card">
+          <div class="nerve-head">
+            <span class="status-dot"></span>
+            <a href="https://www.rfc-editor.org/rfc/rfc9562.html" target="_blank" rel="noopener noreferrer">RFC 9562 — UUID</a>
+          </div>
+          <p>Especificação atual de UUIDs.</p>
+          <small>Validação: aberto/inspecionado durante a montagem; incluído por cobrir diretamente os assuntos desta estação.</small>
+        </article>
+        <article class="nerve-card">
+          <div class="nerve-head">
+            <span class="status-dot"></span>
+            <a href="https://developer.mozilla.org/en-US/docs/Web/Security/Defenses/Transport_Layer_Security" target="_blank" rel="noopener noreferrer">MDN — Transport Layer Security</a>
+          </div>
+          <p>Guia de TLS no contexto web.</p>
+          <small>Validação: aberto/inspecionado durante a montagem; incluído por cobrir diretamente os assuntos desta estação.</small>
+        </article>
+        <article class="nerve-card">
+          <div class="nerve-head">
+            <span class="status-dot"></span>
+            <a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Guides/Cookies" target="_blank" rel="noopener noreferrer">MDN — HTTP Cookies</a>
+          </div>
+          <p>Guia de cookies HTTP e atributos de segurança.</p>
+          <small>Validação: aberto/inspecionado durante a montagem; incluído por cobrir diretamente os assuntos desta estação.</small>
+        </article>
+        <article class="nerve-card">
+          <div class="nerve-head">
+            <span class="status-dot"></span>
+            <a href="https://12factor.net/config" target="_blank" rel="noopener noreferrer">The Twelve-Factor App — Config</a>
+          </div>
+          <p>Referência clássica para separar configuração sensível do código.</p>
+          <small>Validação: aberto/inspecionado durante a montagem; incluído por cobrir diretamente os assuntos desta estação.</small>
+        </article></div>
+        </div>
+      </div>
+      <div class="lab"><strong>Laboratório:</strong> Implementar cadastro/login defensivo: bcryptjs assíncrono, cookies HttpOnly/Secure/SameSite, query parametrizada e secrets fora do código.</div>
+      <div class="check"><strong>Check de avanço:</strong> Você consegue descrever o fluxo seguro de senha e sessão sem expor senha, token ou cookie a logs, frontend ou repositório?</div>
+    </section>
+    
+    <section id="s8" class="station">
+      <div class="station-number">Estação 08</div>
+      <h2>APIs, comunicação, protocolos e rede</h2>
+      <p class="goal">Entender REST, versionamento, breaking changes, status HTTP, endpoints, statelessness, middlewares, HTTP/TCP/UDP/DNS/SMTP e ferramentas de email local.</p>
+      <div class="station-grid">
+        <div>
+          <h3>Assuntos cobertos</h3>
+          <ul class="topic-list"><li>REST/RESTful</li><li>API versioning</li><li>Breaking changes</li><li>Status Codes HTTP</li><li>Endpoints</li><li>Stateless applications</li><li>next-connect</li><li>TCP/IP</li><li>UDP</li><li>HTTP/HTTPS</li><li>DNS</li><li>Registro.br</li><li>SMTP</li><li>Nodemailer</li><li>MailCatcher</li></ul>
+        </div>
+        <div>
+          <h3>Nervos validados</h3>
+          <div class="nerves">
+        <article class="nerve-card">
+          <div class="nerve-head">
+            <span class="status-dot"></span>
+            <a href="https://developer.mozilla.org/en-US/docs/Glossary/REST" target="_blank" rel="noopener noreferrer">MDN — REST</a>
+          </div>
+          <p>Glossário MDN para REST.</p>
+          <small>Validação: aberto/inspecionado durante a montagem; incluído por cobrir diretamente os assuntos desta estação.</small>
+        </article>
+        <article class="nerve-card">
+          <div class="nerve-head">
+            <span class="status-dot"></span>
+            <a href="https://restfulapi.net/versioning/" target="_blank" rel="noopener noreferrer">REST API Versioning</a>
+          </div>
+          <p>Guia dedicado a estratégias de versionamento REST.</p>
+          <small>Validação: aberto/inspecionado durante a montagem; incluído por cobrir diretamente os assuntos desta estação.</small>
+        </article>
+        <article class="nerve-card">
+          <div class="nerve-head">
+            <span class="status-dot"></span>
+            <a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Reference/Status" target="_blank" rel="noopener noreferrer">MDN — HTTP Status Codes</a>
+          </div>
+          <p>Referência MDN para códigos HTTP.</p>
+          <small>Validação: aberto/inspecionado durante a montagem; incluído por cobrir diretamente os assuntos desta estação.</small>
+        </article>
+        <article class="nerve-card">
+          <div class="nerve-head">
+            <span class="status-dot"></span>
+            <a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Guides/Overview" target="_blank" rel="noopener noreferrer">MDN — Overview of HTTP</a>
+          </div>
+          <p>Base para HTTP, statelessness, requests e responses.</p>
+          <small>Validação: aberto/inspecionado durante a montagem; incluído por cobrir diretamente os assuntos desta estação.</small>
+        </article>
+        <article class="nerve-card">
+          <div class="nerve-head">
+            <span class="status-dot"></span>
+            <a href="https://www.rfc-editor.org/rfc/rfc9293.html" target="_blank" rel="noopener noreferrer">RFC 9293 — TCP</a>
+          </div>
+          <p>Especificação atual do Transmission Control Protocol.</p>
+          <small>Validação: aberto/inspecionado durante a montagem; incluído por cobrir diretamente os assuntos desta estação.</small>
+        </article>
+        <article class="nerve-card">
+          <div class="nerve-head">
+            <span class="status-dot"></span>
+            <a href="https://www.cloudflare.com/learning/dns/what-is-dns/" target="_blank" rel="noopener noreferrer">Cloudflare Learning — DNS</a>
+          </div>
+          <p>Explicação prática de DNS.</p>
+          <small>Validação: aberto/inspecionado durante a montagem; incluído por cobrir diretamente os assuntos desta estação.</small>
+        </article>
+        <article class="nerve-card">
+          <div class="nerve-head">
+            <span class="status-dot"></span>
+            <a href="https://www.rfc-editor.org/rfc/rfc5321.html" target="_blank" rel="noopener noreferrer">RFC 5321 — SMTP</a>
+          </div>
+          <p>Especificação do Simple Mail Transfer Protocol.</p>
+          <small>Validação: aberto/inspecionado durante a montagem; incluído por cobrir diretamente os assuntos desta estação.</small>
+        </article>
+        <article class="nerve-card">
+          <div class="nerve-head">
+            <span class="status-dot"></span>
+            <a href="https://nodemailer.com/smtp" target="_blank" rel="noopener noreferrer">Nodemailer — SMTP transport</a>
+          </div>
+          <p>Documentação oficial de SMTP no Nodemailer.</p>
+          <small>Validação: aberto/inspecionado durante a montagem; incluído por cobrir diretamente os assuntos desta estação.</small>
+        </article>
+        <article class="nerve-card">
+          <div class="nerve-head">
+            <span class="status-dot"></span>
+            <a href="https://mailcatcher.me/" target="_blank" rel="noopener noreferrer">MailCatcher</a>
+          </div>
+          <p>Documentação da ferramenta MailCatcher para SMTP local de desenvolvimento.</p>
+          <small>Validação: aberto/inspecionado durante a montagem; incluído por cobrir diretamente os assuntos desta estação.</small>
+        </article></div>
+        </div>
+      </div>
+      <div class="lab"><strong>Laboratório:</strong> Criar API REST versionada com next-connect, status HTTP corretos, contrato estável, envio de email via Nodemailer e inspeção em MailCatcher.</div>
+      <div class="check"><strong>Check de avanço:</strong> Você sabe distinguir mudança compatível, breaking change e mudança interna sem impacto no contrato?</div>
+    </section>
+    
+    <section id="s9" class="station">
+      <div class="station-number">Estação 09</div>
+      <h2>Arquitetura, gestão de projeto e modos de evolução</h2>
+      <p class="goal">Conectar padrões técnicos e gestão: MVC, separação de responsabilidades, tratamento de erro, Issues/Milestones, Agile/DevOps, desenvolvimento orgânico e execução estruturada.</p>
+      <div class="station-grid">
+        <div>
+          <h3>Assuntos cobertos</h3>
+          <ul class="topic-list"><li>MVC</li><li>Separation of Concerns</li><li>Error handling patterns</li><li>Custom errors</li><li>GitHub Issues</li><li>GitHub Milestones</li><li>Movimento Ágil e DevOps</li><li>Desenvolvimento orgânico</li><li>Desenvolvimento &quot;Impressora 3D&quot;</li></ul>
+        </div>
+        <div>
+          <h3>Nervos validados</h3>
+          <div class="nerves">
+        <article class="nerve-card">
+          <div class="nerve-head">
+            <span class="status-dot"></span>
+            <a href="https://martinfowler.com/eaaCatalog/modelViewController.html" target="_blank" rel="noopener noreferrer">Martin Fowler — MVC</a>
+          </div>
+          <p>Referência de padrão arquitetural MVC.</p>
+          <small>Validação: aberto/inspecionado durante a montagem; incluído por cobrir diretamente os assuntos desta estação.</small>
+        </article>
+        <article class="nerve-card">
+          <div class="nerve-head">
+            <span class="status-dot"></span>
+            <a href="https://en.wikipedia.org/wiki/Separation_of_concerns" target="_blank" rel="noopener noreferrer">Separation of Concerns</a>
+          </div>
+          <p>Referência conceitual sobre separação de responsabilidades.</p>
+          <small>Validação: aberto/inspecionado durante a montagem; incluído por cobrir diretamente os assuntos desta estação.</small>
+        </article>
+        <article class="nerve-card">
+          <div class="nerve-head">
+            <span class="status-dot"></span>
+            <a href="https://martinfowler.com/articles/replaceThrowWithNotification.html" target="_blank" rel="noopener noreferrer">Martin Fowler — Notifications vs Exceptions</a>
+          </div>
+          <p>Referência para desenho de erros e validação sem exceções abusivas.</p>
+          <small>Validação: aberto/inspecionado durante a montagem; incluído por cobrir diretamente os assuntos desta estação.</small>
+        </article>
+        <article class="nerve-card">
+          <div class="nerve-head">
+            <span class="status-dot"></span>
+            <a href="https://docs.github.com/en/issues/tracking-your-work-with-issues/learning-about-issues/about-issues" target="_blank" rel="noopener noreferrer">GitHub Docs — Issues</a>
+          </div>
+          <p>Fonte oficial para rastreamento de tarefas com Issues.</p>
+          <small>Validação: aberto/inspecionado durante a montagem; incluído por cobrir diretamente os assuntos desta estação.</small>
+        </article>
+        <article class="nerve-card">
+          <div class="nerve-head">
+            <span class="status-dot"></span>
+            <a href="https://docs.github.com/en/issues/using-labels-and-milestones-to-track-work/about-milestones" target="_blank" rel="noopener noreferrer">GitHub Docs — Milestones</a>
+          </div>
+          <p>Fonte oficial para marcos de projeto.</p>
+          <small>Validação: aberto/inspecionado durante a montagem; incluído por cobrir diretamente os assuntos desta estação.</small>
+        </article>
+        <article class="nerve-card">
+          <div class="nerve-head">
+            <span class="status-dot"></span>
+            <a href="https://agilemanifesto.org/principles.html" target="_blank" rel="noopener noreferrer">Agile Manifesto — Principles</a>
+          </div>
+          <p>Fonte primária dos princípios ágeis.</p>
+          <small>Validação: aberto/inspecionado durante a montagem; incluído por cobrir diretamente os assuntos desta estação.</small>
+        </article>
+        <article class="nerve-card">
+          <div class="nerve-head">
+            <span class="status-dot"></span>
+            <a href="https://aws.amazon.com/devops/" target="_blank" rel="noopener noreferrer">AWS — DevOps</a>
+          </div>
+          <p>Definição e visão prática de DevOps.</p>
+          <small>Validação: aberto/inspecionado durante a montagem; incluído por cobrir diretamente os assuntos desta estação.</small>
+        </article>
+        <article class="nerve-card">
+          <div class="nerve-head">
+            <span class="status-dot"></span>
+            <a href="https://martinfowler.com/bliki/Yagni.html" target="_blank" rel="noopener noreferrer">Martin Fowler — YAGNI</a>
+          </div>
+          <p>Referência para evitar construir antes da necessidade real.</p>
+          <small>Validação: aberto/inspecionado durante a montagem; incluído por cobrir diretamente os assuntos desta estação.</small>
+        </article>
+        <article class="nerve-card">
+          <div class="nerve-head">
+            <span class="status-dot"></span>
+            <a href="https://www.lean.org/explore-lean/what-is-lean/" target="_blank" rel="noopener noreferrer">Lean Enterprise Institute — What is Lean?</a>
+          </div>
+          <p>Referência para redução de desperdício e experimentação contínua.</p>
+          <small>Validação: aberto/inspecionado durante a montagem; incluído por cobrir diretamente os assuntos desta estação.</small>
+        </article></div>
+        </div>
+      </div>
+      <div class="lab"><strong>Laboratório:</strong> Transformar uma issue em milestone, quebrar em tarefas, desenhar camadas MVC, criar política de erros customizados e entregar em PR pequeno.</div>
+      <div class="check"><strong>Check de avanço:</strong> Você consegue decidir quando evoluir organicamente e quando usar uma abordagem estruturada para reduzir ambiguidade?</div>
+    </section>
+    
+    <section id="s10" class="station">
+      <div class="station-number">Estação 10</div>
+      <h2>Ferramentas, formatos, conceitos avançados e manutenção contínua</h2>
+      <p class="goal">Fechar a base profissional: VS Code, terminal, utilitários, JSON/YAML/SemVer, timestamps, race conditions, exit codes, observabilidade, performance, cache, refatoração, debugging, licenças e cookies.</p>
+      <div class="station-grid">
+        <div>
+          <h3>Assuntos cobertos</h3>
+          <ul class="topic-list"><li>VSCode</li><li>Terminal Linux</li><li>Fuzzy search</li><li>Concurrently</li><li>async-retry</li><li>dotenv e dotenv-expand</li><li>JSON</li><li>YAML</li><li>Semantic Versioning (SemVer)</li><li>Unix timestamps</li><li>Race conditions</li><li>Exit codes</li><li>Logging e monitoring</li><li>Performance e otimização</li><li>Cache strategies</li><li>Clean Code</li><li>Refatoração</li><li>Debugging</li><li>Paralisia por análise</li><li>Efeito estilingue infinito</li><li>Licenças de software</li><li>set-cookie-parser</li><li>cookie</li></ul>
+        </div>
+        <div>
+          <h3>Nervos validados</h3>
+          <div class="nerves">
+        <article class="nerve-card">
+          <div class="nerve-head">
+            <span class="status-dot"></span>
+            <a href="https://code.visualstudio.com/docs" target="_blank" rel="noopener noreferrer">VS Code Docs</a>
+          </div>
+          <p>Documentação oficial do VS Code.</p>
+          <small>Validação: aberto/inspecionado durante a montagem; incluído por cobrir diretamente os assuntos desta estação.</small>
+        </article>
+        <article class="nerve-card">
+          <div class="nerve-head">
+            <span class="status-dot"></span>
+            <a href="https://www.gnu.org/software/bash/manual/bash.html" target="_blank" rel="noopener noreferrer">GNU Bash Manual</a>
+          </div>
+          <p>Manual oficial do Bash para terminal Linux.</p>
+          <small>Validação: aberto/inspecionado durante a montagem; incluído por cobrir diretamente os assuntos desta estação.</small>
+        </article>
+        <article class="nerve-card">
+          <div class="nerve-head">
+            <span class="status-dot"></span>
+            <a href="https://github.com/open-cli-tools/concurrently" target="_blank" rel="noopener noreferrer">concurrently GitHub</a>
+          </div>
+          <p>Repositório/documentação para execução paralela de comandos.</p>
+          <small>Validação: aberto/inspecionado durante a montagem; incluído por cobrir diretamente os assuntos desta estação.</small>
+        </article>
+        <article class="nerve-card">
+          <div class="nerve-head">
+            <span class="status-dot"></span>
+            <a href="https://github.com/vercel/async-retry" target="_blank" rel="noopener noreferrer">async-retry GitHub</a>
+          </div>
+          <p>Repositório/documentação da biblioteca async-retry.</p>
+          <small>Validação: aberto/inspecionado durante a montagem; incluído por cobrir diretamente os assuntos desta estação.</small>
+        </article>
+        <article class="nerve-card">
+          <div class="nerve-head">
+            <span class="status-dot"></span>
+            <a href="https://github.com/motdotla/dotenv" target="_blank" rel="noopener noreferrer">dotenv GitHub</a>
+          </div>
+          <p>Repositório/documentação do dotenv.</p>
+          <small>Validação: aberto/inspecionado durante a montagem; incluído por cobrir diretamente os assuntos desta estação.</small>
+        </article>
+        <article class="nerve-card">
+          <div class="nerve-head">
+            <span class="status-dot"></span>
+            <a href="https://www.json.org/json-en.html" target="_blank" rel="noopener noreferrer">JSON.org</a>
+          </div>
+          <p>Referência canônica do formato JSON.</p>
+          <small>Validação: aberto/inspecionado durante a montagem; incluído por cobrir diretamente os assuntos desta estação.</small>
+        </article>
+        <article class="nerve-card">
+          <div class="nerve-head">
+            <span class="status-dot"></span>
+            <a href="https://yaml.org/spec/1.2.2/" target="_blank" rel="noopener noreferrer">YAML 1.2.2 Spec</a>
+          </div>
+          <p>Especificação oficial YAML.</p>
+          <small>Validação: aberto/inspecionado durante a montagem; incluído por cobrir diretamente os assuntos desta estação.</small>
+        </article>
+        <article class="nerve-card">
+          <div class="nerve-head">
+            <span class="status-dot"></span>
+            <a href="https://semver.org/" target="_blank" rel="noopener noreferrer">Semantic Versioning</a>
+          </div>
+          <p>Especificação oficial SemVer.</p>
+          <small>Validação: aberto/inspecionado durante a montagem; incluído por cobrir diretamente os assuntos desta estação.</small>
+        </article>
+        <article class="nerve-card">
+          <div class="nerve-head">
+            <span class="status-dot"></span>
+            <a href="https://opentelemetry.io/docs/what-is-opentelemetry/" target="_blank" rel="noopener noreferrer">OpenTelemetry — What is OpenTelemetry?</a>
+          </div>
+          <p>Referência oficial para observabilidade: traces, metrics e logs.</p>
+          <small>Validação: aberto/inspecionado durante a montagem; incluído por cobrir diretamente os assuntos desta estação.</small>
+        </article>
+        <article class="nerve-card">
+          <div class="nerve-head">
+            <span class="status-dot"></span>
+            <a href="https://web.dev/learn/performance" target="_blank" rel="noopener noreferrer">web.dev — Learn Performance</a>
+          </div>
+          <p>Curso oficial/prático para performance web.</p>
+          <small>Validação: aberto/inspecionado durante a montagem; incluído por cobrir diretamente os assuntos desta estação.</small>
+        </article>
+        <article class="nerve-card">
+          <div class="nerve-head">
+            <span class="status-dot"></span>
+            <a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Guides/Caching" target="_blank" rel="noopener noreferrer">MDN — HTTP caching</a>
+          </div>
+          <p>Referência para cache HTTP.</p>
+          <small>Validação: aberto/inspecionado durante a montagem; incluído por cobrir diretamente os assuntos desta estação.</small>
+        </article>
+        <article class="nerve-card">
+          <div class="nerve-head">
+            <span class="status-dot"></span>
+            <a href="https://refactoring.com/" target="_blank" rel="noopener noreferrer">Refactoring.com</a>
+          </div>
+          <p>Referência de Martin Fowler sobre refatoração.</p>
+          <small>Validação: aberto/inspecionado durante a montagem; incluído por cobrir diretamente os assuntos desta estação.</small>
+        </article>
+        <article class="nerve-card">
+          <div class="nerve-head">
+            <span class="status-dot"></span>
+            <a href="https://choosealicense.com/licenses/" target="_blank" rel="noopener noreferrer">Choose a License</a>
+          </div>
+          <p>Guia de licenças mantido pelo GitHub.</p>
+          <small>Validação: aberto/inspecionado durante a montagem; incluído por cobrir diretamente os assuntos desta estação.</small>
+        </article></div>
+        </div>
+      </div>
+      <div class="lab"><strong>Laboratório:</strong> Criar script de DX com concurrently, dotenv-expand, retry assíncrono, logs estruturados, cache HTTP validável e debug no VS Code.</div>
+      <div class="check"><strong>Check de avanço:</strong> Você consegue tratar DX, observabilidade, cache, performance e licença como parte do produto, não como detalhe final?</div>
+    </section>
+    
+
+    <section id="auditoria" class="audit">
+      <h2>Auditoria Trust by Inspection</h2>
+      <p class="goal">Esta tabela é a prova de cobertura: cada linha do assunto recebeu fonte funcional e contexto. Use o filtro para pesquisar por tópico, estação ou fonte.</p>
+      <ul class="audit-list"><li><strong>Rodada 1 — Busca exploratória:</strong> Prioridade para documentação oficial, specs RFC, OWASP, MDN, GitHub, Docker, PostgreSQL, React/Next e mantenedores de libs.</li><li><strong>Rodada 2 — Inspeção atômica:</strong> Cada assunto recebeu pelo menos uma referência aberta/inspecionada ou resultado oficial funcional.</li><li><strong>Rodada 3 — Substituições:</strong> Links com resposta fraca/erro foram trocados: TCP Cloudflare → RFC 9293; Vercel environments antigo → Vercel Deployments/Environments; npm bcryptjs → repositório dcodeIO/bcrypt.js; Nodemailer página vazia → SMTP transport validado.</li><li><strong>Rodada 4 — Condição de parada:</strong> 111 linhas de assunto mapeadas e 76 fontes únicas usadas como nervos principais/complementares.</li></ul>
+      <div class="filters">
+        <input id="q" type="search" placeholder="Filtrar por assunto ou fonte..." oninput="filterRows()" />
+        <select id="stationFilter" onchange="filterRows()">
+          <option value="">Todas as estações</option>
+          <option value="1">Estação 01</option><option value="2">Estação 02</option><option value="3">Estação 03</option><option value="4">Estação 04</option><option value="5">Estação 05</option><option value="6">Estação 06</option><option value="7">Estação 07</option><option value="8">Estação 08</option><option value="9">Estação 09</option><option value="10">Estação 10</option>
+        </select>
+      </div>
+      <div class="table-wrap">
+        <table id="auditTable">
+          <thead>
+            <tr><th>Est.</th><th>Assunto</th><th>Estação</th><th>Referência validada</th><th>Status</th><th>Por que cobre</th></tr>
+          </thead>
+          <tbody>
+      <tr data-station="1" data-topic="git" data-source="pro git book — git scm">
+        <td><span class="station-badge">01</span></td>
+        <td>Git</td>
+        <td>Controle de versão, colaboração e governança de mudanças</td>
+        <td><a href="https://git-scm.com/book/en/v2" target="_blank" rel="noopener noreferrer">Pro Git Book — Git SCM</a></td>
+        <td><span class="ok">Funcional</span></td>
+        <td>Livro oficial/primário para Git: versionamento, branching, remotes, hooks e internals.</td>
+      </tr>
+    
+
+      <tr data-station="1" data-topic="github" data-source="github docs — get started">
+        <td><span class="station-badge">01</span></td>
+        <td>GitHub</td>
+        <td>Controle de versão, colaboração e governança de mudanças</td>
+        <td><a href="https://docs.github.com/en/get-started" target="_blank" rel="noopener noreferrer">GitHub Docs — Get started</a></td>
+        <td><span class="ok">Funcional</span></td>
+        <td>Documentação oficial do GitHub para repositórios, colaboração e fluxo inicial.</td>
+      </tr>
+    
+
+      <tr data-station="1" data-topic="github codespaces" data-source="github docs — codespaces">
+        <td><span class="station-badge">01</span></td>
+        <td>GitHub Codespaces</td>
+        <td>Controle de versão, colaboração e governança de mudanças</td>
+        <td><a href="https://docs.github.com/en/codespaces" target="_blank" rel="noopener noreferrer">GitHub Docs — Codespaces</a></td>
+        <td><span class="ok">Funcional</span></td>
+        <td>Documentação oficial para ambientes de desenvolvimento em nuvem no GitHub.</td>
+      </tr>
+    
+
+      <tr data-station="1" data-topic="estratégias de branching" data-source="trunk based development">
+        <td><span class="station-badge">01</span></td>
+        <td>Estratégias de branching</td>
+        <td>Controle de versão, colaboração e governança de mudanças</td>
+        <td><a href="https://trunkbaseddevelopment.com/" target="_blank" rel="noopener noreferrer">Trunk Based Development</a></td>
+        <td><span class="ok">Funcional</span></td>
+        <td>Referência dedicada a trunk-based development e integração contínua por branch curta.</td>
+      </tr>
+    
+
+      <tr data-station="1" data-topic="git hooks com husky" data-source="husky docs">
+        <td><span class="station-badge">01</span></td>
+        <td>Git hooks com Husky</td>
+        <td>Controle de versão, colaboração e governança de mudanças</td>
+        <td><a href="https://typicode.github.io/husky/" target="_blank" rel="noopener noreferrer">Husky Docs</a></td>
+        <td><span class="ok">Funcional</span></td>
+        <td>Documentação oficial da ferramenta Husky para Git hooks em projetos JS.</td>
+      </tr>
+    
+
+      <tr data-station="1" data-topic="commitizen" data-source="commitizen docs">
+        <td><span class="station-badge">01</span></td>
+        <td>Commitizen</td>
+        <td>Controle de versão, colaboração e governança de mudanças</td>
+        <td><a href="https://commitizen-tools.github.io/commitizen/" target="_blank" rel="noopener noreferrer">Commitizen Docs</a></td>
+        <td><span class="ok">Funcional</span></td>
+        <td>Documentação oficial do Commitizen para commits padronizados.</td>
+      </tr>
+    
+
+      <tr data-station="1" data-topic="commitlint" data-source="commitlint docs">
+        <td><span class="station-badge">01</span></td>
+        <td>Commitlint</td>
+        <td>Controle de versão, colaboração e governança de mudanças</td>
+        <td><a href="https://commitlint.js.org/" target="_blank" rel="noopener noreferrer">Commitlint Docs</a></td>
+        <td><span class="ok">Funcional</span></td>
+        <td>Documentação oficial para validação de mensagens de commit.</td>
+      </tr>
+    
+
+      <tr data-station="1" data-topic="conventional commits" data-source="conventional commits 1.0.0">
+        <td><span class="station-badge">01</span></td>
+        <td>Conventional Commits</td>
+        <td>Controle de versão, colaboração e governança de mudanças</td>
+        <td><a href="https://www.conventionalcommits.org/en/v1.0.0/" target="_blank" rel="noopener noreferrer">Conventional Commits 1.0.0</a></td>
+        <td><span class="ok">Funcional</span></td>
+        <td>Especificação oficial de mensagens de commit semânticas.</td>
+      </tr>
+    
+
+      <tr data-station="1" data-topic="pull requests" data-source="github docs — about pull requests">
+        <td><span class="station-badge">01</span></td>
+        <td>Pull Requests</td>
+        <td>Controle de versão, colaboração e governança de mudanças</td>
+        <td><a href="https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/proposing-changes-to-your-work-with-pull-requests/about-pull-requests" target="_blank" rel="noopener noreferrer">GitHub Docs — About pull requests</a></td>
+        <td><span class="ok">Funcional</span></td>
+        <td>Fonte oficial para PRs, revisão colaborativa e proposta de mudanças.</td>
+      </tr>
+    
+
+      <tr data-station="1" data-topic="code review" data-source="github docs — about pull requests">
+        <td><span class="station-badge">01</span></td>
+        <td>Code Review</td>
+        <td>Controle de versão, colaboração e governança de mudanças</td>
+        <td><a href="https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/proposing-changes-to-your-work-with-pull-requests/about-pull-requests" target="_blank" rel="noopener noreferrer">GitHub Docs — About pull requests</a></td>
+        <td><span class="ok">Funcional</span></td>
+        <td>Fonte oficial para PRs, revisão colaborativa e proposta de mudanças.</td>
+      </tr>
+    
+
+      <tr data-station="1" data-topic="branch protection rules" data-source="github docs — protected branches">
+        <td><span class="station-badge">01</span></td>
+        <td>Branch protection rules</td>
+        <td>Controle de versão, colaboração e governança de mudanças</td>
+        <td><a href="https://docs.github.com/en/repositories/configuring-branches-and-merges-in-your-repository/managing-protected-branches/about-protected-branches" target="_blank" rel="noopener noreferrer">GitHub Docs — Protected branches</a></td>
+        <td><span class="ok">Funcional</span></td>
+        <td>Fonte oficial para branch protection rules.</td>
+      </tr>
+    
+
+      <tr data-station="2" data-topic="javascript" data-source="mdn — javascript">
+        <td><span class="station-badge">02</span></td>
+        <td>JavaScript</td>
+        <td>Linguagem, runtime e cadeia de dependências Node.js</td>
+        <td><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript" target="_blank" rel="noopener noreferrer">MDN — JavaScript</a></td>
+        <td><span class="ok">Funcional</span></td>
+        <td>Referência consolidada para linguagem JavaScript, guias e APIs fundamentais.</td>
+      </tr>
+    
+
+      <tr data-station="2" data-topic="node.js" data-source="node.js learn — introduction">
+        <td><span class="station-badge">02</span></td>
+        <td>Node.js</td>
+        <td>Linguagem, runtime e cadeia de dependências Node.js</td>
+        <td><a href="https://nodejs.org/learn/getting-started/introduction-to-nodejs" target="_blank" rel="noopener noreferrer">Node.js Learn — Introduction</a></td>
+        <td><span class="ok">Funcional</span></td>
+        <td>Introdução oficial ao runtime Node.js.</td>
+      </tr>
+    
+
+      <tr data-station="2" data-topic="nvm" data-source="nvm-sh/nvm">
+        <td><span class="station-badge">02</span></td>
+        <td>NVM</td>
+        <td>Linguagem, runtime e cadeia de dependências Node.js</td>
+        <td><a href="https://github.com/nvm-sh/nvm" target="_blank" rel="noopener noreferrer">nvm-sh/nvm</a></td>
+        <td><span class="ok">Funcional</span></td>
+        <td>Repositório oficial do Node Version Manager.</td>
+      </tr>
+    
+
+      <tr data-station="2" data-topic="npm" data-source="npm docs — about npm">
+        <td><span class="station-badge">02</span></td>
+        <td>NPM</td>
+        <td>Linguagem, runtime e cadeia de dependências Node.js</td>
+        <td><a href="https://docs.npmjs.com/about-npm/" target="_blank" rel="noopener noreferrer">npm Docs — About npm</a></td>
+        <td><span class="ok">Funcional</span></td>
+        <td>Documentação oficial do npm como registry e gerenciador de pacotes.</td>
+      </tr>
+    
+
+      <tr data-station="2" data-topic="package.json e package-lock.json" data-source="npm docs — package.json">
+        <td><span class="station-badge">02</span></td>
+        <td>package.json e package-lock.json</td>
+        <td>Linguagem, runtime e cadeia de dependências Node.js</td>
+        <td><a href="https://docs.npmjs.com/cli/v11/configuring-npm/package-json/" target="_blank" rel="noopener noreferrer">npm Docs — package.json</a></td>
+        <td><span class="ok">Funcional</span></td>
+        <td>Referência oficial para manifesto de pacotes Node.js.</td>
+      </tr>
+    
+
+      <tr data-station="2" data-topic="peer dependencies" data-source="npm docs — peerdependencies">
+        <td><span class="station-badge">02</span></td>
+        <td>Peer dependencies</td>
+        <td>Linguagem, runtime e cadeia de dependências Node.js</td>
+        <td><a href="https://docs.npmjs.com/cli/v11/configuring-npm/package-json/#peerdependencies" target="_blank" rel="noopener noreferrer">npm Docs — peerDependencies</a></td>
+        <td><span class="ok">Funcional</span></td>
+        <td>Seção oficial sobre peer dependencies dentro do package.json.</td>
+      </tr>
+    
+
+      <tr data-station="3" data-topic="next.js" data-source="next.js docs">
+        <td><span class="station-badge">03</span></td>
+        <td>Next.js</td>
+        <td>Framework full-stack: React, Next.js, routing e data fetching</td>
+        <td><a href="https://nextjs.org/docs" target="_blank" rel="noopener noreferrer">Next.js Docs</a></td>
+        <td><span class="ok">Funcional</span></td>
+        <td>Documentação oficial do framework Next.js.</td>
+      </tr>
+    
+
+      <tr data-station="3" data-topic="react" data-source="react docs — learn">
+        <td><span class="station-badge">03</span></td>
+        <td>React</td>
+        <td>Framework full-stack: React, Next.js, routing e data fetching</td>
+        <td><a href="https://react.dev/learn" target="_blank" rel="noopener noreferrer">React Docs — Learn</a></td>
+        <td><span class="ok">Funcional</span></td>
+        <td>Documentação oficial de React para componentes, estado e UI.</td>
+      </tr>
+    
+
+      <tr data-station="3" data-topic="react dom" data-source="react docs — react dom apis">
+        <td><span class="station-badge">03</span></td>
+        <td>React DOM</td>
+        <td>Framework full-stack: React, Next.js, routing e data fetching</td>
+        <td><a href="https://react.dev/reference/react-dom" target="_blank" rel="noopener noreferrer">React Docs — React DOM APIs</a></td>
+        <td><span class="ok">Funcional</span></td>
+        <td>Referência oficial de renderização DOM em React.</td>
+      </tr>
+    
+
+      <tr data-station="3" data-topic="react hooks" data-source="react docs — built-in hooks">
+        <td><span class="station-badge">03</span></td>
+        <td>React Hooks</td>
+        <td>Framework full-stack: React, Next.js, routing e data fetching</td>
+        <td><a href="https://react.dev/reference/react/hooks" target="_blank" rel="noopener noreferrer">React Docs — Built-in Hooks</a></td>
+        <td><span class="ok">Funcional</span></td>
+        <td>Referência oficial para Hooks do React.</td>
+      </tr>
+    
+
+      <tr data-station="3" data-topic="swr" data-source="swr docs — getting started">
+        <td><span class="station-badge">03</span></td>
+        <td>SWR</td>
+        <td>Framework full-stack: React, Next.js, routing e data fetching</td>
+        <td><a href="https://swr.vercel.app/docs/getting-started" target="_blank" rel="noopener noreferrer">SWR Docs — Getting Started</a></td>
+        <td><span class="ok">Funcional</span></td>
+        <td>Documentação oficial de SWR para data fetching, cache e deduplicação.</td>
+      </tr>
+    
+
+      <tr data-station="3" data-topic="file-based routing" data-source="next.js — layouts and pages">
+        <td><span class="station-badge">03</span></td>
+        <td>File-Based Routing</td>
+        <td>Framework full-stack: React, Next.js, routing e data fetching</td>
+        <td><a href="https://nextjs.org/docs/app/getting-started/layouts-and-pages" target="_blank" rel="noopener noreferrer">Next.js — Layouts and Pages</a></td>
+        <td><span class="ok">Funcional</span></td>
+        <td>Fonte oficial para roteamento baseado em arquivos no App Router.</td>
+      </tr>
+    
+
+      <tr data-station="4" data-topic="editorconfig" data-source="editorconfig">
+        <td><span class="station-badge">04</span></td>
+        <td>EditorConfig</td>
+        <td>Qualidade de código, formatação e testes automatizados</td>
+        <td><a href="https://editorconfig.org/" target="_blank" rel="noopener noreferrer">EditorConfig</a></td>
+        <td><span class="ok">Funcional</span></td>
+        <td>Especificação e documentação oficial para configuração consistente entre editores.</td>
+      </tr>
+    
+
+      <tr data-station="4" data-topic="prettier" data-source="prettier docs">
+        <td><span class="station-badge">04</span></td>
+        <td>Prettier</td>
+        <td>Qualidade de código, formatação e testes automatizados</td>
+        <td><a href="https://prettier.io/docs/" target="_blank" rel="noopener noreferrer">Prettier Docs</a></td>
+        <td><span class="ok">Funcional</span></td>
+        <td>Documentação oficial do formatador Prettier.</td>
+      </tr>
+    
+
+      <tr data-station="4" data-topic="eslint" data-source="eslint docs — getting started">
+        <td><span class="station-badge">04</span></td>
+        <td>ESLint</td>
+        <td>Qualidade de código, formatação e testes automatizados</td>
+        <td><a href="https://eslint.org/docs/latest/use/getting-started" target="_blank" rel="noopener noreferrer">ESLint Docs — Getting Started</a></td>
+        <td><span class="ok">Funcional</span></td>
+        <td>Documentação oficial do linter ESLint.</td>
+      </tr>
+    
+
+      <tr data-station="4" data-topic="jest" data-source="jest docs — getting started">
+        <td><span class="station-badge">04</span></td>
+        <td>Jest</td>
+        <td>Qualidade de código, formatação e testes automatizados</td>
+        <td><a href="https://jestjs.io/docs/getting-started" target="_blank" rel="noopener noreferrer">Jest Docs — Getting Started</a></td>
+        <td><span class="ok">Funcional</span></td>
+        <td>Documentação oficial do framework Jest.</td>
+      </tr>
+    
+
+      <tr data-station="4" data-topic="test-driven development (tdd)" data-source="martin fowler — test driven development">
+        <td><span class="station-badge">04</span></td>
+        <td>Test-Driven Development (TDD)</td>
+        <td>Qualidade de código, formatação e testes automatizados</td>
+        <td><a href="https://martinfowler.com/bliki/TestDrivenDevelopment.html" target="_blank" rel="noopener noreferrer">Martin Fowler — Test Driven Development</a></td>
+        <td><span class="ok">Funcional</span></td>
+        <td>Referência conceitual para TDD por autor reconhecido em engenharia de software.</td>
+      </tr>
+    
+
+      <tr data-station="4" data-topic="behavior-driven development (bdd)" data-source="cucumber — bdd">
+        <td><span class="station-badge">04</span></td>
+        <td>Behavior-Driven Development (BDD)</td>
+        <td>Qualidade de código, formatação e testes automatizados</td>
+        <td><a href="https://cucumber.io/docs/bdd/" target="_blank" rel="noopener noreferrer">Cucumber — BDD</a></td>
+        <td><span class="ok">Funcional</span></td>
+        <td>Documentação do Cucumber para Behavior-Driven Development.</td>
+      </tr>
+    
+
+      <tr data-station="4" data-topic="testes unitários e de integração" data-source="jest docs — getting started">
+        <td><span class="station-badge">04</span></td>
+        <td>Testes unitários e de integração</td>
+        <td>Qualidade de código, formatação e testes automatizados</td>
+        <td><a href="https://jestjs.io/docs/getting-started" target="_blank" rel="noopener noreferrer">Jest Docs — Getting Started</a></td>
+        <td><span class="ok">Funcional</span></td>
+        <td>Documentação oficial do framework Jest.</td>
+      </tr>
+    
+
+      <tr data-station="4" data-topic="@faker-js/faker" data-source="faker docs">
+        <td><span class="station-badge">04</span></td>
+        <td>@faker-js/faker</td>
+        <td>Qualidade de código, formatação e testes automatizados</td>
+        <td><a href="https://fakerjs.dev/guide/" target="_blank" rel="noopener noreferrer">Faker Docs</a></td>
+        <td><span class="ok">Funcional</span></td>
+        <td>Documentação oficial do @faker-js/faker.</td>
+      </tr>
+    
+
+      <tr data-station="4" data-topic="orquestrador de testes" data-source="jest docs — configuration">
+        <td><span class="station-badge">04</span></td>
+        <td>Orquestrador de testes</td>
+        <td>Qualidade de código, formatação e testes automatizados</td>
+        <td><a href="https://jestjs.io/docs/configuration" target="_blank" rel="noopener noreferrer">Jest Docs — Configuration</a></td>
+        <td><span class="ok">Funcional</span></td>
+        <td>Referência oficial para configuração e orquestração de suítes Jest.</td>
+      </tr>
+    
+
+      <tr data-station="4" data-topic="watch mode" data-source="jest docs — cli">
+        <td><span class="station-badge">04</span></td>
+        <td>Watch mode</td>
+        <td>Qualidade de código, formatação e testes automatizados</td>
+        <td><a href="https://jestjs.io/docs/cli" target="_blank" rel="noopener noreferrer">Jest Docs — CLI</a></td>
+        <td><span class="ok">Funcional</span></td>
+        <td>Referência oficial para execução, watch mode e opções CLI do Jest.</td>
+      </tr>
+    
+
+      <tr data-station="5" data-topic="postgresql" data-source="postgresql docs">
+        <td><span class="station-badge">05</span></td>
+        <td>PostgreSQL</td>
+        <td>Persistência relacional com PostgreSQL e migrations</td>
+        <td><a href="https://www.postgresql.org/docs/current/" target="_blank" rel="noopener noreferrer">PostgreSQL Docs</a></td>
+        <td><span class="ok">Funcional</span></td>
+        <td>Documentação oficial do PostgreSQL.</td>
+      </tr>
+    
+
+      <tr data-station="5" data-topic="node-postgres (pg)" data-source="node-postgres docs">
+        <td><span class="station-badge">05</span></td>
+        <td>node-postgres (pg)</td>
+        <td>Persistência relacional com PostgreSQL e migrations</td>
+        <td><a href="https://node-postgres.com/" target="_blank" rel="noopener noreferrer">node-postgres Docs</a></td>
+        <td><span class="ok">Funcional</span></td>
+        <td>Documentação do cliente pg para Node.js e PostgreSQL.</td>
+      </tr>
+    
+
+      <tr data-station="5" data-topic="database migrations" data-source="node-pg-migrate">
+        <td><span class="station-badge">05</span></td>
+        <td>Database Migrations</td>
+        <td>Persistência relacional com PostgreSQL e migrations</td>
+        <td><a href="https://salsita.github.io/node-pg-migrate/" target="_blank" rel="noopener noreferrer">node-pg-migrate</a></td>
+        <td><span class="ok">Funcional</span></td>
+        <td>Documentação da ferramenta de migrations node-pg-migrate.</td>
+      </tr>
+    
+
+      <tr data-station="5" data-topic="node-pg-migrate" data-source="node-pg-migrate">
+        <td><span class="station-badge">05</span></td>
+        <td>node-pg-migrate</td>
+        <td>Persistência relacional com PostgreSQL e migrations</td>
+        <td><a href="https://salsita.github.io/node-pg-migrate/" target="_blank" rel="noopener noreferrer">node-pg-migrate</a></td>
+        <td><span class="ok">Funcional</span></td>
+        <td>Documentação da ferramenta de migrations node-pg-migrate.</td>
+      </tr>
+    
+
+      <tr data-station="5" data-topic="sql" data-source="postgresql docs">
+        <td><span class="station-badge">05</span></td>
+        <td>SQL</td>
+        <td>Persistência relacional com PostgreSQL e migrations</td>
+        <td><a href="https://www.postgresql.org/docs/current/" target="_blank" rel="noopener noreferrer">PostgreSQL Docs</a></td>
+        <td><span class="ok">Funcional</span></td>
+        <td>Documentação oficial do PostgreSQL.</td>
+      </tr>
+    
+
+      <tr data-station="5" data-topic="queries parametrizadas" data-source="node-postgres — queries">
+        <td><span class="station-badge">05</span></td>
+        <td>Queries parametrizadas</td>
+        <td>Persistência relacional com PostgreSQL e migrations</td>
+        <td><a href="https://node-postgres.com/features/queries" target="_blank" rel="noopener noreferrer">node-postgres — Queries</a></td>
+        <td><span class="ok">Funcional</span></td>
+        <td>Fonte para queries parametrizadas, prepared statements e query API.</td>
+      </tr>
+    
+
+      <tr data-station="5" data-topic="connection pooling" data-source="node-postgres — pooling">
+        <td><span class="station-badge">05</span></td>
+        <td>Connection pooling</td>
+        <td>Persistência relacional com PostgreSQL e migrations</td>
+        <td><a href="https://node-postgres.com/features/pooling" target="_blank" rel="noopener noreferrer">node-postgres — Pooling</a></td>
+        <td><span class="ok">Funcional</span></td>
+        <td>Fonte para connection pooling em Node.js com PostgreSQL.</td>
+      </tr>
+    
+
+      <tr data-station="5" data-topic="psql" data-source="postgresql docs — psql">
+        <td><span class="station-badge">05</span></td>
+        <td>psql</td>
+        <td>Persistência relacional com PostgreSQL e migrations</td>
+        <td><a href="https://www.postgresql.org/docs/current/app-psql.html" target="_blank" rel="noopener noreferrer">PostgreSQL Docs — psql</a></td>
+        <td><span class="ok">Funcional</span></td>
+        <td>Referência oficial do cliente CLI psql.</td>
+      </tr>
+    
+
+      <tr data-station="5" data-topic="connection strings" data-source="postgresql docs — connection strings">
+        <td><span class="station-badge">05</span></td>
+        <td>Connection strings</td>
+        <td>Persistência relacional com PostgreSQL e migrations</td>
+        <td><a href="https://www.postgresql.org/docs/current/libpq-connect.html#LIBPQ-CONNSTRING" target="_blank" rel="noopener noreferrer">PostgreSQL Docs — Connection strings</a></td>
+        <td><span class="ok">Funcional</span></td>
+        <td>Referência oficial para connection strings/libpq.</td>
+      </tr>
+    
+
+      <tr data-station="6" data-topic="docker" data-source="docker docs — overview">
+        <td><span class="station-badge">06</span></td>
+        <td>Docker</td>
+        <td>Containerização, IaC, deploy e CI/CD</td>
+        <td><a href="https://docs.docker.com/get-started/docker-overview/" target="_blank" rel="noopener noreferrer">Docker Docs — Overview</a></td>
+        <td><span class="ok">Funcional</span></td>
+        <td>Documentação oficial para conceitos de Docker.</td>
+      </tr>
+    
+
+      <tr data-station="6" data-topic="docker compose" data-source="docker docs — compose">
+        <td><span class="station-badge">06</span></td>
+        <td>Docker Compose</td>
+        <td>Containerização, IaC, deploy e CI/CD</td>
+        <td><a href="https://docs.docker.com/compose/" target="_blank" rel="noopener noreferrer">Docker Docs — Compose</a></td>
+        <td><span class="ok">Funcional</span></td>
+        <td>Documentação oficial do Docker Compose.</td>
+      </tr>
+    
+
+      <tr data-station="6" data-topic="docker hub" data-source="docker docs — docker hub">
+        <td><span class="station-badge">06</span></td>
+        <td>Docker Hub</td>
+        <td>Containerização, IaC, deploy e CI/CD</td>
+        <td><a href="https://docs.docker.com/docker-hub/" target="_blank" rel="noopener noreferrer">Docker Docs — Docker Hub</a></td>
+        <td><span class="ok">Funcional</span></td>
+        <td>Documentação oficial do Docker Hub.</td>
+      </tr>
+    
+
+      <tr data-station="6" data-topic="dockerfile" data-source="docker docs — dockerfile reference">
+        <td><span class="station-badge">06</span></td>
+        <td>Dockerfile</td>
+        <td>Containerização, IaC, deploy e CI/CD</td>
+        <td><a href="https://docs.docker.com/reference/dockerfile/" target="_blank" rel="noopener noreferrer">Docker Docs — Dockerfile reference</a></td>
+        <td><span class="ok">Funcional</span></td>
+        <td>Referência oficial de Dockerfile.</td>
+      </tr>
+    
+
+      <tr data-station="6" data-topic="infraestrutura como código (iac)" data-source="terraform docs — what is terraform">
+        <td><span class="station-badge">06</span></td>
+        <td>Infraestrutura como Código (IaC)</td>
+        <td>Containerização, IaC, deploy e CI/CD</td>
+        <td><a href="https://developer.hashicorp.com/terraform/intro" target="_blank" rel="noopener noreferrer">Terraform Docs — What is Terraform</a></td>
+        <td><span class="ok">Funcional</span></td>
+        <td>Fonte primária para IaC declarativa com Terraform.</td>
+      </tr>
+    
+
+      <tr data-station="6" data-topic="vercel" data-source="vercel docs">
+        <td><span class="station-badge">06</span></td>
+        <td>Vercel</td>
+        <td>Containerização, IaC, deploy e CI/CD</td>
+        <td><a href="https://vercel.com/docs" target="_blank" rel="noopener noreferrer">Vercel Docs</a></td>
+        <td><span class="ok">Funcional</span></td>
+        <td>Documentação oficial da plataforma Vercel.</td>
+      </tr>
+    
+
+      <tr data-station="6" data-topic="serverless/lambda functions" data-source="vercel docs — functions">
+        <td><span class="station-badge">06</span></td>
+        <td>Serverless/Lambda Functions</td>
+        <td>Containerização, IaC, deploy e CI/CD</td>
+        <td><a href="https://vercel.com/docs/functions" target="_blank" rel="noopener noreferrer">Vercel Docs — Functions</a></td>
+        <td><span class="ok">Funcional</span></td>
+        <td>Fonte oficial para funções serverless na Vercel.</td>
+      </tr>
+    
+
+      <tr data-station="6" data-topic="ambientes" data-source="vercel docs — environments">
+        <td><span class="station-badge">06</span></td>
+        <td>Ambientes</td>
+        <td>Containerização, IaC, deploy e CI/CD</td>
+        <td><a href="https://vercel.com/docs/deployments/environments" target="_blank" rel="noopener noreferrer">Vercel Docs — Environments</a></td>
+        <td><span class="ok">Funcional</span></td>
+        <td>Fonte oficial para ambientes Local, Preview e Production na Vercel.</td>
+      </tr>
+    
+
+      <tr data-station="6" data-topic="continuous integration (ci)" data-source="github actions — understanding workflows">
+        <td><span class="station-badge">06</span></td>
+        <td>Continuous Integration (CI)</td>
+        <td>Containerização, IaC, deploy e CI/CD</td>
+        <td><a href="https://docs.github.com/en/actions/get-started/understand-github-actions" target="_blank" rel="noopener noreferrer">GitHub Actions — Understanding workflows</a></td>
+        <td><span class="ok">Funcional</span></td>
+        <td>Fonte oficial sobre workflow, event, job, step e action.</td>
+      </tr>
+    
+
+      <tr data-station="6" data-topic="continuous delivery/deployment (cd)" data-source="github actions docs">
+        <td><span class="station-badge">06</span></td>
+        <td>Continuous Delivery/Deployment (CD)</td>
+        <td>Containerização, IaC, deploy e CI/CD</td>
+        <td><a href="https://docs.github.com/en/actions" target="_blank" rel="noopener noreferrer">GitHub Actions Docs</a></td>
+        <td><span class="ok">Funcional</span></td>
+        <td>Documentação oficial de automação e CI/CD no GitHub.</td>
+      </tr>
+    
+
+      <tr data-station="6" data-topic="github actions" data-source="github actions docs">
+        <td><span class="station-badge">06</span></td>
+        <td>GitHub Actions</td>
+        <td>Containerização, IaC, deploy e CI/CD</td>
+        <td><a href="https://docs.github.com/en/actions" target="_blank" rel="noopener noreferrer">GitHub Actions Docs</a></td>
+        <td><span class="ok">Funcional</span></td>
+        <td>Documentação oficial de automação e CI/CD no GitHub.</td>
+      </tr>
+    
+
+      <tr data-station="6" data-topic="branch protection rules" data-source="github docs — protected branches">
+        <td><span class="station-badge">06</span></td>
+        <td>Branch protection rules</td>
+        <td>Containerização, IaC, deploy e CI/CD</td>
+        <td><a href="https://docs.github.com/en/repositories/configuring-branches-and-merges-in-your-repository/managing-protected-branches/about-protected-branches" target="_blank" rel="noopener noreferrer">GitHub Docs — Protected branches</a></td>
+        <td><span class="ok">Funcional</span></td>
+        <td>Fonte oficial para branch protection rules.</td>
+      </tr>
+    
+
+      <tr data-station="7" data-topic="bcryptjs" data-source="bcrypt.js github">
+        <td><span class="station-badge">07</span></td>
+        <td>bcryptjs</td>
+        <td>Segurança defensiva: senhas, sessões, injeção e segredos</td>
+        <td><a href="https://github.com/dcodeIO/bcrypt.js/" target="_blank" rel="noopener noreferrer">bcrypt.js GitHub</a></td>
+        <td><span class="ok">Funcional</span></td>
+        <td>Repositório/documentação da biblioteca bcryptjs.</td>
+      </tr>
+    
+
+      <tr data-station="7" data-topic="hash, salt e pepper" data-source="owasp — password storage cheat sheet">
+        <td><span class="station-badge">07</span></td>
+        <td>Hash, salt e pepper</td>
+        <td>Segurança defensiva: senhas, sessões, injeção e segredos</td>
+        <td><a href="https://cheatsheetseries.owasp.org/cheatsheets/Password_Storage_Cheat_Sheet.html" target="_blank" rel="noopener noreferrer">OWASP — Password Storage Cheat Sheet</a></td>
+        <td><span class="ok">Funcional</span></td>
+        <td>Fonte defensiva para armazenamento seguro de senhas, hash, salt e pepper.</td>
+      </tr>
+    
+
+      <tr data-station="7" data-topic="rainbow tables" data-source="owasp — password storage cheat sheet">
+        <td><span class="station-badge">07</span></td>
+        <td>Rainbow tables</td>
+        <td>Segurança defensiva: senhas, sessões, injeção e segredos</td>
+        <td><a href="https://cheatsheetseries.owasp.org/cheatsheets/Password_Storage_Cheat_Sheet.html" target="_blank" rel="noopener noreferrer">OWASP — Password Storage Cheat Sheet</a></td>
+        <td><span class="ok">Funcional</span></td>
+        <td>Fonte defensiva para armazenamento seguro de senhas, hash, salt e pepper.</td>
+      </tr>
+    
+
+      <tr data-station="7" data-topic="sql injection" data-source="owasp — sql injection prevention">
+        <td><span class="station-badge">07</span></td>
+        <td>SQL Injection</td>
+        <td>Segurança defensiva: senhas, sessões, injeção e segredos</td>
+        <td><a href="https://cheatsheetseries.owasp.org/cheatsheets/SQL_Injection_Prevention_Cheat_Sheet.html" target="_blank" rel="noopener noreferrer">OWASP — SQL Injection Prevention</a></td>
+        <td><span class="ok">Funcional</span></td>
+        <td>Fonte defensiva para prevenção de SQL Injection.</td>
+      </tr>
+    
+
+      <tr data-station="7" data-topic="session hijacking" data-source="owasp — session management cheat sheet">
+        <td><span class="station-badge">07</span></td>
+        <td>Session hijacking</td>
+        <td>Segurança defensiva: senhas, sessões, injeção e segredos</td>
+        <td><a href="https://cheatsheetseries.owasp.org/cheatsheets/Session_Management_Cheat_Sheet.html" target="_blank" rel="noopener noreferrer">OWASP — Session Management Cheat Sheet</a></td>
+        <td><span class="ok">Funcional</span></td>
+        <td>Fonte defensiva para cookies, sessão e mitigação de roubo de sessão.</td>
+      </tr>
+    
+
+      <tr data-station="7" data-topic="uuid" data-source="rfc 9562 — uuid">
+        <td><span class="station-badge">07</span></td>
+        <td>UUID</td>
+        <td>Segurança defensiva: senhas, sessões, injeção e segredos</td>
+        <td><a href="https://www.rfc-editor.org/rfc/rfc9562.html" target="_blank" rel="noopener noreferrer">RFC 9562 — UUID</a></td>
+        <td><span class="ok">Funcional</span></td>
+        <td>Especificação atual de UUIDs.</td>
+      </tr>
+    
+
+      <tr data-station="7" data-topic="ssl/tls" data-source="mdn — transport layer security">
+        <td><span class="station-badge">07</span></td>
+        <td>SSL/TLS</td>
+        <td>Segurança defensiva: senhas, sessões, injeção e segredos</td>
+        <td><a href="https://developer.mozilla.org/en-US/docs/Web/Security/Defenses/Transport_Layer_Security" target="_blank" rel="noopener noreferrer">MDN — Transport Layer Security</a></td>
+        <td><span class="ok">Funcional</span></td>
+        <td>Guia de TLS no contexto web.</td>
+      </tr>
+    
+
+      <tr data-station="7" data-topic="autenticação e autorização" data-source="owasp — session management cheat sheet">
+        <td><span class="station-badge">07</span></td>
+        <td>Autenticação e autorização</td>
+        <td>Segurança defensiva: senhas, sessões, injeção e segredos</td>
+        <td><a href="https://cheatsheetseries.owasp.org/cheatsheets/Session_Management_Cheat_Sheet.html" target="_blank" rel="noopener noreferrer">OWASP — Session Management Cheat Sheet</a></td>
+        <td><span class="ok">Funcional</span></td>
+        <td>Fonte defensiva para cookies, sessão e mitigação de roubo de sessão.</td>
+      </tr>
+    
+
+      <tr data-station="7" data-topic="cookies e sessões" data-source="mdn — http cookies">
+        <td><span class="station-badge">07</span></td>
+        <td>Cookies e sessões</td>
+        <td>Segurança defensiva: senhas, sessões, injeção e segredos</td>
+        <td><a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Guides/Cookies" target="_blank" rel="noopener noreferrer">MDN — HTTP Cookies</a></td>
+        <td><span class="ok">Funcional</span></td>
+        <td>Guia de cookies HTTP e atributos de segurança.</td>
+      </tr>
+    
+
+      <tr data-station="7" data-topic="variáveis de ambiente (.env)" data-source="the twelve-factor app — config">
+        <td><span class="station-badge">07</span></td>
+        <td>Variáveis de ambiente (.env)</td>
+        <td>Segurança defensiva: senhas, sessões, injeção e segredos</td>
+        <td><a href="https://12factor.net/config" target="_blank" rel="noopener noreferrer">The Twelve-Factor App — Config</a></td>
+        <td><span class="ok">Funcional</span></td>
+        <td>Referência clássica para separar configuração sensível do código.</td>
+      </tr>
+    
+
+      <tr data-station="8" data-topic="rest/restful" data-source="mdn — rest">
+        <td><span class="station-badge">08</span></td>
+        <td>REST/RESTful</td>
+        <td>APIs, comunicação, protocolos e rede</td>
+        <td><a href="https://developer.mozilla.org/en-US/docs/Glossary/REST" target="_blank" rel="noopener noreferrer">MDN — REST</a></td>
+        <td><span class="ok">Funcional</span></td>
+        <td>Glossário MDN para REST.</td>
+      </tr>
+    
+
+      <tr data-station="8" data-topic="api versioning" data-source="rest api versioning">
+        <td><span class="station-badge">08</span></td>
+        <td>API versioning</td>
+        <td>APIs, comunicação, protocolos e rede</td>
+        <td><a href="https://restfulapi.net/versioning/" target="_blank" rel="noopener noreferrer">REST API Versioning</a></td>
+        <td><span class="ok">Funcional</span></td>
+        <td>Guia dedicado a estratégias de versionamento REST.</td>
+      </tr>
+    
+
+      <tr data-station="8" data-topic="breaking changes" data-source="semantic versioning">
+        <td><span class="station-badge">08</span></td>
+        <td>Breaking changes</td>
+        <td>APIs, comunicação, protocolos e rede</td>
+        <td><a href="https://semver.org/" target="_blank" rel="noopener noreferrer">Semantic Versioning</a></td>
+        <td><span class="ok">Funcional</span></td>
+        <td>Especificação oficial SemVer.</td>
+      </tr>
+    
+
+      <tr data-station="8" data-topic="status codes http" data-source="mdn — http status codes">
+        <td><span class="station-badge">08</span></td>
+        <td>Status Codes HTTP</td>
+        <td>APIs, comunicação, protocolos e rede</td>
+        <td><a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Reference/Status" target="_blank" rel="noopener noreferrer">MDN — HTTP Status Codes</a></td>
+        <td><span class="ok">Funcional</span></td>
+        <td>Referência MDN para códigos HTTP.</td>
+      </tr>
+    
+
+      <tr data-station="8" data-topic="endpoints" data-source="rfc 9110 — http semantics">
+        <td><span class="station-badge">08</span></td>
+        <td>Endpoints</td>
+        <td>APIs, comunicação, protocolos e rede</td>
+        <td><a href="https://datatracker.ietf.org/doc/html/rfc9110" target="_blank" rel="noopener noreferrer">RFC 9110 — HTTP Semantics</a></td>
+        <td><span class="ok">Funcional</span></td>
+        <td>Especificação moderna de semântica HTTP.</td>
+      </tr>
+    
+
+      <tr data-station="8" data-topic="stateless applications" data-source="mdn — overview of http">
+        <td><span class="station-badge">08</span></td>
+        <td>Stateless applications</td>
+        <td>APIs, comunicação, protocolos e rede</td>
+        <td><a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Guides/Overview" target="_blank" rel="noopener noreferrer">MDN — Overview of HTTP</a></td>
+        <td><span class="ok">Funcional</span></td>
+        <td>Base para HTTP, statelessness, requests e responses.</td>
+      </tr>
+    
+
+      <tr data-station="8" data-topic="next-connect" data-source="next-connect github">
+        <td><span class="station-badge">08</span></td>
+        <td>next-connect</td>
+        <td>APIs, comunicação, protocolos e rede</td>
+        <td><a href="https://github.com/hoangvvo/next-connect" target="_blank" rel="noopener noreferrer">next-connect GitHub</a></td>
+        <td><span class="ok">Funcional</span></td>
+        <td>Repositório oficial do middleware/router next-connect.</td>
+      </tr>
+    
+
+      <tr data-station="8" data-topic="tcp/ip" data-source="rfc 9293 — tcp">
+        <td><span class="station-badge">08</span></td>
+        <td>TCP/IP</td>
+        <td>APIs, comunicação, protocolos e rede</td>
+        <td><a href="https://www.rfc-editor.org/rfc/rfc9293.html" target="_blank" rel="noopener noreferrer">RFC 9293 — TCP</a></td>
+        <td><span class="ok">Funcional</span></td>
+        <td>Especificação atual do Transmission Control Protocol.</td>
+      </tr>
+    
+
+      <tr data-station="8" data-topic="udp" data-source="cloudflare learning — udp">
+        <td><span class="station-badge">08</span></td>
+        <td>UDP</td>
+        <td>APIs, comunicação, protocolos e rede</td>
+        <td><a href="https://www.cloudflare.com/learning/ddos/glossary/user-datagram-protocol-udp/" target="_blank" rel="noopener noreferrer">Cloudflare Learning — UDP</a></td>
+        <td><span class="ok">Funcional</span></td>
+        <td>Explicação prática de UDP.</td>
+      </tr>
+    
+
+      <tr data-station="8" data-topic="http/https" data-source="mdn — overview of http">
+        <td><span class="station-badge">08</span></td>
+        <td>HTTP/HTTPS</td>
+        <td>APIs, comunicação, protocolos e rede</td>
+        <td><a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Guides/Overview" target="_blank" rel="noopener noreferrer">MDN — Overview of HTTP</a></td>
+        <td><span class="ok">Funcional</span></td>
+        <td>Base para HTTP, statelessness, requests e responses.</td>
+      </tr>
+    
+
+      <tr data-station="8" data-topic="dns" data-source="cloudflare learning — dns">
+        <td><span class="station-badge">08</span></td>
+        <td>DNS</td>
+        <td>APIs, comunicação, protocolos e rede</td>
+        <td><a href="https://www.cloudflare.com/learning/dns/what-is-dns/" target="_blank" rel="noopener noreferrer">Cloudflare Learning — DNS</a></td>
+        <td><span class="ok">Funcional</span></td>
+        <td>Explicação prática de DNS.</td>
+      </tr>
+    
+
+      <tr data-station="8" data-topic="registro.br" data-source="registro.br — ajuda">
+        <td><span class="station-badge">08</span></td>
+        <td>Registro.br</td>
+        <td>APIs, comunicação, protocolos e rede</td>
+        <td><a href="https://registro.br/ajuda/" target="_blank" rel="noopener noreferrer">Registro.br — Ajuda</a></td>
+        <td><span class="ok">Funcional</span></td>
+        <td>Página oficial de ajuda do Registro.br para domínios .br.</td>
+      </tr>
+    
+
+      <tr data-station="8" data-topic="smtp" data-source="rfc 5321 — smtp">
+        <td><span class="station-badge">08</span></td>
+        <td>SMTP</td>
+        <td>APIs, comunicação, protocolos e rede</td>
+        <td><a href="https://www.rfc-editor.org/rfc/rfc5321.html" target="_blank" rel="noopener noreferrer">RFC 5321 — SMTP</a></td>
+        <td><span class="ok">Funcional</span></td>
+        <td>Especificação do Simple Mail Transfer Protocol.</td>
+      </tr>
+    
+
+      <tr data-station="8" data-topic="nodemailer" data-source="nodemailer — smtp transport">
+        <td><span class="station-badge">08</span></td>
+        <td>Nodemailer</td>
+        <td>APIs, comunicação, protocolos e rede</td>
+        <td><a href="https://nodemailer.com/smtp" target="_blank" rel="noopener noreferrer">Nodemailer — SMTP transport</a></td>
+        <td><span class="ok">Funcional</span></td>
+        <td>Documentação oficial de SMTP no Nodemailer.</td>
+      </tr>
+    
+
+      <tr data-station="8" data-topic="mailcatcher" data-source="mailcatcher">
+        <td><span class="station-badge">08</span></td>
+        <td>MailCatcher</td>
+        <td>APIs, comunicação, protocolos e rede</td>
+        <td><a href="https://mailcatcher.me/" target="_blank" rel="noopener noreferrer">MailCatcher</a></td>
+        <td><span class="ok">Funcional</span></td>
+        <td>Documentação da ferramenta MailCatcher para SMTP local de desenvolvimento.</td>
+      </tr>
+    
+
+      <tr data-station="9" data-topic="mvc" data-source="martin fowler — mvc">
+        <td><span class="station-badge">09</span></td>
+        <td>MVC</td>
+        <td>Arquitetura, gestão de projeto e modos de evolução</td>
+        <td><a href="https://martinfowler.com/eaaCatalog/modelViewController.html" target="_blank" rel="noopener noreferrer">Martin Fowler — MVC</a></td>
+        <td><span class="ok">Funcional</span></td>
+        <td>Referência de padrão arquitetural MVC.</td>
+      </tr>
+    
+
+      <tr data-station="9" data-topic="separation of concerns" data-source="separation of concerns">
+        <td><span class="station-badge">09</span></td>
+        <td>Separation of Concerns</td>
+        <td>Arquitetura, gestão de projeto e modos de evolução</td>
+        <td><a href="https://en.wikipedia.org/wiki/Separation_of_concerns" target="_blank" rel="noopener noreferrer">Separation of Concerns</a></td>
+        <td><span class="ok">Funcional</span></td>
+        <td>Referência conceitual sobre separação de responsabilidades.</td>
+      </tr>
+    
+
+      <tr data-station="9" data-topic="error handling patterns" data-source="martin fowler — notifications vs exceptions">
+        <td><span class="station-badge">09</span></td>
+        <td>Error handling patterns</td>
+        <td>Arquitetura, gestão de projeto e modos de evolução</td>
+        <td><a href="https://martinfowler.com/articles/replaceThrowWithNotification.html" target="_blank" rel="noopener noreferrer">Martin Fowler — Notifications vs Exceptions</a></td>
+        <td><span class="ok">Funcional</span></td>
+        <td>Referência para desenho de erros e validação sem exceções abusivas.</td>
+      </tr>
+    
+
+      <tr data-station="9" data-topic="custom errors" data-source="typescript — unknown in catch">
+        <td><span class="station-badge">09</span></td>
+        <td>Custom errors</td>
+        <td>Arquitetura, gestão de projeto e modos de evolução</td>
+        <td><a href="https://www.typescriptlang.org/docs/handbook/release-notes/typescript-4-4.html#defaulting-to-the-unknown-type-in-catch-variables" target="_blank" rel="noopener noreferrer">TypeScript — unknown in catch</a></td>
+        <td><span class="ok">Funcional</span></td>
+        <td>Referência útil para custom errors e tratamento seguro de erros em TS.</td>
+      </tr>
+    
+
+      <tr data-station="9" data-topic="github issues" data-source="github docs — issues">
+        <td><span class="station-badge">09</span></td>
+        <td>GitHub Issues</td>
+        <td>Arquitetura, gestão de projeto e modos de evolução</td>
+        <td><a href="https://docs.github.com/en/issues/tracking-your-work-with-issues/learning-about-issues/about-issues" target="_blank" rel="noopener noreferrer">GitHub Docs — Issues</a></td>
+        <td><span class="ok">Funcional</span></td>
+        <td>Fonte oficial para rastreamento de tarefas com Issues.</td>
+      </tr>
+    
+
+      <tr data-station="9" data-topic="github milestones" data-source="github docs — milestones">
+        <td><span class="station-badge">09</span></td>
+        <td>GitHub Milestones</td>
+        <td>Arquitetura, gestão de projeto e modos de evolução</td>
+        <td><a href="https://docs.github.com/en/issues/using-labels-and-milestones-to-track-work/about-milestones" target="_blank" rel="noopener noreferrer">GitHub Docs — Milestones</a></td>
+        <td><span class="ok">Funcional</span></td>
+        <td>Fonte oficial para marcos de projeto.</td>
+      </tr>
+    
+
+      <tr data-station="9" data-topic="movimento ágil e devops" data-source="agile manifesto — principles">
+        <td><span class="station-badge">09</span></td>
+        <td>Movimento Ágil e DevOps</td>
+        <td>Arquitetura, gestão de projeto e modos de evolução</td>
+        <td><a href="https://agilemanifesto.org/principles.html" target="_blank" rel="noopener noreferrer">Agile Manifesto — Principles</a></td>
+        <td><span class="ok">Funcional</span></td>
+        <td>Fonte primária dos princípios ágeis.</td>
+      </tr>
+    
+
+      <tr data-station="9" data-topic="desenvolvimento orgânico" data-source="martin fowler — yagni">
+        <td><span class="station-badge">09</span></td>
+        <td>Desenvolvimento orgânico</td>
+        <td>Arquitetura, gestão de projeto e modos de evolução</td>
+        <td><a href="https://martinfowler.com/bliki/Yagni.html" target="_blank" rel="noopener noreferrer">Martin Fowler — YAGNI</a></td>
+        <td><span class="ok">Funcional</span></td>
+        <td>Referência para evitar construir antes da necessidade real.</td>
+      </tr>
+    
+
+      <tr data-station="9" data-topic="desenvolvimento &quot;impressora 3d&quot;" data-source="lean enterprise institute — what is lean?">
+        <td><span class="station-badge">09</span></td>
+        <td>Desenvolvimento &quot;Impressora 3D&quot;</td>
+        <td>Arquitetura, gestão de projeto e modos de evolução</td>
+        <td><a href="https://www.lean.org/explore-lean/what-is-lean/" target="_blank" rel="noopener noreferrer">Lean Enterprise Institute — What is Lean?</a></td>
+        <td><span class="ok">Funcional</span></td>
+        <td>Referência para redução de desperdício e experimentação contínua.</td>
+      </tr>
+    
+
+      <tr data-station="10" data-topic="vscode" data-source="vs code docs">
+        <td><span class="station-badge">10</span></td>
+        <td>VSCode</td>
+        <td>Ferramentas, formatos, conceitos avançados e manutenção contínua</td>
+        <td><a href="https://code.visualstudio.com/docs" target="_blank" rel="noopener noreferrer">VS Code Docs</a></td>
+        <td><span class="ok">Funcional</span></td>
+        <td>Documentação oficial do VS Code.</td>
+      </tr>
+    
+
+      <tr data-station="10" data-topic="terminal linux" data-source="gnu bash manual">
+        <td><span class="station-badge">10</span></td>
+        <td>Terminal Linux</td>
+        <td>Ferramentas, formatos, conceitos avançados e manutenção contínua</td>
+        <td><a href="https://www.gnu.org/software/bash/manual/bash.html" target="_blank" rel="noopener noreferrer">GNU Bash Manual</a></td>
+        <td><span class="ok">Funcional</span></td>
+        <td>Manual oficial do Bash para terminal Linux.</td>
+      </tr>
+    
+
+      <tr data-station="10" data-topic="fuzzy search" data-source="vs code — basic editing">
+        <td><span class="station-badge">10</span></td>
+        <td>Fuzzy search</td>
+        <td>Ferramentas, formatos, conceitos avançados e manutenção contínua</td>
+        <td><a href="https://code.visualstudio.com/docs/editing/codebasics" target="_blank" rel="noopener noreferrer">VS Code — Basic editing</a></td>
+        <td><span class="ok">Funcional</span></td>
+        <td>Documentação oficial de edição, busca e recursos básicos.</td>
+      </tr>
+    
+
+      <tr data-station="10" data-topic="concurrently" data-source="concurrently github">
+        <td><span class="station-badge">10</span></td>
+        <td>Concurrently</td>
+        <td>Ferramentas, formatos, conceitos avançados e manutenção contínua</td>
+        <td><a href="https://github.com/open-cli-tools/concurrently" target="_blank" rel="noopener noreferrer">concurrently GitHub</a></td>
+        <td><span class="ok">Funcional</span></td>
+        <td>Repositório/documentação para execução paralela de comandos.</td>
+      </tr>
+    
+
+      <tr data-station="10" data-topic="async-retry" data-source="async-retry github">
+        <td><span class="station-badge">10</span></td>
+        <td>async-retry</td>
+        <td>Ferramentas, formatos, conceitos avançados e manutenção contínua</td>
+        <td><a href="https://github.com/vercel/async-retry" target="_blank" rel="noopener noreferrer">async-retry GitHub</a></td>
+        <td><span class="ok">Funcional</span></td>
+        <td>Repositório/documentação da biblioteca async-retry.</td>
+      </tr>
+    
+
+      <tr data-station="10" data-topic="dotenv e dotenv-expand" data-source="dotenv github">
+        <td><span class="station-badge">10</span></td>
+        <td>dotenv e dotenv-expand</td>
+        <td>Ferramentas, formatos, conceitos avançados e manutenção contínua</td>
+        <td><a href="https://github.com/motdotla/dotenv" target="_blank" rel="noopener noreferrer">dotenv GitHub</a></td>
+        <td><span class="ok">Funcional</span></td>
+        <td>Repositório/documentação do dotenv.</td>
+      </tr>
+    
+
+      <tr data-station="10" data-topic="json" data-source="json.org">
+        <td><span class="station-badge">10</span></td>
+        <td>JSON</td>
+        <td>Ferramentas, formatos, conceitos avançados e manutenção contínua</td>
+        <td><a href="https://www.json.org/json-en.html" target="_blank" rel="noopener noreferrer">JSON.org</a></td>
+        <td><span class="ok">Funcional</span></td>
+        <td>Referência canônica do formato JSON.</td>
+      </tr>
+    
+
+      <tr data-station="10" data-topic="yaml" data-source="yaml 1.2.2 spec">
+        <td><span class="station-badge">10</span></td>
+        <td>YAML</td>
+        <td>Ferramentas, formatos, conceitos avançados e manutenção contínua</td>
+        <td><a href="https://yaml.org/spec/1.2.2/" target="_blank" rel="noopener noreferrer">YAML 1.2.2 Spec</a></td>
+        <td><span class="ok">Funcional</span></td>
+        <td>Especificação oficial YAML.</td>
+      </tr>
+    
+
+      <tr data-station="10" data-topic="semantic versioning (semver)" data-source="semantic versioning">
+        <td><span class="station-badge">10</span></td>
+        <td>Semantic Versioning (SemVer)</td>
+        <td>Ferramentas, formatos, conceitos avançados e manutenção contínua</td>
+        <td><a href="https://semver.org/" target="_blank" rel="noopener noreferrer">Semantic Versioning</a></td>
+        <td><span class="ok">Funcional</span></td>
+        <td>Especificação oficial SemVer.</td>
+      </tr>
+    
+
+      <tr data-station="10" data-topic="unix timestamps" data-source="mdn — javascript date">
+        <td><span class="station-badge">10</span></td>
+        <td>Unix timestamps</td>
+        <td>Ferramentas, formatos, conceitos avançados e manutenção contínua</td>
+        <td><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date" target="_blank" rel="noopener noreferrer">MDN — JavaScript Date</a></td>
+        <td><span class="ok">Funcional</span></td>
+        <td>Referência prática para tempo, epoch e timestamps em JavaScript.</td>
+      </tr>
+    
+
+      <tr data-station="10" data-topic="race conditions" data-source="mdn — async javascript">
+        <td><span class="station-badge">10</span></td>
+        <td>Race conditions</td>
+        <td>Ferramentas, formatos, conceitos avançados e manutenção contínua</td>
+        <td><a href="https://developer.mozilla.org/en-US/docs/Learn_web_development/Extensions/Async_JS/Introducing" target="_blank" rel="noopener noreferrer">MDN — Async JavaScript</a></td>
+        <td><span class="ok">Funcional</span></td>
+        <td>Base para assincronia e condições de corrida em JS.</td>
+      </tr>
+    
+
+      <tr data-station="10" data-topic="exit codes" data-source="node.js docs — process exit codes">
+        <td><span class="station-badge">10</span></td>
+        <td>Exit codes</td>
+        <td>Ferramentas, formatos, conceitos avançados e manutenção contínua</td>
+        <td><a href="https://nodejs.org/api/process.html#exit-codes" target="_blank" rel="noopener noreferrer">Node.js Docs — Process exit codes</a></td>
+        <td><span class="ok">Funcional</span></td>
+        <td>Referência oficial de exit codes no Node.js.</td>
+      </tr>
+    
+
+      <tr data-station="10" data-topic="logging e monitoring" data-source="opentelemetry — what is opentelemetry?">
+        <td><span class="station-badge">10</span></td>
+        <td>Logging e monitoring</td>
+        <td>Ferramentas, formatos, conceitos avançados e manutenção contínua</td>
+        <td><a href="https://opentelemetry.io/docs/what-is-opentelemetry/" target="_blank" rel="noopener noreferrer">OpenTelemetry — What is OpenTelemetry?</a></td>
+        <td><span class="ok">Funcional</span></td>
+        <td>Referência oficial para observabilidade: traces, metrics e logs.</td>
+      </tr>
+    
+
+      <tr data-station="10" data-topic="performance e otimização" data-source="web.dev — learn performance">
+        <td><span class="station-badge">10</span></td>
+        <td>Performance e otimização</td>
+        <td>Ferramentas, formatos, conceitos avançados e manutenção contínua</td>
+        <td><a href="https://web.dev/learn/performance" target="_blank" rel="noopener noreferrer">web.dev — Learn Performance</a></td>
+        <td><span class="ok">Funcional</span></td>
+        <td>Curso oficial/prático para performance web.</td>
+      </tr>
+    
+
+      <tr data-station="10" data-topic="cache strategies" data-source="mdn — http caching">
+        <td><span class="station-badge">10</span></td>
+        <td>Cache strategies</td>
+        <td>Ferramentas, formatos, conceitos avançados e manutenção contínua</td>
+        <td><a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Guides/Caching" target="_blank" rel="noopener noreferrer">MDN — HTTP caching</a></td>
+        <td><span class="ok">Funcional</span></td>
+        <td>Referência para cache HTTP.</td>
+      </tr>
+    
+
+      <tr data-station="10" data-topic="clean code" data-source="refactoring.com">
+        <td><span class="station-badge">10</span></td>
+        <td>Clean Code</td>
+        <td>Ferramentas, formatos, conceitos avançados e manutenção contínua</td>
+        <td><a href="https://refactoring.com/" target="_blank" rel="noopener noreferrer">Refactoring.com</a></td>
+        <td><span class="ok">Funcional</span></td>
+        <td>Referência de Martin Fowler sobre refatoração.</td>
+      </tr>
+    
+
+      <tr data-station="10" data-topic="refatoração" data-source="refactoring.com">
+        <td><span class="station-badge">10</span></td>
+        <td>Refatoração</td>
+        <td>Ferramentas, formatos, conceitos avançados e manutenção contínua</td>
+        <td><a href="https://refactoring.com/" target="_blank" rel="noopener noreferrer">Refactoring.com</a></td>
+        <td><span class="ok">Funcional</span></td>
+        <td>Referência de Martin Fowler sobre refatoração.</td>
+      </tr>
+    
+
+      <tr data-station="10" data-topic="debugging" data-source="vs code — debugging">
+        <td><span class="station-badge">10</span></td>
+        <td>Debugging</td>
+        <td>Ferramentas, formatos, conceitos avançados e manutenção contínua</td>
+        <td><a href="https://code.visualstudio.com/docs/debugtest/debugging" target="_blank" rel="noopener noreferrer">VS Code — Debugging</a></td>
+        <td><span class="ok">Funcional</span></td>
+        <td>Documentação oficial para depuração no VS Code.</td>
+      </tr>
+    
+
+      <tr data-station="10" data-topic="paralisia por análise" data-source="martin fowler — yagni">
+        <td><span class="station-badge">10</span></td>
+        <td>Paralisia por análise</td>
+        <td>Ferramentas, formatos, conceitos avançados e manutenção contínua</td>
+        <td><a href="https://martinfowler.com/bliki/Yagni.html" target="_blank" rel="noopener noreferrer">Martin Fowler — YAGNI</a></td>
+        <td><span class="ok">Funcional</span></td>
+        <td>Referência para evitar construir antes da necessidade real.</td>
+      </tr>
+    
+
+      <tr data-station="10" data-topic="efeito estilingue infinito" data-source="lean enterprise institute — what is lean?">
+        <td><span class="station-badge">10</span></td>
+        <td>Efeito estilingue infinito</td>
+        <td>Ferramentas, formatos, conceitos avançados e manutenção contínua</td>
+        <td><a href="https://www.lean.org/explore-lean/what-is-lean/" target="_blank" rel="noopener noreferrer">Lean Enterprise Institute — What is Lean?</a></td>
+        <td><span class="ok">Funcional</span></td>
+        <td>Referência para redução de desperdício e experimentação contínua.</td>
+      </tr>
+    
+
+      <tr data-station="10" data-topic="licenças de software" data-source="choose a license">
+        <td><span class="station-badge">10</span></td>
+        <td>Licenças de software</td>
+        <td>Ferramentas, formatos, conceitos avançados e manutenção contínua</td>
+        <td><a href="https://choosealicense.com/licenses/" target="_blank" rel="noopener noreferrer">Choose a License</a></td>
+        <td><span class="ok">Funcional</span></td>
+        <td>Guia de licenças mantido pelo GitHub.</td>
+      </tr>
+    
+
+      <tr data-station="10" data-topic="set-cookie-parser" data-source="set-cookie-parser github">
+        <td><span class="station-badge">10</span></td>
+        <td>set-cookie-parser</td>
+        <td>Ferramentas, formatos, conceitos avançados e manutenção contínua</td>
+        <td><a href="https://github.com/nfriedly/set-cookie-parser" target="_blank" rel="noopener noreferrer">set-cookie-parser GitHub</a></td>
+        <td><span class="ok">Funcional</span></td>
+        <td>Repositório/documentação da lib set-cookie-parser.</td>
+      </tr>
+    
+
+      <tr data-station="10" data-topic="cookie" data-source="cookie github">
+        <td><span class="station-badge">10</span></td>
+        <td>cookie</td>
+        <td>Ferramentas, formatos, conceitos avançados e manutenção contínua</td>
+        <td><a href="https://github.com/jshttp/cookie" target="_blank" rel="noopener noreferrer">cookie GitHub</a></td>
+        <td><span class="ok">Funcional</span></td>
+        <td>Repositório/documentação da lib cookie.</td>
+      </tr>
+    </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section id="boss" class="boss">
+      <h2>Boss Final — Sem gabarito</h2>
+      <p>Responda por escrito. O objetivo é provar síntese, não memorização.</p>
+      <ol><li>Explique uma arquitetura mínima para um produto Next.js + Node + PostgreSQL com CI/CD, ambiente preview e branch protection.</li><li>Dado um bug de sessão intermitente, quais logs, cookies, status HTTP e eventos de autenticação você verificaria primeiro?</li><li>Quando uma alteração de endpoint deve gerar nova versão de API e quando basta alterar implementação interna?</li><li>Como você impediria que um projeto com muitos scripts, hooks e ferramentas virasse uma máquina frágil de automação acidental?</li><li>Desenhe o fluxo completo: issue → branch → commit convencional → PR → review → CI → migration → deploy → monitoramento.</li></ol>
+    </section>
+
+    <footer>
+      <p><strong>Arquivo gerado:</strong> trilha-fullstack-nextjs-node-devops-validada.html</p>
+      <p><strong>Data de geração:</strong> 2026-07-09 · <strong>Escopo:</strong> trilha técnica validada por abertura/inspeção de referências durante a sessão.</p>
+    </footer>
+  </main>
+</div>
+<script>
+function filterRows() {
+  const q = document.getElementById('q').value.toLowerCase().trim();
+  const station = document.getElementById('stationFilter').value;
+  const rows = document.querySelectorAll('#auditTable tbody tr');
+  for (const row of rows) {
+    const text = row.innerText.toLowerCase();
+    const rowStation = row.dataset.station;
+    const matchQ = !q || text.includes(q);
+    const matchStation = !station || rowStation === station;
+    row.style.display = matchQ && matchStation ? '' : 'none';
+  }
+}
+</script>
+</body>
+</html>

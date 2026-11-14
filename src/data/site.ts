@@ -75,23 +75,28 @@ export const tutorials: {
   date: string;
   href: string;
   repo: string | null;
+  repoLabel?: Copy;
   title: Copy;
   summary: Copy;
 }[] = [
   {
     id: 'ai-first-playbook',
-    version: '0.4',
+    version: 'v0.4',
     date: '2026-11-14',
-    href: 'https://josemalyson.github.io/ai-first-playbook/',
+    href: '/tutoriais/ai-first-playbook',
     repo: 'https://github.com/Josemalyson/ai-first-playbook',
+    repoLabel: {
+      'pt-BR': 'Repositório e PDF',
+      en: 'Repository and PDF',
+    },
     title: {
       'pt-BR': 'IA First Engineering — Playbook',
       en: 'AI-First Engineering — Playbook',
     },
     summary: {
       'pt-BR':
-        'Contrato de mudança, harness de execução e plano de controle. Gates humanos, DoR/DoD e o fluxo intenção → spec → verificação. Versão 0.4 lida no site em 14 nov 2026.',
-      en: 'Change contract, execution harness, and control plane. Human gates, DoR/DoD, and the intention → spec → verification flow. Version 0.4 read from the site on Nov 14, 2026.',
+        'Contrato de mudança, harness de execução e plano de controle. 29 passos, do 00 ao 28, com o loop de guardrail e pre-commit. Versão v0.4, 14 nov 2026.',
+      en: 'Change contract, execution harness, and control plane. 29 steps, 00 through 28, with the guardrail and pre-commit loop. Version v0.4, 14 Nov 2026. The full text is in Portuguese.',
     },
   },
   {
@@ -129,16 +134,6 @@ export const projects: {
     },
   },
   {
-    name: 'ai-usagebar',
-    href: 'https://github.com/Josemalyson/ai-usagebar',
-    version: null,
-    why: {
-      'pt-BR':
-        'Widget em Rust para Waybar, painel Omarchy e TUI. Mostra cota e créditos de Claude, Codex, Copilot, OpenRouter e outros provedores. Começou como port do claudebar.',
-      en: 'Rust widget for Waybar, the Omarchy panel, and a TUI. Shows quota and credits for Claude, Codex, Copilot, OpenRouter, and other providers. Started as a port of claudebar.',
-    },
-  },
-  {
     name: 'hes',
     href: 'https://github.com/Josemalyson/hes',
     version: 'v3.5.0',
@@ -146,6 +141,38 @@ export const projects: {
       'pt-BR':
         'Harness que trava o agente em fases com gate: ZERO, DISCOVERY, SPEC, DESIGN, DATA, RED, GREEN, SECURITY, REVIEW, DONE. A fase seguinte não abre sem o gate da anterior.',
       en: 'Harness that locks the agent into gated phases: ZERO, DISCOVERY, SPEC, DESIGN, DATA, RED, GREEN, SECURITY, REVIEW, DONE. The next phase does not open without the previous gate.',
+    },
+  },
+];
+
+/**
+ * Third-party tools used here. These are not projects of this site.
+ * Link the upstream repository, and name the author.
+ */
+export const references: {
+  name: string;
+  href: string;
+  author: string;
+  why: Copy;
+}[] = [
+  {
+    name: 'ai-usagebar',
+    href: 'https://github.com/akitaonrails/ai-usagebar',
+    author: 'Fabio Akita',
+    why: {
+      'pt-BR':
+        'Widget em Rust para Waybar, o painel Omarchy e um TUI. Mostra a cota dos planos de Claude, Codex, Copilot, OpenRouter e outros provedores.',
+      en: 'Rust widget for Waybar, the Omarchy panel, and a TUI. Shows plan quota for Claude, Codex, Copilot, OpenRouter, and other providers.',
+    },
+  },
+  {
+    name: 'ai-memory',
+    href: 'https://github.com/akitaonrails/ai-memory',
+    author: 'Fabio Akita',
+    why: {
+      'pt-BR':
+        'Memória de longo prazo para CLIs de agentes de código. Permite continuar o mesmo trabalho em outro agente sem reexplicar o contexto.',
+      en: 'Long-term memory for coding-agent CLIs. The same work can continue in another agent without restating the context.',
     },
   },
 ];
@@ -190,44 +217,3 @@ export const methodNote: Copy = {
     'O método é o loop guardrail + retro. Cada execução deixa evidência (teste, review, policy). O que falha vira regra no ciclo seguinte.',
   en: 'The method is the guardrail + retro loop. Each run leaves evidence (test, review, policy). What fails becomes a rule on the next cycle.',
 };
-
-/**
- * Learning trails. To add one:
- * 1. Put the lab HTML at static/trilhas/<slug>/index.html (self-contained; no private paths).
- * 2. Append an object here. `href` must match that static path.
- * The index page and the home page both read this list.
- */
-export const trails: {
-  slug: string;
-  href: string;
-  version: string;
-  date: string;
-  level: Copy;
-  duration: Copy;
-  title: Copy;
-  summary: Copy;
-}[] = [
-  {
-    slug: 'workflow-devin-cli',
-    href: '/trilhas/workflow-devin-cli/',
-    version: 'v8',
-    date: '2026-11-14',
-    level: {
-      'pt-BR': 'Do zero ao avançado',
-      en: 'Beginner to advanced',
-    },
-    duration: {
-      'pt-BR': '185 min · 8 passos',
-      en: '185 min · 8 steps',
-    },
-    title: {
-      'pt-BR': 'Workflow de desenvolvimento com Devin CLI',
-      en: 'Development workflow with Devin CLI',
-    },
-    summary: {
-      'pt-BR':
-        'Lab no navegador: instalar e autenticar o CLI, um ciclo de planejar, implementar com permissão, revisar o diff e rodar os testes, versionar regras e uma skill, retomar a sessão e decidir o handoff para o Devin Cloud.',
-      en: 'In-browser lab: install and authenticate the CLI, one cycle of plan, permissioned implementation, diff review, and tests, version rules and a skill, resume the session, and decide a Devin Cloud handoff. The lab file is in Portuguese.',
-    },
-  },
-];

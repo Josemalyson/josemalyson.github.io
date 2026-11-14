@@ -143,6 +143,13 @@
   padding: 3.5rem 0 0.5rem;
 }
 
+.sectionLead {
+  max-width: 42rem;
+  margin: 0 0 1.25rem;
+  color: var(--muted);
+  line-height: 1.6;
+}
+
 .section h2,
 .pageHead + .section h2 {
   margin: 0 0 1.25rem;

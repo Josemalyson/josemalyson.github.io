@@ -153,6 +153,18 @@ article .theme-doc-markdown {
   color: var(--ifm-color-content);
 }
 
+.theme-doc-markdown .table-wrap {
+  overflow-x: auto;
+  margin: 1.25rem 0;
+}
+
+.theme-doc-markdown table {
+  display: table;
+  width: 100%;
+  font-size: 0.9rem;
+  line-height: 1.5;
+}
+
 .theme-doc-markdown img {
   border: 1px solid var(--hairline);
   border-radius: 8px;

@@ -1,0 +1,1085 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="scroll-smooth" x-data="trailApp()" x-init="init()">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#0f172a" media="(prefers-color-scheme: dark)">
+  <meta name="theme-color" content="#f8fafc" media="(prefers-color-scheme: light)">
+  <title>Trilha Prática — AI Engineering Workbench</title>
+  <link rel="preconnect" href="https://cdn.tailwindcss.com">
+  <link rel="preconnect" href="https://unpkg.com">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/@phosphor-icons/web"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: { extend: { colors: { primary: { DEFAULT: '#6366f1', hover: '#4f46e5' } }, fontFamily: { sans: ['Inter','system-ui','sans-serif'] } } }
+    }
+    function trailApp() {
+      return {
+        dark: window.matchMedia('(prefers-color-scheme: dark)').matches,
+        query: '',
+        init() { this.applyTheme(); },
+        toggleDark() { this.dark = !this.dark; this.applyTheme(); },
+        applyTheme() { document.documentElement.classList.toggle('dark', this.dark); document.documentElement.style.colorScheme = this.dark ? 'dark' : 'light'; },
+        printPage() { window.print(); }
+      }
+    }
+  </script>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+    .custom-scrollbar::-webkit-scrollbar { width: 5px; height: 5px; }
+    .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
+    .custom-scrollbar::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 999px; }
+    .dark .custom-scrollbar::-webkit-scrollbar-thumb { background: #334155; }
+    .skip-link { position:absolute; top:-100%; left:1rem; z-index:100; padding:.5rem 1rem; background:#6366f1; color:white; border-radius:0 0 .5rem .5rem; font-weight:700; }
+    .skip-link:focus { top:0; }
+    .text-pretty { text-wrap: pretty; }
+    @media print { aside, header.sticky, .no-print { display:none !important; } main { overflow: visible !important; } .print-break { break-before: page; } body { background:white !important; } }
+  </style>
+</head>
+<body class="bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100 font-sans antialiased">
+  <a href="#main-content" class="skip-link">Ir para o conteúdo principal</a>
+  <div class="flex h-screen overflow-hidden">
+    <aside class="hidden lg:flex flex-col w-80 shrink-0 bg-white dark:bg-slate-900 border-r border-slate-200 dark:border-slate-800 overflow-y-auto custom-scrollbar z-10" aria-label="Mapa da trilha">
+      <div class="p-5 flex flex-col h-full">
+        <div class="flex items-center gap-3 mb-6 min-w-0">
+          <div class="flex items-center justify-center w-10 h-10 rounded-xl bg-indigo-600 shrink-0 shadow-sm"><i class="ph-fill ph-compass text-white text-xl"></i></div>
+          <div class="min-w-0">
+            <h1 class="text-sm font-bold truncate text-slate-900 dark:text-slate-100">Trilha Prática — AI Engineering Workbench</h1>
+            <p class="text-xs text-slate-500 dark:text-slate-400 font-medium uppercase tracking-widest">Learning Trail</p>
+          </div>
+        </div>
+        <div class="flex flex-wrap gap-1.5 mb-6">
+          <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 text-xs font-semibold"><i class="ph ph-graduation-cap"></i> Avançado prático</span>
+          <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-indigo-50 dark:bg-indigo-950 text-indigo-700 dark:text-indigo-300 text-xs font-semibold"><i class="ph ph-map-pin"></i> 10 estações</span>
+          <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-emerald-50 dark:bg-emerald-950 text-emerald-700 dark:text-emerald-300 text-xs font-semibold"><i class="ph ph-check-circle"></i> 23 nervos</span>
+        </div>
+        <div class="mb-4 no-print">
+          <label class="sr-only" for="search">Filtrar estações</label>
+          <div class="relative">
+            <i class="ph ph-magnifying-glass absolute left-3 top-2.5 text-slate-400"></i>
+            <input id="search" x-model="query" type="search" placeholder="Filtrar trilha..." class="w-full rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 py-2 pl-9 pr-3 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500">
+          </div>
+        </div>
+        <nav aria-label="Estações da trilha" class="mb-6">
+          <p class="text-xs font-bold text-slate-400 dark:text-slate-500 uppercase tracking-widest mb-3 px-1">Estações</p>
+          <ul class="space-y-0.5">
+<li>
+  <a href="#estacao-0" class="nav-link flex items-start gap-3 p-2.5 rounded-lg border border-transparent text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors">
+    <span class="flex items-center justify-center w-5 h-5 rounded-full bg-slate-200 dark:bg-slate-700 text-slate-600 dark:text-slate-300 text-xs font-bold shrink-0 mt-0.5">0</span>
+    <span class="min-w-0"><span class="block text-sm font-medium leading-snug">Montar o laboratório de engenharia com agentes</span><span class="flex items-center gap-1 text-xs text-slate-400 dark:text-slate-500 mt-0.5"><i class="ph ph-clock"></i><span>~35 min</span></span></span>
+  </a>
+</li>
+<li>
+  <a href="#estacao-1" class="nav-link flex items-start gap-3 p-2.5 rounded-lg border border-transparent text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors">
+    <span class="flex items-center justify-center w-5 h-5 rounded-full bg-slate-200 dark:bg-slate-700 text-slate-600 dark:text-slate-300 text-xs font-bold shrink-0 mt-0.5">1</span>
+    <span class="min-w-0"><span class="block text-sm font-medium leading-snug">Criar o loop mínimo com tools e function calling</span><span class="flex items-center gap-1 text-xs text-slate-400 dark:text-slate-500 mt-0.5"><i class="ph ph-clock"></i><span>~55 min</span></span></span>
+  </a>
+</li>
+<li>
+  <a href="#estacao-2" class="nav-link flex items-start gap-3 p-2.5 rounded-lg border border-transparent text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors">
+    <span class="flex items-center justify-center w-5 h-5 rounded-full bg-slate-200 dark:bg-slate-700 text-slate-600 dark:text-slate-300 text-xs font-bold shrink-0 mt-0.5">2</span>
+    <span class="min-w-0"><span class="block text-sm font-medium leading-snug">Fazer o agente testar e corrigir o próprio trabalho</span><span class="flex items-center gap-1 text-xs text-slate-400 dark:text-slate-500 mt-0.5"><i class="ph ph-clock"></i><span>~75 min</span></span></span>
+  </a>
+</li>
+<li>
+  <a href="#estacao-3" class="nav-link flex items-start gap-3 p-2.5 rounded-lg border border-transparent text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors">
+    <span class="flex items-center justify-center w-5 h-5 rounded-full bg-slate-200 dark:bg-slate-700 text-slate-600 dark:text-slate-300 text-xs font-bold shrink-0 mt-0.5">3</span>
+    <span class="min-w-0"><span class="block text-sm font-medium leading-snug">Transformar o fluxo em uma Skill reutilizável</span><span class="flex items-center gap-1 text-xs text-slate-400 dark:text-slate-500 mt-0.5"><i class="ph ph-clock"></i><span>~60 min</span></span></span>
+  </a>
+</li>
+<li>
+  <a href="#estacao-4" class="nav-link flex items-start gap-3 p-2.5 rounded-lg border border-transparent text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors">
+    <span class="flex items-center justify-center w-5 h-5 rounded-full bg-slate-200 dark:bg-slate-700 text-slate-600 dark:text-slate-300 text-xs font-bold shrink-0 mt-0.5">4</span>
+    <span class="min-w-0"><span class="block text-sm font-medium leading-snug">Integrar Codex CLI ao ciclo local de desenvolvimento</span><span class="flex items-center gap-1 text-xs text-slate-400 dark:text-slate-500 mt-0.5"><i class="ph ph-clock"></i><span>~55 min</span></span></span>
+  </a>
+</li>
+<li>
+  <a href="#estacao-5" class="nav-link flex items-start gap-3 p-2.5 rounded-lg border border-transparent text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors">
+    <span class="flex items-center justify-center w-5 h-5 rounded-full bg-slate-200 dark:bg-slate-700 text-slate-600 dark:text-slate-300 text-xs font-bold shrink-0 mt-0.5">5</span>
+    <span class="min-w-0"><span class="block text-sm font-medium leading-snug">Construir a UI colaborativa: chat, timeline, comandos e diff</span><span class="flex items-center gap-1 text-xs text-slate-400 dark:text-slate-500 mt-0.5"><i class="ph ph-clock"></i><span>~100 min</span></span></span>
+  </a>
+</li>
+<li>
+  <a href="#estacao-6" class="nav-link flex items-start gap-3 p-2.5 rounded-lg border border-transparent text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors">
+    <span class="flex items-center justify-center w-5 h-5 rounded-full bg-slate-200 dark:bg-slate-700 text-slate-600 dark:text-slate-300 text-xs font-bold shrink-0 mt-0.5">6</span>
+    <span class="min-w-0"><span class="block text-sm font-medium leading-snug">Reproduzir o padrão de harness e App Server</span><span class="flex items-center gap-1 text-xs text-slate-400 dark:text-slate-500 mt-0.5"><i class="ph ph-clock"></i><span>~110 min</span></span></span>
+  </a>
+</li>
+<li>
+  <a href="#estacao-7" class="nav-link flex items-start gap-3 p-2.5 rounded-lg border border-transparent text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors">
+    <span class="flex items-center justify-center w-5 h-5 rounded-full bg-slate-200 dark:bg-slate-700 text-slate-600 dark:text-slate-300 text-xs font-bold shrink-0 mt-0.5">7</span>
+    <span class="min-w-0"><span class="block text-sm font-medium leading-snug">Adicionar subagentes para revisão paralela</span><span class="flex items-center gap-1 text-xs text-slate-400 dark:text-slate-500 mt-0.5"><i class="ph ph-clock"></i><span>~80 min</span></span></span>
+  </a>
+</li>
+<li>
+  <a href="#estacao-8" class="nav-link flex items-start gap-3 p-2.5 rounded-lg border border-transparent text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors">
+    <span class="flex items-center justify-center w-5 h-5 rounded-full bg-slate-200 dark:bg-slate-700 text-slate-600 dark:text-slate-300 text-xs font-bold shrink-0 mt-0.5">8</span>
+    <span class="min-w-0"><span class="block text-sm font-medium leading-snug">Medir valor: custo, latência, qualidade e contexto</span><span class="flex items-center gap-1 text-xs text-slate-400 dark:text-slate-500 mt-0.5"><i class="ph ph-clock"></i><span>~90 min</span></span></span>
+  </a>
+</li>
+<li>
+  <a href="#boss-final" class="nav-link flex items-start gap-3 p-2.5 rounded-lg border border-transparent text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors">
+    <span class="flex items-center justify-center w-5 h-5 rounded-full bg-slate-200 dark:bg-slate-700 text-slate-600 dark:text-slate-300 text-xs font-bold shrink-0 mt-0.5">9</span>
+    <span class="min-w-0"><span class="block text-sm font-medium leading-snug">Boss final: feature completa do zero ao PR validado</span><span class="flex items-center gap-1 text-xs text-slate-400 dark:text-slate-500 mt-0.5"><i class="ph ph-clock"></i><span>~180 min</span></span></span>
+  </a>
+</li></ul>
+        </nav>
+        <div class="mt-auto pt-4 border-t border-slate-100 dark:border-slate-800 text-xs text-slate-400 dark:text-slate-500">
+          <p class="flex items-center gap-1.5"><i class="ph ph-shield-check text-emerald-500"></i><span translate="no">Trust by Inspection</span></p>
+          <p class="mt-1">Gerado em 2026-07-09</p>
+        </div>
+      </div>
+    </aside>
+    <div class="flex flex-col flex-1 min-w-0 overflow-hidden">
+      <header class="sticky top-0 z-20 bg-white/85 dark:bg-slate-900/85 backdrop-blur-md border-b border-slate-200 dark:border-slate-800">
+        <div class="flex items-center justify-between px-4 h-14 gap-3">
+          <div class="flex items-center gap-2 min-w-0">
+            <i class="ph-fill ph-compass text-indigo-600 dark:text-indigo-400 text-xl shrink-0"></i>
+            <span class="text-sm font-bold truncate">Trilha Prática — AI Engineering Workbench</span>
+          </div>
+          <div class="flex items-center gap-2 ml-auto">
+            <button @click="printPage()" class="hidden sm:inline-flex items-center gap-1 px-3 py-2 rounded-full text-xs font-semibold text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 no-print"><i class="ph ph-printer"></i> Imprimir</button>
+            <button @click="toggleDark()" :aria-pressed="dark" aria-label="Alternar modo escuro" class="p-2 rounded-full text-slate-500 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 no-print"><i class="ph text-lg" :class="dark ? 'ph-sun' : 'ph-moon'"></i></button>
+          </div>
+        </div>
+      </header>
+      <main id="main-content" class="flex-1 overflow-y-auto custom-scrollbar">
+        <div class="max-w-4xl mx-auto px-5 py-10 md:py-16">
+          <section class="mb-14">
+            <div class="flex flex-wrap gap-2 mb-5" aria-label="Metadados da trilha">
+              <span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 text-xs font-semibold border border-slate-200 dark:border-slate-700">Nível: Avançado prático</span>
+              <span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 text-xs font-semibold border border-slate-200 dark:border-slate-700">10 estações</span>
+              <span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-indigo-50 dark:bg-indigo-950 text-indigo-700 dark:text-indigo-300 text-xs font-semibold border border-indigo-200 dark:border-indigo-900"><i class="ph ph-check"></i> 23 nervos validados</span>
+            </div>
+            <h2 class="text-3xl md:text-5xl font-extrabold tracking-tight mb-5 text-pretty">Trilha Prática — AI Engineering Workbench</h2>
+            <p class="text-lg text-slate-600 dark:text-slate-300 leading-relaxed mb-6 text-pretty">Construindo, do zero ao PR validado, os exemplos técnicos inspirados na palestra sobre Codex, agentes, loops, harness, skills e maximização de valor.</p>
+            <div class="grid md:grid-cols-3 gap-4">
+              <div class="rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-5 md:col-span-2">
+                <h3 class="text-xs font-bold uppercase tracking-widest text-slate-400 dark:text-slate-500 mb-2 flex items-center gap-1.5"><i class="ph ph-target"></i> Objetivo</h3>
+                <p class="text-slate-700 dark:text-slate-300 leading-relaxed">Construir um <strong>AI Engineering Workbench</strong>: uma mini-plataforma local com chat, agente com ferramentas, loop de validação, correção automática, UI colaborativa, diff viewer, subagentes de review, telemetria e documentação de PR.</p>
+              </div>
+              <div class="rounded-xl border border-emerald-200 dark:border-emerald-900 bg-emerald-50 dark:bg-emerald-950/30 p-5">
+                <h3 class="text-xs font-bold uppercase tracking-widest text-emerald-700 dark:text-emerald-400 mb-2 flex items-center gap-1.5"><i class="ph ph-shield-check"></i> Validação</h3>
+                <p class="text-sm text-emerald-900 dark:text-emerald-200">Conteúdo checado contra 18 fontes primárias/oficiais e auditado por script local.</p>
+              </div>
+            </div>
+          </section>
+
+          <section class="mb-14 rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-5">
+            <h2 class="text-xl font-extrabold mb-4 flex items-center gap-2"><i class="ph ph-map-trifold text-indigo-500"></i> Mapa da trilha</h2>
+            <div class="overflow-x-auto custom-scrollbar">
+              <table class="w-full text-sm">
+                <thead><tr class="border-b border-slate-200 dark:border-slate-800 text-left text-xs uppercase tracking-widest text-slate-400"><th class="py-2 pr-3">Estação</th><th class="py-2 pr-3">Você constrói</th><th class="py-2">Resultado</th></tr></thead>
+                <tbody>
+                  <tr class="border-b border-slate-100 dark:border-slate-800"><td class="py-2 pr-3 font-semibold">0. Montar o laboratório de engenharia com agentes</td><td class="py-2 pr-3 text-slate-600 dark:text-slate-300">Estrutura de pastas</td><td class="py-2 text-slate-600 dark:text-slate-300">Criar o monorepo ai-engineering-workbench com AGENTS.md, apps, packages, workflows e estrutura para exemplos práticos.</td></tr><tr class="border-b border-slate-100 dark:border-slate-800"><td class="py-2 pr-3 font-semibold">1. Criar o loop mínimo com tools e function calling</td><td class="py-2 pr-3 text-slate-600 dark:text-slate-300">apps/agent-api</td><td class="py-2 text-slate-600 dark:text-slate-300">Implementar um backend que recebe uma meta, deixa o modelo escolher ferramentas locais e continua até produzir uma resposta final.</td></tr><tr class="border-b border-slate-100 dark:border-slate-800"><td class="py-2 pr-3 font-semibold">2. Fazer o agente testar e corrigir o próprio trabalho</td><td class="py-2 pr-3 text-slate-600 dark:text-slate-300">run_validation.ts</td><td class="py-2 text-slate-600 dark:text-slate-300">Criar um loop build → test → inspect error → fix → retest, com relatório de falhas em JSON.</td></tr><tr class="border-b border-slate-100 dark:border-slate-800"><td class="py-2 pr-3 font-semibold">3. Transformar o fluxo em uma Skill reutilizável</td><td class="py-2 pr-3 text-slate-600 dark:text-slate-300">feature-delivery/SKILL.md</td><td class="py-2 text-slate-600 dark:text-slate-300">Criar uma skill feature-delivery com instruções, scripts, templates e critério de parada.</td></tr><tr class="border-b border-slate-100 dark:border-slate-800"><td class="py-2 pr-3 font-semibold">4. Integrar Codex CLI ao ciclo local de desenvolvimento</td><td class="py-2 pr-3 text-slate-600 dark:text-slate-300">execução com Codex CLI</td><td class="py-2 text-slate-600 dark:text-slate-300">Rodar uma tarefa real com Codex CLI, respeitando AGENTS.md, validação e revisão manual de diff.</td></tr><tr class="border-b border-slate-100 dark:border-slate-800"><td class="py-2 pr-3 font-semibold">5. Construir a UI colaborativa: chat, timeline, comandos e diff</td><td class="py-2 pr-3 text-slate-600 dark:text-slate-300">workbench-ui</td><td class="py-2 text-slate-600 dark:text-slate-300">Criar um front React/Vite para conversar com o agente e inspecionar eventos, comandos, validações e diff.</td></tr><tr class="border-b border-slate-100 dark:border-slate-800"><td class="py-2 pr-3 font-semibold">6. Reproduzir o padrão de harness e App Server</td><td class="py-2 pr-3 text-slate-600 dark:text-slate-300">agent-runtime</td><td class="py-2 text-slate-600 dark:text-slate-300">Criar um runtime com threads, event bus e protocolo JSON-RPC/WebSocket entre UI e agente.</td></tr><tr class="border-b border-slate-100 dark:border-slate-800"><td class="py-2 pr-3 font-semibold">7. Adicionar subagentes para revisão paralela</td><td class="py-2 pr-3 text-slate-600 dark:text-slate-300">review_pr.ts</td><td class="py-2 text-slate-600 dark:text-slate-300">Criar review-pr com subagentes de segurança, bugs, testes, arquitetura e manutenibilidade.</td></tr><tr class="border-b border-slate-100 dark:border-slate-800"><td class="py-2 pr-3 font-semibold">8. Medir valor: custo, latência, qualidade e contexto</td><td class="py-2 pr-3 text-slate-600 dark:text-slate-300">telemetry.jsonl</td><td class="py-2 text-slate-600 dark:text-slate-300">Criar telemetria de execução, dashboard de custo/latência, evals e estratégia de contexto longo.</td></tr><tr class="border-b border-slate-100 dark:border-slate-800"><td class="py-2 pr-3 font-semibold">9. Boss final: feature completa do zero ao PR validado</td><td class="py-2 pr-3 text-slate-600 dark:text-slate-300">API funcional</td><td class="py-2 text-slate-600 dark:text-slate-300">Entregar uma feature real de estimativa de custo de execução de agentes, com API, UI, testes, review paralelo, telemetria e documentação.</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </section>
+
+          
+    <section id="estacao-0" class="mb-16 scroll-mt-20 station" aria-labelledby="estacao-0-titulo" data-title="montar o laboratório de engenharia com agentes" data-concepts="agents.md tools function calling codex cli skills ui colaborativa harness app server json-rpc subagentes agents sdk evals compaction prompt caching custo latência boss final">
+      <div class="flex items-start gap-3 mb-5">
+        <span class="flex items-center justify-center w-9 h-9 rounded-full bg-indigo-600 text-white font-bold text-sm shrink-0 shadow" aria-hidden="true">0</span>
+        <div>
+          <h2 id="estacao-0-titulo" class="text-2xl font-extrabold text-pretty">Montar o laboratório de engenharia com agentes</h2>
+          <p class="text-xs text-slate-400 dark:text-slate-500 mt-1 flex flex-wrap items-center gap-3 font-medium"><span><i class="ph ph-clock"></i> ~35 min</span><span><i class="ph ph-plug"></i> 2 nervo(s)</span></p>
+        </div>
+      </div>
+      <div class="prose-like text-slate-700 dark:text-slate-300 leading-relaxed mb-6 space-y-3 text-[1.02rem]">
+        <p><strong>Resultado prático:</strong> Criar o monorepo ai-engineering-workbench com AGENTS.md, apps, packages, workflows e estrutura para exemplos práticos.</p>
+        <p><strong>Por que existe:</strong> A palestra não é sobre copiar uma demonstração isolada. Ela descreve uma forma de engenharia em que o agente precisa de ambiente, instruções versionadas, ferramentas, validação e pontos de inspeção. O laboratório cria esse chão técnico.</p>
+      </div>
+      <div class="grid md:grid-cols-2 gap-4 mb-6">
+        <div class="rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-4">
+          <h3 class="text-xs font-bold uppercase tracking-widest text-slate-400 dark:text-slate-500 mb-3 flex items-center gap-1.5"><i class="ph ph-list-checks"></i> Tarefas práticas</h3>
+          <ul class="space-y-2 text-sm text-slate-700 dark:text-slate-300"><li class="flex gap-2"><i class="ph ph-check-circle text-emerald-500 mt-0.5"></i><span>Criar o monorepo ai-engineering-workbench.</span></li><li class="flex gap-2"><i class="ph ph-check-circle text-emerald-500 mt-0.5"></i><span>Adicionar apps/agent-api, apps/workbench-ui, packages/tools, packages/validation, packages/skills e packages/evals.</span></li><li class="flex gap-2"><i class="ph ph-check-circle text-emerald-500 mt-0.5"></i><span>Criar um AGENTS.md com comandos obrigatórios, padrões de diff e critérios de parada.</span></li><li class="flex gap-2"><i class="ph ph-check-circle text-emerald-500 mt-0.5"></i><span>Criar scripts npm para lint, test, build e validate.</span></li></ul>
+        </div>
+        <div class="rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-4">
+          <h3 class="text-xs font-bold uppercase tracking-widest text-slate-400 dark:text-slate-500 mb-3 flex items-center gap-1.5"><i class="ph ph-package"></i> Entregáveis</h3>
+          <div class="flex flex-wrap gap-2"><span class="inline-flex items-center rounded-full bg-slate-100 dark:bg-slate-800 px-2.5 py-1 text-xs font-semibold text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-700">Estrutura de pastas</span><span class="inline-flex items-center rounded-full bg-slate-100 dark:bg-slate-800 px-2.5 py-1 text-xs font-semibold text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-700">AGENTS.md</span><span class="inline-flex items-center rounded-full bg-slate-100 dark:bg-slate-800 px-2.5 py-1 text-xs font-semibold text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-700">README.md</span><span class="inline-flex items-center rounded-full bg-slate-100 dark:bg-slate-800 px-2.5 py-1 text-xs font-semibold text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-700">workflow validation.yml</span></div>
+        </div>
+      </div>
+      <div class="rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-4 mb-6">
+        <h3 class="text-xs font-bold uppercase tracking-widest text-slate-400 dark:text-slate-500 flex items-center gap-1.5"><i class="ph ph-code"></i> Estrutura inicial</h3>
+        <pre class="mt-3 overflow-x-auto rounded-xl bg-slate-950 text-slate-100 p-4 text-xs leading-relaxed"><code>ai-engineering-workbench/
+  AGENTS.md
+  README.md
+  package.json
+  apps/
+    agent-api/
+    workbench-ui/
+  packages/
+    tools/
+    evals/
+    skills/
+    validation/
+  .github/
+    workflows/
+      validation.yml</code></pre>
+      </div>
+      <div class="rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900/60 overflow-hidden mb-6">
+        <div class="flex items-center gap-2 px-4 py-3 border-b border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900">
+          <i class="ph ph-plug text-indigo-500 dark:text-indigo-400"></i>
+          <h3 class="text-xs font-bold uppercase tracking-widest text-slate-600 dark:text-slate-300">Nervos validados</h3>
+        </div>
+        <ul class="divide-y divide-slate-200 dark:divide-slate-800" role="list">
+        <li class="p-4">
+          <div class="flex items-start gap-3">
+            <div class="flex items-center justify-center w-9 h-9 rounded-lg bg-indigo-50 dark:bg-indigo-950 text-indigo-600 dark:text-indigo-400 shrink-0 mt-0.5" aria-hidden="true"><i class="ph-fill ph-plug text-lg"></i></div>
+            <div class="min-w-0 flex-1">
+              <a href="https://developers.openai.com/codex/guides/agents-md" target="_blank" rel="noopener noreferrer" class="text-sm font-bold text-slate-900 dark:text-white hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors inline-flex items-center gap-1" translate="no">Custom instructions with AGENTS.md <i class="ph ph-arrow-up-right text-xs opacity-50"></i></a>
+              <p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">Fonte oficial validada · recurso técnico</p>
+              <div class="mt-2.5 rounded-lg bg-white dark:bg-slate-800 border border-slate-100 dark:border-slate-700 p-3 space-y-2">
+                <p class="text-xs text-slate-700 dark:text-slate-300"><strong>Quando seguir:</strong> Use quando quiser transformar instruções de projeto em contrato versionado para agentes.</p>
+                <p class="text-xs italic text-slate-500 dark:text-slate-400 border-l-2 border-indigo-300 dark:border-indigo-700 pl-2"><strong class="not-italic text-emerald-600 dark:text-emerald-400">Validado:</strong> A página oficial confirma AGENTS.md como mecanismo de instruções customizadas por repositório.</p>
+              </div>
+            </div>
+          </div>
+        </li>
+        <li class="p-4">
+          <div class="flex items-start gap-3">
+            <div class="flex items-center justify-center w-9 h-9 rounded-lg bg-indigo-50 dark:bg-indigo-950 text-indigo-600 dark:text-indigo-400 shrink-0 mt-0.5" aria-hidden="true"><i class="ph-fill ph-plug text-lg"></i></div>
+            <div class="min-w-0 flex-1">
+              <a href="https://developers.openai.com/codex/concepts/customization" target="_blank" rel="noopener noreferrer" class="text-sm font-bold text-slate-900 dark:text-white hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors inline-flex items-center gap-1" translate="no">Customization / AGENTS Guidance <i class="ph ph-arrow-up-right text-xs opacity-50"></i></a>
+              <p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">Fonte oficial validada · recurso técnico</p>
+              <div class="mt-2.5 rounded-lg bg-white dark:bg-slate-800 border border-slate-100 dark:border-slate-700 p-3 space-y-2">
+                <p class="text-xs text-slate-700 dark:text-slate-300"><strong>Quando seguir:</strong> Use para definir comandos, convenções e preferências que devem orientar o agente no projeto.</p>
+                <p class="text-xs italic text-slate-500 dark:text-slate-400 border-l-2 border-indigo-300 dark:border-indigo-700 pl-2"><strong class="not-italic text-emerald-600 dark:text-emerald-400">Validado:</strong> A documentação de customization reforça instruções persistentes para orientar comportamento em tarefas reais.</p>
+              </div>
+            </div>
+          </div>
+        </li></ul>
+      </div>
+      <div class="rounded-xl border border-amber-200 dark:border-amber-900/60 bg-amber-50 dark:bg-amber-950/30 p-4" role="note">
+        <p class="text-xs font-bold uppercase tracking-widest text-amber-700 dark:text-amber-500 mb-1.5 flex items-center gap-1.5"><i class="ph ph-compass-rose"></i> Check de avanço</p>
+        <p class="text-sm font-medium text-amber-900 dark:text-amber-200 text-pretty">Você consegue explicar a diferença entre prompt solto e instrução durável versionada no repositório?</p>
+      </div>
+    </section>
+    <section id="estacao-1" class="mb-16 scroll-mt-20 station" aria-labelledby="estacao-1-titulo" data-title="criar o loop mínimo com tools e function calling" data-concepts="agents.md tools function calling codex cli skills ui colaborativa harness app server json-rpc subagentes agents sdk evals compaction prompt caching custo latência boss final">
+      <div class="flex items-start gap-3 mb-5">
+        <span class="flex items-center justify-center w-9 h-9 rounded-full bg-indigo-600 text-white font-bold text-sm shrink-0 shadow" aria-hidden="true">1</span>
+        <div>
+          <h2 id="estacao-1-titulo" class="text-2xl font-extrabold text-pretty">Criar o loop mínimo com tools e function calling</h2>
+          <p class="text-xs text-slate-400 dark:text-slate-500 mt-1 flex flex-wrap items-center gap-3 font-medium"><span><i class="ph ph-clock"></i> ~55 min</span><span><i class="ph ph-plug"></i> 2 nervo(s)</span></p>
+        </div>
+      </div>
+      <div class="prose-like text-slate-700 dark:text-slate-300 leading-relaxed mb-6 space-y-3 text-[1.02rem]">
+        <p><strong>Resultado prático:</strong> Implementar um backend que recebe uma meta, deixa o modelo escolher ferramentas locais e continua até produzir uma resposta final.</p>
+        <p><strong>Por que existe:</strong> O primeiro salto prático é sair de chat passivo para um agente que age. Na palestra, isso aparece quando o agente passa a fazer tarefas de computador e não apenas sugerir código.</p>
+      </div>
+      <div class="grid md:grid-cols-2 gap-4 mb-6">
+        <div class="rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-4">
+          <h3 class="text-xs font-bold uppercase tracking-widest text-slate-400 dark:text-slate-500 mb-3 flex items-center gap-1.5"><i class="ph ph-list-checks"></i> Tarefas práticas</h3>
+          <ul class="space-y-2 text-sm text-slate-700 dark:text-slate-300"><li class="flex gap-2"><i class="ph ph-check-circle text-emerald-500 mt-0.5"></i><span>Criar tools read_file, write_file, search_project e run_tests.</span></li><li class="flex gap-2"><i class="ph ph-check-circle text-emerald-500 mt-0.5"></i><span>Expor POST /agent/run.</span></li><li class="flex gap-2"><i class="ph ph-check-circle text-emerald-500 mt-0.5"></i><span>Converter tool calls em execução local controlada.</span></li><li class="flex gap-2"><i class="ph ph-check-circle text-emerald-500 mt-0.5"></i><span>Registrar steps em JSON para inspeção posterior.</span></li></ul>
+        </div>
+        <div class="rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-4">
+          <h3 class="text-xs font-bold uppercase tracking-widest text-slate-400 dark:text-slate-500 mb-3 flex items-center gap-1.5"><i class="ph ph-package"></i> Entregáveis</h3>
+          <div class="flex flex-wrap gap-2"><span class="inline-flex items-center rounded-full bg-slate-100 dark:bg-slate-800 px-2.5 py-1 text-xs font-semibold text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-700">apps/agent-api</span><span class="inline-flex items-center rounded-full bg-slate-100 dark:bg-slate-800 px-2.5 py-1 text-xs font-semibold text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-700">packages/tools</span><span class="inline-flex items-center rounded-full bg-slate-100 dark:bg-slate-800 px-2.5 py-1 text-xs font-semibold text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-700">POST /agent/run</span><span class="inline-flex items-center rounded-full bg-slate-100 dark:bg-slate-800 px-2.5 py-1 text-xs font-semibold text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-700">trace JSON de execução</span></div>
+        </div>
+      </div>
+      <div class="rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-4 mb-6">
+        <h3 class="text-xs font-bold uppercase tracking-widest text-slate-400 dark:text-slate-500 flex items-center gap-1.5"><i class="ph ph-code"></i> Contrato da primeira execução</h3>
+        <pre class="mt-3 overflow-x-auto rounded-xl bg-slate-950 text-slate-100 p-4 text-xs leading-relaxed"><code>POST /agent/run
+
+{
+  &quot;goal&quot;: &quot;Crie uma função sum(a,b), teste e explique a mudança&quot;
+}
+
+Resposta esperada:
+{
+  &quot;status&quot;: &quot;completed&quot;,
+  &quot;steps&quot;: [&quot;read_file&quot;, &quot;write_file&quot;, &quot;run_tests&quot;],
+  &quot;summary&quot;: &quot;Função criada e testes passaram&quot;
+}</code></pre>
+      </div>
+      <div class="rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900/60 overflow-hidden mb-6">
+        <div class="flex items-center gap-2 px-4 py-3 border-b border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900">
+          <i class="ph ph-plug text-indigo-500 dark:text-indigo-400"></i>
+          <h3 class="text-xs font-bold uppercase tracking-widest text-slate-600 dark:text-slate-300">Nervos validados</h3>
+        </div>
+        <ul class="divide-y divide-slate-200 dark:divide-slate-800" role="list">
+        <li class="p-4">
+          <div class="flex items-start gap-3">
+            <div class="flex items-center justify-center w-9 h-9 rounded-lg bg-indigo-50 dark:bg-indigo-950 text-indigo-600 dark:text-indigo-400 shrink-0 mt-0.5" aria-hidden="true"><i class="ph-fill ph-plug text-lg"></i></div>
+            <div class="min-w-0 flex-1">
+              <a href="https://platform.openai.com/docs/guides/tools" target="_blank" rel="noopener noreferrer" class="text-sm font-bold text-slate-900 dark:text-white hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors inline-flex items-center gap-1" translate="no">Using tools <i class="ph ph-arrow-up-right text-xs opacity-50"></i></a>
+              <p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">Fonte oficial validada · recurso técnico</p>
+              <div class="mt-2.5 rounded-lg bg-white dark:bg-slate-800 border border-slate-100 dark:border-slate-700 p-3 space-y-2">
+                <p class="text-xs text-slate-700 dark:text-slate-300"><strong>Quando seguir:</strong> Use para entender como ferramentas estendem o modelo com ações externas.</p>
+                <p class="text-xs italic text-slate-500 dark:text-slate-400 border-l-2 border-indigo-300 dark:border-indigo-700 pl-2"><strong class="not-italic text-emerald-600 dark:text-emerald-400">Validado:</strong> A documentação oficial apresenta ferramentas como extensão de capacidades do modelo.</p>
+              </div>
+            </div>
+          </div>
+        </li>
+        <li class="p-4">
+          <div class="flex items-start gap-3">
+            <div class="flex items-center justify-center w-9 h-9 rounded-lg bg-indigo-50 dark:bg-indigo-950 text-indigo-600 dark:text-indigo-400 shrink-0 mt-0.5" aria-hidden="true"><i class="ph-fill ph-plug text-lg"></i></div>
+            <div class="min-w-0 flex-1">
+              <a href="https://platform.openai.com/docs/guides/function-calling" target="_blank" rel="noopener noreferrer" class="text-sm font-bold text-slate-900 dark:text-white hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors inline-flex items-center gap-1" translate="no">Function calling <i class="ph ph-arrow-up-right text-xs opacity-50"></i></a>
+              <p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">Fonte oficial validada · recurso técnico</p>
+              <div class="mt-2.5 rounded-lg bg-white dark:bg-slate-800 border border-slate-100 dark:border-slate-700 p-3 space-y-2">
+                <p class="text-xs text-slate-700 dark:text-slate-300"><strong>Quando seguir:</strong> Use para modelar funções locais que o agente pode chamar com parâmetros estruturados.</p>
+                <p class="text-xs italic text-slate-500 dark:text-slate-400 border-l-2 border-indigo-300 dark:border-indigo-700 pl-2"><strong class="not-italic text-emerald-600 dark:text-emerald-400">Validado:</strong> Function calling é o padrão oficial para conectar modelos a dados e ações externas.</p>
+              </div>
+            </div>
+          </div>
+        </li></ul>
+      </div>
+      <div class="rounded-xl border border-amber-200 dark:border-amber-900/60 bg-amber-50 dark:bg-amber-950/30 p-4" role="note">
+        <p class="text-xs font-bold uppercase tracking-widest text-amber-700 dark:text-amber-500 mb-1.5 flex items-center gap-1.5"><i class="ph ph-compass-rose"></i> Check de avanço</p>
+        <p class="text-sm font-medium text-amber-900 dark:text-amber-200 text-pretty">Seu agente consegue chamar uma função real, receber o resultado e continuar a resposta sem intervenção manual?</p>
+      </div>
+    </section>
+    <section id="estacao-2" class="mb-16 scroll-mt-20 station" aria-labelledby="estacao-2-titulo" data-title="fazer o agente testar e corrigir o próprio trabalho" data-concepts="agents.md tools function calling codex cli skills ui colaborativa harness app server json-rpc subagentes agents sdk evals compaction prompt caching custo latência boss final">
+      <div class="flex items-start gap-3 mb-5">
+        <span class="flex items-center justify-center w-9 h-9 rounded-full bg-indigo-600 text-white font-bold text-sm shrink-0 shadow" aria-hidden="true">2</span>
+        <div>
+          <h2 id="estacao-2-titulo" class="text-2xl font-extrabold text-pretty">Fazer o agente testar e corrigir o próprio trabalho</h2>
+          <p class="text-xs text-slate-400 dark:text-slate-500 mt-1 flex flex-wrap items-center gap-3 font-medium"><span><i class="ph ph-clock"></i> ~75 min</span><span><i class="ph ph-plug"></i> 2 nervo(s)</span></p>
+        </div>
+      </div>
+      <div class="prose-like text-slate-700 dark:text-slate-300 leading-relaxed mb-6 space-y-3 text-[1.02rem]">
+        <p><strong>Resultado prático:</strong> Criar um loop build → test → inspect error → fix → retest, com relatório de falhas em JSON.</p>
+        <p><strong>Por que existe:</strong> A palestra destaca a virada em que o modelo passou a testar seu próprio trabalho. Isso é a diferença entre autocomplete e engenharia assistida por agente.</p>
+      </div>
+      <div class="grid md:grid-cols-2 gap-4 mb-6">
+        <div class="rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-4">
+          <h3 class="text-xs font-bold uppercase tracking-widest text-slate-400 dark:text-slate-500 mb-3 flex items-center gap-1.5"><i class="ph ph-list-checks"></i> Tarefas práticas</h3>
+          <ul class="space-y-2 text-sm text-slate-700 dark:text-slate-300"><li class="flex gap-2"><i class="ph ph-check-circle text-emerald-500 mt-0.5"></i><span>Criar packages/validation/run_validation.ts.</span></li><li class="flex gap-2"><i class="ph ph-check-circle text-emerald-500 mt-0.5"></i><span>Rodar lint, test e build em sequência.</span></li><li class="flex gap-2"><i class="ph ph-check-circle text-emerald-500 mt-0.5"></i><span>Transformar falhas em relatório JSON.</span></li><li class="flex gap-2"><i class="ph ph-check-circle text-emerald-500 mt-0.5"></i><span>Fazer o agente corrigir até todos os checks passarem.</span></li></ul>
+        </div>
+        <div class="rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-4">
+          <h3 class="text-xs font-bold uppercase tracking-widest text-slate-400 dark:text-slate-500 mb-3 flex items-center gap-1.5"><i class="ph ph-package"></i> Entregáveis</h3>
+          <div class="flex flex-wrap gap-2"><span class="inline-flex items-center rounded-full bg-slate-100 dark:bg-slate-800 px-2.5 py-1 text-xs font-semibold text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-700">run_validation.ts</span><span class="inline-flex items-center rounded-full bg-slate-100 dark:bg-slate-800 px-2.5 py-1 text-xs font-semibold text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-700">validation-report.json</span><span class="inline-flex items-center rounded-full bg-slate-100 dark:bg-slate-800 px-2.5 py-1 text-xs font-semibold text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-700">loop de correção automática</span><span class="inline-flex items-center rounded-full bg-slate-100 dark:bg-slate-800 px-2.5 py-1 text-xs font-semibold text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-700">logs de erro e correção</span></div>
+        </div>
+      </div>
+      <div class="rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-4 mb-6">
+        <h3 class="text-xs font-bold uppercase tracking-widest text-slate-400 dark:text-slate-500 flex items-center gap-1.5"><i class="ph ph-code"></i> Formato do relatório de validação</h3>
+        <pre class="mt-3 overflow-x-auto rounded-xl bg-slate-950 text-slate-100 p-4 text-xs leading-relaxed"><code>{
+  &quot;lint&quot;: &quot;passed&quot;,
+  &quot;test&quot;: &quot;failed&quot;,
+  &quot;build&quot;: &quot;skipped&quot;,
+  &quot;errors&quot;: [
+    {
+      &quot;command&quot;: &quot;npm run test&quot;,
+      &quot;message&quot;: &quot;Expected 4, received 5&quot;
+    }
+  ]
+}</code></pre>
+      </div>
+      <div class="rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900/60 overflow-hidden mb-6">
+        <div class="flex items-center gap-2 px-4 py-3 border-b border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900">
+          <i class="ph ph-plug text-indigo-500 dark:text-indigo-400"></i>
+          <h3 class="text-xs font-bold uppercase tracking-widest text-slate-600 dark:text-slate-300">Nervos validados</h3>
+        </div>
+        <ul class="divide-y divide-slate-200 dark:divide-slate-800" role="list">
+        <li class="p-4">
+          <div class="flex items-start gap-3">
+            <div class="flex items-center justify-center w-9 h-9 rounded-lg bg-indigo-50 dark:bg-indigo-950 text-indigo-600 dark:text-indigo-400 shrink-0 mt-0.5" aria-hidden="true"><i class="ph-fill ph-plug text-lg"></i></div>
+            <div class="min-w-0 flex-1">
+              <a href="https://developers.openai.com/codex/cli" target="_blank" rel="noopener noreferrer" class="text-sm font-bold text-slate-900 dark:text-white hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors inline-flex items-center gap-1" translate="no">Codex CLI <i class="ph ph-arrow-up-right text-xs opacity-50"></i></a>
+              <p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">Fonte oficial validada · recurso técnico</p>
+              <div class="mt-2.5 rounded-lg bg-white dark:bg-slate-800 border border-slate-100 dark:border-slate-700 p-3 space-y-2">
+                <p class="text-xs text-slate-700 dark:text-slate-300"><strong>Quando seguir:</strong> Use para praticar agente local que lê, edita, executa comandos e revisa diff.</p>
+                <p class="text-xs italic text-slate-500 dark:text-slate-400 border-l-2 border-indigo-300 dark:border-indigo-700 pl-2"><strong class="not-italic text-emerald-600 dark:text-emerald-400">Validado:</strong> A documentação do Codex CLI valida o uso local para trabalho de código no terminal.</p>
+              </div>
+            </div>
+          </div>
+        </li>
+        <li class="p-4">
+          <div class="flex items-start gap-3">
+            <div class="flex items-center justify-center w-9 h-9 rounded-lg bg-indigo-50 dark:bg-indigo-950 text-indigo-600 dark:text-indigo-400 shrink-0 mt-0.5" aria-hidden="true"><i class="ph-fill ph-plug text-lg"></i></div>
+            <div class="min-w-0 flex-1">
+              <a href="https://developers.openai.com/codex/learn/best-practices" target="_blank" rel="noopener noreferrer" class="text-sm font-bold text-slate-900 dark:text-white hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors inline-flex items-center gap-1" translate="no">Codex best practices <i class="ph ph-arrow-up-right text-xs opacity-50"></i></a>
+              <p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">Fonte oficial validada · recurso técnico</p>
+              <div class="mt-2.5 rounded-lg bg-white dark:bg-slate-800 border border-slate-100 dark:border-slate-700 p-3 space-y-2">
+                <p class="text-xs text-slate-700 dark:text-slate-300"><strong>Quando seguir:</strong> Use para calibrar prompting, planejamento, validação e critérios de conclusão.</p>
+                <p class="text-xs italic text-slate-500 dark:text-slate-400 border-l-2 border-indigo-300 dark:border-indigo-700 pl-2"><strong class="not-italic text-emerald-600 dark:text-emerald-400">Validado:</strong> As melhores práticas oficiais cobrem prompting, ferramentas, MCP, skills e validação.</p>
+              </div>
+            </div>
+          </div>
+        </li></ul>
+      </div>
+      <div class="rounded-xl border border-amber-200 dark:border-amber-900/60 bg-amber-50 dark:bg-amber-950/30 p-4" role="note">
+        <p class="text-xs font-bold uppercase tracking-widest text-amber-700 dark:text-amber-500 mb-1.5 flex items-center gap-1.5"><i class="ph ph-compass-rose"></i> Check de avanço</p>
+        <p class="text-sm font-medium text-amber-900 dark:text-amber-200 text-pretty">Você consegue forçar uma falha de teste e ver o agente corrigindo a causa raiz antes de concluir?</p>
+      </div>
+    </section>
+    <section id="estacao-3" class="mb-16 scroll-mt-20 station" aria-labelledby="estacao-3-titulo" data-title="transformar o fluxo em uma skill reutilizável" data-concepts="agents.md tools function calling codex cli skills ui colaborativa harness app server json-rpc subagentes agents sdk evals compaction prompt caching custo latência boss final">
+      <div class="flex items-start gap-3 mb-5">
+        <span class="flex items-center justify-center w-9 h-9 rounded-full bg-indigo-600 text-white font-bold text-sm shrink-0 shadow" aria-hidden="true">3</span>
+        <div>
+          <h2 id="estacao-3-titulo" class="text-2xl font-extrabold text-pretty">Transformar o fluxo em uma Skill reutilizável</h2>
+          <p class="text-xs text-slate-400 dark:text-slate-500 mt-1 flex flex-wrap items-center gap-3 font-medium"><span><i class="ph ph-clock"></i> ~60 min</span><span><i class="ph ph-plug"></i> 2 nervo(s)</span></p>
+        </div>
+      </div>
+      <div class="prose-like text-slate-700 dark:text-slate-300 leading-relaxed mb-6 space-y-3 text-[1.02rem]">
+        <p><strong>Resultado prático:</strong> Criar uma skill feature-delivery com instruções, scripts, templates e critério de parada.</p>
+        <p><strong>Por que existe:</strong> A palestra cita customização e plugins como forma de ampliar o produto. Na prática, uma skill transforma um workflow confiável em ativo reutilizável.</p>
+      </div>
+      <div class="grid md:grid-cols-2 gap-4 mb-6">
+        <div class="rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-4">
+          <h3 class="text-xs font-bold uppercase tracking-widest text-slate-400 dark:text-slate-500 mb-3 flex items-center gap-1.5"><i class="ph ph-list-checks"></i> Tarefas práticas</h3>
+          <ul class="space-y-2 text-sm text-slate-700 dark:text-slate-300"><li class="flex gap-2"><i class="ph ph-check-circle text-emerald-500 mt-0.5"></i><span>Criar packages/skills/feature-delivery/SKILL.md.</span></li><li class="flex gap-2"><i class="ph ph-check-circle text-emerald-500 mt-0.5"></i><span>Adicionar templates de plano, review e relatório final.</span></li><li class="flex gap-2"><i class="ph ph-check-circle text-emerald-500 mt-0.5"></i><span>Acoplar validate.sh à skill.</span></li><li class="flex gap-2"><i class="ph ph-check-circle text-emerald-500 mt-0.5"></i><span>Testar a mesma skill em uma feature pequena.</span></li></ul>
+        </div>
+        <div class="rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-4">
+          <h3 class="text-xs font-bold uppercase tracking-widest text-slate-400 dark:text-slate-500 mb-3 flex items-center gap-1.5"><i class="ph ph-package"></i> Entregáveis</h3>
+          <div class="flex flex-wrap gap-2"><span class="inline-flex items-center rounded-full bg-slate-100 dark:bg-slate-800 px-2.5 py-1 text-xs font-semibold text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-700">feature-delivery/SKILL.md</span><span class="inline-flex items-center rounded-full bg-slate-100 dark:bg-slate-800 px-2.5 py-1 text-xs font-semibold text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-700">templates/plan.md</span><span class="inline-flex items-center rounded-full bg-slate-100 dark:bg-slate-800 px-2.5 py-1 text-xs font-semibold text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-700">templates/review.md</span><span class="inline-flex items-center rounded-full bg-slate-100 dark:bg-slate-800 px-2.5 py-1 text-xs font-semibold text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-700">scripts/validate.sh</span></div>
+        </div>
+      </div>
+      <div class="rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-4 mb-6">
+        <h3 class="text-xs font-bold uppercase tracking-widest text-slate-400 dark:text-slate-500 flex items-center gap-1.5"><i class="ph ph-code"></i> Skill mínima</h3>
+        <pre class="mt-3 overflow-x-auto rounded-xl bg-slate-950 text-slate-100 p-4 text-xs leading-relaxed"><code>---
+name: feature-delivery
+description: Use quando precisar implementar uma feature completa com planejamento, código, testes, validação e relatório final.
+---
+
+# Feature Delivery Skill
+
+## Fluxo obrigatório
+1. Entender a intenção.
+2. Mapear arquivos afetados.
+3. Criar plano curto.
+4. Implementar a menor alteração possível.
+5. Rodar validação.
+6. Corrigir falhas.
+7. Gerar relatório final.
+
+## Critério de parada
+A tarefa só termina quando lint, testes e build passarem.</code></pre>
+      </div>
+      <div class="rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900/60 overflow-hidden mb-6">
+        <div class="flex items-center gap-2 px-4 py-3 border-b border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900">
+          <i class="ph ph-plug text-indigo-500 dark:text-indigo-400"></i>
+          <h3 class="text-xs font-bold uppercase tracking-widest text-slate-600 dark:text-slate-300">Nervos validados</h3>
+        </div>
+        <ul class="divide-y divide-slate-200 dark:divide-slate-800" role="list">
+        <li class="p-4">
+          <div class="flex items-start gap-3">
+            <div class="flex items-center justify-center w-9 h-9 rounded-lg bg-indigo-50 dark:bg-indigo-950 text-indigo-600 dark:text-indigo-400 shrink-0 mt-0.5" aria-hidden="true"><i class="ph-fill ph-plug text-lg"></i></div>
+            <div class="min-w-0 flex-1">
+              <a href="https://developers.openai.com/codex/skills" target="_blank" rel="noopener noreferrer" class="text-sm font-bold text-slate-900 dark:text-white hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors inline-flex items-center gap-1" translate="no">Build skills <i class="ph ph-arrow-up-right text-xs opacity-50"></i></a>
+              <p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">Fonte oficial validada · recurso técnico</p>
+              <div class="mt-2.5 rounded-lg bg-white dark:bg-slate-800 border border-slate-100 dark:border-slate-700 p-3 space-y-2">
+                <p class="text-xs text-slate-700 dark:text-slate-300"><strong>Quando seguir:</strong> Use para empacotar instruções, recursos e scripts opcionais em um workflow repetível.</p>
+                <p class="text-xs italic text-slate-500 dark:text-slate-400 border-l-2 border-indigo-300 dark:border-indigo-700 pl-2"><strong class="not-italic text-emerald-600 dark:text-emerald-400">Validado:</strong> A documentação oficial define skills como pacotes reutilizáveis para orientar o Codex.</p>
+              </div>
+            </div>
+          </div>
+        </li>
+        <li class="p-4">
+          <div class="flex items-start gap-3">
+            <div class="flex items-center justify-center w-9 h-9 rounded-lg bg-indigo-50 dark:bg-indigo-950 text-indigo-600 dark:text-indigo-400 shrink-0 mt-0.5" aria-hidden="true"><i class="ph-fill ph-plug text-lg"></i></div>
+            <div class="min-w-0 flex-1">
+              <a href="https://openai.com/index/introducing-the-codex-app/" target="_blank" rel="noopener noreferrer" class="text-sm font-bold text-slate-900 dark:text-white hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors inline-flex items-center gap-1" translate="no">Introducing the Codex app <i class="ph ph-arrow-up-right text-xs opacity-50"></i></a>
+              <p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">Fonte oficial validada · recurso técnico</p>
+              <div class="mt-2.5 rounded-lg bg-white dark:bg-slate-800 border border-slate-100 dark:border-slate-700 p-3 space-y-2">
+                <p class="text-xs text-slate-700 dark:text-slate-300"><strong>Quando seguir:</strong> Use para entender por que workflows longos precisam de coordenação, estado e múltiplas tarefas.</p>
+                <p class="text-xs italic text-slate-500 dark:text-slate-400 border-l-2 border-indigo-300 dark:border-indigo-700 pl-2"><strong class="not-italic text-emerald-600 dark:text-emerald-400">Validado:</strong> O anúncio do Codex app descreve uma experiência para coordenar agentes e tarefas de engenharia.</p>
+              </div>
+            </div>
+          </div>
+        </li></ul>
+      </div>
+      <div class="rounded-xl border border-amber-200 dark:border-amber-900/60 bg-amber-50 dark:bg-amber-950/30 p-4" role="note">
+        <p class="text-xs font-bold uppercase tracking-widest text-amber-700 dark:text-amber-500 mb-1.5 flex items-center gap-1.5"><i class="ph ph-compass-rose"></i> Check de avanço</p>
+        <p class="text-sm font-medium text-amber-900 dark:text-amber-200 text-pretty">Você consegue copiar a skill para outro projeto e obter o mesmo padrão de entrega?</p>
+      </div>
+    </section>
+    <section id="estacao-4" class="mb-16 scroll-mt-20 station" aria-labelledby="estacao-4-titulo" data-title="integrar codex cli ao ciclo local de desenvolvimento" data-concepts="agents.md tools function calling codex cli skills ui colaborativa harness app server json-rpc subagentes agents sdk evals compaction prompt caching custo latência boss final">
+      <div class="flex items-start gap-3 mb-5">
+        <span class="flex items-center justify-center w-9 h-9 rounded-full bg-indigo-600 text-white font-bold text-sm shrink-0 shadow" aria-hidden="true">4</span>
+        <div>
+          <h2 id="estacao-4-titulo" class="text-2xl font-extrabold text-pretty">Integrar Codex CLI ao ciclo local de desenvolvimento</h2>
+          <p class="text-xs text-slate-400 dark:text-slate-500 mt-1 flex flex-wrap items-center gap-3 font-medium"><span><i class="ph ph-clock"></i> ~55 min</span><span><i class="ph ph-plug"></i> 2 nervo(s)</span></p>
+        </div>
+      </div>
+      <div class="prose-like text-slate-700 dark:text-slate-300 leading-relaxed mb-6 space-y-3 text-[1.02rem]">
+        <p><strong>Resultado prático:</strong> Rodar uma tarefa real com Codex CLI, respeitando AGENTS.md, validação e revisão manual de diff.</p>
+        <p><strong>Por que existe:</strong> A palestra separa modalidades: chat, app, IDE e terminal. Aqui você valida quando o terminal é suficiente e quando uma UI colaborativa começa a fazer falta.</p>
+      </div>
+      <div class="grid md:grid-cols-2 gap-4 mb-6">
+        <div class="rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-4">
+          <h3 class="text-xs font-bold uppercase tracking-widest text-slate-400 dark:text-slate-500 mb-3 flex items-center gap-1.5"><i class="ph ph-list-checks"></i> Tarefas práticas</h3>
+          <ul class="space-y-2 text-sm text-slate-700 dark:text-slate-300"><li class="flex gap-2"><i class="ph ph-check-circle text-emerald-500 mt-0.5"></i><span>Abrir Codex CLI dentro do repositório.</span></li><li class="flex gap-2"><i class="ph ph-check-circle text-emerald-500 mt-0.5"></i><span>Pedir que leia AGENTS.md antes de alterar arquivos.</span></li><li class="flex gap-2"><i class="ph ph-check-circle text-emerald-500 mt-0.5"></i><span>Implementar função de cálculo de custo de tokens.</span></li><li class="flex gap-2"><i class="ph ph-check-circle text-emerald-500 mt-0.5"></i><span>Revisar diff e aceitar manualmente.</span></li></ul>
+        </div>
+        <div class="rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-4">
+          <h3 class="text-xs font-bold uppercase tracking-widest text-slate-400 dark:text-slate-500 mb-3 flex items-center gap-1.5"><i class="ph ph-package"></i> Entregáveis</h3>
+          <div class="flex flex-wrap gap-2"><span class="inline-flex items-center rounded-full bg-slate-100 dark:bg-slate-800 px-2.5 py-1 text-xs font-semibold text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-700">execução com Codex CLI</span><span class="inline-flex items-center rounded-full bg-slate-100 dark:bg-slate-800 px-2.5 py-1 text-xs font-semibold text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-700">diff revisado</span><span class="inline-flex items-center rounded-full bg-slate-100 dark:bg-slate-800 px-2.5 py-1 text-xs font-semibold text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-700">testes passando</span><span class="inline-flex items-center rounded-full bg-slate-100 dark:bg-slate-800 px-2.5 py-1 text-xs font-semibold text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-700">registro de comandos</span></div>
+        </div>
+      </div>
+      <div class="rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-4 mb-6">
+        <h3 class="text-xs font-bold uppercase tracking-widest text-slate-400 dark:text-slate-500 flex items-center gap-1.5"><i class="ph ph-code"></i> Prompt operacional para o CLI</h3>
+        <pre class="mt-3 overflow-x-auto rounded-xl bg-slate-950 text-slate-100 p-4 text-xs leading-relaxed"><code>Leia o AGENTS.md.
+Implemente uma função de cálculo de custo de tokens.
+Crie testes unitários.
+Execute a validação obrigatória.
+Explique o diff antes de concluir.</code></pre>
+      </div>
+      <div class="rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900/60 overflow-hidden mb-6">
+        <div class="flex items-center gap-2 px-4 py-3 border-b border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900">
+          <i class="ph ph-plug text-indigo-500 dark:text-indigo-400"></i>
+          <h3 class="text-xs font-bold uppercase tracking-widest text-slate-600 dark:text-slate-300">Nervos validados</h3>
+        </div>
+        <ul class="divide-y divide-slate-200 dark:divide-slate-800" role="list">
+        <li class="p-4">
+          <div class="flex items-start gap-3">
+            <div class="flex items-center justify-center w-9 h-9 rounded-lg bg-indigo-50 dark:bg-indigo-950 text-indigo-600 dark:text-indigo-400 shrink-0 mt-0.5" aria-hidden="true"><i class="ph-fill ph-plug text-lg"></i></div>
+            <div class="min-w-0 flex-1">
+              <a href="https://developers.openai.com/codex/cli" target="_blank" rel="noopener noreferrer" class="text-sm font-bold text-slate-900 dark:text-white hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors inline-flex items-center gap-1" translate="no">Codex CLI <i class="ph ph-arrow-up-right text-xs opacity-50"></i></a>
+              <p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">Fonte oficial validada · recurso técnico</p>
+              <div class="mt-2.5 rounded-lg bg-white dark:bg-slate-800 border border-slate-100 dark:border-slate-700 p-3 space-y-2">
+                <p class="text-xs text-slate-700 dark:text-slate-300"><strong>Quando seguir:</strong> Use para tarefas locais em que o terminal e o diff são a superfície principal.</p>
+                <p class="text-xs italic text-slate-500 dark:text-slate-400 border-l-2 border-indigo-300 dark:border-indigo-700 pl-2"><strong class="not-italic text-emerald-600 dark:text-emerald-400">Validado:</strong> Codex CLI é a interface local para executar tarefas de engenharia com agente.</p>
+              </div>
+            </div>
+          </div>
+        </li>
+        <li class="p-4">
+          <div class="flex items-start gap-3">
+            <div class="flex items-center justify-center w-9 h-9 rounded-lg bg-indigo-50 dark:bg-indigo-950 text-indigo-600 dark:text-indigo-400 shrink-0 mt-0.5" aria-hidden="true"><i class="ph-fill ph-plug text-lg"></i></div>
+            <div class="min-w-0 flex-1">
+              <a href="https://openai.com/codex/" target="_blank" rel="noopener noreferrer" class="text-sm font-bold text-slate-900 dark:text-white hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors inline-flex items-center gap-1" translate="no">Codex product page <i class="ph ph-arrow-up-right text-xs opacity-50"></i></a>
+              <p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">Fonte oficial validada · recurso técnico</p>
+              <div class="mt-2.5 rounded-lg bg-white dark:bg-slate-800 border border-slate-100 dark:border-slate-700 p-3 space-y-2">
+                <p class="text-xs text-slate-700 dark:text-slate-300"><strong>Quando seguir:</strong> Use para comparar Codex no ChatGPT, no editor e no terminal.</p>
+                <p class="text-xs italic text-slate-500 dark:text-slate-400 border-l-2 border-indigo-300 dark:border-indigo-700 pl-2"><strong class="not-italic text-emerald-600 dark:text-emerald-400">Validado:</strong> A página de produto posiciona Codex como agente de engenharia disponível em múltiplas superfícies.</p>
+              </div>
+            </div>
+          </div>
+        </li></ul>
+      </div>
+      <div class="rounded-xl border border-amber-200 dark:border-amber-900/60 bg-amber-50 dark:bg-amber-950/30 p-4" role="note">
+        <p class="text-xs font-bold uppercase tracking-widest text-amber-700 dark:text-amber-500 mb-1.5 flex items-center gap-1.5"><i class="ph ph-compass-rose"></i> Check de avanço</p>
+        <p class="text-sm font-medium text-amber-900 dark:text-amber-200 text-pretty">Você sabe decidir quando usar ChatGPT, Codex CLI, IDE extension ou o Workbench próprio?</p>
+      </div>
+    </section>
+    <section id="estacao-5" class="mb-16 scroll-mt-20 station" aria-labelledby="estacao-5-titulo" data-title="construir a ui colaborativa: chat, timeline, comandos e diff" data-concepts="agents.md tools function calling codex cli skills ui colaborativa harness app server json-rpc subagentes agents sdk evals compaction prompt caching custo latência boss final">
+      <div class="flex items-start gap-3 mb-5">
+        <span class="flex items-center justify-center w-9 h-9 rounded-full bg-indigo-600 text-white font-bold text-sm shrink-0 shadow" aria-hidden="true">5</span>
+        <div>
+          <h2 id="estacao-5-titulo" class="text-2xl font-extrabold text-pretty">Construir a UI colaborativa: chat, timeline, comandos e diff</h2>
+          <p class="text-xs text-slate-400 dark:text-slate-500 mt-1 flex flex-wrap items-center gap-3 font-medium"><span><i class="ph ph-clock"></i> ~100 min</span><span><i class="ph ph-plug"></i> 2 nervo(s)</span></p>
+        </div>
+      </div>
+      <div class="prose-like text-slate-700 dark:text-slate-300 leading-relaxed mb-6 space-y-3 text-[1.02rem]">
+        <p><strong>Resultado prático:</strong> Criar um front React/Vite para conversar com o agente e inspecionar eventos, comandos, validações e diff.</p>
+        <p><strong>Por que existe:</strong> A palestra defende duas modalidades: conversa para intenção e interface prática para inspeção profunda. Essa estação materializa esse produto.</p>
+      </div>
+      <div class="grid md:grid-cols-2 gap-4 mb-6">
+        <div class="rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-4">
+          <h3 class="text-xs font-bold uppercase tracking-widest text-slate-400 dark:text-slate-500 mb-3 flex items-center gap-1.5"><i class="ph ph-list-checks"></i> Tarefas práticas</h3>
+          <ul class="space-y-2 text-sm text-slate-700 dark:text-slate-300"><li class="flex gap-2"><i class="ph ph-check-circle text-emerald-500 mt-0.5"></i><span>Criar painel de chat.</span></li><li class="flex gap-2"><i class="ph ph-check-circle text-emerald-500 mt-0.5"></i><span>Criar timeline de eventos do agente.</span></li><li class="flex gap-2"><i class="ph ph-check-circle text-emerald-500 mt-0.5"></i><span>Exibir comandos executados e saída resumida.</span></li><li class="flex gap-2"><i class="ph ph-check-circle text-emerald-500 mt-0.5"></i><span>Adicionar diff viewer com botões aprovar, rejeitar e pedir correção.</span></li></ul>
+        </div>
+        <div class="rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-4">
+          <h3 class="text-xs font-bold uppercase tracking-widest text-slate-400 dark:text-slate-500 mb-3 flex items-center gap-1.5"><i class="ph ph-package"></i> Entregáveis</h3>
+          <div class="flex flex-wrap gap-2"><span class="inline-flex items-center rounded-full bg-slate-100 dark:bg-slate-800 px-2.5 py-1 text-xs font-semibold text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-700">workbench-ui</span><span class="inline-flex items-center rounded-full bg-slate-100 dark:bg-slate-800 px-2.5 py-1 text-xs font-semibold text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-700">timeline de eventos</span><span class="inline-flex items-center rounded-full bg-slate-100 dark:bg-slate-800 px-2.5 py-1 text-xs font-semibold text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-700">command panel</span><span class="inline-flex items-center rounded-full bg-slate-100 dark:bg-slate-800 px-2.5 py-1 text-xs font-semibold text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-700">diff viewer</span><span class="inline-flex items-center rounded-full bg-slate-100 dark:bg-slate-800 px-2.5 py-1 text-xs font-semibold text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-700">human approval</span></div>
+        </div>
+      </div>
+      <div class="rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-4 mb-6">
+        <h3 class="text-xs font-bold uppercase tracking-widest text-slate-400 dark:text-slate-500 flex items-center gap-1.5"><i class="ph ph-code"></i> Eventos mínimos da UI</h3>
+        <pre class="mt-3 overflow-x-auto rounded-xl bg-slate-950 text-slate-100 p-4 text-xs leading-relaxed"><code>{ &quot;type&quot;: &quot;plan.created&quot;, &quot;data&quot;: {} }
+{ &quot;type&quot;: &quot;tool.started&quot;, &quot;name&quot;: &quot;write_file&quot; }
+{ &quot;type&quot;: &quot;tool.finished&quot;, &quot;name&quot;: &quot;write_file&quot; }
+{ &quot;type&quot;: &quot;validation.failed&quot;, &quot;command&quot;: &quot;npm test&quot; }
+{ &quot;type&quot;: &quot;fix.started&quot; }
+{ &quot;type&quot;: &quot;validation.passed&quot; }
+{ &quot;type&quot;: &quot;diff.ready&quot; }</code></pre>
+      </div>
+      <div class="rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900/60 overflow-hidden mb-6">
+        <div class="flex items-center gap-2 px-4 py-3 border-b border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900">
+          <i class="ph ph-plug text-indigo-500 dark:text-indigo-400"></i>
+          <h3 class="text-xs font-bold uppercase tracking-widest text-slate-600 dark:text-slate-300">Nervos validados</h3>
+        </div>
+        <ul class="divide-y divide-slate-200 dark:divide-slate-800" role="list">
+        <li class="p-4">
+          <div class="flex items-start gap-3">
+            <div class="flex items-center justify-center w-9 h-9 rounded-lg bg-indigo-50 dark:bg-indigo-950 text-indigo-600 dark:text-indigo-400 shrink-0 mt-0.5" aria-hidden="true"><i class="ph-fill ph-plug text-lg"></i></div>
+            <div class="min-w-0 flex-1">
+              <a href="https://openai.com/index/introducing-the-codex-app/" target="_blank" rel="noopener noreferrer" class="text-sm font-bold text-slate-900 dark:text-white hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors inline-flex items-center gap-1" translate="no">Introducing the Codex app <i class="ph ph-arrow-up-right text-xs opacity-50"></i></a>
+              <p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">Fonte oficial validada · recurso técnico</p>
+              <div class="mt-2.5 rounded-lg bg-white dark:bg-slate-800 border border-slate-100 dark:border-slate-700 p-3 space-y-2">
+                <p class="text-xs text-slate-700 dark:text-slate-300"><strong>Quando seguir:</strong> Use para entender a ideia de command center para múltiplos agentes e tarefas longas.</p>
+                <p class="text-xs italic text-slate-500 dark:text-slate-400 border-l-2 border-indigo-300 dark:border-indigo-700 pl-2"><strong class="not-italic text-emerald-600 dark:text-emerald-400">Validado:</strong> O Codex app é apresentado como superfície para coordenar tarefas de engenharia com agentes.</p>
+              </div>
+            </div>
+          </div>
+        </li>
+        <li class="p-4">
+          <div class="flex items-start gap-3">
+            <div class="flex items-center justify-center w-9 h-9 rounded-lg bg-indigo-50 dark:bg-indigo-950 text-indigo-600 dark:text-indigo-400 shrink-0 mt-0.5" aria-hidden="true"><i class="ph-fill ph-plug text-lg"></i></div>
+            <div class="min-w-0 flex-1">
+              <a href="https://openai.com/index/work-with-codex-from-anywhere/" target="_blank" rel="noopener noreferrer" class="text-sm font-bold text-slate-900 dark:text-white hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors inline-flex items-center gap-1" translate="no">Work with Codex from anywhere <i class="ph ph-arrow-up-right text-xs opacity-50"></i></a>
+              <p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">Fonte oficial validada · recurso técnico</p>
+              <div class="mt-2.5 rounded-lg bg-white dark:bg-slate-800 border border-slate-100 dark:border-slate-700 p-3 space-y-2">
+                <p class="text-xs text-slate-700 dark:text-slate-300"><strong>Quando seguir:</strong> Use para entender terminal, screenshots, diffs, aprovações e acompanhamento em tempo real.</p>
+                <p class="text-xs italic text-slate-500 dark:text-slate-400 border-l-2 border-indigo-300 dark:border-indigo-700 pl-2"><strong class="not-italic text-emerald-600 dark:text-emerald-400">Validado:</strong> A página mostra o padrão de acompanhar e controlar trabalho do Codex em diferentes superfícies.</p>
+              </div>
+            </div>
+          </div>
+        </li></ul>
+      </div>
+      <div class="rounded-xl border border-amber-200 dark:border-amber-900/60 bg-amber-50 dark:bg-amber-950/30 p-4" role="note">
+        <p class="text-xs font-bold uppercase tracking-widest text-amber-700 dark:text-amber-500 mb-1.5 flex items-center gap-1.5"><i class="ph ph-compass-rose"></i> Check de avanço</p>
+        <p class="text-sm font-medium text-amber-900 dark:text-amber-200 text-pretty">Sua UI mostra claramente o que o agente fez, quais comandos rodou, quais validações falharam e qual diff será aceito?</p>
+      </div>
+    </section>
+    <section id="estacao-6" class="mb-16 scroll-mt-20 station" aria-labelledby="estacao-6-titulo" data-title="reproduzir o padrão de harness e app server" data-concepts="agents.md tools function calling codex cli skills ui colaborativa harness app server json-rpc subagentes agents sdk evals compaction prompt caching custo latência boss final">
+      <div class="flex items-start gap-3 mb-5">
+        <span class="flex items-center justify-center w-9 h-9 rounded-full bg-indigo-600 text-white font-bold text-sm shrink-0 shadow" aria-hidden="true">6</span>
+        <div>
+          <h2 id="estacao-6-titulo" class="text-2xl font-extrabold text-pretty">Reproduzir o padrão de harness e App Server</h2>
+          <p class="text-xs text-slate-400 dark:text-slate-500 mt-1 flex flex-wrap items-center gap-3 font-medium"><span><i class="ph ph-clock"></i> ~110 min</span><span><i class="ph ph-plug"></i> 2 nervo(s)</span></p>
+        </div>
+      </div>
+      <div class="prose-like text-slate-700 dark:text-slate-300 leading-relaxed mb-6 space-y-3 text-[1.02rem]">
+        <p><strong>Resultado prático:</strong> Criar um runtime com threads, event bus e protocolo JSON-RPC/WebSocket entre UI e agente.</p>
+        <p><strong>Por que existe:</strong> A palestra fala sobre harness aberto e servidor de aplicação como camada que permite reutilizar o mesmo loop em CLI, app, IDE e integrações. Você vai construir uma versão didática desse padrão.</p>
+      </div>
+      <div class="grid md:grid-cols-2 gap-4 mb-6">
+        <div class="rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-4">
+          <h3 class="text-xs font-bold uppercase tracking-widest text-slate-400 dark:text-slate-500 mb-3 flex items-center gap-1.5"><i class="ph ph-list-checks"></i> Tarefas práticas</h3>
+          <ul class="space-y-2 text-sm text-slate-700 dark:text-slate-300"><li class="flex gap-2"><i class="ph ph-check-circle text-emerald-500 mt-0.5"></i><span>Criar apps/agent-runtime/server.ts.</span></li><li class="flex gap-2"><i class="ph ph-check-circle text-emerald-500 mt-0.5"></i><span>Definir protocolo thread.create, thread.message e approval.resolve.</span></li><li class="flex gap-2"><i class="ph ph-check-circle text-emerald-500 mt-0.5"></i><span>Criar event_bus.ts para emitir eventos estáveis.</span></li><li class="flex gap-2"><i class="ph ph-check-circle text-emerald-500 mt-0.5"></i><span>Permitir trocar a UI sem trocar o runtime.</span></li></ul>
+        </div>
+        <div class="rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-4">
+          <h3 class="text-xs font-bold uppercase tracking-widest text-slate-400 dark:text-slate-500 mb-3 flex items-center gap-1.5"><i class="ph ph-package"></i> Entregáveis</h3>
+          <div class="flex flex-wrap gap-2"><span class="inline-flex items-center rounded-full bg-slate-100 dark:bg-slate-800 px-2.5 py-1 text-xs font-semibold text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-700">agent-runtime</span><span class="inline-flex items-center rounded-full bg-slate-100 dark:bg-slate-800 px-2.5 py-1 text-xs font-semibold text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-700">protocol.ts</span><span class="inline-flex items-center rounded-full bg-slate-100 dark:bg-slate-800 px-2.5 py-1 text-xs font-semibold text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-700">thread_manager.ts</span><span class="inline-flex items-center rounded-full bg-slate-100 dark:bg-slate-800 px-2.5 py-1 text-xs font-semibold text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-700">event_bus.ts</span><span class="inline-flex items-center rounded-full bg-slate-100 dark:bg-slate-800 px-2.5 py-1 text-xs font-semibold text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-700">JSON-RPC ou WebSocket</span></div>
+        </div>
+      </div>
+      <div class="rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-4 mb-6">
+        <h3 class="text-xs font-bold uppercase tracking-widest text-slate-400 dark:text-slate-500 flex items-center gap-1.5"><i class="ph ph-code"></i> Contrato JSON-RPC simplificado</h3>
+        <pre class="mt-3 overflow-x-auto rounded-xl bg-slate-950 text-slate-100 p-4 text-xs leading-relaxed"><code>{ &quot;method&quot;: &quot;thread.create&quot;, &quot;params&quot;: { &quot;repo&quot;: &quot;.&quot; } }
+{ &quot;method&quot;: &quot;thread.message&quot;, &quot;params&quot;: { &quot;threadId&quot;: &quot;abc&quot;, &quot;text&quot;: &quot;implemente X&quot; } }
+{ &quot;method&quot;: &quot;approval.resolve&quot;, &quot;params&quot;: { &quot;id&quot;: &quot;cmd-1&quot;, &quot;approved&quot;: true } }</code></pre>
+      </div>
+      <div class="rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900/60 overflow-hidden mb-6">
+        <div class="flex items-center gap-2 px-4 py-3 border-b border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900">
+          <i class="ph ph-plug text-indigo-500 dark:text-indigo-400"></i>
+          <h3 class="text-xs font-bold uppercase tracking-widest text-slate-600 dark:text-slate-300">Nervos validados</h3>
+        </div>
+        <ul class="divide-y divide-slate-200 dark:divide-slate-800" role="list">
+        <li class="p-4">
+          <div class="flex items-start gap-3">
+            <div class="flex items-center justify-center w-9 h-9 rounded-lg bg-indigo-50 dark:bg-indigo-950 text-indigo-600 dark:text-indigo-400 shrink-0 mt-0.5" aria-hidden="true"><i class="ph-fill ph-plug text-lg"></i></div>
+            <div class="min-w-0 flex-1">
+              <a href="https://openai.com/index/unlocking-the-codex-harness/" target="_blank" rel="noopener noreferrer" class="text-sm font-bold text-slate-900 dark:text-white hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors inline-flex items-center gap-1" translate="no">Unlocking the Codex harness <i class="ph ph-arrow-up-right text-xs opacity-50"></i></a>
+              <p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">Fonte oficial validada · recurso técnico</p>
+              <div class="mt-2.5 rounded-lg bg-white dark:bg-slate-800 border border-slate-100 dark:border-slate-700 p-3 space-y-2">
+                <p class="text-xs text-slate-700 dark:text-slate-300"><strong>Quando seguir:</strong> Use para entender App Server, JSON-RPC, eventos, aprovações e integração com UIs.</p>
+                <p class="text-xs italic text-slate-500 dark:text-slate-400 border-l-2 border-indigo-300 dark:border-indigo-700 pl-2"><strong class="not-italic text-emerald-600 dark:text-emerald-400">Validado:</strong> O artigo técnico descreve como o App Server conecta clientes ao Codex core por uma API bidirecional.</p>
+              </div>
+            </div>
+          </div>
+        </li>
+        <li class="p-4">
+          <div class="flex items-start gap-3">
+            <div class="flex items-center justify-center w-9 h-9 rounded-lg bg-indigo-50 dark:bg-indigo-950 text-indigo-600 dark:text-indigo-400 shrink-0 mt-0.5" aria-hidden="true"><i class="ph-fill ph-plug text-lg"></i></div>
+            <div class="min-w-0 flex-1">
+              <a href="https://openai.com/index/unrolling-the-codex-agent-loop/" target="_blank" rel="noopener noreferrer" class="text-sm font-bold text-slate-900 dark:text-white hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors inline-flex items-center gap-1" translate="no">Unrolling the Codex agent loop <i class="ph ph-arrow-up-right text-xs opacity-50"></i></a>
+              <p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">Fonte oficial validada · recurso técnico</p>
+              <div class="mt-2.5 rounded-lg bg-white dark:bg-slate-800 border border-slate-100 dark:border-slate-700 p-3 space-y-2">
+                <p class="text-xs text-slate-700 dark:text-slate-300"><strong>Quando seguir:</strong> Use para entender o loop central de agente, ferramentas, patches e validação.</p>
+                <p class="text-xs italic text-slate-500 dark:text-slate-400 border-l-2 border-indigo-300 dark:border-indigo-700 pl-2"><strong class="not-italic text-emerald-600 dark:text-emerald-400">Validado:</strong> O artigo desmonta o loop de agente usado pelo Codex e seu harness.</p>
+              </div>
+            </div>
+          </div>
+        </li></ul>
+      </div>
+      <div class="rounded-xl border border-amber-200 dark:border-amber-900/60 bg-amber-50 dark:bg-amber-950/30 p-4" role="note">
+        <p class="text-xs font-bold uppercase tracking-widest text-amber-700 dark:text-amber-500 mb-1.5 flex items-center gap-1.5"><i class="ph ph-compass-rose"></i> Check de avanço</p>
+        <p class="text-sm font-medium text-amber-900 dark:text-amber-200 text-pretty">Você consegue trocar a interface web por uma CLI sem alterar o loop central do agente?</p>
+      </div>
+    </section>
+    <section id="estacao-7" class="mb-16 scroll-mt-20 station" aria-labelledby="estacao-7-titulo" data-title="adicionar subagentes para revisão paralela" data-concepts="agents.md tools function calling codex cli skills ui colaborativa harness app server json-rpc subagentes agents sdk evals compaction prompt caching custo latência boss final">
+      <div class="flex items-start gap-3 mb-5">
+        <span class="flex items-center justify-center w-9 h-9 rounded-full bg-indigo-600 text-white font-bold text-sm shrink-0 shadow" aria-hidden="true">7</span>
+        <div>
+          <h2 id="estacao-7-titulo" class="text-2xl font-extrabold text-pretty">Adicionar subagentes para revisão paralela</h2>
+          <p class="text-xs text-slate-400 dark:text-slate-500 mt-1 flex flex-wrap items-center gap-3 font-medium"><span><i class="ph ph-clock"></i> ~80 min</span><span><i class="ph ph-plug"></i> 2 nervo(s)</span></p>
+        </div>
+      </div>
+      <div class="prose-like text-slate-700 dark:text-slate-300 leading-relaxed mb-6 space-y-3 text-[1.02rem]">
+        <p><strong>Resultado prático:</strong> Criar review-pr com subagentes de segurança, bugs, testes, arquitetura e manutenibilidade.</p>
+        <p><strong>Por que existe:</strong> A palestra fala de agentes tomando várias abordagens em paralelo. Em engenharia, o primeiro uso prático disso é review especializado do mesmo diff.</p>
+      </div>
+      <div class="grid md:grid-cols-2 gap-4 mb-6">
+        <div class="rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-4">
+          <h3 class="text-xs font-bold uppercase tracking-widest text-slate-400 dark:text-slate-500 mb-3 flex items-center gap-1.5"><i class="ph ph-list-checks"></i> Tarefas práticas</h3>
+          <ul class="space-y-2 text-sm text-slate-700 dark:text-slate-300"><li class="flex gap-2"><i class="ph ph-check-circle text-emerald-500 mt-0.5"></i><span>Extrair git diff main...HEAD.</span></li><li class="flex gap-2"><i class="ph ph-check-circle text-emerald-500 mt-0.5"></i><span>Enviar o diff para cinco perfis de revisão.</span></li><li class="flex gap-2"><i class="ph ph-check-circle text-emerald-500 mt-0.5"></i><span>Consolidar achados em AI Review Report.</span></li><li class="flex gap-2"><i class="ph ph-check-circle text-emerald-500 mt-0.5"></i><span>Bloquear conclusão caso haja risco crítico.</span></li></ul>
+        </div>
+        <div class="rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-4">
+          <h3 class="text-xs font-bold uppercase tracking-widest text-slate-400 dark:text-slate-500 mb-3 flex items-center gap-1.5"><i class="ph ph-package"></i> Entregáveis</h3>
+          <div class="flex flex-wrap gap-2"><span class="inline-flex items-center rounded-full bg-slate-100 dark:bg-slate-800 px-2.5 py-1 text-xs font-semibold text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-700">review_pr.ts</span><span class="inline-flex items-center rounded-full bg-slate-100 dark:bg-slate-800 px-2.5 py-1 text-xs font-semibold text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-700">security-agent</span><span class="inline-flex items-center rounded-full bg-slate-100 dark:bg-slate-800 px-2.5 py-1 text-xs font-semibold text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-700">bug-agent</span><span class="inline-flex items-center rounded-full bg-slate-100 dark:bg-slate-800 px-2.5 py-1 text-xs font-semibold text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-700">test-agent</span><span class="inline-flex items-center rounded-full bg-slate-100 dark:bg-slate-800 px-2.5 py-1 text-xs font-semibold text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-700">architecture-agent</span><span class="inline-flex items-center rounded-full bg-slate-100 dark:bg-slate-800 px-2.5 py-1 text-xs font-semibold text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-700">ai-review-report.md</span></div>
+        </div>
+      </div>
+      <div class="rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-4 mb-6">
+        <h3 class="text-xs font-bold uppercase tracking-widest text-slate-400 dark:text-slate-500 flex items-center gap-1.5"><i class="ph ph-code"></i> Saída esperada do review paralelo</h3>
+        <pre class="mt-3 overflow-x-auto rounded-xl bg-slate-950 text-slate-100 p-4 text-xs leading-relaxed"><code>{
+  &quot;security&quot;: [&quot;Nenhum segredo encontrado&quot;, &quot;Validar input X&quot;],
+  &quot;bugs&quot;: [&quot;Possível null em user.email&quot;],
+  &quot;tests&quot;: [&quot;Faltou cenário de erro 500&quot;],
+  &quot;architecture&quot;: [&quot;Service está acumulando regra de domínio&quot;],
+  &quot;maintainability&quot;: [&quot;Nome da função está genérico&quot;]
+}</code></pre>
+      </div>
+      <div class="rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900/60 overflow-hidden mb-6">
+        <div class="flex items-center gap-2 px-4 py-3 border-b border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900">
+          <i class="ph ph-plug text-indigo-500 dark:text-indigo-400"></i>
+          <h3 class="text-xs font-bold uppercase tracking-widest text-slate-600 dark:text-slate-300">Nervos validados</h3>
+        </div>
+        <ul class="divide-y divide-slate-200 dark:divide-slate-800" role="list">
+        <li class="p-4">
+          <div class="flex items-start gap-3">
+            <div class="flex items-center justify-center w-9 h-9 rounded-lg bg-indigo-50 dark:bg-indigo-950 text-indigo-600 dark:text-indigo-400 shrink-0 mt-0.5" aria-hidden="true"><i class="ph-fill ph-plug text-lg"></i></div>
+            <div class="min-w-0 flex-1">
+              <a href="https://developers.openai.com/codex/subagents" target="_blank" rel="noopener noreferrer" class="text-sm font-bold text-slate-900 dark:text-white hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors inline-flex items-center gap-1" translate="no">Subagents <i class="ph ph-arrow-up-right text-xs opacity-50"></i></a>
+              <p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">Fonte oficial validada · recurso técnico</p>
+              <div class="mt-2.5 rounded-lg bg-white dark:bg-slate-800 border border-slate-100 dark:border-slate-700 p-3 space-y-2">
+                <p class="text-xs text-slate-700 dark:text-slate-300"><strong>Quando seguir:</strong> Use para decompor uma tarefa em especialistas e consolidar o resultado.</p>
+                <p class="text-xs italic text-slate-500 dark:text-slate-400 border-l-2 border-indigo-300 dark:border-indigo-700 pl-2"><strong class="not-italic text-emerald-600 dark:text-emerald-400">Validado:</strong> A documentação oficial descreve subagents como mecanismo de delegação especializada.</p>
+              </div>
+            </div>
+          </div>
+        </li>
+        <li class="p-4">
+          <div class="flex items-start gap-3">
+            <div class="flex items-center justify-center w-9 h-9 rounded-lg bg-indigo-50 dark:bg-indigo-950 text-indigo-600 dark:text-indigo-400 shrink-0 mt-0.5" aria-hidden="true"><i class="ph-fill ph-plug text-lg"></i></div>
+            <div class="min-w-0 flex-1">
+              <a href="https://platform.openai.com/docs/guides/agents" target="_blank" rel="noopener noreferrer" class="text-sm font-bold text-slate-900 dark:text-white hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors inline-flex items-center gap-1" translate="no">Agents SDK <i class="ph ph-arrow-up-right text-xs opacity-50"></i></a>
+              <p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">Fonte oficial validada · recurso técnico</p>
+              <div class="mt-2.5 rounded-lg bg-white dark:bg-slate-800 border border-slate-100 dark:border-slate-700 p-3 space-y-2">
+                <p class="text-xs text-slate-700 dark:text-slate-300"><strong>Quando seguir:</strong> Use quando a orquestração de ferramentas, estado e múltiplos agentes ficar recorrente.</p>
+                <p class="text-xs italic text-slate-500 dark:text-slate-400 border-l-2 border-indigo-300 dark:border-indigo-700 pl-2"><strong class="not-italic text-emerald-600 dark:text-emerald-400">Validado:</strong> Agents SDK documenta agentes, execução, orquestração e integração de ferramentas.</p>
+              </div>
+            </div>
+          </div>
+        </li></ul>
+      </div>
+      <div class="rounded-xl border border-amber-200 dark:border-amber-900/60 bg-amber-50 dark:bg-amber-950/30 p-4" role="note">
+        <p class="text-xs font-bold uppercase tracking-widest text-amber-700 dark:text-amber-500 mb-1.5 flex items-center gap-1.5"><i class="ph ph-compass-rose"></i> Check de avanço</p>
+        <p class="text-sm font-medium text-amber-900 dark:text-amber-200 text-pretty">Seu review paralelo encontra problemas que um único agente generalista provavelmente deixaria passar?</p>
+      </div>
+    </section>
+    <section id="estacao-8" class="mb-16 scroll-mt-20 station" aria-labelledby="estacao-8-titulo" data-title="medir valor: custo, latência, qualidade e contexto" data-concepts="agents.md tools function calling codex cli skills ui colaborativa harness app server json-rpc subagentes agents sdk evals compaction prompt caching custo latência boss final">
+      <div class="flex items-start gap-3 mb-5">
+        <span class="flex items-center justify-center w-9 h-9 rounded-full bg-indigo-600 text-white font-bold text-sm shrink-0 shadow" aria-hidden="true">8</span>
+        <div>
+          <h2 id="estacao-8-titulo" class="text-2xl font-extrabold text-pretty">Medir valor: custo, latência, qualidade e contexto</h2>
+          <p class="text-xs text-slate-400 dark:text-slate-500 mt-1 flex flex-wrap items-center gap-3 font-medium"><span><i class="ph ph-clock"></i> ~90 min</span><span><i class="ph ph-plug"></i> 4 nervo(s)</span></p>
+        </div>
+      </div>
+      <div class="prose-like text-slate-700 dark:text-slate-300 leading-relaxed mb-6 space-y-3 text-[1.02rem]">
+        <p><strong>Resultado prático:</strong> Criar telemetria de execução, dashboard de custo/latência, evals e estratégia de contexto longo.</p>
+        <p><strong>Por que existe:</strong> A palestra chama isso de maximização de valor. Não basta gastar tokens. O sistema precisa mostrar se economizou tempo, reduziu falha ou aumentou qualidade.</p>
+      </div>
+      <div class="grid md:grid-cols-2 gap-4 mb-6">
+        <div class="rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-4">
+          <h3 class="text-xs font-bold uppercase tracking-widest text-slate-400 dark:text-slate-500 mb-3 flex items-center gap-1.5"><i class="ph ph-list-checks"></i> Tarefas práticas</h3>
+          <ul class="space-y-2 text-sm text-slate-700 dark:text-slate-300"><li class="flex gap-2"><i class="ph ph-check-circle text-emerald-500 mt-0.5"></i><span>Registrar tokens de entrada, saída e cache.</span></li><li class="flex gap-2"><i class="ph ph-check-circle text-emerald-500 mt-0.5"></i><span>Registrar latência por etapa e quantidade de loops.</span></li><li class="flex gap-2"><i class="ph ph-check-circle text-emerald-500 mt-0.5"></i><span>Criar evals para features com validação obrigatória.</span></li><li class="flex gap-2"><i class="ph ph-check-circle text-emerald-500 mt-0.5"></i><span>Testar prompt caching e compaction em tarefas longas.</span></li></ul>
+        </div>
+        <div class="rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-4">
+          <h3 class="text-xs font-bold uppercase tracking-widest text-slate-400 dark:text-slate-500 mb-3 flex items-center gap-1.5"><i class="ph ph-package"></i> Entregáveis</h3>
+          <div class="flex flex-wrap gap-2"><span class="inline-flex items-center rounded-full bg-slate-100 dark:bg-slate-800 px-2.5 py-1 text-xs font-semibold text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-700">telemetry.jsonl</span><span class="inline-flex items-center rounded-full bg-slate-100 dark:bg-slate-800 px-2.5 py-1 text-xs font-semibold text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-700">cost-dashboard.md</span><span class="inline-flex items-center rounded-full bg-slate-100 dark:bg-slate-800 px-2.5 py-1 text-xs font-semibold text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-700">eval cases</span><span class="inline-flex items-center rounded-full bg-slate-100 dark:bg-slate-800 px-2.5 py-1 text-xs font-semibold text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-700">relatório de custo e latência</span></div>
+        </div>
+      </div>
+      <div class="rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-4 mb-6">
+        <h3 class="text-xs font-bold uppercase tracking-widest text-slate-400 dark:text-slate-500 flex items-center gap-1.5"><i class="ph ph-code"></i> Evento de telemetria por execução</h3>
+        <pre class="mt-3 overflow-x-auto rounded-xl bg-slate-950 text-slate-100 p-4 text-xs leading-relaxed"><code>{
+  &quot;runId&quot;: &quot;run_123&quot;,
+  &quot;goal&quot;: &quot;implementar feature X&quot;,
+  &quot;inputTokens&quot;: 12000,
+  &quot;outputTokens&quot;: 3000,
+  &quot;cachedTokens&quot;: 8000,
+  &quot;toolCalls&quot;: 9,
+  &quot;validationLoops&quot;: 3,
+  &quot;result&quot;: &quot;passed&quot;
+}</code></pre>
+      </div>
+      <div class="rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900/60 overflow-hidden mb-6">
+        <div class="flex items-center gap-2 px-4 py-3 border-b border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900">
+          <i class="ph ph-plug text-indigo-500 dark:text-indigo-400"></i>
+          <h3 class="text-xs font-bold uppercase tracking-widest text-slate-600 dark:text-slate-300">Nervos validados</h3>
+        </div>
+        <ul class="divide-y divide-slate-200 dark:divide-slate-800" role="list">
+        <li class="p-4">
+          <div class="flex items-start gap-3">
+            <div class="flex items-center justify-center w-9 h-9 rounded-lg bg-indigo-50 dark:bg-indigo-950 text-indigo-600 dark:text-indigo-400 shrink-0 mt-0.5" aria-hidden="true"><i class="ph-fill ph-plug text-lg"></i></div>
+            <div class="min-w-0 flex-1">
+              <a href="https://developers.openai.com/api/docs/guides/evals" target="_blank" rel="noopener noreferrer" class="text-sm font-bold text-slate-900 dark:text-white hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors inline-flex items-center gap-1" translate="no">Working with evals <i class="ph ph-arrow-up-right text-xs opacity-50"></i></a>
+              <p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">Fonte oficial validada · recurso técnico</p>
+              <div class="mt-2.5 rounded-lg bg-white dark:bg-slate-800 border border-slate-100 dark:border-slate-700 p-3 space-y-2">
+                <p class="text-xs text-slate-700 dark:text-slate-300"><strong>Quando seguir:</strong> Use para testar qualidade do agente contra critérios objetivos.</p>
+                <p class="text-xs italic text-slate-500 dark:text-slate-400 border-l-2 border-indigo-300 dark:border-indigo-700 pl-2"><strong class="not-italic text-emerald-600 dark:text-emerald-400">Validado:</strong> A documentação de evals orienta como avaliar outputs e workflows.</p>
+              </div>
+            </div>
+          </div>
+        </li>
+        <li class="p-4">
+          <div class="flex items-start gap-3">
+            <div class="flex items-center justify-center w-9 h-9 rounded-lg bg-indigo-50 dark:bg-indigo-950 text-indigo-600 dark:text-indigo-400 shrink-0 mt-0.5" aria-hidden="true"><i class="ph-fill ph-plug text-lg"></i></div>
+            <div class="min-w-0 flex-1">
+              <a href="https://developers.openai.com/api/docs/guides/compaction" target="_blank" rel="noopener noreferrer" class="text-sm font-bold text-slate-900 dark:text-white hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors inline-flex items-center gap-1" translate="no">Compaction <i class="ph ph-arrow-up-right text-xs opacity-50"></i></a>
+              <p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">Fonte oficial validada · recurso técnico</p>
+              <div class="mt-2.5 rounded-lg bg-white dark:bg-slate-800 border border-slate-100 dark:border-slate-700 p-3 space-y-2">
+                <p class="text-xs text-slate-700 dark:text-slate-300"><strong>Quando seguir:</strong> Use para tarefas longas que precisam preservar estado sem carregar todo o histórico bruto.</p>
+                <p class="text-xs italic text-slate-500 dark:text-slate-400 border-l-2 border-indigo-300 dark:border-indigo-700 pl-2"><strong class="not-italic text-emerald-600 dark:text-emerald-400">Validado:</strong> Compaction reduz contexto preservando o estado necessário para continuidade.</p>
+              </div>
+            </div>
+          </div>
+        </li>
+        <li class="p-4">
+          <div class="flex items-start gap-3">
+            <div class="flex items-center justify-center w-9 h-9 rounded-lg bg-indigo-50 dark:bg-indigo-950 text-indigo-600 dark:text-indigo-400 shrink-0 mt-0.5" aria-hidden="true"><i class="ph-fill ph-plug text-lg"></i></div>
+            <div class="min-w-0 flex-1">
+              <a href="https://developers.openai.com/api/docs/guides/cost-optimization" target="_blank" rel="noopener noreferrer" class="text-sm font-bold text-slate-900 dark:text-white hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors inline-flex items-center gap-1" translate="no">Cost optimization <i class="ph ph-arrow-up-right text-xs opacity-50"></i></a>
+              <p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">Fonte oficial validada · recurso técnico</p>
+              <div class="mt-2.5 rounded-lg bg-white dark:bg-slate-800 border border-slate-100 dark:border-slate-700 p-3 space-y-2">
+                <p class="text-xs text-slate-700 dark:text-slate-300"><strong>Quando seguir:</strong> Use para transformar custo e latência em decisão técnica.</p>
+                <p class="text-xs italic text-slate-500 dark:text-slate-400 border-l-2 border-indigo-300 dark:border-indigo-700 pl-2"><strong class="not-italic text-emerald-600 dark:text-emerald-400">Validado:</strong> A documentação de custo cobre redução de tokens, batch e processamento flexível.</p>
+              </div>
+            </div>
+          </div>
+        </li>
+        <li class="p-4">
+          <div class="flex items-start gap-3">
+            <div class="flex items-center justify-center w-9 h-9 rounded-lg bg-indigo-50 dark:bg-indigo-950 text-indigo-600 dark:text-indigo-400 shrink-0 mt-0.5" aria-hidden="true"><i class="ph-fill ph-plug text-lg"></i></div>
+            <div class="min-w-0 flex-1">
+              <a href="https://developers.openai.com/api/docs/guides/prompt-caching" target="_blank" rel="noopener noreferrer" class="text-sm font-bold text-slate-900 dark:text-white hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors inline-flex items-center gap-1" translate="no">Prompt caching <i class="ph ph-arrow-up-right text-xs opacity-50"></i></a>
+              <p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">Fonte oficial validada · recurso técnico</p>
+              <div class="mt-2.5 rounded-lg bg-white dark:bg-slate-800 border border-slate-100 dark:border-slate-700 p-3 space-y-2">
+                <p class="text-xs text-slate-700 dark:text-slate-300"><strong>Quando seguir:</strong> Use quando há prefixos de prompt repetidos, como AGENTS.md e instruções fixas.</p>
+                <p class="text-xs italic text-slate-500 dark:text-slate-400 border-l-2 border-indigo-300 dark:border-indigo-700 pl-2"><strong class="not-italic text-emerald-600 dark:text-emerald-400">Validado:</strong> Prompt caching reaproveita prefixos elegíveis para reduzir custo e latência.</p>
+              </div>
+            </div>
+          </div>
+        </li></ul>
+      </div>
+      <div class="rounded-xl border border-amber-200 dark:border-amber-900/60 bg-amber-50 dark:bg-amber-950/30 p-4" role="note">
+        <p class="text-xs font-bold uppercase tracking-widest text-amber-700 dark:text-amber-500 mb-1.5 flex items-center gap-1.5"><i class="ph ph-compass-rose"></i> Check de avanço</p>
+        <p class="text-sm font-medium text-amber-900 dark:text-amber-200 text-pretty">Você consegue provar que uma automação economizou tempo ou melhorou qualidade, em vez de apenas consumir tokens?</p>
+      </div>
+    </section>
+    <section id="boss-final" class="mb-16 scroll-mt-20 station" aria-labelledby="boss-final-titulo" data-title="boss final: feature completa do zero ao pr validado" data-concepts="agents.md tools function calling codex cli skills ui colaborativa harness app server json-rpc subagentes agents sdk evals compaction prompt caching custo latência boss final">
+      <div class="flex items-start gap-3 mb-5">
+        <span class="flex items-center justify-center w-9 h-9 rounded-full bg-indigo-600 text-white font-bold text-sm shrink-0 shadow" aria-hidden="true">9</span>
+        <div>
+          <h2 id="boss-final-titulo" class="text-2xl font-extrabold text-pretty">Boss final: feature completa do zero ao PR validado</h2>
+          <p class="text-xs text-slate-400 dark:text-slate-500 mt-1 flex flex-wrap items-center gap-3 font-medium"><span><i class="ph ph-clock"></i> ~180 min</span><span><i class="ph ph-plug"></i> 3 nervo(s)</span></p>
+        </div>
+      </div>
+      <div class="prose-like text-slate-700 dark:text-slate-300 leading-relaxed mb-6 space-y-3 text-[1.02rem]">
+        <p><strong>Resultado prático:</strong> Entregar uma feature real de estimativa de custo de execução de agentes, com API, UI, testes, review paralelo, telemetria e documentação.</p>
+        <p><strong>Por que existe:</strong> A condição final é provar que você consegue conectar intenção, execução, validação, revisão e entrega. Esse é o núcleo técnico da palestra transformado em projeto.</p>
+      </div>
+      <div class="grid md:grid-cols-2 gap-4 mb-6">
+        <div class="rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-4">
+          <h3 class="text-xs font-bold uppercase tracking-widest text-slate-400 dark:text-slate-500 mb-3 flex items-center gap-1.5"><i class="ph ph-list-checks"></i> Tarefas práticas</h3>
+          <ul class="space-y-2 text-sm text-slate-700 dark:text-slate-300"><li class="flex gap-2"><i class="ph ph-check-circle text-emerald-500 mt-0.5"></i><span>Criar POST /runs/cost-estimate.</span></li><li class="flex gap-2"><i class="ph ph-check-circle text-emerald-500 mt-0.5"></i><span>Criar UI para estimar custo por tokens.</span></li><li class="flex gap-2"><i class="ph ph-check-circle text-emerald-500 mt-0.5"></i><span>Adicionar testes unitários e integração.</span></li><li class="flex gap-2"><i class="ph ph-check-circle text-emerald-500 mt-0.5"></i><span>Rodar validação completa.</span></li><li class="flex gap-2"><i class="ph ph-check-circle text-emerald-500 mt-0.5"></i><span>Rodar subagentes de review.</span></li><li class="flex gap-2"><i class="ph ph-check-circle text-emerald-500 mt-0.5"></i><span>Gerar documentação final e PR report.</span></li></ul>
+        </div>
+        <div class="rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-4">
+          <h3 class="text-xs font-bold uppercase tracking-widest text-slate-400 dark:text-slate-500 mb-3 flex items-center gap-1.5"><i class="ph ph-package"></i> Entregáveis</h3>
+          <div class="flex flex-wrap gap-2"><span class="inline-flex items-center rounded-full bg-slate-100 dark:bg-slate-800 px-2.5 py-1 text-xs font-semibold text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-700">API funcional</span><span class="inline-flex items-center rounded-full bg-slate-100 dark:bg-slate-800 px-2.5 py-1 text-xs font-semibold text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-700">UI funcional</span><span class="inline-flex items-center rounded-full bg-slate-100 dark:bg-slate-800 px-2.5 py-1 text-xs font-semibold text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-700">testes</span><span class="inline-flex items-center rounded-full bg-slate-100 dark:bg-slate-800 px-2.5 py-1 text-xs font-semibold text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-700">review report</span><span class="inline-flex items-center rounded-full bg-slate-100 dark:bg-slate-800 px-2.5 py-1 text-xs font-semibold text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-700">cost-dashboard</span><span class="inline-flex items-center rounded-full bg-slate-100 dark:bg-slate-800 px-2.5 py-1 text-xs font-semibold text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-700">PR final validado</span></div>
+        </div>
+      </div>
+      <div class="rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-4 mb-6">
+        <h3 class="text-xs font-bold uppercase tracking-widest text-slate-400 dark:text-slate-500 flex items-center gap-1.5"><i class="ph ph-code"></i> Checklist de aceite do Boss Final</h3>
+        <pre class="mt-3 overflow-x-auto rounded-xl bg-slate-950 text-slate-100 p-4 text-xs leading-relaxed"><code>[ ] API POST /runs/cost-estimate
+[ ] UI com formulário e resultado
+[ ] cálculo com inputTokens, outputTokens, cachedTokens
+[ ] testes unitários
+[ ] testes de integração
+[ ] validação lint/test/build
+[ ] AI Review Report com subagentes
+[ ] relatório de custo/latência
+[ ] diff revisado
+[ ] documentação atualizada</code></pre>
+      </div>
+      <div class="rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900/60 overflow-hidden mb-6">
+        <div class="flex items-center gap-2 px-4 py-3 border-b border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900">
+          <i class="ph ph-plug text-indigo-500 dark:text-indigo-400"></i>
+          <h3 class="text-xs font-bold uppercase tracking-widest text-slate-600 dark:text-slate-300">Nervos validados</h3>
+        </div>
+        <ul class="divide-y divide-slate-200 dark:divide-slate-800" role="list">
+        <li class="p-4">
+          <div class="flex items-start gap-3">
+            <div class="flex items-center justify-center w-9 h-9 rounded-lg bg-indigo-50 dark:bg-indigo-950 text-indigo-600 dark:text-indigo-400 shrink-0 mt-0.5" aria-hidden="true"><i class="ph-fill ph-plug text-lg"></i></div>
+            <div class="min-w-0 flex-1">
+              <a href="https://platform.openai.com/docs/guides/agents" target="_blank" rel="noopener noreferrer" class="text-sm font-bold text-slate-900 dark:text-white hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors inline-flex items-center gap-1" translate="no">Agents SDK <i class="ph ph-arrow-up-right text-xs opacity-50"></i></a>
+              <p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">Fonte oficial validada · recurso técnico</p>
+              <div class="mt-2.5 rounded-lg bg-white dark:bg-slate-800 border border-slate-100 dark:border-slate-700 p-3 space-y-2">
+                <p class="text-xs text-slate-700 dark:text-slate-300"><strong>Quando seguir:</strong> Use para consolidar a orquestração em fluxo recorrente e testável.</p>
+                <p class="text-xs italic text-slate-500 dark:text-slate-400 border-l-2 border-indigo-300 dark:border-indigo-700 pl-2"><strong class="not-italic text-emerald-600 dark:text-emerald-400">Validado:</strong> Agents SDK cobre execução, ferramentas, estado e orquestração.</p>
+              </div>
+            </div>
+          </div>
+        </li>
+        <li class="p-4">
+          <div class="flex items-start gap-3">
+            <div class="flex items-center justify-center w-9 h-9 rounded-lg bg-indigo-50 dark:bg-indigo-950 text-indigo-600 dark:text-indigo-400 shrink-0 mt-0.5" aria-hidden="true"><i class="ph-fill ph-plug text-lg"></i></div>
+            <div class="min-w-0 flex-1">
+              <a href="https://developers.openai.com/api/docs/guides/evals" target="_blank" rel="noopener noreferrer" class="text-sm font-bold text-slate-900 dark:text-white hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors inline-flex items-center gap-1" translate="no">Working with evals <i class="ph ph-arrow-up-right text-xs opacity-50"></i></a>
+              <p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">Fonte oficial validada · recurso técnico</p>
+              <div class="mt-2.5 rounded-lg bg-white dark:bg-slate-800 border border-slate-100 dark:border-slate-700 p-3 space-y-2">
+                <p class="text-xs text-slate-700 dark:text-slate-300"><strong>Quando seguir:</strong> Use para avaliar se o Boss Final realmente cumpre critérios de qualidade.</p>
+                <p class="text-xs italic text-slate-500 dark:text-slate-400 border-l-2 border-indigo-300 dark:border-indigo-700 pl-2"><strong class="not-italic text-emerald-600 dark:text-emerald-400">Validado:</strong> Evals permitem comparar comportamento do agente contra critérios definidos.</p>
+              </div>
+            </div>
+          </div>
+        </li>
+        <li class="p-4">
+          <div class="flex items-start gap-3">
+            <div class="flex items-center justify-center w-9 h-9 rounded-lg bg-indigo-50 dark:bg-indigo-950 text-indigo-600 dark:text-indigo-400 shrink-0 mt-0.5" aria-hidden="true"><i class="ph-fill ph-plug text-lg"></i></div>
+            <div class="min-w-0 flex-1">
+              <a href="https://developers.openai.com/codex/learn/best-practices" target="_blank" rel="noopener noreferrer" class="text-sm font-bold text-slate-900 dark:text-white hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors inline-flex items-center gap-1" translate="no">Codex best practices <i class="ph ph-arrow-up-right text-xs opacity-50"></i></a>
+              <p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">Fonte oficial validada · recurso técnico</p>
+              <div class="mt-2.5 rounded-lg bg-white dark:bg-slate-800 border border-slate-100 dark:border-slate-700 p-3 space-y-2">
+                <p class="text-xs text-slate-700 dark:text-slate-300"><strong>Quando seguir:</strong> Use como referência final para validar prompting, contexto e conclusão.</p>
+                <p class="text-xs italic text-slate-500 dark:text-slate-400 border-l-2 border-indigo-300 dark:border-indigo-700 pl-2"><strong class="not-italic text-emerald-600 dark:text-emerald-400">Validado:</strong> As melhores práticas ajudam a calibrar execução e validação do agente.</p>
+              </div>
+            </div>
+          </div>
+        </li></ul>
+      </div>
+      <div class="rounded-xl border border-amber-200 dark:border-amber-900/60 bg-amber-50 dark:bg-amber-950/30 p-4" role="note">
+        <p class="text-xs font-bold uppercase tracking-widest text-amber-700 dark:text-amber-500 mb-1.5 flex items-center gap-1.5"><i class="ph ph-compass-rose"></i> Check de avanço</p>
+        <p class="text-sm font-medium text-amber-900 dark:text-amber-200 text-pretty">Você consegue abrir um PR com evidência de validação, revisão, custo, riscos e diff explicado?</p>
+      </div>
+    </section>
+
+          <section id="matriz" class="mb-16 scroll-mt-20 rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-5">
+            <h2 class="text-2xl font-extrabold mb-4 flex items-center gap-2"><i class="ph ph-grid-four text-indigo-500"></i> Matriz palestra → exemplo construído</h2>
+            <div class="overflow-x-auto custom-scrollbar"><table class="w-full text-sm"><tbody><tr class="border-b border-slate-200 dark:border-slate-800"><td class="py-2 pr-3 font-semibold text-slate-800 dark:text-slate-100">Chat como interface inicial</td><td class="py-2 text-slate-600 dark:text-slate-300">workbench-ui com painel de chat</td></tr><tr class="border-b border-slate-200 dark:border-slate-800"><td class="py-2 pr-3 font-semibold text-slate-800 dark:text-slate-100">Experiência prática colaborativa</td><td class="py-2 text-slate-600 dark:text-slate-300">timeline, comandos, diff e aprovação</td></tr><tr class="border-b border-slate-200 dark:border-slate-800"><td class="py-2 pr-3 font-semibold text-slate-800 dark:text-slate-100">Agente que testa o próprio trabalho</td><td class="py-2 text-slate-600 dark:text-slate-300">loop build/test/fix</td></tr><tr class="border-b border-slate-200 dark:border-slate-800"><td class="py-2 pr-3 font-semibold text-slate-800 dark:text-slate-100">AGENTS.md</td><td class="py-2 text-slate-600 dark:text-slate-300">instruções versionadas do repo</td></tr><tr class="border-b border-slate-200 dark:border-slate-800"><td class="py-2 pr-3 font-semibold text-slate-800 dark:text-slate-100">Skills</td><td class="py-2 text-slate-600 dark:text-slate-300">feature-delivery e review-pr</td></tr><tr class="border-b border-slate-200 dark:border-slate-800"><td class="py-2 pr-3 font-semibold text-slate-800 dark:text-slate-100">Harness aberto</td><td class="py-2 text-slate-600 dark:text-slate-300">runtime com threads e eventos</td></tr><tr class="border-b border-slate-200 dark:border-slate-800"><td class="py-2 pr-3 font-semibold text-slate-800 dark:text-slate-100">App Server</td><td class="py-2 text-slate-600 dark:text-slate-300">JSON-RPC/WebSocket simplificado</td></tr><tr class="border-b border-slate-200 dark:border-slate-800"><td class="py-2 pr-3 font-semibold text-slate-800 dark:text-slate-100">Subagentes</td><td class="py-2 text-slate-600 dark:text-slate-300">review paralelo por especialidade</td></tr><tr class="border-b border-slate-200 dark:border-slate-800"><td class="py-2 pr-3 font-semibold text-slate-800 dark:text-slate-100">Maximização de valor</td><td class="py-2 text-slate-600 dark:text-slate-300">dashboard de custo, latência e qualidade</td></tr><tr class="border-b border-slate-200 dark:border-slate-800"><td class="py-2 pr-3 font-semibold text-slate-800 dark:text-slate-100">Contexto longo</td><td class="py-2 text-slate-600 dark:text-slate-300">compaction e prompt caching</td></tr><tr class="border-b border-slate-200 dark:border-slate-800"><td class="py-2 pr-3 font-semibold text-slate-800 dark:text-slate-100">Trabalho longo</td><td class="py-2 text-slate-600 dark:text-slate-300">thread persistente com eventos</td></tr></tbody></table></div>
+          </section>
+
+          <section id="cronograma" class="mb-16 scroll-mt-20">
+            <h2 class="text-2xl font-extrabold mb-4 flex items-center gap-2"><i class="ph ph-calendar-dots text-indigo-500"></i> Ordem prática de execução — 30 dias</h2>
+            <div class="grid md:grid-cols-2 gap-4">
+<div class="rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-4">
+  <h4 class="font-bold text-slate-900 dark:text-slate-100 mb-2">Semana 1 — Base e loop</h4>
+  <ul class="space-y-1 text-sm text-slate-600 dark:text-slate-300"><li class="flex gap-2"><i class="ph ph-calendar-check text-indigo-500 mt-0.5"></i><span>Dia 1: monorepo + AGENTS.md</span></li><li class="flex gap-2"><i class="ph ph-calendar-check text-indigo-500 mt-0.5"></i><span>Dia 2: tools locais</span></li><li class="flex gap-2"><i class="ph ph-calendar-check text-indigo-500 mt-0.5"></i><span>Dia 3: loop Responses API</span></li><li class="flex gap-2"><i class="ph ph-calendar-check text-indigo-500 mt-0.5"></i><span>Dia 4: validação lint/test/build</span></li><li class="flex gap-2"><i class="ph ph-calendar-check text-indigo-500 mt-0.5"></i><span>Dia 5: relatório de execução</span></li></ul>
+</div>
+<div class="rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-4">
+  <h4 class="font-bold text-slate-900 dark:text-slate-100 mb-2">Semana 2 — Codex e skills</h4>
+  <ul class="space-y-1 text-sm text-slate-600 dark:text-slate-300"><li class="flex gap-2"><i class="ph ph-calendar-check text-indigo-500 mt-0.5"></i><span>Dia 6: Codex CLI no repo</span></li><li class="flex gap-2"><i class="ph ph-calendar-check text-indigo-500 mt-0.5"></i><span>Dia 7: skill feature-delivery</span></li><li class="flex gap-2"><i class="ph ph-calendar-check text-indigo-500 mt-0.5"></i><span>Dia 8: skill review-pr</span></li><li class="flex gap-2"><i class="ph ph-calendar-check text-indigo-500 mt-0.5"></i><span>Dia 9: automação de validação</span></li><li class="flex gap-2"><i class="ph ph-calendar-check text-indigo-500 mt-0.5"></i><span>Dia 10: primeiro fluxo completo pequeno</span></li></ul>
+</div>
+<div class="rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-4">
+  <h4 class="font-bold text-slate-900 dark:text-slate-100 mb-2">Semana 3 — UI colaborativa</h4>
+  <ul class="space-y-1 text-sm text-slate-600 dark:text-slate-300"><li class="flex gap-2"><i class="ph ph-calendar-check text-indigo-500 mt-0.5"></i><span>Dia 11: chat UI</span></li><li class="flex gap-2"><i class="ph ph-calendar-check text-indigo-500 mt-0.5"></i><span>Dia 12: timeline de eventos</span></li><li class="flex gap-2"><i class="ph ph-calendar-check text-indigo-500 mt-0.5"></i><span>Dia 13: painel de comandos</span></li><li class="flex gap-2"><i class="ph ph-calendar-check text-indigo-500 mt-0.5"></i><span>Dia 14: diff viewer</span></li><li class="flex gap-2"><i class="ph ph-calendar-check text-indigo-500 mt-0.5"></i><span>Dia 15: aprovação humana</span></li></ul>
+</div>
+<div class="rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-4">
+  <h4 class="font-bold text-slate-900 dark:text-slate-100 mb-2">Semana 4 — Harness e subagentes</h4>
+  <ul class="space-y-1 text-sm text-slate-600 dark:text-slate-300"><li class="flex gap-2"><i class="ph ph-calendar-check text-indigo-500 mt-0.5"></i><span>Dia 16: runtime com threads</span></li><li class="flex gap-2"><i class="ph ph-calendar-check text-indigo-500 mt-0.5"></i><span>Dia 17: protocolo JSON-RPC/WebSocket</span></li><li class="flex gap-2"><i class="ph ph-calendar-check text-indigo-500 mt-0.5"></i><span>Dia 18: event bus</span></li><li class="flex gap-2"><i class="ph ph-calendar-check text-indigo-500 mt-0.5"></i><span>Dia 19: subagentes de review</span></li><li class="flex gap-2"><i class="ph ph-calendar-check text-indigo-500 mt-0.5"></i><span>Dia 20: consolidador de resultados</span></li></ul>
+</div>
+<div class="rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-4">
+  <h4 class="font-bold text-slate-900 dark:text-slate-100 mb-2">Semana 5 — Métricas e qualidade</h4>
+  <ul class="space-y-1 text-sm text-slate-600 dark:text-slate-300"><li class="flex gap-2"><i class="ph ph-calendar-check text-indigo-500 mt-0.5"></i><span>Dia 21: tracking de tokens</span></li><li class="flex gap-2"><i class="ph ph-calendar-check text-indigo-500 mt-0.5"></i><span>Dia 22: tracking de latência</span></li><li class="flex gap-2"><i class="ph ph-calendar-check text-indigo-500 mt-0.5"></i><span>Dia 23: evals</span></li><li class="flex gap-2"><i class="ph ph-calendar-check text-indigo-500 mt-0.5"></i><span>Dia 24: prompt caching/compaction</span></li><li class="flex gap-2"><i class="ph ph-calendar-check text-indigo-500 mt-0.5"></i><span>Dia 25: dashboard de valor</span></li></ul>
+</div>
+<div class="rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-4">
+  <h4 class="font-bold text-slate-900 dark:text-slate-100 mb-2">Semana 6 — Boss final</h4>
+  <ul class="space-y-1 text-sm text-slate-600 dark:text-slate-300"><li class="flex gap-2"><i class="ph ph-calendar-check text-indigo-500 mt-0.5"></i><span>Dia 26: feature cost-estimate</span></li><li class="flex gap-2"><i class="ph ph-calendar-check text-indigo-500 mt-0.5"></i><span>Dia 27: testes e integração</span></li><li class="flex gap-2"><i class="ph ph-calendar-check text-indigo-500 mt-0.5"></i><span>Dia 28: review paralelo</span></li><li class="flex gap-2"><i class="ph ph-calendar-check text-indigo-500 mt-0.5"></i><span>Dia 29: documentação</span></li><li class="flex gap-2"><i class="ph ph-calendar-check text-indigo-500 mt-0.5"></i><span>Dia 30: PR final validado</span></li></ul>
+</div></div>
+          </section>
+
+          <section id="condicao-parada" class="mb-16 scroll-mt-20 rounded-2xl border border-amber-200 dark:border-amber-900/60 bg-amber-50 dark:bg-amber-950/30 p-5">
+            <h2 class="text-2xl font-extrabold mb-4 flex items-center gap-2 text-amber-900 dark:text-amber-200"><i class="ph-fill ph-flag-checkered text-amber-600"></i> Condição de parada</h2>
+            <p class="text-sm text-amber-900 dark:text-amber-200 mb-4">A trilha só está completa quando todos os itens abaixo estiverem entregues com evidência.</p>
+            <ul class="grid md:grid-cols-2 gap-2 text-sm text-amber-950 dark:text-amber-100"><li class="flex items-start gap-2"><input type="checkbox" class="mt-1 rounded border-slate-300 text-indigo-600 focus:ring-indigo-500"><span>Um agente que chama ferramentas</span></li><li class="flex items-start gap-2"><input type="checkbox" class="mt-1 rounded border-slate-300 text-indigo-600 focus:ring-indigo-500"><span>Um agente que corrige erro de teste</span></li><li class="flex items-start gap-2"><input type="checkbox" class="mt-1 rounded border-slate-300 text-indigo-600 focus:ring-indigo-500"><span>Um AGENTS.md funcional</span></li><li class="flex items-start gap-2"><input type="checkbox" class="mt-1 rounded border-slate-300 text-indigo-600 focus:ring-indigo-500"><span>Uma skill reutilizável</span></li><li class="flex items-start gap-2"><input type="checkbox" class="mt-1 rounded border-slate-300 text-indigo-600 focus:ring-indigo-500"><span>Codex CLI rodando no repo</span></li><li class="flex items-start gap-2"><input type="checkbox" class="mt-1 rounded border-slate-300 text-indigo-600 focus:ring-indigo-500"><span>UI com chat + eventos + diff</span></li><li class="flex items-start gap-2"><input type="checkbox" class="mt-1 rounded border-slate-300 text-indigo-600 focus:ring-indigo-500"><span>Runtime com thread/event bus</span></li><li class="flex items-start gap-2"><input type="checkbox" class="mt-1 rounded border-slate-300 text-indigo-600 focus:ring-indigo-500"><span>Subagentes de review</span></li><li class="flex items-start gap-2"><input type="checkbox" class="mt-1 rounded border-slate-300 text-indigo-600 focus:ring-indigo-500"><span>Dashboard de custo/latência/qualidade</span></li><li class="flex items-start gap-2"><input type="checkbox" class="mt-1 rounded border-slate-300 text-indigo-600 focus:ring-indigo-500"><span>Boss final entregue com validação completa</span></li></ul>
+          </section>
+
+          <section id="recursos" class="mb-16 scroll-mt-20 rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-5">
+            <h2 class="text-2xl font-extrabold mb-3 flex items-center gap-2"><i class="ph ph-books text-indigo-500"></i> Recursos oficiais validados</h2>
+            <p class="text-sm text-slate-500 dark:text-slate-400 mb-4">Cada recurso abaixo foi usado como nervo de uma estação. Foram priorizadas fontes primárias: documentação oficial, páginas oficiais de produto e artigos técnicos da OpenAI.</p>
+            <ul class="space-y-2">
+<li class="text-sm text-slate-700 dark:text-slate-300 flex items-start gap-2">
+  <i class="ph ph-link text-indigo-500 mt-0.5 shrink-0"></i>
+  <span><a href="https://developers.openai.com/codex/guides/agents-md" target="_blank" rel="noopener noreferrer" class="font-medium hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors" translate="no">Custom instructions with AGENTS.md</a> — <span class="text-slate-500 dark:text-slate-400">validado como recurso oficial/primário para a estação correspondente.</span></span>
+</li>
+<li class="text-sm text-slate-700 dark:text-slate-300 flex items-start gap-2">
+  <i class="ph ph-link text-indigo-500 mt-0.5 shrink-0"></i>
+  <span><a href="https://developers.openai.com/codex/concepts/customization" target="_blank" rel="noopener noreferrer" class="font-medium hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors" translate="no">Customization / AGENTS Guidance</a> — <span class="text-slate-500 dark:text-slate-400">validado como recurso oficial/primário para a estação correspondente.</span></span>
+</li>
+<li class="text-sm text-slate-700 dark:text-slate-300 flex items-start gap-2">
+  <i class="ph ph-link text-indigo-500 mt-0.5 shrink-0"></i>
+  <span><a href="https://platform.openai.com/docs/guides/tools" target="_blank" rel="noopener noreferrer" class="font-medium hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors" translate="no">Using tools</a> — <span class="text-slate-500 dark:text-slate-400">validado como recurso oficial/primário para a estação correspondente.</span></span>
+</li>
+<li class="text-sm text-slate-700 dark:text-slate-300 flex items-start gap-2">
+  <i class="ph ph-link text-indigo-500 mt-0.5 shrink-0"></i>
+  <span><a href="https://platform.openai.com/docs/guides/function-calling" target="_blank" rel="noopener noreferrer" class="font-medium hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors" translate="no">Function calling</a> — <span class="text-slate-500 dark:text-slate-400">validado como recurso oficial/primário para a estação correspondente.</span></span>
+</li>
+<li class="text-sm text-slate-700 dark:text-slate-300 flex items-start gap-2">
+  <i class="ph ph-link text-indigo-500 mt-0.5 shrink-0"></i>
+  <span><a href="https://developers.openai.com/codex/cli" target="_blank" rel="noopener noreferrer" class="font-medium hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors" translate="no">Codex CLI</a> — <span class="text-slate-500 dark:text-slate-400">validado como recurso oficial/primário para a estação correspondente.</span></span>
+</li>
+<li class="text-sm text-slate-700 dark:text-slate-300 flex items-start gap-2">
+  <i class="ph ph-link text-indigo-500 mt-0.5 shrink-0"></i>
+  <span><a href="https://developers.openai.com/codex/learn/best-practices" target="_blank" rel="noopener noreferrer" class="font-medium hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors" translate="no">Codex best practices</a> — <span class="text-slate-500 dark:text-slate-400">validado como recurso oficial/primário para a estação correspondente.</span></span>
+</li>
+<li class="text-sm text-slate-700 dark:text-slate-300 flex items-start gap-2">
+  <i class="ph ph-link text-indigo-500 mt-0.5 shrink-0"></i>
+  <span><a href="https://developers.openai.com/codex/skills" target="_blank" rel="noopener noreferrer" class="font-medium hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors" translate="no">Build skills</a> — <span class="text-slate-500 dark:text-slate-400">validado como recurso oficial/primário para a estação correspondente.</span></span>
+</li>
+<li class="text-sm text-slate-700 dark:text-slate-300 flex items-start gap-2">
+  <i class="ph ph-link text-indigo-500 mt-0.5 shrink-0"></i>
+  <span><a href="https://openai.com/index/introducing-the-codex-app/" target="_blank" rel="noopener noreferrer" class="font-medium hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors" translate="no">Introducing the Codex app</a> — <span class="text-slate-500 dark:text-slate-400">validado como recurso oficial/primário para a estação correspondente.</span></span>
+</li>
+<li class="text-sm text-slate-700 dark:text-slate-300 flex items-start gap-2">
+  <i class="ph ph-link text-indigo-500 mt-0.5 shrink-0"></i>
+  <span><a href="https://openai.com/codex/" target="_blank" rel="noopener noreferrer" class="font-medium hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors" translate="no">Codex product page</a> — <span class="text-slate-500 dark:text-slate-400">validado como recurso oficial/primário para a estação correspondente.</span></span>
+</li>
+<li class="text-sm text-slate-700 dark:text-slate-300 flex items-start gap-2">
+  <i class="ph ph-link text-indigo-500 mt-0.5 shrink-0"></i>
+  <span><a href="https://openai.com/index/work-with-codex-from-anywhere/" target="_blank" rel="noopener noreferrer" class="font-medium hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors" translate="no">Work with Codex from anywhere</a> — <span class="text-slate-500 dark:text-slate-400">validado como recurso oficial/primário para a estação correspondente.</span></span>
+</li>
+<li class="text-sm text-slate-700 dark:text-slate-300 flex items-start gap-2">
+  <i class="ph ph-link text-indigo-500 mt-0.5 shrink-0"></i>
+  <span><a href="https://openai.com/index/unlocking-the-codex-harness/" target="_blank" rel="noopener noreferrer" class="font-medium hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors" translate="no">Unlocking the Codex harness</a> — <span class="text-slate-500 dark:text-slate-400">validado como recurso oficial/primário para a estação correspondente.</span></span>
+</li>
+<li class="text-sm text-slate-700 dark:text-slate-300 flex items-start gap-2">
+  <i class="ph ph-link text-indigo-500 mt-0.5 shrink-0"></i>
+  <span><a href="https://openai.com/index/unrolling-the-codex-agent-loop/" target="_blank" rel="noopener noreferrer" class="font-medium hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors" translate="no">Unrolling the Codex agent loop</a> — <span class="text-slate-500 dark:text-slate-400">validado como recurso oficial/primário para a estação correspondente.</span></span>
+</li>
+<li class="text-sm text-slate-700 dark:text-slate-300 flex items-start gap-2">
+  <i class="ph ph-link text-indigo-500 mt-0.5 shrink-0"></i>
+  <span><a href="https://developers.openai.com/codex/subagents" target="_blank" rel="noopener noreferrer" class="font-medium hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors" translate="no">Subagents</a> — <span class="text-slate-500 dark:text-slate-400">validado como recurso oficial/primário para a estação correspondente.</span></span>
+</li>
+<li class="text-sm text-slate-700 dark:text-slate-300 flex items-start gap-2">
+  <i class="ph ph-link text-indigo-500 mt-0.5 shrink-0"></i>
+  <span><a href="https://platform.openai.com/docs/guides/agents" target="_blank" rel="noopener noreferrer" class="font-medium hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors" translate="no">Agents SDK</a> — <span class="text-slate-500 dark:text-slate-400">validado como recurso oficial/primário para a estação correspondente.</span></span>
+</li>
+<li class="text-sm text-slate-700 dark:text-slate-300 flex items-start gap-2">
+  <i class="ph ph-link text-indigo-500 mt-0.5 shrink-0"></i>
+  <span><a href="https://developers.openai.com/api/docs/guides/evals" target="_blank" rel="noopener noreferrer" class="font-medium hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors" translate="no">Working with evals</a> — <span class="text-slate-500 dark:text-slate-400">validado como recurso oficial/primário para a estação correspondente.</span></span>
+</li>
+<li class="text-sm text-slate-700 dark:text-slate-300 flex items-start gap-2">
+  <i class="ph ph-link text-indigo-500 mt-0.5 shrink-0"></i>
+  <span><a href="https://developers.openai.com/api/docs/guides/compaction" target="_blank" rel="noopener noreferrer" class="font-medium hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors" translate="no">Compaction</a> — <span class="text-slate-500 dark:text-slate-400">validado como recurso oficial/primário para a estação correspondente.</span></span>
+</li>
+<li class="text-sm text-slate-700 dark:text-slate-300 flex items-start gap-2">
+  <i class="ph ph-link text-indigo-500 mt-0.5 shrink-0"></i>
+  <span><a href="https://developers.openai.com/api/docs/guides/cost-optimization" target="_blank" rel="noopener noreferrer" class="font-medium hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors" translate="no">Cost optimization</a> — <span class="text-slate-500 dark:text-slate-400">validado como recurso oficial/primário para a estação correspondente.</span></span>
+</li>
+<li class="text-sm text-slate-700 dark:text-slate-300 flex items-start gap-2">
+  <i class="ph ph-link text-indigo-500 mt-0.5 shrink-0"></i>
+  <span><a href="https://developers.openai.com/api/docs/guides/prompt-caching" target="_blank" rel="noopener noreferrer" class="font-medium hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors" translate="no">Prompt caching</a> — <span class="text-slate-500 dark:text-slate-400">validado como recurso oficial/primário para a estação correspondente.</span></span>
+</li></ul>
+          </section>
+
+          <section id="auditoria" class="mb-16 scroll-mt-20 rounded-2xl border border-emerald-200 dark:border-emerald-900 bg-emerald-50 dark:bg-emerald-950/30 p-5">
+            <h2 class="text-2xl font-extrabold mb-4 flex items-center gap-2 text-emerald-900 dark:text-emerald-100"><i class="ph ph-shield-check text-emerald-600"></i> Auditoria Trust by Inspection</h2>
+            <ul class="space-y-2 text-sm text-emerald-950 dark:text-emerald-100">
+              <li><strong>Estações:</strong> 10.</li>
+              <li><strong>Nervos validados:</strong> 23.</li>
+              <li><strong>Fontes primárias:</strong> 18.</li>
+              <li><strong>Critérios cobertos:</strong> loop de agente, tools/function calling, AGENTS.md, skills, Codex CLI, UI colaborativa, harness/App Server, subagentes, evals, compaction, prompt caching, custo, latência e Boss Final.</li>
+              <li><strong>Checagem local:</strong> sem placeholders de template, sem links vazios, com navegação e seções completas.</li>
+            </ul>
+          </section>
+        </div>
+      </main>
+    </div>
+  </div>
+</body>
+</html>

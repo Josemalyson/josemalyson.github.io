@@ -29,6 +29,20 @@ const config: Config = {
       },
     },
   },
+  plugins: [
+    [
+      '@docusaurus/plugin-content-docs',
+      {
+        id: 'tutoriais',
+        path: 'tutoriais',
+        routeBasePath: 'tutoriais',
+        sidebarPath: false,
+        breadcrumbs: false,
+        showLastUpdateTime: false,
+        showLastUpdateAuthor: false,
+      },
+    ],
+  ],
   presets: [
     [
       'classic',
@@ -109,6 +123,7 @@ const config: Config = {
             {label: 'Trilhas', to: '/trilhas'},
             {label: 'Tutoriais', to: '/#tutoriais'},
             {label: 'Open source', to: '/#opensource'},
+            {label: 'Playbook', to: '/tutoriais/ai-first-playbook'},
             {label: 'Amazon Bedrock', to: '/docs/aws/bedrock'},
           ],
         },
