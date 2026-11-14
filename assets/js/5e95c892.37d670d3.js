@@ -1,1 +1,0 @@
-"use strict";(globalThis.webpackChunkjosemalyson_github_io||=[]).push([[647],{7121(e,s,r){r.r(s),r.d(s,{default:()=>l});r(6540);var a=r(4164),u=r(7559),o=r(5500),t=r(2831),c=r(1656),i=r(4848);function l(e){return(0,i.jsx)(o.e3,{className:(0,a.A)(u.G.wrapper.docsPages),children:(0,i.jsx)(c.A,{children:(0,t.v)(e.route.routes)})})}}}]);

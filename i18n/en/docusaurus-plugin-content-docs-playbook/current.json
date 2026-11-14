@@ -1,0 +1,58 @@
+{
+  "version.label": {
+    "message": "Next",
+    "description": "The label for version current"
+  },
+  "sidebar.playbookSidebar.category.Introdução": {
+    "message": "Introduction",
+    "description": "The label for category 'Introdução' in sidebar 'playbookSidebar'"
+  },
+  "sidebar.playbookSidebar.category.Fundamentos": {
+    "message": "Foundations",
+    "description": "The label for category 'Fundamentos' in sidebar 'playbookSidebar'"
+  },
+  "sidebar.playbookSidebar.category.Tutoriais": {
+    "message": "Tutorials",
+    "description": "The label for category 'Tutoriais' in sidebar 'playbookSidebar'"
+  },
+  "sidebar.playbookSidebar.category.Setup": {
+    "message": "Setup",
+    "description": "The label for category 'Setup' in sidebar 'playbookSidebar'"
+  },
+  "sidebar.playbookSidebar.category.Guardrails e pre-commit loop": {
+    "message": "Guardrails and the pre-commit loop",
+    "description": "The label for category 'Guardrails e pre-commit loop' in sidebar 'playbookSidebar'"
+  },
+  "sidebar.playbookSidebar.category.Discovery": {
+    "message": "Discovery",
+    "description": "The label for category 'Discovery' in sidebar 'playbookSidebar'"
+  },
+  "sidebar.playbookSidebar.category.Spec": {
+    "message": "Spec",
+    "description": "The label for category 'Spec' in sidebar 'playbookSidebar'"
+  },
+  "sidebar.playbookSidebar.category.Decomposição": {
+    "message": "Decomposition",
+    "description": "The label for category 'Decomposição' in sidebar 'playbookSidebar'"
+  },
+  "sidebar.playbookSidebar.category.Implementação": {
+    "message": "Implementation",
+    "description": "The label for category 'Implementação' in sidebar 'playbookSidebar'"
+  },
+  "sidebar.playbookSidebar.category.Verificação": {
+    "message": "Verification",
+    "description": "The label for category 'Verificação' in sidebar 'playbookSidebar'"
+  },
+  "sidebar.playbookSidebar.category.Entrega": {
+    "message": "Delivery",
+    "description": "The label for category 'Entrega' in sidebar 'playbookSidebar'"
+  },
+  "sidebar.playbookSidebar.category.Fechamento": {
+    "message": "Closing",
+    "description": "The label for category 'Fechamento' in sidebar 'playbookSidebar'"
+  },
+  "sidebar.playbookSidebar.category.Referências": {
+    "message": "References",
+    "description": "The label for category 'Referências' in sidebar 'playbookSidebar'"
+  }
+}

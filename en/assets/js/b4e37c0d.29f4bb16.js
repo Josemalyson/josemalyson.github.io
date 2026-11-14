@@ -1,1 +1,0 @@
-"use strict";(globalThis.webpackChunkjosemalyson_github_io||=[]).push([[763],{6088(s){s.exports=JSON.parse('{"name":"docusaurus-plugin-content-docs","id":"tutoriais"}')}}]);

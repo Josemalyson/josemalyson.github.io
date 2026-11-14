@@ -1,0 +1,2462 @@
+[
+  {
+    "id": "nAubbmlhPfI",
+    "url": "https://www.youtube.com/watch?v=nAubbmlhPfI",
+    "title": "What Comes After Loops?: Deep Dive Into Agentic Architecture | DevDay 2026",
+    "channel": "OpenAI",
+    "category": "Agentes e loops",
+    "summary_pt": "Do loop simples a agentes que colaboram e as escolhas de design por trás.",
+    "collected_at": "2026-11-11",
+    "source": "vault"
+  },
+  {
+    "id": "TqC1qOfiVcQ",
+    "url": "https://www.youtube.com/watch?v=TqC1qOfiVcQ",
+    "title": "Claude Agent SDK [Full Workshop] — Thariq Shihipar, Anthropic",
+    "channel": "AI Engineer",
+    "category": "Agentes e loops",
+    "summary_pt": "Claude Agent SDK [Full Workshop] — Thariq Shihipar, Anthropic.",
+    "collected_at": null,
+    "source": "vault"
+  },
+  {
+    "id": "jPPiZ22DY3g",
+    "url": "https://www.youtube.com/watch?v=jPPiZ22DY3g",
+    "title": "The Art of Loop Engineering: How to Build Agents That Improve Over Time",
+    "channel": "LangChain",
+    "category": "Agentes e loops",
+    "summary_pt": "The Art of Loop Engineering: How to Build Agents That Improve Over Time.",
+    "collected_at": null,
+    "source": "vault"
+  },
+  {
+    "id": "24WH740Xn9M",
+    "url": "https://www.youtube.com/watch?v=24WH740Xn9M",
+    "title": "Decide which Looker MCP integration is right for you?",
+    "channel": "Google Cloud Tech",
+    "category": "Code agents e harnesses",
+    "summary_pt": "Ajuda a escolher o caminho de integração do agente com o Looker.",
+    "collected_at": "2026-11-14",
+    "source": "vault"
+  },
+  {
+    "id": "3tacaSEZM9M",
+    "url": "https://www.youtube.com/watch?v=3tacaSEZM9M",
+    "title": "Bug Triage with Gemini 4 Hydrogen and Gemini 4 Carbon",
+    "channel": "Google Antigravity",
+    "category": "Code agents e harnesses",
+    "summary_pt": "Antigravity: triagem de bug com Gemini 4 Hydrogen e Gemini 4 Carbon.",
+    "collected_at": "2026-11-13",
+    "source": "vault"
+  },
+  {
+    "id": "D_4Rn6uLdQM",
+    "url": "https://www.youtube.com/watch?v=D_4Rn6uLdQM",
+    "title": "225,000 Lines of Tests, Written and Merged by Agents - Kush Agrawal, Duolingo",
+    "channel": "AI Engineer",
+    "category": "Code agents e harnesses",
+    "summary_pt": "Pipeline autônomo escolhe arquivos sem teste no app iOS (~2 milhões de linhas) e preenche a cobertura.",
+    "collected_at": "2026-11-12",
+    "source": "vault"
+  },
+  {
+    "id": "oeknLUsN_GE",
+    "url": "https://www.youtube.com/watch?v=oeknLUsN_GE",
+    "title": "Agents Made Code Free. Maintaining It Didn't Get Cheaper. - Dmitry Buykin, Maersk",
+    "channel": "AI Engineer",
+    "category": "Code agents e harnesses",
+    "summary_pt": "O que aparece meses depois, quando a maior parte do código de produção já veio de agente.",
+    "collected_at": "2026-11-12",
+    "source": "vault"
+  },
+  {
+    "id": "gg-gXO0tIUY",
+    "url": "https://www.youtube.com/watch?v=gg-gXO0tIUY",
+    "title": "Multimodal AI agent architecture: Voice, vision, tools & memory",
+    "channel": "Google Cloud Tech",
+    "category": "Code agents e harnesses",
+    "summary_pt": "Google Cloud Tech, fechamento da 1ª temporada: o que separa um agente multimodal de um chatbot com voz e visão grudados.",
+    "collected_at": "2026-11-12",
+    "source": "vault"
+  },
+  {
+    "id": "vlfCjWuv4es",
+    "url": "https://www.youtube.com/watch?v=vlfCjWuv4es",
+    "title": "Rethinking Claude Code Best Practices — Lydia Hallie, Anthropic",
+    "channel": "AI Engineer",
+    "category": "Code agents e harnesses",
+    "summary_pt": "A tese da palestra é que o que foi acumulado no setup no último ano hoje segura o modelo, em vez de ajudar.",
+    "collected_at": "2026-11-12",
+    "source": "vault"
+  },
+  {
+    "id": "cWrYEBlWpcY",
+    "url": "https://www.youtube.com/watch?v=cWrYEBlWpcY",
+    "title": "Stop Shipping LLM Settings That Only Win on Paper - Rohan Pandey & Balaji Varadarajan, DigitalOcean",
+    "channel": "AI Engineer",
+    "category": "Code agents e harnesses",
+    "summary_pt": "Ajuste que brilha no paper muitas vezes não é o que o usuário vê no hardware de produção.",
+    "collected_at": "2026-11-12",
+    "source": "vault"
+  },
+  {
+    "id": "0NbLVdCZHF0",
+    "url": "https://www.youtube.com/watch?v=0NbLVdCZHF0",
+    "title": "Tabular Foundation Models for Data Science Agents",
+    "channel": "DeepLearningAI",
+    "category": "Code agents e harnesses",
+    "summary_pt": "Curso curto sobre prever em dataset novo sem treinar do zero, via in-context learning.",
+    "collected_at": "2026-11-12",
+    "source": "vault"
+  },
+  {
+    "id": "yzx4IuEh_tU",
+    "url": "https://www.youtube.com/watch?v=yzx4IuEh_tU",
+    "title": "Your SKILL.md Is 70% Stuff the Model Already Knows - Nikolay Petrov, Intel",
+    "channel": "AI Engineer",
+    "category": "Code agents e harnesses",
+    "summary_pt": "Propõe fatiar a skill em afirmações testáveis e medir o modelo com e sem cada uma, para poder enxugar.",
+    "collected_at": "2026-11-12",
+    "source": "trello"
+  },
+  {
+    "id": "hMEQ4rdaOLw",
+    "url": "https://www.youtube.com/watch?v=hMEQ4rdaOLw",
+    "title": "11 More Tiny Coding Agent Fixes With A Stupid Amount Of Payoff (Learn These Now)",
+    "channel": "Cole Medin",
+    "category": "Code agents e harnesses",
+    "summary_pt": "Ataca agente que diz que terminou sem terminar, testes verdes com app quebrado e regras ignoradas.",
+    "collected_at": "2026-11-11",
+    "source": "trello"
+  },
+  {
+    "id": "vg3JdjGuJwM",
+    "url": "https://www.youtube.com/watch?v=vg3JdjGuJwM",
+    "title": "Every Correction You Give Your Agent Is Data - Brian Douglas, Paper Compute",
+    "channel": "AI Engineer",
+    "category": "Code agents e harnesses",
+    "summary_pt": "Código Rust que compila mas viola decisões que um colega pegaria; o conhecimento faltante está nos pushbacks.",
+    "collected_at": "2026-11-11",
+    "source": "vault"
+  },
+  {
+    "id": "_NBx2NNOuA4",
+    "url": "https://www.youtube.com/watch?v=_NBx2NNOuA4",
+    "title": "Give Your On-Call Its Own AI Teammate - Swaapnika Motapothula, Chinmay Gandhi & Vlad Tsvang, Meta",
+    "channel": "AI Engineer",
+    "category": "Code agents e harnesses",
+    "summary_pt": "Doze alertas às 2h: um agente coordenador em vez de o engenheiro coordenar cada passo.",
+    "collected_at": "2026-11-11",
+    "source": "vault"
+  },
+  {
+    "id": "b7l_Dhe1h8M",
+    "url": "https://www.youtube.com/watch?v=b7l_Dhe1h8M",
+    "title": "Harness-as-a-Service: Building with the Agents API | DevDay 2026",
+    "channel": "OpenAI",
+    "category": "Code agents e harnesses",
+    "summary_pt": "Rodar o harness do Codex no seu ambiente via Agents API e o que a OpenAI gerencia.",
+    "collected_at": "2026-11-11",
+    "source": "vault"
+  },
+  {
+    "id": "xM_BhmEyKAY",
+    "url": "https://www.youtube.com/watch?v=xM_BhmEyKAY",
+    "title": "How Workday Builds Agent Prototypes in Under a Day with LangChain",
+    "channel": "LangChain",
+    "category": "Code agents e harnesses",
+    "summary_pt": "Protótipo de meses para menos de um dia.",
+    "collected_at": "2026-11-11",
+    "source": "vault"
+  },
+  {
+    "id": "TlOAhw9t5DA",
+    "url": "https://www.youtube.com/watch?v=TlOAhw9t5DA",
+    "title": "Merge Is the Bottleneck - Prasanna Sankar, Vorflux",
+    "channel": "AI Engineer",
+    "category": "Code agents e harnesses",
+    "summary_pt": "Agente achou a tarefa inacabada na transcrição de uma ligação e abriu o PR; o gargalo passa a ser a fila de merge.",
+    "collected_at": "2026-11-11",
+    "source": "vault"
+  },
+  {
+    "id": "b5fz7J4S-ms",
+    "url": "https://www.youtube.com/watch?v=b5fz7J4S-ms",
+    "title": "Run Claude Code Locally for FREE with Ollama",
+    "channel": "Mervin Praison",
+    "category": "Code agents e harnesses",
+    "summary_pt": "Modelo local Recursive Flint passou 7 ou 8 de 10 sem correção.",
+    "collected_at": "2026-11-11",
+    "source": "vault"
+  },
+  {
+    "id": "QRm7VNMnurA",
+    "url": "https://www.youtube.com/watch?v=QRm7VNMnurA",
+    "title": "Sites and the Next Generation of Web Apps | DevDay 2026",
+    "channel": "OpenAI",
+    "category": "Code agents e harnesses",
+    "summary_pt": "ChatGPT Sites, Astra e WebMCP para interfaces usadas por pessoas e agentes.",
+    "collected_at": "2026-11-11",
+    "source": "vault"
+  },
+  {
+    "id": "U1IVZy9FhVQ",
+    "url": "https://www.youtube.com/watch?v=U1IVZy9FhVQ",
+    "title": "What Will You Build With Coding Agents That Don’t Quit? | DevDay 2026",
+    "channel": "OpenAI",
+    "category": "Code agents e harnesses",
+    "summary_pt": "Run do Codex de mais de 1.000 horas mantendo build e testes verdes; como escolher tarefas recorrentes e orçar tokens.",
+    "collected_at": "2026-11-11",
+    "source": "vault"
+  },
+  {
+    "id": "do17HkyvGSc",
+    "url": "https://www.youtube.com/watch?v=do17HkyvGSc",
+    "title": "Why code is breaking production (Google Engineers Explain)",
+    "channel": "Google Cloud Tech",
+    "category": "Code agents e harnesses",
+    "summary_pt": "Código 10x mais rápido com IA, produção 10x mais fácil de quebrar; práticas de SRE.",
+    "collected_at": "2026-11-11",
+    "source": "vault"
+  },
+  {
+    "id": "hFNbPmzzcEs",
+    "url": "https://www.youtube.com/watch?v=hFNbPmzzcEs",
+    "title": "Your Agent Doesn't Need an LLM for Every Decision - Raymond Weitekamp, OpenProse",
+    "channel": "AI Engineer",
+    "category": "Code agents e harnesses",
+    "summary_pt": "Modelos rápidos de decisão (System One) como classificadores dentro do harness.",
+    "collected_at": "2026-11-11",
+    "source": "vault"
+  },
+  {
+    "id": "rS36lYuvXQ8",
+    "url": "https://www.youtube.com/watch?v=rS36lYuvXQ8",
+    "title": "Your Agent Hates Your CLI - Ayush Bhardwaj, Allos AI",
+    "channel": "AI Engineer",
+    "category": "Code agents e harnesses",
+    "summary_pt": "Agente esconde teste falho atrás de pipeline de shell com sucesso e corta a mensagem de erro.",
+    "collected_at": "2026-11-11",
+    "source": "trello"
+  },
+  {
+    "id": "DxP5aW4VknQ",
+    "url": "https://www.youtube.com/watch?v=DxP5aW4VknQ",
+    "title": "Your Sub-Agents Are a Distributed System. Treat Them Like One. - Girish Konda, Microsoft",
+    "channel": "AI Engineer",
+    "category": "Code agents e harnesses",
+    "summary_pt": "Trabalho pela metade reportado como sucesso, palpite lido como fato e rate limit são falhas clássicas de sistemas distribuídos.",
+    "collected_at": "2026-11-11",
+    "source": "trello"
+  },
+  {
+    "id": "yH7_SIIgI-Y",
+    "url": "https://www.youtube.com/watch?v=yH7_SIIgI-Y",
+    "title": "An Agent That Fixes Its Own Mistakes - Saloni Gandhi & Ziwei Guo, LinkedIn",
+    "channel": "AI Engineer",
+    "category": "Code agents e harnesses",
+    "summary_pt": "LinkedIn mantém um loop fechado de correção para o retrato do membro montado por agentes (vídeo); a Microsoft mostra agentes de longa duração melhorando o próprio harness ao longo de horas (via DAIR).",
+    "collected_at": "2026-11-10",
+    "source": "trello"
+  },
+  {
+    "id": "RiaTyJ2POVo",
+    "url": "https://www.youtube.com/watch?v=RiaTyJ2POVo",
+    "title": "Build a Better Software Factory with Claude Code",
+    "channel": "ZazenCodes",
+    "category": "Code agents e harnesses",
+    "summary_pt": "Passo a passo da fábrica própria com agentes.",
+    "collected_at": "2026-11-10",
+    "source": "trello"
+  },
+  {
+    "id": "sUcvhFGc4mw",
+    "url": "https://www.youtube.com/watch?v=sUcvhFGc4mw",
+    "title": "How Gemini 4 Argon & Carbon were built (ft. DeepMind’s Head of Gemini Product)",
+    "channel": "Google Cloud Tech",
+    "category": "Code agents e harnesses",
+    "summary_pt": "Tulsee Doshi (Head of Product da família Gemini no DeepMind) explica o Gemini 4 Argon e Carbon: modelos de horizonte longo que trabalham sozinhos em codebases por dias, com taxa de prompt injection indireto e de trapaça próxima de zero.",
+    "collected_at": "2026-11-10",
+    "source": "vault"
+  },
+  {
+    "id": "BTtyguoPvBU",
+    "url": "https://www.youtube.com/watch?v=BTtyguoPvBU",
+    "title": "How One Founder Manages 20 AI Coding Agents at Once - Ryan Carson, Untangle",
+    "channel": "AI Engineer",
+    "category": "Code agents e harnesses",
+    "summary_pt": "Coordenador em nuvem, comandado por voz, distribui o trabalho.",
+    "collected_at": "2026-11-10",
+    "source": "trello"
+  },
+  {
+    "id": "9F9x3MufdMQ",
+    "url": "https://www.youtube.com/watch?v=9F9x3MufdMQ",
+    "title": "DeepSeek Harness (DSH) EXPLAINED | Everything Is a Plugin",
+    "channel": "Hugging Face",
+    "category": "Code agents e harnesses",
+    "summary_pt": "O DSH trata tudo como plugin, inclusive o loop do agente, e instala plugins sozinho a partir de uma lista curada com dsh plugin add, o que muda como skills são distribuídas.",
+    "collected_at": "2026-11-09",
+    "source": "trello"
+  },
+  {
+    "id": "Wb9C79BC1EQ",
+    "url": "https://www.youtube.com/watch?v=Wb9C79BC1EQ",
+    "title": "Run DeepSeek Super Agent Locally for FREE (Harness + Ollama)",
+    "channel": "Mervin Praison",
+    "category": "Code agents e harnesses",
+    "summary_pt": "Mostra um roteador que entrega cada tarefa a um worker e roda os workers ao mesmo tempo, sem API key.",
+    "collected_at": "2026-11-09",
+    "source": "vault"
+  },
+  {
+    "id": "Enn9dVrRXAo",
+    "url": "https://www.youtube.com/watch?v=Enn9dVrRXAo",
+    "title": "Stop Doing Agent Archaeology on Your Team's Code - Richard Feldman, Delta",
+    "channel": "AI Engineer",
+    "category": "Code agents e harnesses",
+    "summary_pt": "No handoff de trabalho de agente fica o branch, mas se perdem o raciocínio, os becos sem saída e as decisões; o vídeo trata de como preservar isso.",
+    "collected_at": "2026-11-09",
+    "source": "trello"
+  },
+  {
+    "id": "ZJjRgvjhq3M",
+    "url": "https://www.youtube.com/watch?v=ZJjRgvjhq3M",
+    "title": "Build Your Own Finance Agent Inside ChatGPT - Stefano Fabbri & Oliver Steffmann, OpenAI",
+    "channel": "AI Engineer",
+    "category": "Code agents e harnesses",
+    "summary_pt": "Hands-on da OpenAI; construção de fluxos, não intro.",
+    "collected_at": "2026-11-08",
+    "source": "vault"
+  },
+  {
+    "id": "EtZwTYahfek",
+    "url": "https://www.youtube.com/watch?v=EtZwTYahfek",
+    "title": "7 Things Your AI Coworker Needs - Philipp Schmid, Google DeepMind",
+    "channel": "AI Engineer",
+    "category": "Code agents e harnesses",
+    "summary_pt": "Philipp Schmid demonstra a construção com Managed Agents e os componentes necessários para autonomia.",
+    "collected_at": "2026-11-07",
+    "source": "trello"
+  },
+  {
+    "id": "EQt4Yr92Q64",
+    "url": "https://www.youtube.com/watch?v=EQt4Yr92Q64",
+    "title": "Cursor Live Apps: Complete Setup (Database + Login)",
+    "channel": "Mervin Praison",
+    "category": "Code agents e harnesses",
+    "summary_pt": "Cursor Live Apps: Complete Setup (Database + Login).",
+    "collected_at": "2026-11-07",
+    "source": "vault"
+  },
+  {
+    "id": "IW5XI2_1ctI",
+    "url": "https://www.youtube.com/watch?v=IW5XI2_1ctI",
+    "title": "Grounding agents in your trusted semantic models using Knowledge Catalog",
+    "channel": "Google Cloud Tech",
+    "category": "Code agents e harnesses",
+    "summary_pt": "O Knowledge Catalog indexa camadas semânticas como LookML e métricas dbt para orientar agentes com definições confiáveis.",
+    "collected_at": "2026-11-07",
+    "source": "vault"
+  },
+  {
+    "id": "kIlVNGZZr8o",
+    "url": "https://www.youtube.com/watch?v=kIlVNGZZr8o",
+    "title": "How Agents Cut Hour-Long Data Checks to 5 Minutes - Amol Kapoor & Clifford Ressel, Nori Agentic",
+    "channel": "AI Engineer",
+    "category": "Code agents e harnesses",
+    "summary_pt": "Mostra implementação de verificações de dados com agentes em nuvem, em vez de apenas um case de adoção.",
+    "collected_at": "2026-11-07",
+    "source": "vault"
+  },
+  {
+    "id": "maitMe9HCvw",
+    "url": "https://www.youtube.com/watch?v=maitMe9HCvw",
+    "title": "How to Get Frontier Coding Results at 70% Lower Cost - Nouha Dziri, Cohere",
+    "channel": "AI Engineer",
+    "category": "Code agents e harnesses",
+    "summary_pt": "Nouha Dziri apresenta um líder que divide o trabalho entre agentes que exploram, implementam e verificam em paralelo.",
+    "collected_at": "2026-11-07",
+    "source": "trello"
+  },
+  {
+    "id": "oWqsBuhRRZ4",
+    "url": "https://www.youtube.com/watch?v=oWqsBuhRRZ4",
+    "title": "How We Mapped a 35-Million-Line Mainframe in 4 Days - Stephen Chin, Neo4j & Neeraj Deshmukh, Blitzy",
+    "channel": "AI Engineer",
+    "category": "Code agents e harnesses",
+    "summary_pt": "Neo4j e Blitzy apresentam mapeamento de dependências de mainframe com grafos, aproveitável em análise de impacto.",
+    "collected_at": "2026-11-07",
+    "source": "vault"
+  },
+  {
+    "id": "9Y-bOQkXh-I",
+    "url": "https://www.youtube.com/watch?v=9Y-bOQkXh-I",
+    "title": "Voice mode in Google Antigravity",
+    "channel": "Google Antigravity",
+    "category": "Code agents e harnesses",
+    "summary_pt": "A demo mostra planejamento e direcionamento de alterações por voz, com Gemini Live.",
+    "collected_at": "2026-11-07",
+    "source": "vault"
+  },
+  {
+    "id": "9_FzA-J9S2E",
+    "url": "https://www.youtube.com/watch?v=9_FzA-J9S2E",
+    "title": "you need to use Herdr RIGHT NOW!!",
+    "channel": "NetworkChuck",
+    "category": "Code agents e harnesses",
+    "summary_pt": "Você já tem Herdr nas estrelas; o fato novo é o walkthrough de uso como ambiente para sessões de IA.",
+    "collected_at": "2026-11-07",
+    "source": "vault"
+  },
+  {
+    "id": "ys6YQ2yfBpM",
+    "url": "https://www.youtube.com/watch?v=ys6YQ2yfBpM",
+    "title": "Your Old Prompts Are Making Claude Worse - Lance Martin, Anthropic",
+    "channel": "AI Engineer",
+    "category": "Code agents e harnesses",
+    "summary_pt": "Lance Martin propõe auditar instruções herdadas que já não ajudam os modelos atuais.",
+    "collected_at": "2026-11-07",
+    "source": "trello"
+  },
+  {
+    "id": "czosBPhFnDI",
+    "url": "https://www.youtube.com/watch?v=czosBPhFnDI",
+    "title": "3 ways to design your agentic system",
+    "channel": "Google Cloud Tech",
+    "category": "Code agents e harnesses",
+    "summary_pt": "Google Cloud Tech: 3 formas de desenhar um sistema agêntico (agente único, times de agentes, grafos) com ADK.",
+    "collected_at": "2026-11-06",
+    "source": "vault"
+  },
+  {
+    "id": "VHAWV5JY5Ug",
+    "url": "https://www.youtube.com/watch?v=VHAWV5JY5Ug",
+    "title": "A próxima fase dos Harnesses de IA (SELF-IMPROVING HARNESS)",
+    "channel": "Ronnald Hawk | Engenharia de IA",
+    "category": "Code agents e harnesses",
+    "summary_pt": "Um harness que melhora a si mesmo, ajustando prompts, skills e tools a partir das próprias falhas.",
+    "collected_at": "2026-11-06",
+    "source": "trello"
+  },
+  {
+    "id": "4gSXKRusEYk",
+    "url": "https://www.youtube.com/watch?v=4gSXKRusEYk",
+    "title": "Build and Deploy an Always-On AI Agent with Pi",
+    "channel": "ZazenCodes",
+    "category": "Code agents e harnesses",
+    "summary_pt": "Agente persistente (always-on) com o harness Pi e backend Postgres serverless (Neon).",
+    "collected_at": "2026-11-06",
+    "source": "trello"
+  },
+  {
+    "id": "ty8i2zl9q2c",
+    "url": "https://www.youtube.com/watch?v=ty8i2zl9q2c",
+    "title": "LangChain vs. LangGraph vs. Deep Agents: When to Use Each One",
+    "channel": "LangChain",
+    "category": "Code agents e harnesses",
+    "summary_pt": "Mapa das três camadas (runtime durável, framework, harness).",
+    "collected_at": "2026-11-06",
+    "source": "vault"
+  },
+  {
+    "id": "_YIAcXZg9Yk",
+    "url": "https://www.youtube.com/watch?v=_YIAcXZg9Yk",
+    "title": "Remote Agents in Google Antigravity",
+    "channel": "Google Antigravity",
+    "category": "Code agents e harnesses",
+    "summary_pt": "O Antigravity passa a rodar agentes remotos em VMs na nuvem, com aprovação de permissões pelo celular.",
+    "collected_at": "2026-11-06",
+    "source": "trello"
+  },
+  {
+    "id": "r1iJzoxFBtg",
+    "url": "https://www.youtube.com/watch?v=r1iJzoxFBtg",
+    "title": "Browser Use with Managed Deep Agents",
+    "channel": "LangChain",
+    "category": "Code agents e harnesses",
+    "summary_pt": "Walkthrough de deep agents operando sites sem API (padrão já no acervo W44).",
+    "collected_at": "2026-11-05",
+    "source": "trello"
+  },
+  {
+    "id": "dNGchf4InU0",
+    "url": "https://www.youtube.com/watch?v=dNGchf4InU0",
+    "title": "Real time vision for AI agents: Snapshots, streams & Gemini Live API",
+    "channel": "Google Cloud Tech",
+    "category": "Code agents e harnesses",
+    "summary_pt": "Snapshots, streams e tools sobre o frame com ADK + Gemini Live.",
+    "collected_at": "2026-11-05",
+    "source": "trello"
+  },
+  {
+    "id": "OrcsMi2-IcM",
+    "url": "https://www.youtube.com/watch?v=OrcsMi2-IcM",
+    "title": "NEW DeepSeek Harness -  Super Agent!",
+    "channel": "Sam Witteveen",
+    "category": "Code agents e harnesses",
+    "summary_pt": "Protótipo da DeepSeek de sistema de agente mais autônomo, construído sobre o DeepSeek Harness.",
+    "collected_at": "2026-11-04",
+    "source": "trello"
+  },
+  {
+    "id": "JGtkTjn4120",
+    "url": "https://www.youtube.com/watch?v=JGtkTjn4120",
+    "title": "Why AI Makes You 100x Faster but Not Your Company - Mitchell Troyanovsky, Basis",
+    "channel": "AI Engineer",
+    "category": "Code agents e harnesses",
+    "summary_pt": "Palestra do AI Engineer da Basis sobre arquitetura simples de agentes.",
+    "collected_at": "2026-11-04",
+    "source": "trello"
+  },
+  {
+    "id": "z-oy69GXAmk",
+    "url": "https://www.youtube.com/watch?v=z-oy69GXAmk",
+    "title": "Agents don't fail, they guess: Designing contracts for multi-agent pipelines – Amit Upadhyay",
+    "channel": "Thoughtworks",
+    "category": "Code agents e harnesses",
+    "summary_pt": "Contratos explícitos (entrada, saída, responsabilidade) entre agentes.",
+    "collected_at": "2026-11-03",
+    "source": "trello"
+  },
+  {
+    "id": "Zo2oyjbTEXA",
+    "url": "https://www.youtube.com/watch?v=Zo2oyjbTEXA",
+    "title": "Agents on longer tasks need more than one loop",
+    "channel": "DeepLearningAI",
+    "category": "Code agents e harnesses",
+    "summary_pt": "Arquitetura de loops aninhados (planejador, executor, verificador) para tarefas longas.",
+    "collected_at": "2026-11-03",
+    "source": "trello"
+  },
+  {
+    "id": "3jBtMhM8h8E",
+    "url": "https://www.youtube.com/watch?v=3jBtMhM8h8E",
+    "title": "Agents that don't lose the plot: Designing for long-horizon success | XConf Vietnam 2026",
+    "channel": "Thoughtworks",
+    "category": "Code agents e harnesses",
+    "summary_pt": "Como evitar drift e erros acumulados em execuções longas de agentes (P9/P5).",
+    "collected_at": "2026-11-03",
+    "source": "trello"
+  },
+  {
+    "id": "HyNpKhkU1lQ",
+    "url": "https://www.youtube.com/watch?v=HyNpKhkU1lQ",
+    "title": "Claude Draws Machines You Can Open: Is It REALLY Good?",
+    "channel": "Mervin Praison",
+    "category": "Code agents e harnesses",
+    "summary_pt": "Mervin Praison mostra uma skill do Claude para gerar figuras.",
+    "collected_at": "2026-11-03",
+    "source": "trello"
+  },
+  {
+    "id": "2CYacXIiHiM",
+    "url": "https://www.youtube.com/watch?v=2CYacXIiHiM",
+    "title": "Harness engineering: Building the control system for AI coding agents | XConf Vietnam 2026",
+    "channel": "Thoughtworks",
+    "category": "Code agents e harnesses",
+    "summary_pt": "Já entraram nos briefings da semana e valem para o roteiro: Harness engineering (Thoughtworks, ) e contratos para pipelines multiagente (Thoughtworks.",
+    "collected_at": "2026-11-03",
+    "source": "trello"
+  },
+  {
+    "id": "xy_7SzwsIjM",
+    "url": "https://www.youtube.com/watch?v=xy_7SzwsIjM",
+    "title": "How to Build Agents That Improve Over Time: Model, Harness, Context | Interrupt London",
+    "channel": "LangChain",
+    "category": "Code agents e harnesses",
+    "summary_pt": "Harrison Chase divide o agente em modelo, harness e contexto e mostra onde melhorar cada um; context engineering (P9).",
+    "collected_at": "2026-11-03",
+    "source": "trello"
+  },
+  {
+    "id": "XEWR0C6p97c",
+    "url": "https://www.youtube.com/watch?v=XEWR0C6p97c",
+    "title": "I built an agent to run my YouTube channel",
+    "channel": "Google Cloud Tech",
+    "category": "Code agents e harnesses",
+    "summary_pt": "Vídeo do Google Cloud Tech sobre um pipeline multimodal autônomo com um passo de aprovação humana.",
+    "collected_at": "2026-11-03",
+    "source": "trello"
+  },
+  {
+    "id": "YHKuUjicB3M",
+    "url": "https://www.youtube.com/watch?v=YHKuUjicB3M",
+    "title": "My AI Software Factory Ships Hundreds of PRs a Week (Here's How I Manage It)",
+    "channel": "Cole Medin",
+    "category": "Code agents e harnesses",
+    "summary_pt": "Uma fábrica de software com IA que entrega centenas de PRs por semana, coordenada por um plano de controle.",
+    "collected_at": "2026-11-03",
+    "source": "trello"
+  },
+  {
+    "id": "v0UkV5qS9E4",
+    "url": "https://www.youtube.com/watch?v=v0UkV5qS9E4",
+    "title": "Why We Rebuilt Microsoft Office From Scratch for AI Agents - Yijia Liang, Compound AI",
+    "channel": "AI Engineer",
+    "category": "Code agents e harnesses",
+    "summary_pt": "Why We Rebuilt Microsoft Office From Scratch for AI Agents, Yijia Liang (Compound AI), AI Engineer, 01/11.",
+    "collected_at": "2026-11-03",
+    "source": "trello"
+  },
+  {
+    "id": "XIHZpZtYCzo",
+    "url": "https://www.youtube.com/watch?v=XIHZpZtYCzo",
+    "title": "Your AI Agents Shouldn't Care Where They Run - Nikhil Harithas, Factory",
+    "channel": "AI Engineer",
+    "category": "Code agents e harnesses",
+    "summary_pt": "Palestra do AI Engineer sobre separar runtime e identidade do agente do ambiente em que ele roda.",
+    "collected_at": "2026-11-03",
+    "source": "trello"
+  },
+  {
+    "id": "geMAe-PLJF4",
+    "url": "https://www.youtube.com/watch?v=geMAe-PLJF4",
+    "title": "I Made a Fruit Fly Review My Code - Nick Nisi, WorkOS",
+    "channel": "AI Engineer",
+    "category": "Code agents e harnesses",
+    "summary_pt": "WorkOS: \"I Made a Fruit Fly Review My Code\", o revisor humano como gargalo (AI Engineer).",
+    "collected_at": "2026-11-02",
+    "source": "trello"
+  },
+  {
+    "id": "KJr1Q-k-yH0",
+    "url": "https://www.youtube.com/watch?v=KJr1Q-k-yH0",
+    "title": "Someone wrote a PAPER about my skill",
+    "channel": "Matt Pocock",
+    "category": "Code agents e harnesses",
+    "summary_pt": "Matt Pocock — 06/11/2026 — Comenta um artigo acadêmico sobre a skill /retro e o que ele achou sobre agentes de código que se autoaperfeiçoam.",
+    "collected_at": "2026-11-02",
+    "source": "trello"
+  },
+  {
+    "id": "sYYNVN2ePLU",
+    "url": "https://www.youtube.com/watch?v=sYYNVN2ePLU",
+    "title": "Agentify your app",
+    "channel": "Google Cloud Tech",
+    "category": "Code agents e harnesses",
+    "summary_pt": "Build It: tornar um app operável por agentes com Antigravity.",
+    "collected_at": "2026-10-26",
+    "source": "vault"
+  },
+  {
+    "id": "UGuNt2_Oz8s",
+    "url": "https://www.youtube.com/watch?v=UGuNt2_Oz8s",
+    "title": "Agents That Self Improve While You Sleep - Fuad Ali, Arize AI",
+    "channel": "AI Engineer",
+    "category": "Code agents e harnesses",
+    "summary_pt": "AI Engineer: agentes que se aprimoram durante a noite.",
+    "collected_at": "2026-10-26",
+    "source": "trello"
+  },
+  {
+    "id": "djp9WZ0zt1c",
+    "url": "https://www.youtube.com/watch?v=djp9WZ0zt1c",
+    "title": "AI is a scout, not an engineer – Tyson Brown",
+    "channel": "Thoughtworks",
+    "category": "Code agents e harnesses",
+    "summary_pt": "XConf: IA é batedora, não engenheira.",
+    "collected_at": "2026-10-26",
+    "source": "vault"
+  },
+  {
+    "id": "BlbxhsItZPg",
+    "url": "https://www.youtube.com/watch?v=BlbxhsItZPg",
+    "title": "Anthropic's New Study: You're Not Controlling AI as Much as You Think You Are",
+    "channel": "Cole Medin",
+    "category": "Code agents e harnesses",
+    "summary_pt": "Comentário sobre estudo da Anthropic a respeito de quanto controle o usuário tem sobre a IA.",
+    "collected_at": "2026-10-26",
+    "source": "vault"
+  },
+  {
+    "id": "ujmyzWSj8IU",
+    "url": "https://www.youtube.com/watch?v=ujmyzWSj8IU",
+    "title": "API credits, now in ChatGPT Pro and Business plans",
+    "channel": "OpenAI",
+    "category": "Code agents e harnesses",
+    "summary_pt": "Até US$500/mês em créditos de API para assinantes elegíveis.",
+    "collected_at": "2026-10-26",
+    "source": "vault"
+  },
+  {
+    "id": "CwIyDq6nhdk",
+    "url": "https://www.youtube.com/watch?v=CwIyDq6nhdk",
+    "title": "Aprenda MONOLITO MODULAR ANTES de MICROSERVIÇOS",
+    "channel": "Fernanda Kipper",
+    "category": "Code agents e harnesses",
+    "summary_pt": "Arquitetura: monólito modular como passo antes de microsserviços.",
+    "collected_at": "2026-10-26",
+    "source": "vault"
+  },
+  {
+    "id": "Y_p3y6zP5QE",
+    "url": "https://www.youtube.com/watch?v=Y_p3y6zP5QE",
+    "title": "Build Your Own Team of Managed Agents - Jack Wotherspoon, Google DeepMind",
+    "channel": "AI Engineer",
+    "category": "Code agents e harnesses",
+    "summary_pt": "Build Your Own Team of Managed Agents - Jack Wotherspoon, Google DeepMind.",
+    "collected_at": "2026-10-26",
+    "source": "vault"
+  },
+  {
+    "id": "O3jCAZbrRHM",
+    "url": "https://www.youtube.com/watch?v=O3jCAZbrRHM",
+    "title": "Building Semiconductor Agents at Skyworks with LangGraph + LangSmith",
+    "channel": "LangChain",
+    "category": "Code agents e harnesses",
+    "summary_pt": "Caso real de agentes em produção com observabilidade LangSmith.",
+    "collected_at": "2026-10-26",
+    "source": "vault"
+  },
+  {
+    "id": "oOCCZN9S-8o",
+    "url": "https://www.youtube.com/watch?v=oOCCZN9S-8o",
+    "title": "Claude Code e Codex em paralelo: 4 agentes, 2 projetos",
+    "channel": "Fabricio Veronez",
+    "category": "Code agents e harnesses",
+    "summary_pt": "Fluxo com vários agentes de código em paralelo.",
+    "collected_at": "2026-10-26",
+    "source": "vault"
+  },
+  {
+    "id": "iN5fscBeTDE",
+    "url": "https://www.youtube.com/watch?v=iN5fscBeTDE",
+    "title": "DeepSeek in Claude Code (and the Engine They Gave Away)",
+    "channel": "Mervin Praison",
+    "category": "Code agents e harnesses",
+    "summary_pt": "DeepInfer open source e V4.1-Flash com pesos MIT e contexto de 1M.",
+    "collected_at": "2026-10-26",
+    "source": "vault"
+  },
+  {
+    "id": "pqqA_4TaIsU",
+    "url": "https://www.youtube.com/watch?v=pqqA_4TaIsU",
+    "title": "From dead-on-arrival to alive: How AI resurrects the humble ADR – Xiaowen Zhuang and Hao Pan",
+    "channel": "Thoughtworks",
+    "category": "Code agents e harnesses",
+    "summary_pt": "XConf: ADR revivido por IA.",
+    "collected_at": "2026-10-26",
+    "source": "vault"
+  },
+  {
+    "id": "cflbzHRvGvg",
+    "url": "https://www.youtube.com/watch?v=cflbzHRvGvg",
+    "title": "From Ideas to Prototypes with Codex | Shopify’s Mikhail Parakhin",
+    "channel": "OpenAI",
+    "category": "Code agents e harnesses",
+    "summary_pt": "CTO da Shopify sobre trazer protótipo em vez de ideia.",
+    "collected_at": "2026-10-26",
+    "source": "vault"
+  },
+  {
+    "id": "DXfXXB8Murs",
+    "url": "https://www.youtube.com/watch?v=DXfXXB8Murs",
+    "title": "Gemini 4 Carbon: Google's Best AI and You CAN'T Use It",
+    "channel": "Mervin Praison",
+    "category": "Code agents e harnesses",
+    "summary_pt": "Anúncio do Gemini 4 Carbon, de acesso restrito.",
+    "collected_at": "2026-10-26",
+    "source": "vault"
+  },
+  {
+    "id": "lPZQrVFcz3c",
+    "url": "https://www.youtube.com/watch?v=lPZQrVFcz3c",
+    "title": "Getting a Head Start with Codex | Mitchell Hashimoto",
+    "channel": "OpenAI",
+    "category": "Code agents e harnesses",
+    "summary_pt": "Como Hashimoto deixa agentes Codex trabalhando ao fim do dia.",
+    "collected_at": "2026-10-26",
+    "source": "vault"
+  },
+  {
+    "id": "aGIUg8zKI8A",
+    "url": "https://www.youtube.com/watch?v=aGIUg8zKI8A",
+    "title": "How a Trading Firm Ships New AI Models the Same Day - Noyan Tokgozoglu, Optiver",
+    "channel": "AI Engineer",
+    "category": "Code agents e harnesses",
+    "summary_pt": "AI Engineer: modelo novo no mesmo dia (Optiver).",
+    "collected_at": "2026-10-26",
+    "source": "vault"
+  },
+  {
+    "id": "u4n558Ul6w0",
+    "url": "https://www.youtube.com/watch?v=u4n558Ul6w0",
+    "title": "Introducing TorchTPU: Native PyTorch on Google Cloud TPUs",
+    "channel": "Google Cloud Tech",
+    "category": "Code agents e harnesses",
+    "summary_pt": "Backend PyTorch nativo open source para TPU, com Meta.",
+    "collected_at": "2026-10-26",
+    "source": "vault"
+  },
+  {
+    "id": "ij9a55_rib4",
+    "url": "https://www.youtube.com/watch?v=ij9a55_rib4",
+    "title": "Loop Engineering não é Vibe Coding:  é Agente com verificação",
+    "channel": "Ronnald Hawk | Engenharia de IA",
+    "category": "Code agents e harnesses",
+    "summary_pt": "Desenhar o loop do agente (agir → verificar → corrigir) com critério de parada explícito, em vez de prompt único (P9).",
+    "collected_at": "2026-10-26",
+    "source": "trello"
+  },
+  {
+    "id": "YX4Z4XqZ9Vo",
+    "url": "https://www.youtube.com/watch?v=YX4Z4XqZ9Vo",
+    "title": "Most of Your Docs Readers Are Now AI Agents - Hahnbee Lee, Mintlify & Lincoln Murr, Coinbase",
+    "channel": "AI Engineer",
+    "category": "Code agents e harnesses",
+    "summary_pt": "Most of Your Docs Readers Are Now AI Agents (Mintlify/Coinbase, P2/P10).",
+    "collected_at": "2026-10-26",
+    "source": "trello"
+  },
+  {
+    "id": "oAhYP1FwKSY",
+    "url": "https://www.youtube.com/watch?v=oAhYP1FwKSY",
+    "title": "NVIDIA VP: Same AI Model, 30% to 100% (Must Know)",
+    "channel": "Mervin Praison",
+    "category": "Code agents e harnesses",
+    "summary_pt": "Entrevista sobre NVIDIA Agent Toolkit: harness muda o resultado do mesmo modelo.",
+    "collected_at": "2026-10-26",
+    "source": "vault"
+  },
+  {
+    "id": "FczbSauVvjw",
+    "url": "https://www.youtube.com/watch?v=FczbSauVvjw",
+    "title": "Science Behind the Open Cyber Frontier with Mistral Large 4",
+    "channel": "Hugging Face",
+    "category": "Code agents e harnesses",
+    "summary_pt": "Conversa com a Mistral sobre capacidades de cibersegurança do modelo.",
+    "collected_at": "2026-10-26",
+    "source": "vault"
+  },
+  {
+    "id": "mQu0zN4IvSI",
+    "url": "https://www.youtube.com/watch?v=mQu0zN4IvSI",
+    "title": "Software engineering at Google & CS education with Titus Winters",
+    "channel": "The Pragmatic Engineer",
+    "category": "Code agents e harnesses",
+    "summary_pt": "Engenharia de software no Google e currículo de CS na era da IA.",
+    "collected_at": "2026-10-26",
+    "source": "vault"
+  },
+  {
+    "id": "N3tqEBWFD00",
+    "url": "https://www.youtube.com/watch?v=N3tqEBWFD00",
+    "title": "Stop Paying for Bad Prompts: Amazon Bedrock Prompt Optimization (Simple vs Advanced)",
+    "channel": "AWS Developers",
+    "category": "Code agents e harnesses",
+    "summary_pt": "Otimização de prompts no Bedrock para cortar custo de tokens.",
+    "collected_at": "2026-10-26",
+    "source": "vault"
+  },
+  {
+    "id": "VoSQZBguB1A",
+    "url": "https://www.youtube.com/watch?v=VoSQZBguB1A",
+    "title": "The PHP bug threatening the web. Plus, who's auditing AI?",
+    "channel": "IBM Technology",
+    "category": "Code agents e harnesses",
+    "summary_pt": "Bug de PHP achado com ajuda de modelo de IA e auditoria de IA.",
+    "collected_at": "2026-10-26",
+    "source": "vault"
+  },
+  {
+    "id": "k-Zpe1dWvLM",
+    "url": "https://www.youtube.com/watch?v=k-Zpe1dWvLM",
+    "title": "This Week in AI | 29th October 2026",
+    "channel": "Thoughtworks",
+    "category": "Code agents e harnesses",
+    "summary_pt": "This Week in AI | 29th October 2026 (Thoughtworks, 29/10).",
+    "collected_at": "2026-10-26",
+    "source": "vault"
+  },
+  {
+    "id": "XOUSuxY074U",
+    "url": "https://www.youtube.com/watch?v=XOUSuxY074U",
+    "title": "Why Own Your Intelligence? Harrison Chase Keynote | Interrupt London",
+    "channel": "LangChain",
+    "category": "Code agents e harnesses",
+    "summary_pt": "Keynote sobre a especialização que o time acumula no agente como ativo próprio.",
+    "collected_at": "2026-10-26",
+    "source": "vault"
+  },
+  {
+    "id": "CKFUx7COIwQ",
+    "url": "https://www.youtube.com/watch?v=CKFUx7COIwQ",
+    "title": "Workshop: Training Agents at the frontier of AI Industry",
+    "channel": "Hugging Face",
+    "category": "Code agents e harnesses",
+    "summary_pt": "Palestras sobre post-training de agentes com modelos abertos.",
+    "collected_at": "2026-10-26",
+    "source": "vault"
+  },
+  {
+    "id": "_4Ph2dhmUFI",
+    "url": "https://www.youtube.com/watch?v=_4Ph2dhmUFI",
+    "title": "How to Know When an AI Agent Can Work Unsupervised — Evan Kormos, Coinbase",
+    "channel": "AI Engineer",
+    "category": "Code agents e harnesses",
+    "summary_pt": "Palestrante do talk \"How to Know When an AI Agent Can Work Unsupervised\" (canal AI Engineer, capturado em 2026-10-20).",
+    "collected_at": "2026-10-20",
+    "source": "vault"
+  },
+  {
+    "id": "2C_CefSQEAQ",
+    "url": "https://www.youtube.com/watch?v=2C_CefSQEAQ",
+    "title": "AI harness crash course",
+    "channel": "Google Cloud Tech",
+    "category": "Code agents e harnesses",
+    "summary_pt": "Google Cloud Tech (22/10). Percorre as quatro partes de um harness: contexto e memória, ferramentas e fluxo, sandbox com aprovação humana, e avaliação com checagens, LLM judge e humano. Dá o esqueleto para padronizar harness no time. [Mentor, Gestor, Conteúdo] — [vídeo]( ).",
+    "collected_at": "2026-10-19",
+    "source": "trello"
+  },
+  {
+    "id": "kspZP5BgkEU",
+    "url": "https://www.youtube.com/watch?v=kspZP5BgkEU",
+    "title": "AI Writes the Code. So What's Left for Engineers? - Laurie Voss, Arize AI",
+    "channel": "AI Engineer",
+    "category": "Code agents e harnesses",
+    "summary_pt": "AI Writes the Code. So What's Left for Engineers? - Laurie Voss, Arize AI.",
+    "collected_at": "2026-10-19",
+    "source": "vault"
+  },
+  {
+    "id": "dZgA6btnb_s",
+    "url": "https://www.youtube.com/watch?v=dZgA6btnb_s",
+    "title": "Do Not Let Models Invent Numbers - Vinoo Ganesh, Kepler",
+    "channel": "AI Engineer",
+    "category": "Code agents e harnesses",
+    "summary_pt": "Do Not Let Models Invent Numbers - Vinoo Ganesh, Kepler.",
+    "collected_at": "2026-10-19",
+    "source": "vault"
+  },
+  {
+    "id": "AnsXWH2_EBU",
+    "url": "https://www.youtube.com/watch?v=AnsXWH2_EBU",
+    "title": "How Anthropic Merges 30,000 Code Changes a Day - Manish Kapur, Sonar & Addy Osmani, Anthropic",
+    "channel": "AI Engineer",
+    "category": "Code agents e harnesses",
+    "summary_pt": "Git não aguenta o volume de agentes; Anthropic redesenhou source control e review (30k merges/semana).",
+    "collected_at": "2026-10-19",
+    "source": "trello"
+  },
+  {
+    "id": "CLve4Nx_RwI",
+    "url": "https://www.youtube.com/watch?v=CLve4Nx_RwI",
+    "title": "How Bridgewater Turned 100 Million Documents Into an Edge - Sam Green & Aaron Linsky, Bridgewater",
+    "channel": "AI Engineer",
+    "category": "Code agents e harnesses",
+    "summary_pt": "How Bridgewater Turned 100 Million Documents Into an Edge - Sam Green & Aaron Linsky, Bridgewater.",
+    "collected_at": "2026-10-19",
+    "source": "vault"
+  },
+  {
+    "id": "7Y4sbZgBdnc",
+    "url": "https://www.youtube.com/watch?v=7Y4sbZgBdnc",
+    "title": "Is the Agent Harness Dead? — Jediah Katz, SpaceXAI",
+    "channel": "AI Engineer",
+    "category": "Code agents e harnesses",
+    "summary_pt": "Jediah Katz, SpaceXAI (19/10).",
+    "collected_at": "2026-10-19",
+    "source": "trello"
+  },
+  {
+    "id": "tNKmMhiOw9w",
+    "url": "https://www.youtube.com/watch?v=tNKmMhiOw9w",
+    "title": "Run Your AI Software Factory Like a Real Engineering Org (Here's How)",
+    "channel": "Cole Medin",
+    "category": "Code agents e harnesses",
+    "summary_pt": "Cole Medin (23/10). Leva a \"fábrica\" de agentes para um time, com dono do código, padrões que precisam passar antes do deploy e aprovação humana, usando o Port como portal. Serve como modelo direto de processo para time híbrido. [Mentor, Gestor, Conteúdo] — [vídeo]( ).",
+    "collected_at": "2026-10-19",
+    "source": "trello"
+  },
+  {
+    "id": "Prl858_AovM",
+    "url": "https://www.youtube.com/watch?v=Prl858_AovM",
+    "title": "The revised rules of engineering management with Will Larson",
+    "channel": "The Pragmatic Engineer",
+    "category": "Code agents e harnesses",
+    "summary_pt": "The Pragmatic Engineer (21/10).",
+    "collected_at": "2026-10-19",
+    "source": "vault"
+  },
+  {
+    "id": "v5tm5EAzsAs",
+    "url": "https://www.youtube.com/watch?v=v5tm5EAzsAs",
+    "title": "Your Agent Fix Just Broke Something Else - Sofia Jakovcevic, Arize AI",
+    "channel": "AI Engineer",
+    "category": "Code agents e harnesses",
+    "summary_pt": "Vídeos AI Engineer: Arize (regressão de agentes e papel do engenheiro), Kepler (números inventados), Bridgewater (100M documentos), Browserbase e DeepMind/LinqAlpha (agentes financeiros).",
+    "collected_at": "2026-10-19",
+    "source": "trello"
+  },
+  {
+    "id": "Dh7jAYHcAlo",
+    "url": "https://www.youtube.com/watch?v=Dh7jAYHcAlo",
+    "title": "AI Agent Debugging Setup: OpenTelemetry + Jaeger in Kubernetes",
+    "channel": "DevOps & AI Toolkit",
+    "category": "Code agents e harnesses",
+    "summary_pt": "AI Agent Debugging Setup: OpenTelemetry + Jaeger in Kubernetes.",
+    "collected_at": null,
+    "source": "vault"
+  },
+  {
+    "id": "R0OdB-p-ns4",
+    "url": "https://www.youtube.com/watch?v=R0OdB-p-ns4",
+    "title": "AI Dev 25 | Harrison Chase: Long Term Memory with LangGraph",
+    "channel": "DeepLearningAI",
+    "category": "Code agents e harnesses",
+    "summary_pt": "AI Dev 25 | Harrison Chase: Long Term Memory with LangGraph.",
+    "collected_at": null,
+    "source": "vault"
+  },
+  {
+    "id": "cu2fgknmemA",
+    "url": "https://www.youtube.com/watch?v=cu2fgknmemA",
+    "title": "Hermes Agent The 24/7 Self-Evolving AI Agent!",
+    "channel": "WorldofAI",
+    "category": "Code agents e harnesses",
+    "summary_pt": "Hermes Agent The 24/7 Self-Evolving AI Agent!",
+    "collected_at": null,
+    "source": "vault"
+  },
+  {
+    "id": "DosHnyq78xY",
+    "url": "https://www.youtube.com/watch?v=DosHnyq78xY",
+    "title": "Intro to MCP Servers – Model Context Protocol with Python Course",
+    "channel": "freeCodeCamp.org",
+    "category": "Code agents e harnesses",
+    "summary_pt": "Intro to MCP Servers – Model Context Protocol with Python Course.",
+    "collected_at": null,
+    "source": "vault"
+  },
+  {
+    "id": "MmiveeGxfX0",
+    "url": "https://www.youtube.com/watch?v=MmiveeGxfX0",
+    "title": "Introducing AgentWorkflow, a way to easily create multi-agent systems in Llamaindex",
+    "channel": "LlamaIndex",
+    "category": "Code agents e harnesses",
+    "summary_pt": "Introducing AgentWorkflow, a way to easily create multi-agent systems in Llamaindex.",
+    "collected_at": null,
+    "source": "vault"
+  },
+  {
+    "id": "UklCxmEvz2w",
+    "url": "https://www.youtube.com/watch?v=UklCxmEvz2w",
+    "title": "LangGraph Tutorial for Beginners: Build Your First AI Agent",
+    "channel": "DataCamp",
+    "category": "Code agents e harnesses",
+    "summary_pt": "LangGraph Tutorial for Beginners: Build Your First AI Agent.",
+    "collected_at": null,
+    "source": "vault"
+  },
+  {
+    "id": "RhTiAOGwbYE",
+    "url": "https://www.youtube.com/watch?v=RhTiAOGwbYE",
+    "title": "MCP Tutorial: Build Your First MCP Server and Client from Scratch (Free Labs)",
+    "channel": "KodeKloud",
+    "category": "Code agents e harnesses",
+    "summary_pt": "MCP Tutorial: Build Your First MCP Server and Client from Scratch (Free Labs).",
+    "collected_at": null,
+    "source": "vault"
+  },
+  {
+    "id": "j302Dd1QoV4",
+    "url": "https://www.youtube.com/watch?v=j302Dd1QoV4",
+    "title": "Meu setup de terminal pra codar com IA",
+    "channel": "Breno Vieira LionLab",
+    "category": "Code agents e harnesses",
+    "summary_pt": "Meu setup de terminal pra codar com IA.",
+    "collected_at": null,
+    "source": "vault"
+  },
+  {
+    "id": "12Cffcjha-w",
+    "url": "https://www.youtube.com/watch?v=12Cffcjha-w",
+    "title": "The People Who Train AI Built Their Own Agent",
+    "channel": "Ray Fernando",
+    "category": "Code agents e harnesses",
+    "summary_pt": "The People Who Train AI Built Their Own Agent.",
+    "collected_at": null,
+    "source": "vault"
+  },
+  {
+    "id": "SXwC9fSwct8",
+    "url": "https://www.youtube.com/watch?v=SXwC9fSwct8",
+    "title": "Ultimate Docker Compose Tutorial",
+    "channel": "TechWorld with Nana",
+    "category": "Code agents e harnesses",
+    "summary_pt": "Ultimate Docker Compose Tutorial.",
+    "collected_at": null,
+    "source": "vault"
+  },
+  {
+    "id": "zyQxyNQZ8B4",
+    "url": "https://www.youtube.com/watch?v=zyQxyNQZ8B4",
+    "title": "The Home Repo Pattern",
+    "channel": "Matt Pocock",
+    "category": "Contexto/memória/skills",
+    "summary_pt": "The Home Repo Pattern.",
+    "collected_at": "2026-11-13",
+    "source": "vault"
+  },
+  {
+    "id": "hWe-j78vNpc",
+    "url": "https://www.youtube.com/watch?v=hWe-j78vNpc",
+    "title": "The Home Repo: The effortless multi-repo agent setup",
+    "channel": "Matt Pocock",
+    "category": "Contexto/memória/skills",
+    "summary_pt": "The Home Repo: The effortless multi-repo agent setup.",
+    "collected_at": "2026-11-13",
+    "source": "vault"
+  },
+  {
+    "id": "3Krz7Rdd4JI",
+    "url": "https://www.youtube.com/watch?v=3Krz7Rdd4JI",
+    "title": "Every Company Is Building Agents That Can't Work Together - Justin Schroeder, Standard Agents",
+    "channel": "AI Engineer",
+    "category": "Contexto/memória/skills",
+    "summary_pt": "Skills e MCP padronizaram contexto, mas os agentes seguem sob medida; argumenta por agentes compartilháveis.",
+    "collected_at": "2026-11-11",
+    "source": "vault"
+  },
+  {
+    "id": "bY27JLlV3Ps",
+    "url": "https://www.youtube.com/watch?v=bY27JLlV3Ps",
+    "title": "AI agent memory explained: Short-term vs. long-term state",
+    "channel": "Google Cloud Tech",
+    "category": "Contexto/memória/skills",
+    "summary_pt": "Separa estado de curto e longo prazo sem inflar contexto nem latência.",
+    "collected_at": "2026-11-10",
+    "source": "trello"
+  },
+  {
+    "id": "lR931Iz8Z6U",
+    "url": "https://www.youtube.com/watch?v=lR931Iz8Z6U",
+    "title": "Vector Databases Full Course for Beginners – Embeddings, Similarity Search & ChromaDB",
+    "channel": "freeCodeCamp.org",
+    "category": "Contexto/memória/skills",
+    "summary_pt": "Do vetor e da similaridade (cosseno, Euclidiana) até embeddings com o Gemini, arquitetura (IVF/HNSW) e busca semântica no ChromaDB.",
+    "collected_at": "2026-11-10",
+    "source": "vault"
+  },
+  {
+    "id": "Xw9utONfhIY",
+    "url": "https://www.youtube.com/watch?v=Xw9utONfhIY",
+    "title": "What Your Coding Agent Can't See in the Code - Tom Moor, Linear",
+    "channel": "AI Engineer",
+    "category": "Contexto/memória/skills",
+    "summary_pt": "Escrever código deixou de ser o gargalo; manter o produto coerente com agentes entregando é o problema, e o vídeo mostra como a Linear carrega contexto.",
+    "collected_at": "2026-11-09",
+    "source": "trello"
+  },
+  {
+    "id": "Jy8vX_CIsBw",
+    "url": "https://www.youtube.com/watch?v=Jy8vX_CIsBw",
+    "title": "Is vibe coding an insult?",
+    "channel": "Matt Pocock",
+    "category": "Contexto/memória/skills",
+    "summary_pt": "Is vibe coding an insult?",
+    "collected_at": "2026-11-06",
+    "source": "vault"
+  },
+  {
+    "id": "SUqQlvyI3N8",
+    "url": "https://www.youtube.com/watch?v=SUqQlvyI3N8",
+    "title": "Your AI Agent Keeps Making the Same Mistakes - Sparsh Jain, CentralAgent AI",
+    "channel": "AI Engineer",
+    "category": "Contexto/memória/skills",
+    "summary_pt": "Memória e contexto: como o agente aprende em vez de só lembrar.",
+    "collected_at": "2026-11-06",
+    "source": "trello"
+  },
+  {
+    "id": "Z1saoyb_98M",
+    "url": "https://www.youtube.com/watch?v=Z1saoyb_98M",
+    "title": "Junior engineers: don't wait for permission",
+    "channel": "Matt Pocock",
+    "category": "Contexto/memória/skills",
+    "summary_pt": "Junior engineers: don't wait for permission.",
+    "collected_at": "2026-11-05",
+    "source": "vault"
+  },
+  {
+    "id": "g_NgCLTibiM",
+    "url": "https://www.youtube.com/watch?v=g_NgCLTibiM",
+    "title": "Make Your AI Agents Predictable With Graph Engineering - Zachary Blumenfeld, Neo4j",
+    "channel": "AI Engineer",
+    "category": "Contexto/memória/skills",
+    "summary_pt": "Palestra do AI Engineer sobre engenharia de grafos aplicada a agentes.",
+    "collected_at": "2026-11-04",
+    "source": "trello"
+  },
+  {
+    "id": "0PqGT2L6cZM",
+    "url": "https://www.youtube.com/watch?v=0PqGT2L6cZM",
+    "title": "Why Datasite Stopped Building Its Own Parsing - Adit Abraham, Reducto & Raj Bakhru, Datasite",
+    "channel": "AI Engineer",
+    "category": "Contexto/memória/skills",
+    "summary_pt": "Palestra do AI Engineer sobre parsing de documentos com a Reducto na Datasite.",
+    "collected_at": "2026-11-04",
+    "source": "trello"
+  },
+  {
+    "id": "3Ad73Onx3Aw",
+    "url": "https://www.youtube.com/watch?v=3Ad73Onx3Aw",
+    "title": "Better Search Took This AI Agent From 36% to 98% Accuracy - Aamir Shakir, Mixedbread",
+    "channel": "AI Engineer",
+    "category": "Contexto/memória/skills",
+    "summary_pt": "Palestra do AI Engineer mostrando que só melhorar a busca elevou o acerto de um agente de 36% para 98%.",
+    "collected_at": "2026-11-03",
+    "source": "trello"
+  },
+  {
+    "id": "1_lX0m64-aI",
+    "url": "https://www.youtube.com/watch?v=1_lX0m64-aI",
+    "title": "Everyone Has the Same AI Models. Here's What Sets Agents Apart - Richmond Alake, Oracle",
+    "channel": "AI Engineer",
+    "category": "Contexto/memória/skills",
+    "summary_pt": "Richmond Alake, Oracle (AI Engineer, 31/10) — memória de agentes e a camada depois do control plane como diferencial (P9).",
+    "collected_at": "2026-11-03",
+    "source": "trello"
+  },
+  {
+    "id": "qq2Hm4XNRgI",
+    "url": "https://www.youtube.com/watch?v=qq2Hm4XNRgI",
+    "title": "How to Decide What Your AI Agent Should Remember - Wojciech Pluta, Oracle",
+    "channel": "AI Engineer",
+    "category": "Contexto/memória/skills",
+    "summary_pt": "O que o agente deve lembrar.",
+    "collected_at": "2026-11-03",
+    "source": "trello"
+  },
+  {
+    "id": "qIWB1yMsqRo",
+    "url": "https://www.youtube.com/watch?v=qIWB1yMsqRo",
+    "title": "The 4 Components of Every Successful AI Second Brain (Build These Now)",
+    "channel": "Cole Medin",
+    "category": "Contexto/memória/skills",
+    "summary_pt": "Os quatro blocos de um segundo cérebro operado por IA (captura, organização, recuperação, ação).",
+    "collected_at": "2026-11-03",
+    "source": "trello"
+  },
+  {
+    "id": "8vDzncmzxyg",
+    "url": "https://www.youtube.com/watch?v=8vDzncmzxyg",
+    "title": "Your AI Agent Starts Every Session Like a New Hire - Killian Carlsen-Phelan, Sonar",
+    "channel": "AI Engineer",
+    "category": "Contexto/memória/skills",
+    "summary_pt": "Sonar: o agente começa cada sessão como novato (P2/P9).",
+    "collected_at": "2026-11-03",
+    "source": "trello"
+  },
+  {
+    "id": "LnQce-eHm8k",
+    "url": "https://www.youtube.com/watch?v=LnQce-eHm8k",
+    "title": "Your AI Agent Wants Your Data. Here's How to Lock It Down - Jeff Smith, Oracle",
+    "channel": "AI Engineer",
+    "category": "Contexto/memória/skills",
+    "summary_pt": "Your AI Agent Wants Your Data: travar NL-to-SQL (AI Engineer, P13).",
+    "collected_at": "2026-11-03",
+    "source": "trello"
+  },
+  {
+    "id": "EMIRXv2iE_Q",
+    "url": "https://www.youtube.com/watch?v=EMIRXv2iE_Q",
+    "title": "Your Coding Agent Knows Your Code, But Not Your Actual App (Here's the Fix)",
+    "channel": "Cole Medin",
+    "category": "Contexto/memória/skills",
+    "summary_pt": "Cole Medin — 06/11/2026 — Mostra como dar ao agente de código o contexto que mora nas plataformas (dados, dependências, deploy, incidentes), e não só no repositório.",
+    "collected_at": "2026-11-02",
+    "source": "trello"
+  },
+  {
+    "id": "8C4bh59FtsI",
+    "url": "https://www.youtube.com/watch?v=8C4bh59FtsI",
+    "title": "AI Agent Memory Architecture: Structured SQL, Semantic Vector Search & Memory Bank",
+    "channel": "Google Cloud Tech",
+    "category": "Contexto/memória/skills",
+    "summary_pt": "Diferença entre memória estruturada (SQL) e semântica (vetor) e Memory Bank; base para memória de agentes.",
+    "collected_at": "2026-10-26",
+    "source": "vault"
+  },
+  {
+    "id": "ljocUEpTgUA",
+    "url": "https://www.youtube.com/watch?v=ljocUEpTgUA",
+    "title": "Developing with advanced agent workflows in Looker",
+    "channel": "Google Cloud Tech",
+    "category": "Contexto/memória/skills",
+    "summary_pt": "Looker Skills open source via MCP Toolbox.",
+    "collected_at": "2026-10-26",
+    "source": "vault"
+  },
+  {
+    "id": "m-SqTgZDiAc",
+    "url": "https://www.youtube.com/watch?v=m-SqTgZDiAc",
+    "title": "Postgres é TUDO que sua IA precisa",
+    "channel": "Ronnald Hawk | Engenharia de IA",
+    "category": "Contexto/memória/skills",
+    "summary_pt": "Postgres como base única para apps de IA (vetor, memória).",
+    "collected_at": "2026-10-26",
+    "source": "vault"
+  },
+  {
+    "id": "mmns33BsBcY",
+    "url": "https://www.youtube.com/watch?v=mmns33BsBcY",
+    "title": "What Is Quantization? How AI Models Get Smaller & Faster",
+    "channel": "IBM Technology",
+    "category": "Contexto/memória/skills",
+    "summary_pt": "Quantização e requisitos de memória de modelos.",
+    "collected_at": "2026-10-26",
+    "source": "vault"
+  },
+  {
+    "id": "mMw3arwQsL0",
+    "url": "https://www.youtube.com/watch?v=mMw3arwQsL0",
+    "title": "1,368 AI Failures and What They Teach About Evals — Vishal Srivastava, New York Life & Tanmay Sah",
+    "channel": "AI Engineer",
+    "category": "Contexto/memória/skills",
+    "summary_pt": "1,368 AI Failures and What They Teach About Evals — Vishal Srivastava, New York Life & Tanmay Sah.",
+    "collected_at": "2026-10-19",
+    "source": "trello"
+  },
+  {
+    "id": "BwXremQ-i6I",
+    "url": "https://www.youtube.com/watch?v=BwXremQ-i6I",
+    "title": "Context Engineering for AI Agents: 4 Failure Modes to Avoid",
+    "channel": "IBM Technology",
+    "category": "Contexto/memória/skills",
+    "summary_pt": "Context Engineering for AI Agents: 4 Failure Modes to Avoid.",
+    "collected_at": "2026-10-19",
+    "source": "trello"
+  },
+  {
+    "id": "czKuoutcwYc",
+    "url": "https://www.youtube.com/watch?v=czKuoutcwYc",
+    "title": "Google’s approach to security review with agents",
+    "channel": "Google Cloud Tech",
+    "category": "Contexto/memória/skills",
+    "summary_pt": "Google Cloud Tech (20/10). Mostra o Mantis, framework multiagente de auditoria com pipeline de verificação contra falso positivo, e revisão com Antigravity CLI usando skills e hooks. Base para governança e segurança de código gerado por agente. [Mentor, Conteúdo] — [vídeo]( ).",
+    "collected_at": "2026-10-19",
+    "source": "trello"
+  },
+  {
+    "id": "jVGKJBoPWFo",
+    "url": "https://www.youtube.com/watch?v=jVGKJBoPWFo",
+    "title": "Stop AI-Assisted Code From Drifting in Production | Russ Miles | Prodacity 2026",
+    "channel": "Rise8",
+    "category": "Contexto/memória/skills",
+    "summary_pt": "Stop AI-Assisted Code From Drifting in Production | Russ Miles | Prodacity 2026.",
+    "collected_at": "2026-10-19",
+    "source": "trello"
+  },
+  {
+    "id": "Ud5RsBegyfw",
+    "url": "https://www.youtube.com/watch?v=Ud5RsBegyfw",
+    "title": "What is context engineering? Explained in 5 minutes",
+    "channel": "LangChain",
+    "category": "Contexto/memória/skills",
+    "summary_pt": "LangChain (21/10). Explica offloading para sistema de arquivos virtual e sumarização ao passar de 85% do contexto em tarefas longas. Aplica direto em arquitetura de agentes e nos custom-skills. [Mentor, Gestor] — [vídeo]( ).",
+    "collected_at": "2026-10-19",
+    "source": "trello"
+  },
+  {
+    "id": "EJyuu6zlQCg",
+    "url": "https://www.youtube.com/watch?v=EJyuu6zlQCg",
+    "title": "5 Claude Code skills I use every single day",
+    "channel": "Matt Pocock",
+    "category": "Contexto/memória/skills",
+    "summary_pt": "5 Claude Code skills I use every single day.",
+    "collected_at": null,
+    "source": "vault"
+  },
+  {
+    "id": "3MP8D-mdheA",
+    "url": "https://www.youtube.com/watch?v=3MP8D-mdheA",
+    "title": "How To De-Slop A Codebase Ruined By AI (with one skill)",
+    "channel": "Matt Pocock",
+    "category": "Contexto/memória/skills",
+    "summary_pt": "How To De-Slop A Codebase Ruined By AI (with one skill).",
+    "collected_at": null,
+    "source": "vault"
+  },
+  {
+    "id": "6BB6exR8Zd8",
+    "url": "https://www.youtube.com/watch?v=6BB6exR8Zd8",
+    "title": "I stopped using /grill-me for coding. Here’s what I use instead:",
+    "channel": "Matt Pocock",
+    "category": "Contexto/memória/skills",
+    "summary_pt": "I stopped using /grill-me for coding.",
+    "collected_at": null,
+    "source": "vault"
+  },
+  {
+    "id": "wIXr22QTEHg",
+    "url": "https://www.youtube.com/watch?v=wIXr22QTEHg",
+    "title": "LLM Compression Explained: Build Faster, Efficient AI Models",
+    "channel": "IBM Technology",
+    "category": "Contexto/memória/skills",
+    "summary_pt": "LLM Compression Explained: Build Faster, Efficient AI Models.",
+    "collected_at": null,
+    "source": "vault"
+  },
+  {
+    "id": "hYZdIwFIy-c",
+    "url": "https://www.youtube.com/watch?v=hYZdIwFIy-c",
+    "title": "Red Green Refactor is OP With Claude Code",
+    "channel": "Matt Pocock",
+    "category": "Contexto/memória/skills",
+    "summary_pt": "Red Green Refactor is OP With Claude Code.",
+    "collected_at": null,
+    "source": "vault"
+  },
+  {
+    "id": "GatM9XV0gOw",
+    "url": "https://www.youtube.com/watch?v=GatM9XV0gOw",
+    "title": "Building a custom evaluation for your agent",
+    "channel": "Google Cloud Tech",
+    "category": "Evals e qualidade",
+    "summary_pt": "Vídeo Google Cloud: montar uma avaliação customizada do seu agente.",
+    "collected_at": "2026-11-13",
+    "source": "vault"
+  },
+  {
+    "id": "MQiojLnK-E0",
+    "url": "https://www.youtube.com/watch?v=MQiojLnK-E0",
+    "title": "60% of Our Data PRs Now Merge With No Human Review - Chetas Joshi, Robinhood",
+    "channel": "AI Engineer",
+    "category": "Evals e qualidade",
+    "summary_pt": "LinkedIn revisa 40 mil PRs/semana com orquestrador, subagentes independentes, merge de achados repetidos e verificação dos achados únicos por outro modelo; aceitação de 63,9% medida por código alterado e golden dataset para eval.",
+    "collected_at": "2026-11-10",
+    "source": "trello"
+  },
+  {
+    "id": "NUgaWmws0XQ",
+    "url": "https://www.youtube.com/watch?v=NUgaWmws0XQ",
+    "title": "How Airbnb builds Trust for Guests and Hosts using AI Agents with LangGraph",
+    "channel": "LangChain",
+    "category": "Evals e qualidade",
+    "summary_pt": "Airbnb faz o agente abster-se e encaminhar ao humano em decisões de alto risco, com explicabilidade (vídeo); o Control Room da OpenAI rastreia e para cargas de modelo de forma central.",
+    "collected_at": "2026-11-10",
+    "source": "trello"
+  },
+  {
+    "id": "ATMcd9tkhhc",
+    "url": "https://www.youtube.com/watch?v=ATMcd9tkhhc",
+    "title": "Stop Chatting With Spreadsheets — Francesco Galletta & Felippe Felisola Caso, Monzo",
+    "channel": "AI Engineer",
+    "category": "Evals e qualidade",
+    "summary_pt": "Harness em que a resposta precisa ser confiável, a partir de um problema real de pagamentos.",
+    "collected_at": "2026-11-10",
+    "source": "trello"
+  },
+  {
+    "id": "wWisOHEcMPE",
+    "url": "https://www.youtube.com/watch?v=wWisOHEcMPE",
+    "title": "Engineering Agency out of the Happy Path — Matthew Jewkes, Standard Cybernetics",
+    "channel": "AI Engineer",
+    "category": "Evals e qualidade",
+    "summary_pt": "Separar erro real de caso ambíguo e de exceção levou a automação a 99,95% nas tarefas críticas; é um método de avaliação reaproveitável.",
+    "collected_at": "2026-11-09",
+    "source": "trello"
+  },
+  {
+    "id": "6TjFjHPjVH0",
+    "url": "https://www.youtube.com/watch?v=6TjFjHPjVH0",
+    "title": "I Let Agents Refactor My Codebase for 3 Weeks. Then I Read the Code. — Keiji Kanazawa, Microsoft",
+    "channel": "AI Engineer",
+    "category": "Evals e qualidade",
+    "summary_pt": "Um agente ligou testes unitários à inferência de produção e os rodou cerca de 30 vezes; é o tipo de falha que passa em revisão superficial e gera custo e flakiness.",
+    "collected_at": "2026-11-09",
+    "source": "trello"
+  },
+  {
+    "id": "YV1x6gCdgQA",
+    "url": "https://www.youtube.com/watch?v=YV1x6gCdgQA",
+    "title": "Teach Your AI Agent to Build Products Everyone Can Use - Jemima Abu, CAIS",
+    "channel": "AI Engineer",
+    "category": "Evals e qualidade",
+    "summary_pt": "Agentes reproduzem as falhas de acessibilidade do código de treino; vale como guardrail para telas geradas por agente.",
+    "collected_at": "2026-11-09",
+    "source": "trello"
+  },
+  {
+    "id": "RdQCY_-SXbA",
+    "url": "https://www.youtube.com/watch?v=RdQCY_-SXbA",
+    "title": "AI Can't Make Up a Number It Can't Look Up - Vinoo Ganesh, Kepler",
+    "channel": "AI Engineer",
+    "category": "Evals e qualidade",
+    "summary_pt": "Vinoo Ganesh discute grounding e validação de números, úteis para evitar respostas inventadas em agentes com dados estruturados.",
+    "collected_at": "2026-11-07",
+    "source": "trello"
+  },
+  {
+    "id": "hJOwOkLHRN0",
+    "url": "https://www.youtube.com/watch?v=hJOwOkLHRN0",
+    "title": "LifeVal: Measuring AI progress on the tasks that matter in everyday life.",
+    "channel": "OpenAI",
+    "category": "Evals e qualidade",
+    "summary_pt": "Apresenta um benchmark moldado por tarefas reais de usuários, útil para revisar o que seus evals deixam de medir.",
+    "collected_at": "2026-11-07",
+    "source": "trello"
+  },
+  {
+    "id": "pz74r-4dGfQ",
+    "url": "https://www.youtube.com/watch?v=pz74r-4dGfQ",
+    "title": "Your AI Agent Is Hiding Its Mistakes From You - Ben Holmes, Warp",
+    "channel": "AI Engineer",
+    "category": "Evals e qualidade",
+    "summary_pt": "Ben Holmes mostra como reunir conversas, ferramentas e saídas para o agente revisar o próprio ambiente.",
+    "collected_at": "2026-11-07",
+    "source": "trello"
+  },
+  {
+    "id": "zLc8zeGeNaY",
+    "url": "https://www.youtube.com/watch?v=zLc8zeGeNaY",
+    "title": "How Netflix Evaluates AI When There's No Right Answer - Cameron Wolfe, Netflix",
+    "channel": "AI Engineer",
+    "category": "Evals e qualidade",
+    "summary_pt": "Um framework de três partes para evals sem gabarito.",
+    "collected_at": "2026-11-06",
+    "source": "trello"
+  },
+  {
+    "id": "4VmugsE-iP0",
+    "url": "https://www.youtube.com/watch?v=4VmugsE-iP0",
+    "title": "How We Took an AI Agent From 41% to 97% Accurate - Milind Sunil Shah, Brainbase Labs",
+    "channel": "AI Engineer",
+    "category": "Evals e qualidade",
+    "summary_pt": "Framework de 6 passos com evals reais que levou um agente de 41% a 97%.",
+    "collected_at": "2026-11-05",
+    "source": "trello"
+  },
+  {
+    "id": "5__Fm2TnPcU",
+    "url": "https://www.youtube.com/watch?v=5__Fm2TnPcU",
+    "title": "Stop guessing how to fix your agent",
+    "channel": "DeepLearningAI",
+    "category": "Evals e qualidade",
+    "summary_pt": "Evals de decisão e ação do agente vs testes clássicos; como localizar onde o agente erra.",
+    "collected_at": "2026-11-05",
+    "source": "trello"
+  },
+  {
+    "id": "V2UqEUA8NjM",
+    "url": "https://www.youtube.com/watch?v=V2UqEUA8NjM",
+    "title": "Stop Making Your Customers Click Approve - Emil Chetty, Wise",
+    "channel": "AI Engineer",
+    "category": "Evals e qualidade",
+    "summary_pt": "Desenho de HITL em produto de agente: quando pedir confirmação e quando não.",
+    "collected_at": "2026-11-05",
+    "source": "trello"
+  },
+  {
+    "id": "5UgnatzpZ9E",
+    "url": "https://www.youtube.com/watch?v=5UgnatzpZ9E",
+    "title": "Building the AI Agent Is Easy. Proving It's Safe Isn't - Jonathan Osborne, NatWest",
+    "channel": "AI Engineer",
+    "category": "Evals e qualidade",
+    "summary_pt": "Palestra do AI Engineer em que a NatWest mostra como prova a segurança de agentes.",
+    "collected_at": "2026-11-04",
+    "source": "trello"
+  },
+  {
+    "id": "-uBABM2AuFg",
+    "url": "https://www.youtube.com/watch?v=-uBABM2AuFg",
+    "title": "Don't Approve the AI Model. Approve the App - Doneyli De Jesus, Langfuse",
+    "channel": "AI Engineer",
+    "category": "Evals e qualidade",
+    "summary_pt": "Palestra do AI Engineer com a Langfuse sobre gates de deploy em apps de LLM.",
+    "collected_at": "2026-11-04",
+    "source": "trello"
+  },
+  {
+    "id": "OpO9z12XgOk",
+    "url": "https://www.youtube.com/watch?v=OpO9z12XgOk",
+    "title": "Você Não Sabe Onde Seu Agente de IA Falhou | Tracing e Observabilidade com Langfuse",
+    "channel": "Ronnald Hawk | Engenharia de IA",
+    "category": "Evals e qualidade",
+    "summary_pt": "Tracing de agentes na prática com Langfuse para descobrir em que passo o agente falhou (PT-BR).",
+    "collected_at": "2026-11-03",
+    "source": "trello"
+  },
+  {
+    "id": "3osCbSufv8g",
+    "url": "https://www.youtube.com/watch?v=3osCbSufv8g",
+    "title": "Voice AI Where One Wrong Question Breaks the Rules - Shiv Indap, Upstart & Brooke Hopkins, Coval",
+    "channel": "AI Engineer",
+    "category": "Evals e qualidade",
+    "summary_pt": "Voice AI Where One Wrong Question Breaks the Rules, Shiv Indap (Upstart) e Brooke Hopkins (Coval), AI Engineer, 31/10.",
+    "collected_at": "2026-11-03",
+    "source": "trello"
+  },
+  {
+    "id": "BT1Mo-fD-g0",
+    "url": "https://www.youtube.com/watch?v=BT1Mo-fD-g0",
+    "title": "Your Coding Agent Can't Undo Its Own Mistakes - Tanmay Sah & Dolly Sah",
+    "channel": "AI Engineer",
+    "category": "Evals e qualidade",
+    "summary_pt": "Conteúdo e Autoridade: ângulo do dia é “o agente precisa de contrato, evidência e capacidade de parar”.",
+    "collected_at": "2026-11-02",
+    "source": "trello"
+  },
+  {
+    "id": "gdzsJZJ6DDs",
+    "url": "https://www.youtube.com/watch?v=gdzsJZJ6DDs",
+    "title": "Your Financial Agent Needs to Show Its Work - Anirudh Veeraragavan, Fieldguide",
+    "channel": "AI Engineer",
+    "category": "Evals e qualidade",
+    "summary_pt": "Grounding e evidência do raciocínio do agente — o trabalho precisa aparecer, não só o resultado.",
+    "collected_at": "2026-11-02",
+    "source": "trello"
+  },
+  {
+    "id": "K8NgeOuZmWU",
+    "url": "https://www.youtube.com/watch?v=K8NgeOuZmWU",
+    "title": "AI exposes a major web security flaw, plus a new kind of voice model",
+    "channel": "IBM Technology",
+    "category": "Evals e qualidade",
+    "summary_pt": "Podcast semanal: falha web exposta por IA e novo modelo de voz.",
+    "collected_at": "2026-10-26",
+    "source": "vault"
+  },
+  {
+    "id": "VfT4GUpzops",
+    "url": "https://www.youtube.com/watch?v=VfT4GUpzops",
+    "title": "First Responder: Agentic incident triage | XConf Vietnam 2026",
+    "channel": "Thoughtworks",
+    "category": "Evals e qualidade",
+    "summary_pt": "Agente que vasculha logs, métricas, configs e código para triagem de incidentes; observabilidade + agentes (P11).",
+    "collected_at": "2026-10-26",
+    "source": "trello"
+  },
+  {
+    "id": "1F9_YR5bkW4",
+    "url": "https://www.youtube.com/watch?v=1F9_YR5bkW4",
+    "title": "First Responder: Agentic incident triage – Vijay More",
+    "channel": "Thoughtworks",
+    "category": "Evals e qualidade",
+    "summary_pt": "XConf: triagem agêntica de incidentes.",
+    "collected_at": "2026-10-26",
+    "source": "trello"
+  },
+  {
+    "id": "kRJjSOYqW0I",
+    "url": "https://www.youtube.com/watch?v=kRJjSOYqW0I",
+    "title": "How to Test Your Agents on Real Tasks With Harbor - Xander Song, Arize AI",
+    "channel": "AI Engineer",
+    "category": "Evals e qualidade",
+    "summary_pt": "AI Engineer: Harbor, testar agentes em tarefas reais.",
+    "collected_at": "2026-10-26",
+    "source": "trello"
+  },
+  {
+    "id": "7WUzHIF32vA",
+    "url": "https://www.youtube.com/watch?v=7WUzHIF32vA",
+    "title": "If Your AI Scores 100%, Your Eval Is Wrong - Ramakrishnan Lokanathan, eslams.com",
+    "channel": "AI Engineer",
+    "category": "Evals e qualidade",
+    "summary_pt": "Eval saturado não mede nada; é preciso casos difíceis e adversariais (P15).",
+    "collected_at": "2026-10-26",
+    "source": "trello"
+  },
+  {
+    "id": "Wb3hQaG_xf0",
+    "url": "https://www.youtube.com/watch?v=Wb3hQaG_xf0",
+    "title": "Inside Managed Deep Agents: mda CLI, Context Hub, and Harbor Evals | Interrupt London",
+    "channel": "LangChain",
+    "category": "Evals e qualidade",
+    "summary_pt": "LangChain Managed Deep Agents e evals Harbor.",
+    "collected_at": "2026-10-26",
+    "source": "trello"
+  },
+  {
+    "id": "0cfi4nTl1r0",
+    "url": "https://www.youtube.com/watch?v=0cfi4nTl1r0",
+    "title": "Trick or Trace: Build an AWS incident triage agent with Strands harness",
+    "channel": "AWS Developers",
+    "category": "Evals e qualidade",
+    "summary_pt": "Constrói um agente de triagem de incidentes com o harness Strands, com repo/ambiente para reproduzir (P11).",
+    "collected_at": "2026-10-26",
+    "source": "trello"
+  },
+  {
+    "id": "A3FL_zTQKU0",
+    "url": "https://www.youtube.com/watch?v=A3FL_zTQKU0",
+    "title": "Don't Trust Your AI Agents. Test Them Like a Scientist — Stephanie Jarmak, Omni Analytics",
+    "channel": "AI Engineer",
+    "category": "Evals e qualidade",
+    "summary_pt": "Só trocar o harness mexeu 30% no resultado; evals como experimento com tarefas realistas, execuções repetidas e variância.",
+    "collected_at": "2026-10-19",
+    "source": "trello"
+  },
+  {
+    "id": "q4WC4TowkBo",
+    "url": "https://www.youtube.com/watch?v=q4WC4TowkBo",
+    "title": "Teach Your Agent to Prove It's Done — Nick Nisi & Zack Proser, WorkOS",
+    "channel": "AI Engineer",
+    "category": "Evals e qualidade",
+    "summary_pt": "Loops de verificação para o agente checar o próprio trabalho: health check via CLI, snapshot de browser, LLM judge e evals.",
+    "collected_at": "2026-10-19",
+    "source": "trello"
+  },
+  {
+    "id": "FDVdLrloFOw",
+    "url": "https://www.youtube.com/watch?v=FDVdLrloFOw",
+    "title": "Observability and Evals for AI Agents: A Simple Breakdown",
+    "channel": "LangChain",
+    "category": "Evals e qualidade",
+    "summary_pt": "Observability and Evals for AI Agents: A Simple Breakdown.",
+    "collected_at": null,
+    "source": "vault"
+  },
+  {
+    "id": "BAHYBXTOLM4",
+    "url": "https://www.youtube.com/watch?v=BAHYBXTOLM4",
+    "title": "How to Give AI Coding Agents AWS Access Safely",
+    "channel": "AWS Developers",
+    "category": "Infra e escala",
+    "summary_pt": "Um founder mandou “não mexa em nada” e o agente apagou o banco de produção: o prompt dizia não, a credencial dizia sim.",
+    "collected_at": "2026-11-13",
+    "source": "vault"
+  },
+  {
+    "id": "pabDkNR7jIs",
+    "url": "https://www.youtube.com/watch?v=pabDkNR7jIs",
+    "title": "The Future of AI Infrastructure",
+    "channel": "Google Cloud Tech",
+    "category": "Infra e escala",
+    "summary_pt": "Amin Vahdat e Mark Lohmeyer mostram a infraestrutura feita para agentes de IA 24/7 e o AI Hypercomputer (silício próprio, rede e software aberto como PyTorch, vLLM e Kubernetes).",
+    "collected_at": "2026-11-10",
+    "source": "vault"
+  },
+  {
+    "id": "UO2mTQMlB-8",
+    "url": "https://www.youtube.com/watch?v=UO2mTQMlB-8",
+    "title": "New Updates in Google Antigravity | Episode 9",
+    "channel": "Google Antigravity",
+    "category": "Infra e escala",
+    "summary_pt": "O Google Cloud Developer plugin chegou ao marketplace do Antigravity, junto com o episódio 9 de novidades.",
+    "collected_at": "2026-11-03",
+    "source": "trello"
+  },
+  {
+    "id": "_0SQh8a1Osk",
+    "url": "https://www.youtube.com/watch?v=_0SQh8a1Osk",
+    "title": "Don't Vibe Code Your Agent Infrastructure - Akshat Bubna, Modal",
+    "channel": "AI Engineer",
+    "category": "Infra e escala",
+    "summary_pt": "Akshat Bubna (Modal) sobre o que agentes exigem da camada de runtime — isolamento, escala e ciclo de vida que não se improvisam.",
+    "collected_at": "2026-11-02",
+    "source": "trello"
+  },
+  {
+    "id": "w6abqSOJZws",
+    "url": "https://www.youtube.com/watch?v=w6abqSOJZws",
+    "title": "AWS Spend Limits Are Here: Set a Hard Stop So You Never Get a Surprise Bill",
+    "channel": "AWS Developers",
+    "category": "Infra e escala",
+    "summary_pt": "Limite rígido de gasto por projeto, a partir de US$20.",
+    "collected_at": "2026-10-26",
+    "source": "vault"
+  },
+  {
+    "id": "fbDU4_WjvZw",
+    "url": "https://www.youtube.com/watch?v=fbDU4_WjvZw",
+    "title": "Beyond GPUs: Building the engineering platform for the AI factory – Shangqi Liu",
+    "channel": "Thoughtworks",
+    "category": "Infra e escala",
+    "summary_pt": "Shangqi Liu (Thoughtworks, 26/10) — plataforma de engenharia para tornar milhares de aceleradores produtivos.",
+    "collected_at": "2026-10-26",
+    "source": "vault"
+  },
+  {
+    "id": "8DjS3t4l4no",
+    "url": "https://www.youtube.com/watch?v=8DjS3t4l4no",
+    "title": "Create an ALB in EKS Auto Mode | AWS EKS Auto Mode Tutorial (Step-by-Step Guide 2025)",
+    "channel": "The Devops Bucket",
+    "category": "Infra e escala",
+    "summary_pt": "Create an ALB in EKS Auto Mode | AWS EKS Auto Mode Tutorial (Step-by-Step Guide 2025).",
+    "collected_at": null,
+    "source": "vault"
+  },
+  {
+    "id": "BYZgA2BBt4s",
+    "url": "https://www.youtube.com/watch?v=BYZgA2BBt4s",
+    "title": "Kubernetes Services Explained (ClusterIP, Loadbalancer, NodePort)",
+    "channel": "The Coding Gopher",
+    "category": "Infra e escala",
+    "summary_pt": "Kubernetes Services Explained (ClusterIP, Loadbalancer, NodePort).",
+    "collected_at": null,
+    "source": "vault"
+  },
+  {
+    "id": "b2yYR9ARNaE",
+    "url": "https://www.youtube.com/watch?v=b2yYR9ARNaE",
+    "title": "Supercharge Your Canary Deployments With Argo Rollouts St... Kostis Kapelonis & Alexandre Gaudreault",
+    "channel": "CNCF [Cloud Native Computing Foundation]",
+    "category": "Infra e escala",
+    "summary_pt": "Supercharge Your Canary Deployments With Argo Rollouts St.",
+    "collected_at": null,
+    "source": "vault"
+  },
+  {
+    "id": "PkAmyub12K8",
+    "url": "https://www.youtube.com/watch?v=PkAmyub12K8",
+    "title": "How Mozilla uses GPT-6 Cyber to find and fix Firefox vulnerabilities",
+    "channel": "OpenAI",
+    "category": "Segurança",
+    "summary_pt": "Vídeo da OpenAI sobre priorização, investigação e correção com agentes no time de segurança da Mozilla (GPT-6 Cyber no anúncio; o modelo pago não é o objeto do teste).",
+    "collected_at": "2026-11-14",
+    "source": "trello"
+  },
+  {
+    "id": "1M8vagUOdJM",
+    "url": "https://www.youtube.com/watch?v=1M8vagUOdJM",
+    "title": "Fireside Chat with Erik Bernhardsson, Modal",
+    "channel": "LangChain",
+    "category": "Segurança",
+    "summary_pt": "LangChain: Erik Bernhardsson (Modal) sobre por que o sandbox estourou (vibe coding, agentes em background, rollouts de RL).",
+    "collected_at": "2026-11-13",
+    "source": "vault"
+  },
+  {
+    "id": "vdBDMj2UhDg",
+    "url": "https://www.youtube.com/watch?v=vdBDMj2UhDg",
+    "title": "How to enable PR security reviews with Codex Security",
+    "channel": "OpenAI",
+    "category": "Segurança",
+    "summary_pt": "Walkthrough oficial do plugin, do scan e do patch, com o vídeo irmão do review no PR:.",
+    "collected_at": "2026-11-12",
+    "source": "trello"
+  },
+  {
+    "id": "hUhr0JiVZZs",
+    "url": "https://www.youtube.com/watch?v=hUhr0JiVZZs",
+    "title": "How to run your first Codex Security scan",
+    "channel": "OpenAI",
+    "category": "Segurança",
+    "summary_pt": "Walkthrough oficial do plugin, do scan e do patch, com o vídeo irmão do review no PR:.",
+    "collected_at": "2026-11-12",
+    "source": "trello"
+  },
+  {
+    "id": "gUQN7juxvVI",
+    "url": "https://www.youtube.com/watch?v=gUQN7juxvVI",
+    "title": "Codex Security: From Vulnerability to Verified Fix | DevDay 2026",
+    "channel": "OpenAI",
+    "category": "Segurança",
+    "summary_pt": "CLI e SDK open source para varrer base grande, pegar problema em PR e verificar a correção.",
+    "collected_at": "2026-11-11",
+    "source": "vault"
+  },
+  {
+    "id": "_7P580m4kPY",
+    "url": "https://www.youtube.com/watch?v=_7P580m4kPY",
+    "title": "You Can't Tell What an Agent Skill Will Do by Reading It - Roey Ben Chaim, Zenity",
+    "channel": "AI Engineer",
+    "category": "Segurança",
+    "summary_pt": "Skill de diagnóstico oficial lê credenciais e sonda metadata de instância, igual a um infostealer.",
+    "collected_at": "2026-11-11",
+    "source": "trello"
+  },
+  {
+    "id": "WWIFiQi9U4w",
+    "url": "https://www.youtube.com/watch?v=WWIFiQi9U4w",
+    "title": "The One Thing Every AI Agent Framework Agrees On - Mislav Ivanda, Daytona",
+    "channel": "AI Engineer",
+    "category": "Segurança",
+    "summary_pt": "Frameworks que discordam em quase tudo convergem em sandbox integrado ao agente, o que valida a direção da execução isolada.",
+    "collected_at": "2026-11-09",
+    "source": "trello"
+  },
+  {
+    "id": "1NWnSwCB4NM",
+    "url": "https://www.youtube.com/watch?v=1NWnSwCB4NM",
+    "title": "Your KV Cache Can Spot Attacks on Your AI Agents - Ari Azarafrooz, Intrinsec AI",
+    "channel": "AI Engineer",
+    "category": "Segurança",
+    "summary_pt": "Usa o KV cache que o motor de inferência já grava como sinal de segurança, em vez de olhar só entrada e saída.",
+    "collected_at": "2026-11-09",
+    "source": "trello"
+  },
+  {
+    "id": "NVvjqd9iEl0",
+    "url": "https://www.youtube.com/watch?v=NVvjqd9iEl0",
+    "title": "100% of Your Code, 100% of the Time: AI Security with Small Models - Strands Decider Standup",
+    "channel": "AWS Developers",
+    "category": "Segurança",
+    "summary_pt": "Segue o Strands Decider já no acervo (W45); perguntas da comunidade.",
+    "collected_at": "2026-11-06",
+    "source": "vault"
+  },
+  {
+    "id": "YqJ4asgj1R8",
+    "url": "https://www.youtube.com/watch?v=YqJ4asgj1R8",
+    "title": "Stop Giving Your AI Agents API Keys - Kim Maida, Keycard & Mason Egger, Temporal",
+    "channel": "AI Engineer",
+    "category": "Segurança",
+    "summary_pt": "Padrão de credencial curta emitida por tool call, via OAuth token exchange (Keycard), dentro de um workflow durável (Temporal).",
+    "collected_at": "2026-11-06",
+    "source": "trello"
+  },
+  {
+    "id": "JxNCuXkSWyQ",
+    "url": "https://www.youtube.com/watch?v=JxNCuXkSWyQ",
+    "title": "A Valid Key Let an AI Agent Delete Production - Sagar Batchu, Speakeasy",
+    "channel": "AI Engineer",
+    "category": "Segurança",
+    "summary_pt": "Palestra do AI Engineer em que um agente com uma credencial válida apagou produção.",
+    "collected_at": "2026-11-03",
+    "source": "trello"
+  },
+  {
+    "id": "ITmbZFFGQuI",
+    "url": "https://www.youtube.com/watch?v=ITmbZFFGQuI",
+    "title": "Why AI agents need their own identity & audit trails",
+    "channel": "Google Cloud Tech",
+    "category": "Segurança",
+    "summary_pt": "Why AI agents need their own identity & audit trails, Smitha Kolan, Google Cloud Tech, 28/10 (short).",
+    "collected_at": "2026-11-03",
+    "source": "trello"
+  },
+  {
+    "id": "pXRZyOxbDL4",
+    "url": "https://www.youtube.com/watch?v=pXRZyOxbDL4",
+    "title": "How Mozilla strengthens Firefox security with GPT-6 Cyber",
+    "channel": "OpenAI",
+    "category": "Segurança",
+    "summary_pt": "A Mozilla usou o GPT-6 Cyber para achar vulnerabilidades graves desconhecidas no Firefox e melhorias de arquitetura, e entregou as correções (alegações da fonte; OpenAI, 05/11).",
+    "collected_at": "2026-11-02",
+    "source": "trello"
+  },
+  {
+    "id": "5WlmyncEcNM",
+    "url": "https://www.youtube.com/watch?v=5WlmyncEcNM",
+    "title": "Open Source Security in the Age of AI",
+    "channel": "IBM Technology",
+    "category": "Segurança",
+    "summary_pt": "IA achando vulnerabilidades open source mais rápido; impacto na cadeia de suprimentos.",
+    "collected_at": "2026-10-26",
+    "source": "vault"
+  },
+  {
+    "id": "VzpbeVdS_ok",
+    "url": "https://www.youtube.com/watch?v=VzpbeVdS_ok",
+    "title": "Security skills for AI agents (From Google security engineers)",
+    "channel": "Google Cloud Tech",
+    "category": "Segurança",
+    "summary_pt": "Pre-commit hooks para impedir que agentes de código vazem segredos; segurança de agentes (P13).",
+    "collected_at": "2026-10-26",
+    "source": "trello"
+  },
+  {
+    "id": "BgLdvF7Qkh8",
+    "url": "https://www.youtube.com/watch?v=BgLdvF7Qkh8",
+    "title": "300 Agents, 60 People: How We Secured Our Own AI Agents - Aiden Sochowski, Runlayer",
+    "channel": "AI Engineer",
+    "category": "Segurança",
+    "summary_pt": "AI Engineer: 300 agentes, 60 pessoas (Runlayer).",
+    "collected_at": "2026-10-19",
+    "source": "trello"
+  },
+  {
+    "id": "z7cNbsr3b5s",
+    "url": "https://www.youtube.com/watch?v=z7cNbsr3b5s",
+    "title": "Building secure agents for knowledge work",
+    "channel": "Claude",
+    "category": "Segurança",
+    "summary_pt": "Building secure agents for knowledge work.",
+    "collected_at": "2026-10-19",
+    "source": "trello"
+  },
+  {
+    "id": "p2vmRfShi_U",
+    "url": "https://www.youtube.com/watch?v=p2vmRfShi_U",
+    "title": "CodeMender: AI powered vulnerability fixes right in GitHub PRs",
+    "channel": "Google Cloud Tech",
+    "category": "Segurança",
+    "summary_pt": "Correção automática de vulnerabilidades em PRs, com gitops starter kit (P11).",
+    "collected_at": "2026-10-19",
+    "source": "trello"
+  },
+  {
+    "id": "5O6jLtoeKrg",
+    "url": "https://www.youtube.com/watch?v=5O6jLtoeKrg",
+    "title": "Real AI Agent Attacks and What Would Have Stopped Them — Andrey Rybka, Bloomberg",
+    "channel": "AI Engineer",
+    "category": "Segurança",
+    "summary_pt": "Andrey Rybka, Bloomberg (23/10).",
+    "collected_at": "2026-10-19",
+    "source": "trello"
+  },
+  {
+    "id": "h8jgniNJcbQ",
+    "url": "https://www.youtube.com/watch?v=h8jgniNJcbQ",
+    "title": "Why Are We Still Governing AI Agents Like Software? - Tim Tyler, Gravitee",
+    "channel": "AI Engineer",
+    "category": "Segurança",
+    "summary_pt": "AI Engineer: governar agentes como software (Gravitee).",
+    "collected_at": "2026-10-19",
+    "source": "trello"
+  },
+  {
+    "id": "DHTnxP6oUIk",
+    "url": "https://www.youtube.com/watch?v=DHTnxP6oUIk",
+    "title": "Build a secure computer for your agent",
+    "channel": "LangChain",
+    "category": "Segurança",
+    "summary_pt": "Build a secure computer for your agent.",
+    "collected_at": null,
+    "source": "vault"
+  },
+  {
+    "id": "OqM67QG_Ikk",
+    "url": "https://www.youtube.com/watch?v=OqM67QG_Ikk",
+    "title": "From fork() to Fleet: Designing an Agent Sandbox Cloud — Abhishek Bhardwaj, OpenAI",
+    "channel": "AI Engineer",
+    "category": "Segurança",
+    "summary_pt": "From fork() to Fleet: Designing an Agent Sandbox Cloud — Abhishek Bhardwaj, OpenAI.",
+    "collected_at": null,
+    "source": "vault"
+  },
+  {
+    "id": "szKqAMSijvQ",
+    "url": "https://www.youtube.com/watch?v=szKqAMSijvQ",
+    "title": "We Saved Millions (Really!): Marc Brooker & Carr Onstott - Strands Decider Standup",
+    "channel": "AWS Developers",
+    "category": "Modelos e execução",
+    "summary_pt": "Perguntas da comunidade sobre os modelos Decider do Strands e o que vem depois, na linha de custo de decisão/roteamento.",
+    "collected_at": "2026-11-14",
+    "source": "trello"
+  },
+  {
+    "id": "rTCQKw3NjFI",
+    "url": "https://www.youtube.com/watch?v=rTCQKw3NjFI",
+    "title": "Claude Sheets Just Took On Excel. I REALLY Tested It",
+    "channel": "Mervin Praison",
+    "category": "Modelos e execução",
+    "summary_pt": "Anthropic colocou planilha e quadro no Claude; o vídeo compara com Fable 5.2.",
+    "collected_at": "2026-11-13",
+    "source": "vault"
+  },
+  {
+    "id": "h048iP1jcbQ",
+    "url": "https://www.youtube.com/watch?v=h048iP1jcbQ",
+    "title": "Fable 5.2 Prompting: I REALLY Tested Anthropic's Advice",
+    "channel": "Mervin Praison",
+    "category": "Modelos e execução",
+    "summary_pt": "O lançamento do modelo já estava na W46; o fato novo é o teste do guia reescrito em 11/11, mesma tarefa, várias rodadas, no plano dele.",
+    "collected_at": "2026-11-13",
+    "source": "vault"
+  },
+  {
+    "id": "fLjGgbW0Ki8",
+    "url": "https://www.youtube.com/watch?v=fLjGgbW0Ki8",
+    "title": "Your Complete Guide to Fable 5.2 (When to Use It, Effort Levels, Prompting)",
+    "channel": "Cole Medin",
+    "category": "Modelos e execução",
+    "summary_pt": "O lançamento do modelo já estava na W46; o fato novo é o guia de effort levels e prompt para não queimar o limite.",
+    "collected_at": "2026-11-12",
+    "source": "vault"
+  },
+  {
+    "id": "UChuafFEalg",
+    "url": "https://www.youtube.com/watch?v=UChuafFEalg",
+    "title": "Claude Fable 5.2 vs Opus 5.5: What It REALLY Costs",
+    "channel": "Mervin Praison",
+    "category": "Modelos e execução",
+    "summary_pt": "Fable 5.2 custa US$ 8/40 por 1M (antes 10/50), é até 30% mais rápido e em High empata com Opus 5.5 Max no FrontierCode 2.0 por cerca de metade do custo por tarefa; a Anthropic indica Opus no dia a dia e Fable como Advisor/Orchestrator.",
+    "collected_at": "2026-11-10",
+    "source": "trello"
+  },
+  {
+    "id": "WJpeW9lCSUM",
+    "url": "https://www.youtube.com/watch?v=WJpeW9lCSUM",
+    "title": "NVIDIA's Nemotron Bolt 74B-A9B 2 Bit",
+    "channel": "Sam Witteveen",
+    "category": "Modelos e execução",
+    "summary_pt": "VLM com tool calling e experts em cerca de 2 bits (GGUF IQ2_XXS de 22 GB).",
+    "collected_at": "2026-11-10",
+    "source": "trello"
+  },
+  {
+    "id": "ntVpbyDTYaQ",
+    "url": "https://www.youtube.com/watch?v=ntVpbyDTYaQ",
+    "title": "Your Self-Hosted LLM Needs to Say No - Harshul Jain & Parv Khatri, Audible & SAP",
+    "channel": "AI Engineer",
+    "category": "Modelos e execução",
+    "summary_pt": "Rajadas e retries de agentes de código derrubam o servidor de inferência; o servidor precisa saber recusar e priorizar o interativo.",
+    "collected_at": "2026-11-10",
+    "source": "trello"
+  },
+  {
+    "id": "KdG9OSOtJOA",
+    "url": "https://www.youtube.com/watch?v=KdG9OSOtJOA",
+    "title": "Why No One Agrees on What Their AI Tokens Cost - Pratyusha Duvvuri, Cisco",
+    "channel": "AI Engineer",
+    "category": "Modelos e execução",
+    "summary_pt": "Quem liderou observabilidade de agentes na Galileo perguntou a cerca de 100 empresas e propõe uma definição de custo; ajuda a fechar custo por tarefa.",
+    "collected_at": "2026-11-09",
+    "source": "trello"
+  },
+  {
+    "id": "C9HS3zMrGo0",
+    "url": "https://www.youtube.com/watch?v=C9HS3zMrGo0",
+    "title": "AREX-2 - The Harness in the Model",
+    "channel": "Sam Witteveen",
+    "category": "Modelos e execução",
+    "summary_pt": "A análise discute um modelo de 27B que internaliza tentar, verificar e repetir, mudando a divisão de trabalho entre modelo e harness.",
+    "collected_at": "2026-11-07",
+    "source": "trello"
+  },
+  {
+    "id": "il0dgxjpoC0",
+    "url": "https://www.youtube.com/watch?v=il0dgxjpoC0",
+    "title": "Local AI 301: Quantization",
+    "channel": "Hugging Face",
+    "category": "Modelos e execução",
+    "summary_pt": "Como quantizar um modelo para rodar local com llama.cpp e vLLM.",
+    "collected_at": "2026-11-06",
+    "source": "trello"
+  },
+  {
+    "id": "RYIV5E2Xq60",
+    "url": "https://www.youtube.com/watch?v=RYIV5E2Xq60",
+    "title": "I REALLY Want Open Models to Win, But They Just Don't Cut It (Yet)",
+    "channel": "Cole Medin",
+    "category": "Modelos e execução",
+    "summary_pt": "Teste prático open-weight vs frontier em tarefas agentic longas.",
+    "collected_at": "2026-11-05",
+    "source": "trello"
+  },
+  {
+    "id": "T-42NrYjwxM",
+    "url": "https://www.youtube.com/watch?v=T-42NrYjwxM",
+    "title": "Our Smaller Model Beat Opus on Finance Tasks - Alexander Shevchenko, Ramp",
+    "channel": "AI Engineer",
+    "category": "Modelos e execução",
+    "summary_pt": "Applied research em produção: dados de domínio + modelo menor superando frontier.",
+    "collected_at": "2026-11-05",
+    "source": "trello"
+  },
+  {
+    "id": "prGP0huECPo",
+    "url": "https://www.youtube.com/watch?v=prGP0huECPo",
+    "title": "Without Caching, Your AI Agent Costs 10x More - George Cameron, Artificial Analysis",
+    "channel": "AI Engineer",
+    "category": "Modelos e execução",
+    "summary_pt": "Palestra do AI Engineer em que a Artificial Analysis mede o efeito de caching no custo de agentes.",
+    "collected_at": "2026-11-04",
+    "source": "trello"
+  },
+  {
+    "id": "vSCYL8ySh9g",
+    "url": "https://www.youtube.com/watch?v=vSCYL8ySh9g",
+    "title": "Dory - NVIDIA's Looped Transformer",
+    "channel": "Sam Witteveen",
+    "category": "Modelos e execução",
+    "summary_pt": "Sam Witteveen explica o Dory, um transformer em loop da NVIDIA.",
+    "collected_at": "2026-11-03",
+    "source": "trello"
+  },
+  {
+    "id": "5SRjPT2Eo7A",
+    "url": "https://www.youtube.com/watch?v=5SRjPT2Eo7A",
+    "title": "Your Company Should Train Its Own AI Models - Will Brown, Prime Intellect",
+    "channel": "AI Engineer",
+    "category": "Modelos e execução",
+    "summary_pt": "Will Brown mostra como transformar os traces dos agentes em dataset para treinar um modelo próprio.",
+    "collected_at": "2026-11-03",
+    "source": "trello"
+  },
+  {
+    "id": "n5FP-TGekAw",
+    "url": "https://www.youtube.com/watch?v=n5FP-TGekAw",
+    "title": "GPT-6.1 Terra + 9 AI Updates That REALLY Matter",
+    "channel": "Mervin Praison",
+    "category": "Modelos e execução",
+    "summary_pt": "GPT-6.1 Terra e mais 9 updates, com LFM3/llama.cpp no Mac (Mervin Praison).",
+    "collected_at": "2026-10-26",
+    "source": "vault"
+  },
+  {
+    "id": "hK3xqW_HrP0",
+    "url": "https://www.youtube.com/watch?v=hK3xqW_HrP0",
+    "title": "Introducing the TPU agent suite (preview): Open source agents for PyTorch on Cloud TPU",
+    "channel": "Google Cloud Tech",
+    "category": "Modelos e execução",
+    "summary_pt": "Agentes open source para inferência PyTorch em TPU, no GitHub.",
+    "collected_at": "2026-10-26",
+    "source": "vault"
+  },
+  {
+    "id": "rWtbOgl5FTU",
+    "url": "https://www.youtube.com/watch?v=rWtbOgl5FTU",
+    "title": "The Cheaper AI Model That Costs You More - Rayan Krishnan, Vals AI",
+    "channel": "AI Engineer",
+    "category": "Modelos e execução",
+    "summary_pt": "Preço por token engana; o que importa é custo por tarefa concluída, incluindo retries e falhas (P16).",
+    "collected_at": "2026-10-26",
+    "source": "trello"
+  },
+  {
+    "id": "MDUYSMJmi8A",
+    "url": "https://www.youtube.com/watch?v=MDUYSMJmi8A",
+    "title": "Uber’s AI infra, from the inside",
+    "channel": "The Pragmatic Engineer",
+    "category": "Modelos e execução",
+    "summary_pt": "Desagregação prefill/decode e expert parallelism no vLLM, plataforma de IA da Uber e storage para 1 bi de usuários.",
+    "collected_at": "2026-10-19",
+    "source": "trello"
+  },
+  {
+    "id": "0EnLxIbAvYk",
+    "url": "https://www.youtube.com/watch?v=0EnLxIbAvYk",
+    "title": "Your Spec Has Bugs. Catch Them Before Your Agent Codes. - Rajath Mahendrappa Kotyal, AWS",
+    "channel": "AI Engineer",
+    "category": "Carreira/organização AI-First",
+    "summary_pt": "Regras que não podem valer ao mesmo tempo, casos de falha ausentes e frases com dois sentidos.",
+    "collected_at": "2026-11-12",
+    "source": "trello"
+  },
+  {
+    "id": "gbeuC0ud1p4",
+    "url": "https://www.youtube.com/watch?v=gbeuC0ud1p4",
+    "title": "Your PR Says the Tests Passed. Prove It. - Stephen Chin & Cassandra Chin",
+    "channel": "AI Engineer",
+    "category": "Carreira/organização AI-First",
+    "summary_pt": "Tracetoon recupera o contexto de um branch para provar que o comando de teste cobriu a mudança.",
+    "collected_at": "2026-11-11",
+    "source": "trello"
+  },
+  {
+    "id": "fTUinMqA1XQ",
+    "url": "https://www.youtube.com/watch?v=fTUinMqA1XQ",
+    "title": "Your Team's Agents Are All Shipping to the Same Code at Once - Patrick Debois, Tessl",
+    "channel": "AI Engineer",
+    "category": "Carreira/organização AI-First",
+    "summary_pt": "Continuous delivery não foi feito para fábrica multiplayer; mapeia o que quebra.",
+    "collected_at": "2026-11-11",
+    "source": "vault"
+  },
+  {
+    "id": "CgsWxRUY5Eo",
+    "url": "https://www.youtube.com/watch?v=CgsWxRUY5Eo",
+    "title": "AI Agents for Performance: Ship Faster, Pay Less — Rajat Shah, Netflix",
+    "channel": "AI Engineer",
+    "category": "Carreira/organização AI-First",
+    "summary_pt": "Números de produção: O(N²) com 8,8% de CPU, regex com 46% de CPU (22x), alocação com 47% do heap, lookup de métrica com 66% de CPU; canário julgado só por telemetria e PR humano; catálogo no estilo LLM-wiki.",
+    "collected_at": "2026-11-10",
+    "source": "trello"
+  },
+  {
+    "id": "ktbAVYsAxpk",
+    "url": "https://www.youtube.com/watch?v=ktbAVYsAxpk",
+    "title": "The Agents Were Fine. Everything Around Them Broke. - Joey Wang, Harvey",
+    "channel": "AI Engineer",
+    "category": "Carreira/organização AI-First",
+    "summary_pt": "Três histórias do Spectre, plataforma interna de agentes em nuvem: as falhas vinham do ambiente (deps, credenciais, CI), não do modelo.",
+    "collected_at": "2026-11-10",
+    "source": "trello"
+  },
+  {
+    "id": "hX140a5klW0",
+    "url": "https://www.youtube.com/watch?v=hX140a5klW0",
+    "title": "AI Writes Code Faster Than Uber Can Merge It - Preetam Dwivedi & Manjari Akella, Uber",
+    "channel": "AI Engineer",
+    "category": "Carreira/organização AI-First",
+    "summary_pt": "O pipeline de merge do Uber chegou ao limite com mudanças de agentes em monorepos de mais de 5.000 devs; depois da geração, o gargalo passa a ser fila de CI e revisão.",
+    "collected_at": "2026-11-09",
+    "source": "trello"
+  },
+  {
+    "id": "nKjPBAw_N_0",
+    "url": "https://www.youtube.com/watch?v=nKjPBAw_N_0",
+    "title": "How to Build a Software Factory That Improves Itself - Zach Lloyd, Warp",
+    "channel": "AI Engineer",
+    "category": "Carreira/organização AI-First",
+    "summary_pt": "Descreve a passagem de agentes no laptop para fábricas em nuvem com sandbox e ciclo de melhoria, do ex-líder de engenharia do Google Docs.",
+    "collected_at": "2026-11-09",
+    "source": "trello"
+  },
+  {
+    "id": "Psue1dCqop0",
+    "url": "https://www.youtube.com/watch?v=Psue1dCqop0",
+    "title": "Infraestrutura de IA como um profissional (na prática)",
+    "channel": "Ronnald Hawk | Engenharia de IA",
+    "category": "Carreira/organização AI-First",
+    "summary_pt": "Ronnald Hawk: infraestrutura de IA como profissional.",
+    "collected_at": "2026-11-04",
+    "source": "trello"
+  },
+  {
+    "id": "yC72iQx6rM0",
+    "url": "https://www.youtube.com/watch?v=yC72iQx6rM0",
+    "title": "Qodo brings company context into Codex code review",
+    "channel": "OpenAI",
+    "category": "Carreira/organização AI-First",
+    "summary_pt": "Vídeo da OpenAI com a Qodo mostrando review de código com contexto da organização no Codex.",
+    "collected_at": "2026-11-04",
+    "source": "trello"
+  },
+  {
+    "id": "dTStgyPW1Tk",
+    "url": "https://www.youtube.com/watch?v=dTStgyPW1Tk",
+    "title": "[Keynote] Different clocks  Why execution speed is a strategic choice",
+    "channel": "Thoughtworks",
+    "category": "Carreira/organização AI-First",
+    "summary_pt": "[Keynote] Different clocks: Why execution speed is a strategic choice, Thoughtworks (XConf), 26/10.",
+    "collected_at": "2026-11-03",
+    "source": "trello"
+  },
+  {
+    "id": "5fPJudoOkUg",
+    "url": "https://www.youtube.com/watch?v=5fPJudoOkUg",
+    "title": "From delivery to greater outcomes: How AI is transforming delivery | XConf Vietnam 2026",
+    "channel": "Thoughtworks",
+    "category": "Carreira/organização AI-First",
+    "summary_pt": "From delivery to outcomes: How AI is transforming delivery, Linh Huynh, Thoughtworks, 29/10.",
+    "collected_at": "2026-11-03",
+    "source": "trello"
+  },
+  {
+    "id": "hy8UstR2NEg",
+    "url": "https://www.youtube.com/watch?v=hy8UstR2NEg",
+    "title": "Full Course: Spec-Driven Development with Coding Agents",
+    "channel": "DeepLearningAI",
+    "category": "Carreira/organização AI-First",
+    "summary_pt": "Curso completo de spec-driven development com agentes de código, alternativa disciplinada ao vibe coding.",
+    "collected_at": "2026-11-03",
+    "source": "trello"
+  },
+  {
+    "id": "-X3yXTwGs9A",
+    "url": "https://www.youtube.com/watch?v=-X3yXTwGs9A",
+    "title": "AI Writes Code Faster Than Your Team Can Review It - Andrew Norrish, Sourcegraph",
+    "channel": "AI Engineer",
+    "category": "Carreira/organização AI-First",
+    "summary_pt": "Talk do AI Engineer sobre o gargalo de revisão quando agentes geram mais código do que o time consegue revisar.",
+    "collected_at": "2026-11-02",
+    "source": "trello"
+  },
+  {
+    "id": "ZZ19zhYnDKY",
+    "url": "https://www.youtube.com/watch?v=ZZ19zhYnDKY",
+    "title": "AIE CODE: Google DeepMind, Anthropic, SpaceXSI, TypeSafe, Lovable, Ramp, etc (System One theme)",
+    "channel": "AI Engineer",
+    "category": "Carreira/organização AI-First",
+    "summary_pt": "AI Engineer — anunciado em 06/11/2026 — ·.",
+    "collected_at": "2026-11-02",
+    "source": "trello"
+  },
+  {
+    "id": "y9JtCCZP2MQ",
+    "url": "https://www.youtube.com/watch?v=y9JtCCZP2MQ",
+    "title": "AIE CODE: OpenAI, ArtCraft, Cognition, Exa, Anthropic, Amp, et al",
+    "channel": "AI Engineer",
+    "category": "Carreira/organização AI-First",
+    "summary_pt": "Transmissões ao vivo da conferência de engenharia com IA em São Francisco.",
+    "collected_at": "2026-11-02",
+    "source": "trello"
+  },
+  {
+    "id": "4ZsVR-6YOzs",
+    "url": "https://www.youtube.com/watch?v=4ZsVR-6YOzs",
+    "title": "How Salesforce uses Claude Code",
+    "channel": "Claude",
+    "category": "Carreira/organização AI-First",
+    "summary_pt": "Líderes de engenharia da Salesforce (06/11) contam como escalaram o Claude Code para milhares de engenheiros, com o dobro de produção efetiva e menos bugs por linha, e como medem o ROI (números da fonte).",
+    "collected_at": "2026-11-02",
+    "source": "trello"
+  },
+  {
+    "id": "jDwc0aXTAFg",
+    "url": "https://www.youtube.com/watch?v=jDwc0aXTAFg",
+    "title": "Your Company Has No Model of Itself. Agents Can Build One - Joao Wenzel, Citadel Securities",
+    "channel": "AI Engineer",
+    "category": "Carreira/organização AI-First",
+    "summary_pt": "Joao Wenzel descreve um mapa organizacional mantido por agentes.",
+    "collected_at": "2026-11-02",
+    "source": "trello"
+  },
+  {
+    "id": "adfw3xJBx1o",
+    "url": "https://www.youtube.com/watch?v=adfw3xJBx1o",
+    "title": "A Bank Built Its Own Coding Agent. It Took Off — Felippe Felisola Caso & Francesco Galletta, Monzo",
+    "channel": "AI Engineer",
+    "category": "Carreira/organização AI-First",
+    "summary_pt": "Monzo (20/10). Mostra como o agente interno da Monzo passou a escrever mais de 10% dos PRs mesclados, com MCP gateway para ferramentas internas e orquestração em sandbox num banco regulado. [Mentor, Gestor] — [vídeo]( ).",
+    "collected_at": "2026-10-19",
+    "source": "trello"
+  },
+  {
+    "id": "f0FZgmZrcW8",
+    "url": "https://www.youtube.com/watch?v=f0FZgmZrcW8",
+    "title": "A first-hand look at building an agentic platform at Splio",
+    "channel": "Thoughtworks",
+    "category": "Carreira/organização AI-First",
+    "summary_pt": "A first-hand look at building an agentic platform at Splio.",
+    "collected_at": "2026-10-19",
+    "source": "trello"
+  },
+  {
+    "id": "Ve2bAarPA2I",
+    "url": "https://www.youtube.com/watch?v=Ve2bAarPA2I",
+    "title": "Better AI Models Won't Fix Your Engineering Team — Nicholas Arcolano, Jellyfish",
+    "channel": "AI Engineer",
+    "category": "Carreira/organização AI-First",
+    "summary_pt": "Nicholas Arcolano, Jellyfish (22/10).",
+    "collected_at": "2026-10-19",
+    "source": "trello"
+  },
+  {
+    "id": "OJ6DiiSoUuQ",
+    "url": "https://www.youtube.com/watch?v=OJ6DiiSoUuQ",
+    "title": "How AWS thinks about spec-driven development — XConf Europe 2026",
+    "channel": "Thoughtworks",
+    "category": "Carreira/organização AI-First",
+    "summary_pt": "Spec-driven na AWS e Thoughtworks Tech Radar vol.",
+    "collected_at": "2026-10-19",
+    "source": "trello"
+  },
+  {
+    "id": "Ok6QdZHCcI8",
+    "url": "https://www.youtube.com/watch?v=Ok6QdZHCcI8",
+    "title": "How Revolut Cut AI Coding Costs 90% With Self-Hosted Open Models - David Abitbol, Revolut",
+    "channel": "AI Engineer",
+    "category": "Carreira/organização AI-First",
+    "summary_pt": "Revolut: -90% de custo com modelos self-hosted (P16).",
+    "collected_at": "2026-10-19",
+    "source": "trello"
+  },
+  {
+    "id": "4UtrRVtUN_g",
+    "url": "https://www.youtube.com/watch?v=4UtrRVtUN_g",
+    "title": "How to Build an AI Code Review Agent - Daksh Gupta, Greptile",
+    "channel": "AI Engineer",
+    "category": "Carreira/organização AI-First",
+    "summary_pt": "AI Engineer: vídeos sobre code review agent (Greptile) e Gemini Managed Agents [Mentor, Professor].",
+    "collected_at": "2026-10-19",
+    "source": "trello"
+  },
+  {
+    "id": "YWEGhawmGf8",
+    "url": "https://www.youtube.com/watch?v=YWEGhawmGf8",
+    "title": "Technology Radar Vol. 35 | Date Reveal | 4 November 2026",
+    "channel": "Thoughtworks",
+    "category": "Carreira/organização AI-First",
+    "summary_pt": "Spec-driven na AWS e Thoughtworks Tech Radar vol.",
+    "collected_at": "2026-10-19",
+    "source": "trello"
+  },
+  {
+    "id": "XKrOPCv-YuQ",
+    "url": "https://www.youtube.com/watch?v=XKrOPCv-YuQ",
+    "title": "The AI native squad: How small teams deliver faster with AI – Jessie Xia and Siyuan Li",
+    "channel": "Thoughtworks",
+    "category": "Carreira/organização AI-First",
+    "summary_pt": "The AI native squad: How small teams deliver faster with AI – Jessie Xia and Siyuan Li.",
+    "collected_at": "2026-10-19",
+    "source": "trello"
+  }
+]

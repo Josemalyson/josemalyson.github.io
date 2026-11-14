@@ -11,6 +11,14 @@
     "message": "Learning trails",
     "description": "Navbar item with label Trilhas"
   },
+  "item.label.Vídeos": {
+    "message": "Videos",
+    "description": "Navbar item with label Vídeos"
+  },
+  "item.label.Playbook": {
+    "message": "Playbook",
+    "description": "Navbar item with label Playbook"
+  },
   "item.label.Tutoriais": {
     "message": "Tutorials",
     "description": "Navbar item with label Tutoriais"
