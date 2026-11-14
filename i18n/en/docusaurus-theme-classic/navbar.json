@@ -1,0 +1,30 @@
+{
+  "title": {
+    "message": "Josemalyson Oliveira",
+    "description": "The title in the navbar"
+  },
+  "logo.alt": {
+    "message": "Josemalyson Oliveira",
+    "description": "The alt text of navbar logo"
+  },
+  "item.label.Trilhas": {
+    "message": "Learning trails",
+    "description": "Navbar item with label Trilhas"
+  },
+  "item.label.Tutoriais": {
+    "message": "Tutorials",
+    "description": "Navbar item with label Tutoriais"
+  },
+  "item.label.Open source": {
+    "message": "Open source",
+    "description": "Navbar item with label Open source"
+  },
+  "item.label.Contato": {
+    "message": "Contact",
+    "description": "Navbar item with label Contato"
+  },
+  "item.label.GitHub": {
+    "message": "GitHub",
+    "description": "Navbar item with label GitHub"
+  }
+}

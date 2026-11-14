@@ -1,0 +1,222 @@
+@import '@fontsource/inter/latin-400.css';
+@import '@fontsource/inter/latin-500.css';
+@import '@fontsource/inter/latin-600.css';
+@import '@fontsource/inter/latin-700.css';
+@import '@fontsource/geist-mono/latin-400.css';
+@import '@fontsource/geist-mono/latin-500.css';
+@import '@fontsource/geist-mono/latin-600.css';
+
+:root {
+  --ifm-font-family-base: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  --ifm-font-family-monospace: 'Geist Mono', 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
+  --ifm-color-primary: #008d6e;
+  --ifm-color-primary-dark: #086e59;
+  --ifm-color-primary-darker: #085646;
+  --ifm-color-primary-darkest: #063d32;
+  --ifm-color-primary-light: #00b48a;
+  --ifm-color-primary-lighter: #00d4a4;
+  --ifm-color-primary-lightest: #8debd0;
+  --ifm-background-color: #ffffff;
+  --ifm-navbar-background-color: #ffffff;
+  --ifm-footer-background-color: #ffffff;
+  --ifm-heading-font-weight: 600;
+  --ifm-line-height-base: 1.6;
+  --ifm-font-size-base: 16px;
+  --ifm-code-font-size: 0.875rem;
+  --ifm-global-radius: 8px;
+  --ifm-navbar-height: 4rem;
+  --ifm-navbar-shadow: none;
+  --ifm-toc-border-color: #e5e5e5;
+  --ifm-hr-background-color: #e5e5e5;
+  --ifm-color-content: #0a0a0a;
+  --ifm-color-content-secondary: #4b4c50;
+  --ifm-link-color: #0a0a0a;
+  --ifm-link-hover-color: #086e59;
+  --ifm-link-decoration: underline;
+  --ifm-link-hover-decoration: underline;
+  --ink: #0a0a0a;
+  --muted: #5a5a5c;
+  --subtle: #707176;
+  --hairline: #e5e5e5;
+  --surface: #f7f7f7;
+  --accent: #00d4a4;
+  --code-bg: #1c1c1e;
+  --reading: 40rem;
+  color-scheme: light;
+}
+
+html[data-theme='dark'] {
+  --ifm-background-color: #0a0a0a;
+  --ifm-navbar-background-color: #0a0a0a;
+  --ifm-footer-background-color: #0a0a0a;
+  --ifm-color-content: #f5f5f5;
+  --ifm-color-content-secondary: #c2c3c7;
+  --ifm-link-color: #f5f5f5;
+  --ifm-link-hover-color: #8debd0;
+  --ifm-hr-background-color: #292a2e;
+  --ink: #f5f5f5;
+  --muted: #c2c3c7;
+  --subtle: #919398;
+  --hairline: #292a2e;
+  --surface: #151618;
+  --code-bg: #1c1c1e;
+  color-scheme: dark;
+}
+
+html {
+  scroll-padding-top: calc(var(--ifm-navbar-height) + 1rem);
+}
+
+body {
+  letter-spacing: -0.006em;
+}
+
+.navbar {
+  border-bottom: 1px solid var(--hairline);
+  backdrop-filter: blur(16px);
+}
+
+.navbar__title {
+  font-weight: 650;
+  font-size: 0.92rem;
+  letter-spacing: -0.02em;
+}
+
+.navbar__link {
+  font-weight: 500;
+  font-size: 0.875rem;
+}
+
+.navbar__link--active {
+  color: var(--ink);
+  box-shadow: inset 0 -2px 0 var(--accent);
+}
+
+.navbar__logo {
+  height: 2rem;
+}
+
+.footer {
+  border-top: 1px solid var(--hairline);
+}
+
+.footer__title {
+  color: var(--ink);
+  font-size: 0.875rem;
+}
+
+.footer__link-item {
+  color: var(--muted);
+}
+
+.footer__copyright {
+  color: var(--subtle);
+  font-size: 0.8125rem;
+}
+
+:focus-visible {
+  outline: 2px solid #00b48a;
+  outline-offset: 3px;
+}
+
+.theme-doc-markdown > header {
+  display: none;
+}
+
+article .theme-doc-markdown {
+  max-width: var(--reading);
+  margin: 0 auto;
+  font-size: 1.0625rem;
+  line-height: 1.75;
+}
+
+.theme-doc-markdown h2 {
+  margin-top: 2.5rem;
+  font-size: 1.5rem;
+  letter-spacing: -0.03em;
+  line-height: 1.25;
+}
+
+.theme-doc-markdown h3 {
+  margin-top: 2rem;
+  font-size: 1.2rem;
+  letter-spacing: -0.02em;
+}
+
+.theme-doc-markdown h4 {
+  margin-top: 1.5rem;
+  font-size: 1.05rem;
+}
+
+.theme-doc-markdown p,
+.theme-doc-markdown li {
+  color: var(--ifm-color-content);
+}
+
+.theme-doc-markdown img {
+  border: 1px solid var(--hairline);
+  border-radius: 8px;
+}
+
+.theme-doc-markdown code {
+  font-family: var(--ifm-font-family-monospace);
+  background: var(--surface);
+  border: 1px solid var(--hairline);
+  border-radius: 4px;
+  padding: 0.1rem 0.35rem;
+  font-size: 0.8125rem;
+  font-weight: 500;
+}
+
+.theme-doc-markdown pre {
+  background: var(--code-bg);
+  border-radius: 8px;
+  border: 1px solid #1f1f1f;
+}
+
+.theme-doc-markdown pre code {
+  background: transparent;
+  border: 0;
+  padding: 0;
+  color: #f5f5f5;
+  font-weight: 400;
+  font-size: 0.875rem;
+  line-height: 1.5;
+}
+
+.theme-doc-markdown .admonition {
+  border-radius: 12px;
+  border: 1px solid var(--hairline);
+  box-shadow: none;
+}
+
+.docs-wrapper .col {
+  max-width: none;
+}
+
+.docs-doc-page .container {
+  max-width: 52rem;
+}
+
+.theme-doc-footer,
+.pagination-nav {
+  max-width: var(--reading);
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.pagination-nav:not(:has(a)) {
+  display: none;
+}
+
+@media (max-width: 996px) {
+  .navbar__title {
+    font-size: 0.84rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+}

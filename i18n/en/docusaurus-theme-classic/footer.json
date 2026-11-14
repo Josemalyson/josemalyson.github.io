@@ -1,0 +1,42 @@
+{
+  "link.title.Mapa": {
+    "message": "Map",
+    "description": "The title of the footer links column with title=Mapa in the footer"
+  },
+  "link.title.Contato": {
+    "message": "Contact",
+    "description": "The title of the footer links column with title=Contato in the footer"
+  },
+  "link.item.label.Trilhas": {
+    "message": "Learning trails",
+    "description": "The label of footer link with label=Trilhas linking to /trilhas"
+  },
+  "link.item.label.Tutoriais": {
+    "message": "Tutorials",
+    "description": "The label of footer link with label=Tutoriais linking to /#tutoriais"
+  },
+  "link.item.label.Open source": {
+    "message": "Open source",
+    "description": "The label of footer link with label=Open source linking to /#opensource"
+  },
+  "link.item.label.Amazon Bedrock": {
+    "message": "Amazon Bedrock",
+    "description": "The label of footer link with label=Amazon Bedrock linking to /docs/aws/bedrock"
+  },
+  "link.item.label.LinkedIn": {
+    "message": "LinkedIn",
+    "description": "The label of footer link with label=LinkedIn linking to https://br.linkedin.com/in/josemalysonoliveira"
+  },
+  "link.item.label.GitHub": {
+    "message": "GitHub",
+    "description": "The label of footer link with label=GitHub linking to https://github.com/Josemalyson"
+  },
+  "link.item.label.X": {
+    "message": "X",
+    "description": "The label of footer link with label=X linking to https://x.com/josemalyson"
+  },
+  "copyright": {
+    "message": "Josemalyson Oliveira",
+    "description": "The footer copyright"
+  }
+}
